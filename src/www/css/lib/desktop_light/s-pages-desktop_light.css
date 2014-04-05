@@ -1,0 +1,17 @@
+#content .scene.segments dt {color: #cccccc; width: auto; text-align: left; padding: 0 0 5px 0; display: block; font-size: 16px;} 
+#content .scene.segments dd {padding: 0 0 25px 20px; width: auto; display: block;}
+
+
+#content .scene.pricing div.sponsor,
+#content .scene.pricing div.corporate,
+#content .scene.pricing div.business,
+#content .scene.pricing div.free {padding: 0 0 20px;}
+
+#content .scene.pricing dl.price {}
+#content .scene.pricing dl.price dt,
+#content .scene.pricing dl.price dd {width: auto; padding-left: 0;}
+
+#content .scene div.vcard {padding: 25px 50px;}
+#content .scene div.vcard .name {padding: 0 0 15px;}
+#content .scene div.vcard .tel,
+#content .scene div.vcard .email {font-size: 13px;}

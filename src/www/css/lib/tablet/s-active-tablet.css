@@ -1,0 +1,4 @@
+#header .logo:active,
+#navigation ul li:active {text-decoration: none;}
+
+#content .scene a:active {text-decoration: underline;}

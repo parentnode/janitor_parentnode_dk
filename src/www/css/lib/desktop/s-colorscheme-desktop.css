@@ -1,0 +1,34 @@
+/*
+http://colorschemedesigner.com/#3s51Tw0w0w0w0
+
+#04859d - PRIMARY LIGHT
+#ff7c00 - PRIMARY DARK
+#ffb773 - BORDER
+*/
+
+
+* {color: #ff7c00;}
+
+body {background: #ffffff;}
+
+#header .logo {color: #04859d;}
+#navigation ul li {color: #04859d;}
+#content .scene a {color: #04859d;}
+
+#content .scene hr {border-color: #ffb773;}
+#content .scene code {color: #333333;}
+
+#footer {border-color: #ffb773;}
+#footer p {color: #ff7c00;}
+
+.front #header .logo,
+.segments #navigation ul li.segments,
+.about #navigation ul li.about,
+.apis #navigation ul li.apis,
+.pricing #navigation ul li.pricing {color: #ff7c00;}
+
+
+.terms_notification {background: #ffffff;}
+.terms_notification .accept,
+.terms_notification .details {color: #04859d;}
+.terms_notification {border-color: #ffb773;}

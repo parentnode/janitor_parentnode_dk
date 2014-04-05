@@ -1,3 +1,3 @@
 .DS_Store
-src/config/config.php
+src/library/*
 src/config/connect_*.php

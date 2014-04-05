@@ -1,0 +1,7 @@
+#header .logo:active,
+#navigation ul li:active {text-decoration: none;}
+
+#content .scene a:active {text-decoration: underline;}
+
+.terms_notification .accept:active,
+.terms_notification .details:active {text-decoration: underline;}
