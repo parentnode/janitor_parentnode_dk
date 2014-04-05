@@ -11,7 +11,7 @@ $action = $page->actions();
 
 
 $page->bodyClass("front");
-$page->pageTitle("Janitor - Frontend first");
+$page->pageTitle("Frontend first");
 
 $page->header();
 $page->template("pages/front.php");
