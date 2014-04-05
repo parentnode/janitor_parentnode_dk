@@ -188,22 +188,22 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 .terms_notification .details:hover {text-decoration: underline;}
 
 /*s-colorscheme-desktop_light.css*/
-* {color: #cccccc;}
-body {background: #333333;}
-#header .logo {color: #A0746D;}
-#navigation ul li a {color: #A0746D;}
-#content .scene a {color: #A0746D;}
-#content .scene hr {border-color: #505050;}
+* {color: #ff7c00;}
+body {background: #ffffff;}
+#header .logo {color: #04859d;}
+#navigation ul li a {color: #04859d;}
+#content .scene a {color: #04859d;}
+#content .scene hr {border-color: #ffb773;}
 #content .scene code {color: #333333;}
-#footer {border-color: #505050;}
-#footer p {color: #A0746D;}
+#footer {border-color: #ffb773;}
+#footer p {color: #ff7c00;}
 .front #header .logo,
 .segments #navigation ul li.segments a,
 .about #navigation ul li.about a,
 .apis #navigation ul li.apis a,
-.pricing #navigation ul li.pricing a {color: #cccccc;}
-.terms_notification {background: #333333;}
+.pricing #navigation ul li.pricing a {color: #ff7c00;}
+.terms_notification {background: #ffffff;}
 .terms_notification .accept,
-.terms_notification .details {color: #A0746D;}
-.terms_notification {border-color: #505050;}
+.terms_notification .details {color: #04859d;}
+.terms_notification {border-color: #ffb773;}
 

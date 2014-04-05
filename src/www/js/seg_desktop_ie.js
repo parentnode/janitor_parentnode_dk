@@ -3400,7 +3400,7 @@ Util.Objects["page"] = new function() {
 	this.init = function(page) {
 			page.hN = u.qs("#header");
 			page.hN.service = u.qs(".servicenavigation", page.hN);
-			page.logo = u.ie(page.hN, "a", {"class":"logo", "html":"Detector"});
+			page.logo = u.ie(page.hN, "a", {"class":"logo", "html":"Janitor"});
 			page.logo.url = '/';
 			page.cN = u.qs("#content", page);
 			page.nN = u.qs("#navigation", page);
@@ -3507,8 +3507,8 @@ u.e.addDOMReadyEvent(u.init);
 
 
 /*ga.js*/
-u.ga_account = 'UA-49732426-1';
-u.ga_domain = 'detector.parentnode.dk';
+u.ga_account = 'UA-49739795-1';
+u.ga_domain = 'janitor.parentnode.dk';
 
 
 /*u-googleanalytics.js*/

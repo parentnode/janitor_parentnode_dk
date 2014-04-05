@@ -42,7 +42,7 @@
 	-webkit-font-smoothing: antialiased;
 }
 html {min-height: 100%;}
-body {background: #333333; margin: 0; overflow-y: scroll; overflow-x: hidden;}
+body {background: #ffffff; margin: 0; overflow-y: scroll; overflow-x: hidden;}
 h1, h2, h3, h4, h5, h6, p, ul, li, dl, dd, dt {padding: 0; margin: 0;}
 h1, h2, h3, h4, h5, h6, p, li, dd, dt, span, a {line-height: 1em; font-weight: normal;}
 ul {list-style: none;}
@@ -289,22 +289,22 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 
 
 /*s-colorscheme-desktop.css*/
-* {color: #cccccc;}
-body {background: #333333;}
-#header .logo {color: #A0746D;}
-#navigation ul li {color: #A0746D;}
-#content .scene a {color: #A0746D;}
-#content .scene hr {border-color: #505050;}
+* {color: #ff7c00;}
+body {background: #ffffff;}
+#header .logo {color: #04859d;}
+#navigation ul li {color: #04859d;}
+#content .scene a {color: #04859d;}
+#content .scene hr {border-color: #ffb773;}
 #content .scene code {color: #333333;}
-#footer {border-color: #505050;}
-#footer p {color: #A0746D;}
+#footer {border-color: #ffb773;}
+#footer p {color: #ff7c00;}
 .front #header .logo,
 .segments #navigation ul li.segments,
 .about #navigation ul li.about,
 .apis #navigation ul li.apis,
-.pricing #navigation ul li.pricing {color: #cccccc;}
-.terms_notification {background: #333333;}
+.pricing #navigation ul li.pricing {color: #ff7c00;}
+.terms_notification {background: #ffffff;}
 .terms_notification .accept,
-.terms_notification .details {color: #A0746D;}
-.terms_notification {border-color: #505050;}
+.terms_notification .details {color: #04859d;}
+.terms_notification {border-color: #ffb773;}
 

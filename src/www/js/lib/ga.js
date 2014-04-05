@@ -1,2 +1,2 @@
-u.ga_account = 'UA-49732426-1';
-u.ga_domain = 'detector.parentnode.dk';
+u.ga_account = 'UA-49739795-1';
+u.ga_domain = 'janitor.parentnode.dk';
