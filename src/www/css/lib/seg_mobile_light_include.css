@@ -1,9 +1,12 @@
 @import url(/css/lib/s-fonts-desktop_light.css);
 
 
-@import url(/css/lib/mobile/s-page-mobile.css);
-@import url(/css/lib/mobile/s-header-mobile.css);
-@import url(/css/lib/mobile/s-footer-mobile.css);
-@import url(/css/lib/mobile/s-content-mobile.css);
+@import url(http://parentnode.local/css/lib/mobile/s-page-mobile.css);
+@import url(http://parentnode.local/css/lib/mobile/s-header-mobile.css);
+@import url(http://parentnode.local/css/lib/mobile/s-footer-mobile.css);
+
+@import url(http://parentnode.local/css/lib/mobile/s-content-mobile.css);
+@import url(http://parentnode.local/css/lib/mobile/s-form-mobile.css);
+
 @import url(/css/lib/mobile/s-pages-mobile.css);
 @import url(/css/lib/mobile/s-colorscheme-mobile.css);

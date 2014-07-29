@@ -22,10 +22,8 @@ body {background: #ffffff;}
 #footer p {color: #ff7c00;}
 
 .front #header .logo,
-.segments #navigation ul li.segments,
-.about #navigation ul li.about,
-.apis #navigation ul li.apis,
-.pricing #navigation ul li.pricing {color: #ff7c00;}
+.docs #navigation ul li.docs,
+.gettingstarted #navigation ul li.gettingstarted {color: #ff7c00;}
 
 
 .terms_notification {background: #ffffff;}

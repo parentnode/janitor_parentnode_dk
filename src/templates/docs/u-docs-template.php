@@ -78,17 +78,17 @@
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="javascript">
-							<!-- list javascript functions used by function -->
-							<h5>JavaScript</h5>
+						<div class="php">
+							<!-- list php functions used by function -->
+							<h5>PHP</h5>
 							<ul>
 								<li>_function_</li>
 							</ul>
 						</div>
 
-						<div class="manipulator">
-							<!-- list manipulator functions used by function -->
-							<h5>Manipulator</h5>
+						<div class="janitor">
+							<!-- list janitor functions used by function -->
+							<h5>Janitor</h5>
 							<ul>
 								<li>_function_</li>
 							</ul>
@@ -99,69 +99,6 @@
 				</div>
 			</div>
 
-		</div>
-	</div>
-
-	<div class="section files">
-		<div class="header">
-			<h2>Files</h2>
-		</div>
-		<div class="body">
-
-			<div class="files main">
-				<h3>Main file</h3>
-				<ul>
-					<!-- specify main js file (like: u-dom.js) -->
-					<li><span class="file">u-.js</span></li>
-				</ul>
-			</div>
-
-			<div class="files support">
-				<h3>Segment support files</h3>
-				<ul>
-					<!-- specify segment support js files (like: u-dom-desktop_light.js) -->
-					<li>none</li>
-				</ul>
-			</div>
-
-		</div>
-	</div>
-
-	<div class="section segments">
-		<div class="header">
-			<h2>Segment dependencies</h2>
-		</div>
-		<div class="body">
-			<dl class="segments">
-				<!-- specify which files are required for which segments -->
-				<!-- add todo class if segment is not tested yet -->
-				<dt>desktop</dt>
-				<dd><span class="file">u-.js</span></dd>
-
-				<dt>desktop_ie</dt>
-				<dd><span class="file">u-.js</span></dd>
-
-				<dt>desktop_light</dt>
-				<dd><span class="file">u-.js</span></dd>
-
-				<dt>tablet</dt>
-				<dd><span class="file">u-.js</span></dd>
-
-				<dt>tv</dt>
-				<dd><span class="file">u-.js</span></dd>
-
-				<dt>mobile_touch</dt>
-				<dd><span class="file">u-.js</span></dd>
-	
-				<dt>mobile</dt>
-				<dd>not tested</dd>
-	
-				<dt>mobile_light</dt>
-				<dd>not tested</dd>
-
-				<dt>basic</dt>
-				<dd>not supported</dd>
-			</dl>
 		</div>
 	</div>
 

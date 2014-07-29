@@ -1,28 +1,90 @@
-#content .scene.segments dt {color: #cccccc; width: auto; text-align: left; padding: 0 0 5px 0; display: block; font-size: 16px;} 
-#content .scene.segments dt:after {content: ":";}
-#content .scene.segments dd {padding: 0 0 25px; width: auto; display: block;}
+/* DOWNLOAD */
+#content .scene.download {}
+#content .scene.download .actions {padding-top: 20px;}
 
 
-#content .scene.apis dt {width: 50px;}
-#content .scene.apis dd {width: 445px;}
+/* DOCUMENTATION FRONTPAGE */
+#content .scene.docsindex {}
+#content .scene.docsindex h1+ul.actions {display: none;}
 
-#content .scene.apis div.jsonp dt {width: 80px;}
-#content .scene.apis div.jsonp dd {width: 415px;}
-
-#content .scene.apis div.js dt {width: 100px;}
-#content .scene.apis div.js dd {width: 395px;}
+#content .scene.docsindex .notes {display: none;}
+#content .scene.docsindex .tests {display: none;}
 
 
-#content .scene.pricing div.sponsor,
-#content .scene.pricing div.corporate,
-#content .scene.pricing div.business,
-#content .scene.pricing div.free {padding: 0 0 20px;}
+/* FILES */
+#content .scene.docsindex .files {padding-top: 25px;}
+#content .scene.docsindex .files h2 {padding-bottom: 15px;}
+#content .scene.docsindex .files ul {max-width: 500px;}
 
-#content .scene.pricing dl.price {}
-#content .scene.pricing dl.price dt,
-#content .scene.pricing dl.price dd {width: auto;}
+#content .scene.docsindex .files li {position: relative;}
+#content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
+#content .scene.docsindex .files li p {display: none;}
 
-#content .scene div.vcard {padding: 25px 50px;}
-#content .scene div.vcard .name {padding: 0 0 15px;}
-#content .scene div.vcard .tel,
-#content .scene div.vcard .email {font-size: 13px;}
+
+/* BROWSER SUPPORT */
+#content .scene.docsindex .browsersupport {padding-top: 25px;}
+#content .scene.docsindex .browsersupport h2 {padding-bottom: 15px;}
+
+
+/* SEARCH */
+#content .scene.docsindex .search {padding-top: 15px;}
+#content .scene.docsindex .search.loading {background: transparent url(/img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search h2 {padding-bottom: 15px;}
+#content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
+#content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
+#content .scene.docsindex .search .results .function .definition dl {width: auto;}
+#content .scene.docsindex .search .results .function .definition dd {padding-bottom: 0; width: auto; display: block;}
+
+#content .scene.docsindex .search .results .function .parameters,
+#content .scene.docsindex .search .results .function .examples,
+#content .scene.docsindex .search .results .function .return,
+#content .scene.docsindex .search .results .function .uses,
+#content .scene.docsindex .search .results .function .description,
+#content .scene.docsindex .search .results .function .callbacks,
+#content .scene.docsindex .search .results .function .definition h4,
+#content .scene.docsindex .search .results .function .definition .name,
+#content .scene.docsindex .search .results .function .definition dt {display: none;}
+
+
+/* DOCUMENTATION PAGE */
+#content .scene.docpage .example code {top: 0;}
+#content .scene.docpage h2 {padding-bottom: 15px;}
+
+
+/* FUNCTIONS */
+#content .scene.docpage .section.functions {}
+#content .scene.docpage .section.functions .function .body {display: none;}
+#content .scene.docpage .section.functions .header {cursor: pointer;}
+#content .scene.docpage .section.functions .body {border-bottom: 1px solid #bbbbbb;}
+
+
+#content .scene.docpage .section.functions .function {padding: 10px 0 0; overflow: hidden; border-top: 1px solid #bbbbbb; background: #ffffff;}
+#content .scene.docpage .section.functions .function .header {}
+#content .scene.docpage .section.functions .function .body {padding: 20px 0 0; border: none;}
+
+
+#content .scene.docpage .section.functions .function .body .definition dd {white-space: nowrap;}
+
+
+#content .scene.docpage .section.functions .function .body .parameters dl.options {margin-left: -80px; width: 475px;}
+#content .scene.docpage .section.functions .function .body .parameters dl.options dt {width: 130px;}
+
+#content .scene.docpage .section.functions .function .body .callbacks dl {padding-left: 70px;}
+#content .scene.docpage .section.functions .function .body .callbacks dt {width: auto; display: block; text-align: left; font-weight: 700;}
+#content .scene.docpage .section.functions .function .body .callbacks dd {width: auto; display: block;}
+
+
+#content .scene.docpage .section.functions .function .body .example {padding: 0 0 20px;}
+#content .scene.docpage .section.functions .function .body .example p {padding-bottom: 5px;}
+
+
+#content .scene.docpage .section.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
+#content .scene.docpage .section.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
+
+
+
+#content .scene.docpage .section.files {padding-top: 25px;}
+#content .scene.docpage .section.segments {padding-top: 15px;}
+
+#content .scene.docpage dd {padding-bottom: 5px;}
+
