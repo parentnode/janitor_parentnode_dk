@@ -1,7 +1,6 @@
 <div class="scene front i:front">
 	<h1>Getting started with Janitor</h1>
-	<p>Brief introduction</p>
-
+	<p></p>
 
 	<h2>Install</h2>
 
