@@ -19,9 +19,7 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">template</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">_returntype_</span> = 
 								_functionname_(
@@ -80,14 +78,6 @@
 
 					<div class="uses">
 						<h4>Uses</h4>
-
-						<div class="javascript">
-							<!-- list javascript functions used by function -->
-							<h5>JavaScript</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
 
 						<div class="manipulator">
 							<!-- list manipulator functions used by function -->
@@ -111,14 +101,11 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">getTitle</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">String</span> = 
+								Page::pageTitle(
+									<span class="type">String</span> <span class="var">$value</span>
 								);
 							</dd>
 						</dl>
@@ -126,60 +113,44 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>You can set the title manually via Page::header in your controller. If you don't, I will look for, prioritized:<br>
+						- An Item title<br>
+						- Tags - and create a list of them<br>
+						- A Navigation item title<br>
+						- The fallback SITE_NAME<br>
+						</p>
 					</div>
+	
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">String</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">$value</span> Set your own page title
 								</div>
 							</dd>
 						</dl>
+
 					</div>
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">nothing</span> ?</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
+						<div class="example"><code>$this->pageTitle();</code>
+							<p>Print the page title.</p>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
-
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -203,14 +174,11 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">pageDescription</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">String</span> = 
+								Page::pageDescription(
+									<span class="type">String</span> <span class="var">$value</span>
 								);
 							</dd>
 						</dl>
@@ -218,60 +186,38 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Get or set the page description</p>
 					</div>
-
+						
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">String</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">$value</span> Set your own page description
 								</div>
 							</dd>
 						</dl>
 					</div>
 
+
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">String</span> the page desciption</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
+						<div class="example"><code>$this->pageDesciption();</code>
+							<p>Print the page desciption.</p>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
-
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -280,7 +226,6 @@
 								<li>_function_</li>
 							</ul>
 						</div>
-
 					</div>
 
 				</div>
@@ -295,14 +240,11 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">bodyClass</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">String </span> = 
+								Page::bodyClass(
+									<span class="type">String</span> <span class="var">$value</span>
 								);
 							</dd>
 						</dl>
@@ -310,33 +252,17 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Get or set the body class</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">String</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">$value</span> Set your body class
 								</div>
 							</dd>
 						</dl>
@@ -344,26 +270,19 @@
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">String</span> The body class</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
+						<div class="example"><code>$this->bodyClass();</code>
+							<p>Print the body class.</p>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
-
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -387,14 +306,11 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">contentClass</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">String </span> = 
+								Page::contentClass(
+									<span class="type">String</span> <span class="var">$value</span>
 								);
 							</dd>
 						</dl>
@@ -402,33 +318,17 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Set or get content class</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">String</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">$value</span> Set your content class
 								</div>
 							</dd>
 						</dl>
@@ -436,26 +336,19 @@
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">String</span> The content class</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
+						<div class="example"><code>$this->contentClass();</code>
+							<p>Print the content class.</p>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
-
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -479,9 +372,7 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">header</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">_returntype_</span> = 
 								_functionname_(
