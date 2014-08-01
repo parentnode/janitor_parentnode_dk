@@ -1,29 +1,48 @@
 <div class="scene front i:front">
-	<h1>GIT based project Install</h1>
-	
+	<h1>Janitor project install</h1>
+	<p>
+		A Janitor project should live in a GIT repository. If you don't know about GIT yet, check out 
+		<a href="http://en.wikipedia.org/wiki/Git_%28software%29" target="_blank">GIT on Wikipedia</a> and 
+		<a href="http://github.com" target="_blank">GITHub</a>.
+	</p>
 
-	<h3>1. Create Git repository</h3>
-	<p>The easiest way to install Janitor is through Git. The first thing you need to do is to create a new Git repository. Here's and article on how to do that on <a href="https://help.github.com/articles/create-a-repo">github</a></p>
 
-	<p>You can also create a local GIT repos by simple running this command in your terminal.</p>
-	<code>
-		git init bare #ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#
-</code>
-	
-	<h3>2. Clone to local machine</h3>
-	<p>If you are working with an external repos, now clone it to your local machine.</p>
-	<p>One of the easiest ways is to use the <a href="https://mac.github.com/">Github app</a></p>
-	<p>Or do it manually like this:</p>
-	<code>
-git clone #URL_TO_ORIGIN_MASTER#
-</code>
+	<h2>1. Create new GIT repository</h2>
+	<p>
+		You can either create a remote GIT repository at your favorite GIT hosting provider or create a local 
+		repository for your project.
+	</p>
 
-	<h3>3. Clone submodules</h3>
-	<p>Submodules is a clever thing that comes with git. A submodule in a git repository is like a sub-directory which is a separate git repository in its own. So, by cloning submodules into our new Git repository is half the job to het Janitor running.</p>
-	<p>Open terminal. Navigate to the local project folder and run the following lines:</p>
+	<h3>Remote GIT repository</h3>
+	<h4>1. Create your new repository at your GIT provider.</h4>
+	<p>Here's and article on how to do that on <a href="https://help.github.com/articles/create-a-repo">github</a>.</p>
 
-	<div class="example">
-		<code>git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
+	<h4>2. Clone your new repository to your local machine.</h4>
+
+
+	<p>or</p>
+
+
+	<h3>Local GIT repository</h3>
+
+	<h4>1. Create local GIT repository</h4>
+	<code>git init --bare #PATH_FOR_GIT_REPOS#.git</code>
+
+	<h4>2. Clone working copy</h4>
+	<code>git clone #PATH_FOR_GIT_REPOS#.git #PATH_FOR_WORKING_COPY#</code>
+
+
+	<h2>2. Clone submodules</h2>
+	<p>
+		Submodules is a clever thing that comes with git. A submodule in a git repository is like a sub-directory 
+		which is a separate git repository in its own. So, by cloning submodules into our new Git repository is 
+		half the job to het Janitor running.
+	</p>
+	<p>
+		Open terminal. Navigate to the local project folder and run the following lines:
+	</p>
+
+	<code>git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
 git commit -m 'added js-merger submodule'
 git push
 
@@ -35,13 +54,10 @@ git push
 
 git submodule add https://github.com/parentnode/janitor.git submodules/janitor
 git commit -m 'added janitor submodule'
-git push
-		</code>
-	</div>
-					
+git push</code>
 
 
-	<h3>4. Add Apache configuration</h3>
+	<h2>3. Add Apache configuration</h2>
 	<p>Add "apache" folder to your project and copy content below to new file httpd-vhosts.conf</p>
 	<code>
 &lt;VirtualHost *:80&gt;
@@ -50,16 +66,21 @@ git push
 &lt;/VirtualHost&gt;
 </code>
 
-	<p>Add this file to your Apache configuration</p>
+	<p>Add this file to your Apache configuration by adding something like this:</p>
+	<code>Include "#PATH_TO_WORKING_COPY#/apache/httpd-vhosts.conf"</code>
+
+
 	<p>Your Apache configuration file is most likely to be here <br>
 	"/opt/local/apache2/conf/httpd.conf"<br>
 	or here<br>
-	"/opt/local/apache2/conf/extra/httpd-vhosts.conf"</p>
+	"/opt/local/apache2/conf/extra/httpd-vhosts.conf".</p>
+
+
 	<p><a href="https://www.google.com/search?q=etc%2Fhosts#q=Apache+configuration+httpd.conf">Google some more info</a></p>
 	<p></p>
 
 
-	<h3>5. Update hosts file</h3>
+	<h2>4. Update hosts file</h2>
 	<p>Your Hosts file is probably located here "/etc/hosts". Open it in an editor and add:</p>
 	<div class="example">
 		<code>
@@ -70,17 +91,17 @@ fe80::1%lo0	projectName.local
 	<p><a href="https://www.google.com/search?q=etc%2Fhosts&oq=etc%2Fhosts">Google some more info</a></p>
 
 
-	<h3>6. Set file permissions</h3>
+	<h2>5. Set file permissions</h2>
 	<p>Copy into your terminal</p>
 	<code>
 sudo chmod -R 777 #ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#
 </code>
 
-	<h3>7. Restart Apache</h3>
+	<h2>6. Restart Apache</h2>
 	<p>Open terminal and enter "apache restart". </p>
 	
 
-	<h3>8. Run setup script</h3>
+	<h2>7. Run setup script</h2>
 	<p>Open your browser and go to projectName.localhost/setup. Follow the instructions.</br>
 	Add DB
 	Password
