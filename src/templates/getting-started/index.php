@@ -11,6 +11,7 @@
 		<li>MySql 5+</li>
 		<li>FFMpeg 2.2+</li>
 		<li>ImageMagick</li>
+		<li>GIT</li>
 	</ul>
 	<p class="todo">Create script to detect server requirements</p>
 
