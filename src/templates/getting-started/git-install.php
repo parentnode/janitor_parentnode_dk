@@ -24,11 +24,14 @@
 
 
 	<h3>Local GIT repository</h3>
-
+	
 	<h4>1. Create local GIT repository</h4>
+	<p>#PATH_FOR_GIT_REPOS# is the path to your repository. This is not the same as the project directory. If you don't know where to put your repository, you could always just add it to the desktop or your dropbox.</p>
 	<code>git init --bare #PATH_FOR_GIT_REPOS#.git</code>
 
 	<h4>2. Clone working copy</h4>
+	<p>#PATH_FOR_WORKING_COPY# is the path to the project. We will now clone the repository we just created into the project folder.</p>
+
 	<code>git clone #PATH_FOR_GIT_REPOS#.git #PATH_FOR_WORKING_COPY#</code>
 
 
