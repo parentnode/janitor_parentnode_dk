@@ -27,8 +27,8 @@
 	</p>
 	<p>
 		We use Google Analytics for statistics on our website. We like statistics because it tells us how many 
-		people visit our website and if any pages are more popular than others. This information is cruzial to proving
-		improvements where improvements are needed. 
+		people visit our website and if any pages are more popular than others. This information is cruzial to provide
+		improvements where needed. 
 		<a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage" target="_blank">Google Analytics use cookies</a>
 		to provide us with this information. We do not allow Google to share this information with third parties.
 	</p>
