@@ -1,8 +1,7 @@
 <div class="scene front i:front">
-	<h1>Janitor project install</h1>
-
+	<h1>Set up Janitor project from scratch</h1>
 	<p>
-		Janitor should live in a GIT repository. Git is a distributed Version Control System and 
+		A Janitor project should live in a GIT repository. Git is a distributed Version Control System and 
 		its purpose is to track the development of source code through time. If you don’t know 
 		much about Git, check out 
 		<a href="http://en.wikipedia.org/wiki/Git_%28software%29" target="_blank">GIT on Wikipedia</a> 
@@ -12,28 +11,24 @@
 
 
 	<h2>1. Create new GIT repository</h2>
-
 	<p>
 		The first step is to decide where you would like your project to live. Either you create a “remote repository” 
 		that resides on a remote server that is shared among multiple team members or a local repository that resides 
 		on your local machine if you are the only one who needs access.
 	</p>
 
+
 	<h3>Remote GIT repository</h3>
-	<h4>1. Create your new repository at your GIT provider.</h4>
+	<h4>Create your new repository at your GIT provider.</h4>
 	<p>
 		Here's and article on how to do that on <a href="https://help.github.com/articles/create-a-repo">github</a>.
+		There are plenty of other options out there as well, just 
+		<a href="https://www.google.com?q=git%20hosting" target="_blonk">ask google</a>.
 	</p>
-
-	<h4>2. Clone your new repository to your local machine.</h4>
-
 
 	<p>or</p>
 
-
 	<h3>Local GIT repository</h3>
-	
-	<h4>1. Create local GIT repository</h4>
 	<p>
 		The combined history of your source code lives in a .git folder. This is not where you work, only where GIT works.
 		Decide the path (#PATH_FOR_GIT_REPOS#) to where you would like the local GIT repository to be hosted. This could 
@@ -42,7 +37,9 @@
 	<p>The run this command in Terminal, replacing #PATH_FOR_GIT_REPOS# with the path you decided on.</p>
 	<code>git init --bare #PATH_FOR_GIT_REPOS#.git</code>
 
-	<h4>2. Clone working copy</h4>
+
+
+	<h2>2. Clone working copy</h2>
 	<p>
 		Then we clone the GIT repository to where we are going to work on it. We call it our woking copy. 
 		(In my case the working copy need to be in the sites folder). #PATH_FOR_WORKING_COPY#
@@ -51,7 +48,13 @@
 	<code>git clone #PATH_FOR_GIT_REPOS#.git #PATH_FOR_WORKING_COPY#</code>
 
 
-	<h2>2. Clone submodules</h2>
+
+	<h3>Set file permissions</h3>
+	<p>To be able to have access to your “working copy” folder we need to adjust the file permissions first.</p>
+	<code>sudo chmod -R 777 #ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#</code>
+
+
+	<h2>3. Clone submodules</h2>
 	<p>
 		Submodules is a clever thing that comes with GIT. Submodules allow you to keep a GIT repository 
 		as a subdirectory of another GIT repository. This lets you clone another repository into your 
@@ -74,20 +77,12 @@ git commit -m 'added janitor submodule'
 git push</code>
 
 
-	<h2>3. Add Apache configuration</h2>
+	<h2>4. Add Apache configuration</h2>
 	<p>
 		Next we need to configure our web server. Janitor uses Apache, the most popular web server on the 
 		internet since 1996. In your “working copy” create a new folder called “apache”. Copy and personalise 
 		the code below into a new file called “httpd-vhosts.conf” and save it into your newly created apache folder.
 	</p>
-# local test configuration
-<VirtualHost *:80>
-	DocumentRoot "/srv/sites/parentnode/janitor_test/submodules/janitor/src"
-	ServerName janitor_test.local
-
-	Alias "/setup" "/srv/sites/parentnode/janitor_test/submodules/janitor/src/setup"
-	Alias "/janitor/admin" "/srv/sites/parentnode/janitor_test/submodules/janitor/src/www"
-</VirtualHost>
 
 	<code>&lt;VirtualHost *:80&gt;
 DocumentRoot &quot;#ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#/submodules/janitor/src&quot;
@@ -113,7 +108,7 @@ Alias "/janitor/admin" "#ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#/submodules/janito
 	<p></p>
 
 
-	<h2>4. Update hosts file</h2>
+	<h2>5. Update hosts file</h2>
 	<p>In a next step we need to update our host file. The exact location of the Hosts file depends on your operating system. (fx. /etc/hosts on Unix/Linux)</p>
 	<div class="example">
 		<code>127.0.0.1	projectName.local
@@ -122,9 +117,7 @@ fe80::1%lo0	projectName.local</code>
 	<p><a href="https://www.google.com/search?q=etc%2Fhosts&oq=etc%2Fhosts">Google some more info</a></p>
 
 
-	<h2>5. Set file permissions</h2>
-	<p>To be able to have access to your “working copy” folder we need to adjust the file permissions first.</p>
-	<code>sudo chmod -R 777 #ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#</code>
+
 
 	<h2>6. Restart Apache</h2>
 	<p>To confirm the changes made above we need to restart apache.</p>

@@ -14,14 +14,7 @@
 	<p><a href="/getting-started/install-software">How to install the server software</a></p>
 
 
-	<p class="todo">Create script to detect server requirements</p>
+	<h3><a href="/getting-started/set-up-a-janitor-project">Set up a Janitor project</a></h3>
 
-	<h3><a href="/getting-started/git-install">GIT based project Install</a></h3>
-
-
-	<h2>Setup</h2>
-	<p>Run setup file to create relevant structure.</p>
-
-	<h2>Concept</h2>
 
 </div>
