@@ -11,7 +11,8 @@
 		<li>ImageMagick</li>
 		<li>GIT</li>
 	</ul>
-	<p><a href="/getting-started/install-software">How to install the server software</a></p>
+	<p><a href="/getting-started/install-software-mac">How to install the server software on a Mac</a></p>
+	<p><a href="/getting-started/install-software-windows">How to install the server software on Windows</a></p>
 
 
 	<h3><a href="/getting-started/set-up-a-janitor-project">Set up a Janitor project</a></h3>
