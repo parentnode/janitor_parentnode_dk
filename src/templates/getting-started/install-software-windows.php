@@ -67,6 +67,7 @@
 	<p>Now we're creating a symbolic link <strong><em>"\srv\sites"</em></strong> - this is a "hard shortcut" points to our <strong>"Sites"</strong> folder created above.</p>
 	<ul>
 		<li>Go to the root of your hard drive (the drive that contains the "Sites" folder)</li>
+		<li>Create a folder called <strong><em>"srv"</em></strong></li>
 		<li>Use this command line to make a symbolic link points to "Sites" folder:</li>
 	</ul>
 	<code>mklink /J "\srv\sites" "\real\path\to\Sites"</code>
@@ -87,9 +88,7 @@
 	</code>
 
 	<p>Change no.2: Include global config file</p>
-	<code>
-Include "/srv/sites/apache/apache.conf"
-	</code>
+	<code>Include "/srv/sites/apache/apache.conf"</code>
 
 
 
