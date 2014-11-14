@@ -1,4 +1,4 @@
-<div class="scene front i:front">
+<div class="scene installsoftware i:front">
 	<h1>Janitor server software</h1>
 	<p>
 		This guides you through a complete setup, using the preferred

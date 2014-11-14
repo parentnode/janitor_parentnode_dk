@@ -3,7 +3,7 @@
 
 	<p>
 		This is <strong>not</strong> a guide for 
-		<a href="/getting-started/set-up-an-existing-janitor-project">setting up an existing Janitor project</a>.
+		<a href="/getting-started/set-up-an-existing-project">setting up an existing Janitor project</a>.
 	</p>
 
 	<ul class="toc i:toc"></ul>
@@ -15,12 +15,12 @@
 		and css-merger, the two tools used for merging 
 		<a href="http://detector.parentnode.dk" target="_blank">Segment</a>-based JavaScript and CSS. 
 		Then setup of Apache configuration and hosts file. You can find the 
-		<a href="/getting-started/create-janitor-project-quickly">short version here</a>.
+		<a href="/getting-started/create-a-new-project-quickly">short version here</a>.
 	</p>
 
 	<p>
 		You might want to read the 
-		<a href="/getting-started/system-requirements-for-janitor">System Requirements for Janitor</a> 
+		<a href="/getting-started/system-requirements">System Requirements for Janitor</a> 
 		before you continue.
 	</p>
 
