@@ -12,8 +12,8 @@ error_reporting(E_ALL);
 */
 define("SITE_UID", "JANI");
 define("SITE_NAME", "Janitor");
-define("SITE_URL", "janitor.parentnode.dk");
-define("SITE_EMAIL", "martin@kaestel.dk");
+define("SITE_URL", $_SERVER["SERVER_NAME"]);
+define("SITE_EMAIL", "info@parentnode.dk");
 
 /**
 * Optional constants
@@ -21,7 +21,6 @@ define("SITE_EMAIL", "martin@kaestel.dk");
 define("DEFAULT_PAGE_DESCRIPTION", "Janitor is a PHP content distribution framework, with a unique focus on frontend development");
 define("DEFAULT_LANGUAGE_ISO", "EN");
 define("DEFAULT_COUNTRY_ISO", "DK");
-define("DEFAULT_CURRENCY_ISO", "DKK");
 
 
 // // Enable items model

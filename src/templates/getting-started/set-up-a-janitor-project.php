@@ -2,7 +2,7 @@
 	<h1>Set up Janitor project from scratch</h1>
 	<p>
 		A Janitor project should live in a GIT repository. Git is a distributed Version Control System and 
-		its purpose is to track the development of source code through time. If you don’t know 
+		its purpose is to track the development of source code over time. If you don’t know 
 		much about Git, check out 
 		<a href="http://en.wikipedia.org/wiki/Git_%28software%29" target="_blank">GIT on Wikipedia</a> 
 		or on <a href="http://github.com" target="_blank">GITHub</a> where you can host opensource 
@@ -13,13 +13,13 @@
 	<h2>1. Create new GIT repository</h2>
 	<p>
 		The first step is to decide where you would like your project to live. Either you create a “remote repository” 
-		that resides on a remote server that is shared among multiple team members or a local repository that resides 
-		on your local machine if you are the only one who needs access.
+		that resides on a remote server, shared among multiple team members or a local repository that resides 
+		on your local machine, if you are the only one who needs access.
 	</p>
 
 
 	<h3>Remote GIT repository</h3>
-	<h4>Create your new repository at your GIT provider.</h4>
+	<h4>Create your new repository at your GIT provider</h4>
 	<p>
 		Here's and article on how to do that on <a href="https://help.github.com/articles/create-a-repo">github</a>.
 		There are plenty of other options out there as well, just 
@@ -31,36 +31,35 @@
 	<h3>Local GIT repository</h3>
 	<p>
 		The combined history of your source code lives in a .git folder. This is not where you work, only where GIT works.
-		Decide the path (#PATH_FOR_GIT_REPOS#) to where you would like the local GIT repository to be hosted. This could 
+		Decide the path (#GIT_REPOS_PATH#) to where you would like the local GIT repository to be hosted. This could 
 		be in your Dropbox or some other location which is backed up automatically. Backup is nice.
 	</p>
-	<p>The run this command in Terminal, replacing #PATH_FOR_GIT_REPOS# with the path you decided on.</p>
-	<code>git init --bare #PATH_FOR_GIT_REPOS#.git</code>
+	<h4>Create your new repository locally</h4>
+	<p>Run this command in Terminal, replacing #GIT_REPOS_PATH# with the path you decided on.</p>
+	<code>git init --bare #GIT_REPOS_PATH#.git</code>
 
 
 
 	<h2>2. Clone working copy</h2>
 	<p>
-		Then we clone the GIT repository to where we are going to work on it. We call it our woking copy. 
-		(In my case the working copy need to be in the sites folder). #PATH_FOR_WORKING_COPY#
-		- your project folder so to speak
+		Then we clone the GIT repository to where we are going to work on it. We call it our woking copy.
 	</p>
-	<code>git clone #PATH_FOR_GIT_REPOS#.git #PATH_FOR_WORKING_COPY#</code>
+	<code>git clone #GIT_REPOS_PATH#.git #WORKING_COPY_PATH#</code>
 
 
 
 	<h3>Set file permissions</h3>
-	<p>To be able to have access to your “working copy” folder we need to adjust the file permissions first.</p>
-	<code>sudo chmod -R 777 #ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#</code>
+	<p>For the setup script to access to your Working copy we need to adjust the file permissions first.</p>
+	<code>sudo chmod -R 777 #WORKING_COPY_PATH#</code>
 
 
 	<h2>3. Clone submodules</h2>
 	<p>
 		Submodules is a clever thing that comes with GIT. Submodules allow you to keep a GIT repository 
 		as a subdirectory of another GIT repository. This lets you clone another repository into your 
-		project and keep your commits separate.
+		project and keep your commits separate. This is how we integrate Janitor in projects.
 	</p>
-	<p>In terminal navigate to your #PATH_FOR_WORKING_COPY# and copy/past the following lines:</p>
+	<p>In terminal navigate to your #WORKING_COPY_PATH# and copy/past the following lines:</p>
 
 	<code>git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
 git commit -m 'added js-merger submodule'\n
@@ -80,43 +79,40 @@ git push</code>
 	<h2>4. Add Apache configuration</h2>
 	<p>
 		Next we need to configure our web server. Janitor uses Apache, the most popular web server on the 
-		internet since 1996. In your “working copy” create a new folder called “apache”. Copy and personalise 
-		the code below into a new file called “httpd-vhosts.conf” and save it into your newly created apache folder.
+		internet since 1996. In your Working copy, create a new folder called “apache”. Copy and personalise 
+		the code below into a new file called “httpd-vhosts.conf” and save it into #WORKING_COPY_PATH#/apache.
 	</p>
 
 	<code>&lt;VirtualHost *:80&gt;
-DocumentRoot &quot;#ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#/submodules/janitor/src&quot;
-ServerName #STATE_YOUR_DOMAIN_NAME_HERE#
+DocumentRoot &quot;#WORKING_COPY_PATH#/submodules/janitor/src&quot;
+ServerName #DOMAIN_NAME#
 
-Alias "/setup" "#ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#/submodules/janitor/src/setup"
-Alias "/janitor/admin" "#ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER#/submodules/janitor/src/www"
+Alias "/setup" #WORKING_COPY_PATH#/submodules/janitor/src/setup"
+Alias "/janitor/admin" #WORKING_COPY_PATH#/submodules/janitor/src/www"
 &lt;/VirtualHost&gt;</code>
 
+	<p>Finally you need to configure your main Apache file by adding the line below:</p>
+	<code>Include "#WORKING_COPY_PATH#/apache/httpd-vhosts.conf"</code>
 
-	<p>In addition we need to configure our main apache file by adding the line below:</p>
-	<code>Include "#PATH_TO_WORKING_COPY#/apache/httpd-vhosts.conf"</code>
-
-
-	<p>
+	<!--p>
 		Due to the flexibility of apache towards your workflow, the apache "conf/httpd.conf" file might 
 		be at a different place - but most likely it’s located here “/opt/local/apache2/conf/httpd.conf" 
 		or here "/opt/local/apache2/conf/extra/httpd-vhosts.conf".
-	</p>
-
-
-	<p><a href="https://www.google.com/search?q=etc%2Fhosts#q=Apache+configuration+httpd.conf">Google some more info</a></p>
-	<p></p>
+	</p-->
 
 
 	<h2>5. Update hosts file</h2>
-	<p>In a next step we need to update our host file. The exact location of the Hosts file depends on your operating system. (fx. /etc/hosts on Unix/Linux)</p>
+	<p>
+		If you are setting up your Janitor project locally, you probably was to add a the #DOMAIN_NAME# to
+		your hosts file. The exact location of the hosts file depends on your operating system, but
+		it is typically located in /etc/hosts on Unix/Linux and in \Windows\System32\drivers\etc\hosts
+		on Windows.
+	</p>
+	<p>Add the follwing code to your hosts file, replacing #DOMAIN_NAME# with your new project domain name.</p>
 	<div class="example">
-		<code>127.0.0.1	projectName.local
-fe80::1%lo0	projectName.local</code>
+		<code>127.0.0.1	#DOMAIN_NAME#
+fe80::1%lo0	#DOMAIN_NAME#</code>
 	</div>
-	<p><a href="https://www.google.com/search?q=etc%2Fhosts&oq=etc%2Fhosts">Google some more info</a></p>
-
-
 
 
 	<h2>6. Restart Apache</h2>
@@ -124,9 +120,12 @@ fe80::1%lo0	projectName.local</code>
 	<code>apache restart</code>
 
 	<h2>7. Run setup script</h2>
-	<p>Almost done! We’ve laid the foundation by creating a new GIT repository and by adding the necessary server files. Now we’re ready to actually setup Janitor. In your browser copy & personalise the link below and follow the instructions.</p>
-
-	<code>http://projectName.localhost/setup</code>
+	<p>
+		Almost done! We’ve laid the foundation by creating a new GIT repository and by adding the necessary 
+		server files. Now we’re ready to actually set up Janitor. In your browser you should now be able to 
+		access the domain and follow the instructions.
+	</p>
+	<code>http://#DOMAIN_NAME#/setup</code>
 
 
 </div>
