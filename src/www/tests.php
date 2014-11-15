@@ -18,18 +18,18 @@ if(is_array($action) && count($action)) {
 
 	if(count($action) == 1) {
 
-		$page->header();
-		$page->template("tests/".$action[0].".php");
-		$page->footer();
+		# /getting-started/#sindex#
+		$page->page(array(
+			"templates" => "tests/".$action[0].".php"
+		));
 		exit();
-
 	}
 
 }
 
-
-$page->header();
-$page->template("tests/index.php");
-$page->footer();
+$page->page(array(
+	"templates" => "tests/index.php"
+));
+exit();
 
 ?>

@@ -13,8 +13,10 @@ $action = $page->actions();
 $page->bodyClass("front");
 $page->pageTitle("Frontend first");
 
-$page->header();
-$page->template("pages/front.php");
-$page->footer();
+
+$page->page(array(
+	"templates" => "pages/front.php"
+));
+exit();
 
 ?>

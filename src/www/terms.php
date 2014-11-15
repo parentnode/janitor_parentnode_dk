@@ -13,9 +13,9 @@ $page->bodyClass("terms");
 $page->pageTitle("Terms");
 
 
-$page->header();
-$page->template("pages/terms.php");
-$page->footer();
+$page->page(array(
+	"templates" => "pages/terms.php"
+));
 exit();
 
 ?>
