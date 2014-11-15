@@ -6,7 +6,7 @@
 		<li>PHP 5.3+ (with mysqlnd and short_open_tag = On)</li>
 		<li>MySql 5+</li>
 		<li>ImageMagick</li>
-		<li>FFMpeg 2.2+</li>
+		<li>FFMpeg 2.1+</li>
 		<li>GIT</li>
 	</ul>
 
