@@ -203,6 +203,8 @@ git push
 	<p>
 		In Terminal/CMD you should be able to run:
 	</p>
+	<code>service apache2 restart</code>
+	<p>or</p>
 	<code>apachectl restart</code>
 
 	<p>
