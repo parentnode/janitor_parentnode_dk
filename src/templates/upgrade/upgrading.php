@@ -73,6 +73,11 @@ to
 <a href="/janitor">
 
 
+<a href="/admin" target="_blank">Admin</a>
+to
+<a href="/janitor" target="_blank">Janitor</a>
+
+
 "/admin/cms
 to
 "/janitor/admin/items
@@ -127,14 +132,15 @@ validPath
 remove old alias' from apache conf
 check specific apache log in apache conf
 update autoconversion alias in apache conf
-update 404 path in apache conf
+update 404 path in apache conf (and delete existing 404 controller)
 
 modify DB user_access manually or run quickfix-access if site is already set up with users
 
-check if SITE_MAIL exists in config.php (it should)
+check if SITE_EMAIL exists in config.php (it should)
 check values of DEFAULT_COUNTRY_ISO and DEFAULT_COUNTRY_ISO in config.php
 check SITE_COLLECT_NOTIFICATIONS in config.php (should be declared)
 check SITE_URL in config.php = define("SITE_URL", $_SERVER["SERVER_NAME"]);
+
 
 Implement simplified connect_mail.php (without from + name)
 
@@ -148,7 +154,9 @@ in janitor list templates width images:
 image:".$media["format"] to format:".$media["format"]
 and add image class manually
 
+implement mediae name if needed (class+template)
 
+Optional: updated to new controller syntax
 
 
 Run /setup
