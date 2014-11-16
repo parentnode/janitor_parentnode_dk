@@ -21,6 +21,11 @@ body {background: #ffffff;}
 #footer {border-color: #ffb773;}
 #footer p {color: #ff7c00;}
 
+#content ul.actions input.button.primary,
+#content ul.actions a.button.primary {background-color: #9b001c;}
+#content ul.actions input.button.primary:hover,
+#content ul.actions a.button.primary:hover {background-color: #ef002a;}
+
 .front #header .logo,
 .docs #navigation ul li.docs,
 .gettingstarted #navigation ul li.gettingstarted {color: #ff7c00;}
