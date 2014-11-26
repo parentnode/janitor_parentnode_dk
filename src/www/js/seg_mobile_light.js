@@ -1,6 +1,8 @@
 
 /*seg_mobile_light_include.js*/
 
+/*seg_mobile_light_include.js*/
+
 /*u.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
@@ -47,4 +49,5 @@ if(u.ga_account) {
 		}
 	}
 }
+
 
