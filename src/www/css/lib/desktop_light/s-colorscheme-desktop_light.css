@@ -4,22 +4,32 @@ body {background: #ffffff;}
 
 #header .logo {color: #04859d;}
 #navigation ul li a {color: #04859d;}
-#content .scene a {color: #04859d;}
 
+#content .scene a {color: #04859d;}
 #content .scene hr {border-color: #ffb773;}
 #content .scene code {color: #333333;}
+#content ul.actions input.primary,
+#content ul.actions a.primary,
+#content .scene .pagination .next,
+#content .scene .pagination .previous {background-color: #04859d;}
+#content ul.actions input.primary:hover,
+#content ul.actions a.primary:hover,
+#content .scene .pagination .next:hover,
+#content .scene .pagination .previous:hover {background-color: #ff7c00;}
 
 #footer {border-color: #ffb773;}
-#footer p {color: #ff7c00;}
-
-.front #header .logo,
-.segments #navigation ul li.segments a,
-.about #navigation ul li.about a,
-.apis #navigation ul li.apis a,
-.pricing #navigation ul li.pricing a {color: #ff7c00;}
 
 
 .terms_notification {background: #ffffff;}
 .terms_notification .accept,
 .terms_notification .details {color: #04859d;}
 .terms_notification {border-color: #ffb773;}
+
+
+/* LOCAL */
+
+.front #header .logo,
+.segments #navigation ul li.segments a,
+.about #navigation ul li.about a,
+.apis #navigation ul li.apis a,
+.pricing #navigation ul li.pricing a {color: #ff7c00;}

@@ -1,6 +1,5 @@
 @import url(http://parentnode.local/css/global/seg_mobile_touch_include.css);
 @import url(/css/lib/s-fonts.css);
 
-@import url(/css/lib/mobile_touch/s-pages-mobile_touch.css);
-@import url(/css/lib/mobile_touch/s-active-mobile_touch.css);
 @import url(/css/lib/mobile_touch/s-colorscheme-mobile_touch.css);
+@import url(/css/lib/mobile_touch/s-pages-mobile_touch.css);
