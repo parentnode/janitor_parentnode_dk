@@ -19,6 +19,56 @@ class TypeTests extends Itemtype {
 		$this->db = SITE_DB.".item_tests";
 
 
+		$this->addToModel("string", array(
+			"type" => "string",
+			"label" => "String",
+			"required" => true,
+			"error_message" => "String must be string"
+		));
+
+		$this->addToModel("text", array(
+			"type" => "text",
+			"label" => "Text",
+			"required" => true,
+			"error_message" => "Text must be text"
+		));
+
+		$this->addToModel("html", array(
+			"type" => "html",
+			"label" => "HTML",
+			"required" => true,
+			"error_message" => "HTML must be HTML"
+		));
+
+		$this->addToModel("email", array(
+			"type" => "email",
+			"label" => "Email",
+			"required" => true,
+			"error_message" => "Email must be email"
+		));
+
+		$this->addToModel("tel", array(
+			"type" => "tel",
+			"label" => "Phone",
+			"required" => true,
+			"error_message" => "Phone must be phone"
+		));
+
+		$this->addToModel("password", array(
+			"type" => "password",
+			"label" => "Password",
+			"required" => true,
+			"error_message" => "Password must be password"
+		));
+
+		$this->addToModel("select", array(
+			"type" => "select",
+			"label" => "Select",
+			"options" => array("" => "Select option", "1" => "First option"),
+			"required" => true,
+			"error_message" => "Option must be selected"
+		));
+
 		$this->addToModel("datetime", array(
 			"type" => "datetime",
 			"label" => "Datetime (yyyy-mm-dd hh:mm)",
@@ -47,10 +97,87 @@ class TypeTests extends Itemtype {
 			"error_message" => "Must be Number"
 		));
 
+		$this->addToModel("tag", array(
+			"type" => "tag",
+			"label" => "Tag",
+			"required" => true,
+			"error_message" => "Tag must be valid tag"
+		));
+
+		$this->addToModel("file", array(
+			"type" => "files",
+			"label" => "Files",
+			"required" => true,
+			"error_message" => "Files must be added"
+		));
+
 	}
 
 
 	// VALIDATION TESTS
+
+	function stringValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("string"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function textValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("text"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function htmlValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("html"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function selectValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("select"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function emailValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("email"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function telValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("tel"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function passwordValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("password"))) {
+			return true;
+		}
+		return false;
+	}
 
 	function dateValidation() {
 
@@ -88,6 +215,23 @@ class TypeTests extends Itemtype {
 		return false;
 	}
 
+	function tagValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("tag"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function fileValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("file"))) {
+			return true;
+		}
+		return false;
+	}
 
 }
 

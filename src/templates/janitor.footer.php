@@ -2,7 +2,8 @@
 
 	<div id="navigation">
 		<ul>
-			<?= $HTML->link("Tests", "/tests", array("wrapper" => "li.test")) ?>
+			<?= $HTML->link("Tests", "/janitor/tests", array("wrapper" => "li.test")) ?>
+			<?= $HTML->link("Users", "/janitor/admin/user/list", array("wrapper" => "li.user")) ?>
 		</ul>
 	</div>
 

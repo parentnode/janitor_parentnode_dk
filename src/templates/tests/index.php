@@ -4,6 +4,7 @@
 
 
 	<ul>
+		<li><a href="/tests/security">Security</a></li>
 		<li><a href="/tests/form">Form interface</a></li>
 		<li><a href="/tests/form-validation">Form validation</a></li>
 	</ul>
