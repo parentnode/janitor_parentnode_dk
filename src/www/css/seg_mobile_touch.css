@@ -74,7 +74,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #header .servicenavigation li.navigation div {border-radius: 1px; height: 3px; margin: 0 0 5px; background: #888888;}
 #header .servicenavigation li.navigation.open div {background: #cccccc;}
 #header .servicenavigation li.navigation a {display: none;}
-#header .servicenavigation li,
+#header .servicenavigation li.user,
 #header .servicenavigation li.admin {display: none;}
 #navigation {position: absolute; width: 100%; top: 75px; display: none;}
 #navigation ul {}

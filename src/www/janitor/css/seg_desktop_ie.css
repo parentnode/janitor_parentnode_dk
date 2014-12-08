@@ -175,8 +175,8 @@ body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
 #content .field.radiobuttons div.item input {width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
 #content .field.radiobuttons div.item label {font-size: 1.077rem; line-height: 1em; display: inline-block; vertical-align: top; text-align: left; width: auto;}
 #content .field.files {border: 3px dashed #dedede; width: 374px; display: inline-block; vertical-align: top; border-radius: 5px; position: relative; padding: 0; margin: 2px 30px 20px;}
-#content .field.files input[type="file"] {opacity: 0; width: 356px; height: 50px;}
-#content .field.files label {display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 18px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
+#content .field.files input[type="file"] {opacity: 0; width: 374px; border: none; height: 60px; margin: 0; padding: 0;}
+#content .field.files label {display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 20px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
 #content .field.files.loading label {display: none;}
 #content .field.files.loading {background: transparent url(/janitor/admin/img/gx_loader.gif) no-repeat center center;}
 #content .field.location {}
@@ -209,6 +209,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field.location.focus input {margin: 2px; border: 1px solid #dcdcdc;}
 #content .field.location.focus input.focus {margin: 0; border: 3px solid #5c5c5c;}
 #content .field.files.focus {border-color: #c8e183;}
+#content .field.files.focus input[type="file"] {margin: 0; border: none;}
 #content .field.files.focus label {background-color: #c8e183;}
 #content .field input.default,
 #content .field select.default,
@@ -330,7 +331,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field.html .editor div.tag.focus ul.type li {color: #ffffff;}
 #content .field.html .editor div.tag.h1 div.text {font-size: 36px;}
 #content .field.html .editor div.tag.h2 div.text {font-size: 30px;}
-#content .field.html .editor div.tag.h3 div.text {font-size: 30px;}
+#content .field.html .editor div.tag.h3 div.text {font-size: 20px;}
 #content .field.html .editor div.tag.h4 div.text {font-size: 16px;}
 #content .field.html .editor div.tag.h5 div.text {font-size: 14px;}
 #content .field.html .editor div.tag.p div.text {font-size: 14px;}
@@ -546,6 +547,16 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .defaultList ul.items > li:hover {background-color: #edf0f2;}
 #content .defaultList ul.items > li h3 {padding: 16px 30px 0px 30px;}
 #content .defaultList ul.items > li.image {background-repeat: no-repeat; min-height: 100px; padding-left: 160px; background-position: 0px center;}
+#content .defaultList ul.items > li.audio {padding-left: 80px;}
+#content .defaultList ul.items > li.audio div.audioplayer {position: absolute; top: 16px; left: 30px; width: 50px; height: 50px; 
+	background: transparent url(/janitor/admin/img/bg_bn_play_medium.png) no-repeat 0px 0px;
+}
+#content .defaultList ul.items > li.playing div.audioplayer {background-position: 0px -100px;}
+#content .defaultList ul.items > li.video {padding-left: 80px;}
+#content .defaultList ul.items > li.video div.videoplayer {position: absolute; top: 16px; left: 30px; width: 50px; height: 50px; 
+	background: transparent url(/janitor/admin/img/bg_bn_play_medium.png) no-repeat 0px 0px;
+}
+#content .defaultList ul.items > li.playing div.videoplayer {background-position: 0px -100px;}
 #content .defaultList ul.items > li .description,
 #content .defaultList ul.items > li dl {display: none;}
 #content .defaultList ul.items > li .actions {position: absolute; top: 0px; padding: 0; right: 20px;}
@@ -593,7 +604,6 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.defaultEdit > div.media {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.media form.upload {text-align: left; position: relative; z-index: 2;}
 #content .scene.defaultEdit > div.media form.upload .actions {display: none;}
-#content .scene.defaultEdit > div.media form.upload input[type=file] {height: 45px;}
 #content .scene.defaultEdit > div.media form.delete {padding: 0; position: absolute; top: 0; right: 0;}
 #content .scene.defaultEdit > div.media form.delete ul.actions {padding: 0;}
 #content .scene.defaultEdit > div.media form.delete ul.actions li {padding: 0;}
@@ -603,17 +613,17 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 }
 #content .scene.defaultEdit > div.media form.delete input:hover {background-position: 8px -67px;}
 #content .scene.defaultEdit > div.media form.delete input.confirm {text-indent: 0; width: auto; padding-left: 24px;}
-#content .scene.defaultEdit > div.media > img {margin: 0 28px; position: absolute; top: 47px; left: 0; z-index: 1; width: 384px;}
+#content .scene.defaultEdit > div.media > img,
+#content .scene.defaultEdit > div.media > div.videoplayer {margin: 0 28px; position: absolute; top: 47px; left: 0; z-index: 1;}
 #content .scene.defaultEdit > div.media > form.delete {left: 412px; right: auto; top: 47px; z-index: 11;}
 #content .scene.defaultEdit > div.media > form.delete input {position: absolute; top: 0; right: 0;}
-#content .scene.defaultEdit > div.single_media form.upload input[type=file] {height: 196px;}
+#content .scene.defaultEdit > div.single_media form.upload input[type=file] {height: 204px;}
 #content .scene.defaultEdit > div.single_media form.upload label {margin-top: 90px;}
-#content .scene.defaultEdit > div.single_media img {height: 216px;}
 #content .scene.defaultEdit > div.media ul.mediae {padding: 0 20px 0; text-align: left;}
 #content .scene.defaultEdit > div.media ul.mediae > li {margin: 0 10px 20px; position: relative; text-align: center;}
 #content .scene.defaultEdit > div.media ul.mediae > li.dragged {z-index: 2;}
 #content .scene.defaultEdit > div.media ul.mediae > li h4 {padding: 0 0 5px;}
-#content .scene.defaultEdit > div.media ul.mediae > li p {word-wrap: break-word; padding: 10px; font-size: 10px; text-align: left; background-color: rgba(255,255,255, 0.7); color: #000000; width: 100%; position: absolute; bottom: 0; left: 0; cursor: text;}
+#content .scene.defaultEdit > div.media ul.mediae > li p {word-wrap: break-word; padding: 10px; font-size: 10px; text-align: left; background-color: rgba(0,0,0, 0.7); color: #ffffff; width: 100%; position: absolute; bottom: 0; left: 0; cursor: text;}
 #content .scene.defaultEdit > div.media ul.mediae > li form.edit {display: none;}
 #content .scene.defaultEdit > div.media ul.mediae > li.edit p {display: none;}
 #content .scene.defaultEdit > div.media ul.mediae > li.edit form.edit {display: block;}
@@ -621,16 +631,23 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.defaultEdit > div.media ul.mediae > li form.edit div.field {padding: 5px; background-color: rgba(255,255,255, 0.7);}
 #content .scene.defaultEdit > div.media ul.mediae > li form.edit div.field input {font-size: 12px; height: 20px;}
 #content .scene.defaultEdit > div.media.sortable ul.mediae > li {cursor: move;}
-#content .scene.defaultEdit > div.media ul.mediae li.image {height: 150px;}
-#content .scene.defaultEdit > div.media ul.mediae li.audio {width: 50px; height: 70px;
-	background: transparent url(/janitor/admin/img//bg_bn_play_medium.png) no-repeat 0px 20px;
+#content .scene.defaultEdit > div.media ul.mediae li {height: 150px;}
+#content .scene.defaultEdit > div.media ul.mediae li img {width: 100%;}
+#content .scene.defaultEdit > div.media ul.mediae li.image a {display: none;}
+#content .scene.defaultEdit > div.media ul.mediae li.audio {width: 150px;}
+#content .scene.defaultEdit > div.media.image div.file a {display: none;} 
+#content .scene.defaultEdit > div.media div.file {z-index: 11; margin: 0; height: 30px; width: 384px; background-color: rgba(0,0,0, 0.7); position: absolute; bottom: 16px; left: 28px;}
+#content .scene.defaultEdit > div.media div.file a {display: inline-block; vertical-align: top; width: 30px; height: 30px; text-indent: -9999px;
+	background: transparent url(/janitor/admin/img/bg_bn_play_medium.png) no-repeat 2px 3px; background-size: 80% auto;
 }
-#content .scene.defaultEdit > div.media ul.mediae li.audio.playing {background-position: 0 -80px;}
-#content .scene.defaultEdit > div.media ul.mediae li.audio a {display: block; text-indent: -9999px;}
-#content .scene.defaultEdit > div.media ul.mediae li.video {width: 150px;
-	background: transparent url(/janitor/admin/img//bg_bn_play_medium.png) no-repeat center 40px;
+#content .scene.defaultEdit > div.media div.file p {display: inline-block; vertical-align: top; width: auto; height: 20px; word-wrap: break-word; padding: 10px 5px 0; font-size: 10px; line-height: 1em; color: #ffffff;}
+#content .scene.defaultEdit > div.media div.file a.playing {background-position: 2px -45px;}
+#content .scene.defaultEdit > div.media ul.mediae li.video a,
+#content .scene.defaultEdit > div.media ul.mediae li.audio a {position: absolute; top: 35px; left: 50%; margin-left: -25px; text-indent: -9999px; display: block; width: 50px; height: 50px;
+	background: transparent url(/janitor/admin/img/bg_bn_play_medium.png) no-repeat center 0px; background-size: 100% auto;
 }
-#content .scene.defaultEdit > div.media ul.mediae li.video a {display: none;}
+#content .scene.defaultEdit > div.media ul.mediae li.video video {width: 100%; height: 100%;}
+#content .scene.defaultEdit > div.media ul.mediae li a.playing {background-position: center -100px;}
 
 
 /*s-default_new.css*/
@@ -641,22 +658,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 
 
 /*s-form-desktop_ie.css*/
-#content ul.actions input.button,
-#content ul.actions a.button {background-position: 10px 100px; background-image: url(/janitor/admin/img//bg_icons.png);}
-#content ul.actions input.button:hover,
-#content ul.actions a.button:hover {background-color: #dddddd; background-image: url(/janitor/admin/img//bg_icons.png);}
-#content ul.actions input.button.primary,
-#content ul.actions a.button.primary {background-image: url(/janitor/admin/img//bg_icons.png);}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover {background-color: #a3cd5b; background-image: url(/janitor/admin/img//bg_icons.png);}
-#content ul.actions input.button.secondary,
-#content ul.actions a.button.secondary {background-image: url(/janitor/admin/img//bg_icons.png);}
-#content ul.actions input.button.secondary:hover,
-#content ul.actions a.button.secondary:hover {background-color: #fdc04f; background-image: url(/janitor/admin/img//bg_icons.png);}
-#content form input.button.delete.confirm {background-image: url(/janitor/admin/img//bg_icons.png);}
-#content form input.button.delete.confirm:hover {background-color: #fc7777; background-image: url(/janitor/admin/img//bg_icons.png);}
-#content form input.button.disabled,
-#content form input.button.disabled:hover {background-image: url(/janitor/admin/img//bg_icons.png) !important;}
+#content .field.files input[type="file"] {font-size: 130px;}
 
 
 
