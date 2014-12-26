@@ -1,161 +1,76 @@
 <?
 global $model;
+global $IC;
+
 //$model = new Tests();
-$item = array("status" => 1, "id" => 1);
+$item = $IC->getItem(array("id" => 1, "extend" => array("tags" => false, "mediae" => false)));
 	
 ?>
 <script type="text/javascript">
+
+u.o["testForm"] = new function() {
+	this.init = function(form) {
+		u.bug("init")
+		u.f.init(form, {"validation":false});
+		form.submitted = function() {
+			this.response = function(response) {
+				u.xInObject(response);
+			}
+			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
+
+		}
+	}	
+}
+
 </script>
 
 <div class="scene tests defaultEdit i:scene">
-	<h1>HTML Class - For testing Janitor backend interface</h1>	
-
-	
-	<h2>Date validation</h2>
-	<?= $model->formStart("/tests/testDateValidation", array("class" => "labelstyle:inject i:testValidation date")) ?>
-		<fieldset>
-			<?= $model->input("date") ?>
-		</fieldset>
-
-		<ul class="actions">
-			<?= $model->submit("Update", array("wrapper" => "li.save")) ?>
-		</ul>
-	<?= $model->formEnd() ?>
-
-	<h2>Datetime validation</h2>
-	<?= $model->formStart("/tests/testDatetimeValidation", array("class" => "labelstyle:inject i:testValidation datetime")) ?>
-		<fieldset>
-			<?= $model->input("datetime") ?>
-		</fieldset>
-
-		<ul class="actions">
-			<?= $model->submit("Update", array("wrapper" => "li.save")) ?>
-		</ul>
-	<?= $model->formEnd() ?>
-
-	<h2>Integer validation</h2>
-	<?= $model->formStart("/tests/testIntegerValidation", array("class" => "labelstyle:inject i:testValidation integer")) ?>
-		<fieldset>
-			<?= $model->input("integer") ?>
-		</fieldset>
-
-		<ul class="actions">
-			<?= $model->submit("Update", array("wrapper" => "li.save")) ?>
-		</ul>
-	<?= $model->formEnd() ?>
+	<h1>HTML Class</h1>	
+	<ul class="actions">
+		<?= $model->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
+	</ul>
 
 
-	<div class="item i:_defaultEdit">
-		<h2>All-in-one content</h2>
-		<?= $model->formStart("/", array("class" => "labelstyle:inject")) ?>
+	<h2>Testing Janitor backend interface</h2>
+
+	<div class="item">
+
+		<h3>All-in-one content</h3>
+		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
-				<?= $model->input("string", array("type" => "string", "label" => "String", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("integer", array("type" => "integer", "label" => "integer", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("number", array("type" => "number", "label" => "number", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("name", array("value" => $item["name"])) ?>
 
-				<?= $model->input("email", array("type" => "email", "label" => "email", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("tel", array("type" => "tel", "label" => "tel", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("password", array("type" => "password", "label" => "password", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_integer", array("value" => $item["v_integer"])) ?>
+				<?= $model->input("v_number", array("value" => $item["v_number"])) ?>
 
-				<?= $model->input("datetime", array("type" => "datetime", "label" => "Datetime", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("date", array("type" => "date", "label" => "Date", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_email", array("value" => $item["v_email"])) ?>
+				<?= $model->input("v_tel", array("value" => $item["v_tel"])) ?>
+				<?= $model->input("v_password", array("value" => $item["v_password"])) ?>
 
-				<?= $model->input("description", array("type" => "text", "class" => "autoexpand short", "label" => "Text", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_datetime", array("value" => $item["v_datetime"])) ?>
+				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
 
-				<?= $model->input("html", array("type" => "html", "label" => "HTML", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_select", array("value" => $item["v_select"])) ?>
 
-				<?= $model->input("checkbox1", array("type" => "checkbox", "label" => "Checkbox", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("checkbox2", array("type" => "checkbox", "label" => "Checkbox", "value" => 1, "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
 
-				<?= $model->input("radiobuttons", array("type" => "radiobuttons", "label" => "Radiobuttons", "value" => "value2", "options" => array("value1" => "text1", "value2" => "text2"), "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->input("v_checkbox", array("value" => $item["v_checkbox"])) ?>
+				<?= $model->input("v_radiobuttons", array("value" => $item["v_radiobuttons"])) ?>
 
-				<?= $model->input("select", array("type" => "select", "value" => "value2", "options" => array("value1" => "text1", "value2" => "text2"), "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
 
-				<?= $model->inputLocation("location", "latitude", "longitude", array("label_loc" => "Location", "label_lat" => "latitude", "label_lon" => "Longitude", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
+				<?= $model->inputHTML("v_html", array("value" => $item["v_html"])) ?>
+				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "label_lon" => $item["v_longitude"])) ?>
 			</fieldset>
 
-			<ul class="actions">
-				<?= $model->link("Back", "/", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
-				<?= $model->submit("Update", array("class" => "primary key:s", "wrapper" => "li.save")) ?>
-			</ul>
+			<?= $JML->editActions($item) ?>
 		<?= $model->formEnd() ?>
-
-
-
-		<?= $model->formStart("/tests/testDateValidation", array("class" => "labelstyle:inject")) ?>
-			<fieldset>
-				<?= $model->input("datetime", array("type" => "datetime", "label" => "Datetime", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-				<?= $model->input("date", array("type" => "date", "label" => "Date", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-			</fieldset>
-
-			<ul class="actions">
-				<?= $model->link("Back", "/", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
-				<?= $model->submit("Update", array("class" => "primary key:s", "wrapper" => "li.save")) ?>
-			</ul>
-		<?= $model->formEnd() ?>
-	</div>
-
-
-	<div class="media i:_addMedia sortable item_id:1"
-		data-save-order="/" 
-		data-delete-media="/"
-		data-update-media-name="/"
-		>
-		<h2>Media</h2>
-		<?= $model->formStart("/", array("class" => "upload labelstyle:inject")) ?>
-			<fieldset>
-				<?= $model->input("mediae", array("type" => "files", "label" => "files", "required" => true, "error_message" => "error message", "hint_message" => "hint_message")) ?>
-			</fieldset>
-
-			<ul class="actions">
-				<?= $model->submit("Add image", array("class" => "primary", "wrapper" => "li.save")) ?>
-			</ul>
-		<?= $model->formEnd() ?>
-
-		<ul class="mediae">
-			<li class="media image variant:missing_image media_id:1">
-				<img src="/images/0/missing_image/x150.png" />
-				<p>Image name 1</p>
-			</li>
-			<li class="media image variant:missing_image media_id:1">
-				<img src="/images/0/missing_image/x150.png" />
-				<p>Image name 2</p>
-			</li>
-			<li class="media image variant:missing_image media_id:1">
-				<img src="/images/0/missing_image/x150.png" />
-				<p>Image name 3</p>
-			</li>
-		</ul>
 
 	</div>
 
 
-	<div class="tags i:_defaultTags item_id:1"
-		data-get-tags="/" 
-		data-delete-tag="/"
-		>
-		<h2>Tags</h2>
-		<?= $model->formStart("/", array("class" => "labelstyle:inject")) ?>
-			<fieldset>
-				<?= $model->input("tags", array("type" => "tags")) ?>
-			</fieldset>
+	<?//= $JML->editTags($item) ?>
 
-			<ul class="actions">
-				<?= $model->submit("Add new tag", array("class" => "primary", "wrapper" => "li.save")) ?>
-			</ul>
-		<?= $model->formEnd() ?>
+	<?//= $JML->editMedia($item) ?>
 
-		<ul class="tags">
-			<li class="tag">
-				<span class="context">context</span>:<span class="value">value 1</span>
-			</li>
-			<li class="tag">
-				<span class="context">context</span>:<span class="value">value 2</span>
-			</li>
-			<li class="tag">
-				<span class="context">context</span>:<span class="value">value 3</span>
-			</li>
-		</ul>
-	</div>
 
 </div>	

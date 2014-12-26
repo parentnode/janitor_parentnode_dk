@@ -19,49 +19,42 @@ class TypeTests extends Itemtype {
 		$this->db = SITE_DB.".item_tests";
 
 
-		$this->addToModel("string", array(
+		$this->addToModel("name", array(
 			"type" => "string",
 			"label" => "String",
 			"required" => true,
 			"error_message" => "String must be string"
 		));
 
-		$this->addToModel("text", array(
+		$this->addToModel("v_text", array(
 			"type" => "text",
 			"label" => "Text",
 			"required" => true,
 			"error_message" => "Text must be text"
 		));
 
-		$this->addToModel("html", array(
-			"type" => "html",
-			"label" => "HTML",
-			"required" => true,
-			"error_message" => "HTML must be HTML"
-		));
-
-		$this->addToModel("email", array(
+		$this->addToModel("v_email", array(
 			"type" => "email",
 			"label" => "Email",
 			"required" => true,
 			"error_message" => "Email must be email"
 		));
 
-		$this->addToModel("tel", array(
+		$this->addToModel("v_tel", array(
 			"type" => "tel",
 			"label" => "Phone",
 			"required" => true,
 			"error_message" => "Phone must be phone"
 		));
 
-		$this->addToModel("password", array(
+		$this->addToModel("v_password", array(
 			"type" => "password",
 			"label" => "Password",
 			"required" => true,
 			"error_message" => "Password must be password"
 		));
 
-		$this->addToModel("select", array(
+		$this->addToModel("v_select", array(
 			"type" => "select",
 			"label" => "Select",
 			"options" => array("" => "Select option", "1" => "First option"),
@@ -69,33 +62,73 @@ class TypeTests extends Itemtype {
 			"error_message" => "Option must be selected"
 		));
 
-		$this->addToModel("datetime", array(
+		$this->addToModel("v_datetime", array(
 			"type" => "datetime",
 			"label" => "Datetime (yyyy-mm-dd hh:mm)",
 			"required" => true,
 			"error_message" => "Datetime must be of format (yyyy-mm-dd hh:mm)"
 		));
 
-		$this->addToModel("date", array(
+		$this->addToModel("v_date", array(
 			"type" => "date",
 			"label" => "Date (yyyy-mm-dd)",
 			"required" => true,
 			"error_message" => "Date must be of format (yyyy-mm-dd)"
 		));
 
-		$this->addToModel("integer", array(
+		$this->addToModel("v_integer", array(
 			"type" => "integer",
 			"label" => "Integer",
 			"required" => true,
 			"error_message" => "Must be Integer"
 		));
 
-		$this->addToModel("number", array(
+		$this->addToModel("v_number", array(
 			"type" => "number",
 			"label" => "Number",
 			"required" => true,
 			"error_message" => "Must be Number"
 		));
+
+		$this->addToModel("v_checkbox", array(
+			"type" => "checkbox",
+			"label" => "Checkbox",
+			"required" => true,
+			"error_message" => "Must be checked"
+		));
+
+		$this->addToModel("v_radiobuttons", array(
+			"type" => "radiobuttons",
+			"label" => "Radiobuttons",
+			"options" => array("value1" => "text1", "value2" => "text2"),
+			"required" => true,
+			"error_message" => "One must be selected"
+		));
+
+
+		$this->addToModel("v_html", array(
+			"type" => "html",
+			"label" => "HTML",
+			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg", //",mp4,vimeo,youtube",
+			"required" => true,
+			"error_message" => "HTML must be HTML"
+		));
+
+		$this->addToModel("v_location", array(
+			"type" => "location",
+			"label" => "Location",
+			//"required" => true,
+			"error_message" => "Must be location"
+		));
+		$this->addToModel("v_latitude", array(
+			"type" => "number",
+			"label" => "Latitude"
+		));
+		$this->addToModel("v_longitude", array(
+			"type" => "number",
+			"label" => "Longitude"
+		));
+
 
 		$this->addToModel("tag", array(
 			"type" => "tag",
@@ -119,7 +152,7 @@ class TypeTests extends Itemtype {
 	function stringValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("string"))) {
+		if($this->validateList(array("name"))) {
 			return true;
 		}
 		return false;
@@ -128,7 +161,7 @@ class TypeTests extends Itemtype {
 	function textValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("text"))) {
+		if($this->validateList(array("v_text"))) {
 			return true;
 		}
 		return false;
@@ -137,7 +170,7 @@ class TypeTests extends Itemtype {
 	function htmlValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("html"))) {
+		if($this->validateList(array("v_html"))) {
 			return true;
 		}
 		return false;
@@ -146,7 +179,7 @@ class TypeTests extends Itemtype {
 	function selectValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("select"))) {
+		if($this->validateList(array("v_select"))) {
 			return true;
 		}
 		return false;
@@ -155,7 +188,7 @@ class TypeTests extends Itemtype {
 	function emailValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("email"))) {
+		if($this->validateList(array("v_email"))) {
 			return true;
 		}
 		return false;
@@ -164,7 +197,7 @@ class TypeTests extends Itemtype {
 	function telValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("tel"))) {
+		if($this->validateList(array("v_tel"))) {
 			return true;
 		}
 		return false;
@@ -173,7 +206,7 @@ class TypeTests extends Itemtype {
 	function passwordValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("password"))) {
+		if($this->validateList(array("v_password"))) {
 			return true;
 		}
 		return false;
@@ -182,7 +215,7 @@ class TypeTests extends Itemtype {
 	function dateValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("date"))) {
+		if($this->validateList(array("v_date"))) {
 			return true;
 		}
 		return false;
@@ -191,7 +224,7 @@ class TypeTests extends Itemtype {
 	function datetimeValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("datetime"))) {
+		if($this->validateList(array("v_datetime"))) {
 			return true;
 		}
 		return false;
@@ -200,7 +233,7 @@ class TypeTests extends Itemtype {
 	function integerValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("integer"))) {
+		if($this->validateList(array("v_integer"))) {
 			return true;
 		}
 		return false;
@@ -209,7 +242,25 @@ class TypeTests extends Itemtype {
 	function numberValidation() {
 
 		$this->getPostedEntities();
-		if($this->validateList(array("number"))) {
+		if($this->validateList(array("v_number"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function checkboxValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("v_checkbox"))) {
+			return true;
+		}
+		return false;
+	}
+
+	function radiobuttonsValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("v_radiobuttons"))) {
 			return true;
 		}
 		return false;
@@ -233,6 +284,8 @@ class TypeTests extends Itemtype {
 		return false;
 	}
 
+
+	function testAll() {}
 }
 
 ?>

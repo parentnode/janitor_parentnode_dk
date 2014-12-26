@@ -4,8 +4,8 @@
 
 
 	<ul>
-		<li><a href="/tests/security">Security</a></li>
-		<li><a href="/tests/form">Form interface</a></li>
-		<li><a href="/tests/form-validation">Form validation</a></li>
+		<?= $HTML->link("Security", "/janitor/tests/security", array("wrapper" => "li.security")) ?>
+		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
+		<?= $HTML->link("Form validation", "/janitor/tests/form-validation", array("wrapper" => "li.formvalidation")) ?>
 	</ul>
 </div>
