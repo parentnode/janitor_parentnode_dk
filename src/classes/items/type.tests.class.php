@@ -109,7 +109,7 @@ class TypeTests extends Itemtype {
 		$this->addToModel("v_html", array(
 			"type" => "html",
 			"label" => "HTML",
-			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg", //",mp4,vimeo,youtube",
+			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube", //",mp4",
 			"required" => true,
 			"error_message" => "HTML must be HTML"
 		));
