@@ -117,6 +117,14 @@
 
 
 
+			<h3>7. Installing FFMpeg</h3>
+			<ul>
+				<li>Download "FFmpeg git-48efe9e Win32 Static" from this site: <a href="http://zeranoe1.rssing.com/chan-5973786/all_p23.html" target="_blank">http://zeranoe1.rssing.com/chan-5973786/all_p23.html</a></li>
+				<li>Extract it into the folder <strong>"/srv"</strong> and rename it to <strong>"ffmpeg"</strong>. So we have <strong>"/srv/ffmpeg"</strong></li>
+				<li>To check the FFMpeg version: Go to the directory <strong>"/srv/ffmpeg/bin"</strong> and excute this command: <strong>"ffmpeg -version"</strong></li>
+			</ul>
+
+			
 			<h3>Sample file: <em>"/srv/sites/apache/apache.conf"</em></h3>
 			<p></p>
 			<code>
