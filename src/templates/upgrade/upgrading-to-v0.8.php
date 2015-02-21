@@ -22,6 +22,9 @@ Upgade class
 
 Itemtypes extend Itemtype (instead of Model)
 
+
+
+
 new Item()
 to
 new Items()

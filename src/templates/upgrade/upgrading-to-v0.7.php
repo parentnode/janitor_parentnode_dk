@@ -136,8 +136,9 @@ update 404 path in apache conf (and delete existing 404 controller)
 
 modify DB user_access manually or run quickfix-access if site is already set up with users
 
+
 check if SITE_EMAIL exists in config.php (it should)
-check values of DEFAULT_COUNTRY_ISO and DEFAULT_COUNTRY_ISO in config.php
+check values of DEFAULT_COUNTRY_ISO and DEFAULT_LANGUAGE_ISO in config.php
 check SITE_COLLECT_NOTIFICATIONS in config.php (should be declared)
 check SITE_URL in config.php = define("SITE_URL", $_SERVER["SERVER_NAME"]);
 
@@ -145,8 +146,12 @@ check SITE_URL in config.php = define("SITE_URL", $_SERVER["SERVER_NAME"]);
 Implement simplified connect_mail.php (without from + name)
 
 
+
 page and post
+
 Update paths in janitor.footer.php 
+Update janitor.footer.php to use HTML->link syntax
+
 delete controllers and templates if exists (and remove css for backend)
 
 

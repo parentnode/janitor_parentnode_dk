@@ -1,4 +1,2 @@
-#header .logo:active,
-#navigation ul li:active {text-decoration: none;}
-
-#content .scene a:active {text-decoration: underline;}
+#content ul.actions input.button.primary:active,
+#content ul.actions a.button.primary:active {background-color: #ff7c00;}
