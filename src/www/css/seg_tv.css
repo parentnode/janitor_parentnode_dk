@@ -378,6 +378,8 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 }
 
 
+/*s-pages-desktop_light.css*/
+#navigation {display: none;}
 
 /*s-colorscheme-desktop_light.css*/
 * {color: #ff7c00;}

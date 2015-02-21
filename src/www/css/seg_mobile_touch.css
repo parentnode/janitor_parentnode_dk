@@ -573,3 +573,5 @@ body {}
 .pricing #navigation ul li.pricing {color: #ff7c00;}
 
 
+/*s-pages-mobile_touch.css*/
+#header .servicenavigation {display: none;}

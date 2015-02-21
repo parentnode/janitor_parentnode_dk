@@ -579,6 +579,8 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 }
 
 
+/*s-pages-desktop.css*/
+#navigation {display: none;}
 
 /*s-colorscheme-desktop.css*/
 * {color: #ff7c00;}

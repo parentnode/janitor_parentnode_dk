@@ -283,6 +283,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 
 
 
+/*s-pages-mobile.css*/
+#navigation {display: none;}
 
 /*s-colorscheme-mobile.css*/
 * {color: #ff7c00;}

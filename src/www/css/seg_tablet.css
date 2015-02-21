@@ -573,6 +573,8 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 }
 
 
+/*s-pages-desktop.css*/
+#navigation {display: none;}
 
 /*s-colorscheme-desktop.css*/
 * {color: #ff7c00;}
