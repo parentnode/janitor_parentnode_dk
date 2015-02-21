@@ -117,6 +117,32 @@
 
 
 
+			<h3>7. Installing Imagick</h3>
+			<p>Download and install this file: <a href="http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/binaries/ImageMagick-6.7.7-5-Q16-windows-dll.exe" target="_blank">http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/binaries/ImageMagick-6.7.7-5-Q16-windows-dll.exe</a></p>
+
+			
+			
+			
+			<h3>8. Installing Imagick extension for PHP</h3>
+			<ul>
+				<li>Download this file: <a href="http://www.peewit.fr/imagick/releases/php_imagick-3.2.0RC1-5.5-ts-vc11-x86.zip" target="_blank">http://www.peewit.fr/imagick/releases/php_imagick-3.2.0RC1-5.5-ts-vc11-x86.zip</a></li>
+				<li>Extract the file <strong>"php_imagick.dll"</strong> to php <strong>"ext"</strong> folder (ex: wamp\bin\php\php5.5.12\ext)</li>
+				<li>Edit <strong>php.ini</strong> file and add new extension:<br/>
+					<strong>extension=php_imagick.dll</strong>
+				</li>
+				<li>Restart WAMPP Server</li>
+			</ul>
+
+			
+			
+			<h3>9. Installing FFMpeg</h3>
+			<ul>
+				<li>Download "FFmpeg git-48efe9e Win32 Static" from this site: <a href="http://zeranoe1.rssing.com/chan-5973786/all_p23.html" target="_blank">http://zeranoe1.rssing.com/chan-5973786/all_p23.html</a></li>
+				<li>Extract it into the folder <strong>"/srv"</strong> and rename it to <strong>"ffmpeg"</strong>. So we have <strong>"/srv/ffmpeg"</strong></li>
+				<li>To check the FFMpeg version: Go to the directory <strong>"/srv/ffmpeg/bin"</strong> and excute this command: <strong>"ffmpeg -version"</strong></li>
+			</ul>
+
+			
 			<h3>Sample file: <em>"/srv/sites/apache/apache.conf"</em></h3>
 			<p></p>
 			<code>
