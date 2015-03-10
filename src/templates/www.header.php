@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<?= $this->language() ?>">
 <head>
-	<!-- (c) & (p) parentnode.dk 2009-2014 //-->
+	<!-- (c) & (p) parentnode.dk 2009-2015 //-->
 	<!-- All material protected by copyrightlaws, as if you didnt know //-->
 	<!-- If you want to help build the ultimate frontend-centered platform, visit parentnode.dk -->
 	<title><?= SITE_NAME ?> - <?= $this->pageTitle() ?></title>
@@ -27,6 +27,12 @@
 	<div id="header">
 		<ul class="servicenavigation">
 			<li class="keynav navigation nofollow"><a href="#navigation">To navigation</a></li>
+<?		if(session()->value("user_id") && session()->value("user_group_id") > 1): ?>
+			<li class="keynav admin nofollow"><a href="/janitor">Janitor</a></li>
+			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
+<?		else: ?>
+			<li class="keynav user nofollow"><a href="/login">Login</a></li>
+<?		endif; ?>
 		</ul>
 	</div>
 
