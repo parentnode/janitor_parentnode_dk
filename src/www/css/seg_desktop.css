@@ -504,7 +504,7 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
 #content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
-#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 90px; stroke: #999999; stroke-width: 2px;}
+#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 90px; stroke: #999999; stroke-width: 3px;}
 #content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
 #content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
 #content .scene div.functions .function .body .uses .manipulator ul {padding-bottom: 0;}
