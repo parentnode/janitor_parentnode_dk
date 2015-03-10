@@ -1,4 +1,8 @@
-<div class="scene gettingstarted i:scene">
+<?php
+$this->bodyClass("gettingstarted");
+$this->pageTitle("Folder layout of Janitor");
+?>
+<div class="scene folderlayout i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
 		<h1 itemprop="name">The folder layout of Janitor</h1>
@@ -11,7 +15,14 @@
 		</dl>
 
 		<div class="articlebody" itemprop="articleBody">
-			<ul>
+
+			<p>This is work in progress and part of milestone for v0.8 - Check the
+				<a href="/pages/milestones">Milestones</a> for more information.
+			</p>
+
+			<h2>Folders in Janitor</h2>
+
+			<ul class="folders">
 				<li><h3>apache - local development apache configuration</h3></li>
 				<li>
 					<h3>src - specific project files</h3>

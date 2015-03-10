@@ -11,7 +11,7 @@ $action = $page->actions();
 
 
 $page->bodyClass("pages");
-$page->pageTitle("Every good library deserves performance");
+$page->pageTitle("Every good library deserves content");
 
 
 if(is_array($action) && count($action)) {
@@ -28,7 +28,7 @@ if(is_array($action) && count($action)) {
 
 
 $page->page(array(
-	"templates" => "docs/index.php"
+	"templates" => "pages/getting-started.php"
 ));
 exit();
 

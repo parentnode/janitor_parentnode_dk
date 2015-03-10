@@ -1,3 +1,7 @@
+<?php
+$this->bodyClass("gettingstarted");
+$this->pageTitle("Howto ...");
+?>
 <style>
 	*{
 		color: #666;

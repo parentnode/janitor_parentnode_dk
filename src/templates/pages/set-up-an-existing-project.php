@@ -1,3 +1,7 @@
+<?php
+$this->bodyClass("gettingstarted");
+$this->pageTitle("Howto ...");
+?>
 <div class="scene gettingstarted i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
@@ -13,11 +17,11 @@
 		<div class="articlebody" itemprop="articleBody">
 			<p>
 				This is <strong>not</strong> a guide for 
-				<a href="/getting-started/create-a-new-project">creating a new Janitor project</a>.
+				<a href="/pages/create-a-new-project">creating a new Janitor project</a>.
 			</p>
 
-			<p>
-				To be continued.
+			<p>Part of milestone for v0.9 - Check the
+				<a href="/pages/milestones">Milestones</a> for more information.
 			</p>
 		</div>
 	</div>

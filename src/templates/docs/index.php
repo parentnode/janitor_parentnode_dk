@@ -1,68 +1,73 @@
 <div class="scene docsindex i:docsindex">
 
-	<div class="article" itemscope itemtype="http://schema.org/Article">
-		<h1 itemprop="name">Documentation</h1>
+	<h1>Documentation</h1>
 
-		<dl class="info">
-			<dt class="published_at">Date published</dt>
-			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
-			<dt class="author">Author</dt>
-			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
-		</dl>
+	<ul class="actions">
+		<li><a class="nofollow" href="#library_files" rel="nofollow">Goto files</a></li>
+	</ul>
 
-		<div class="articlebody" itemprop="articleBody">
-			<ul class="actions">
-				<li><a class="nofollow" href="#library_files" rel="nofollow">Goto files</a></li>
-			</ul>
+	<p>
+		This documentation cover Core classes and APIs of Janitor. 
+		If you are new to Janitor, check out <a href="/getting-started">getting started</a>.
+	</p>
 
-			<ul class="related">
-				<li>
-					<h3><a href="/getting-started">Getting started</a></h3>
-					<p>Introduction</p>
-				</li>
-			</ul>
+	<p class="note">
+		We are currently in the process of updating the documentation, while working on the release of
+		Janitor 0.8. Until then, we apoligize the incomplete online documentation. Check the
+		<a href="/pages/milestones">Milestones</a> for more information.
+	</p>
 
-			<div class="search"></div>
+	<div class="search"></div>
 
-			<div class="files">
+	<div class="files" id="library_files">
 
-				<h2>Index</h2>
-				<ul class="library">
-					<li>
-						<h3><a href="/docs/class-page">Page</a></h3>
-						<p>Core request and response structure</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-items">Items</a></h3>
-						<p>Getting and manipulating items</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-users">Users</a></h3>
-						<p>Getting and manipulating users</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-image">Image</a></h3>
-						<p>Image class</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-video">Video</a></h3>
-						<p>Video class</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-audio">Audio</a></h3>
-						<p>Audio class</p>
-					</li>
-					<li>
-						<h3><a href="/docs/class-filesystem">Filesystem</a></h3>
-						<p>Filesystem class</p>
-					</li>
-					<li>
-						<h3><a href="/docs/autoconversion">Media auto-conversion</a></h3>
-						<p>Media scaling and format conversion (Image, Video, Audio)</p>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<h2>Index</h2>
+		<ul class="library">
+			<li>
+				<h3><a href="/docs/class-page">Page</a></h3>
+				<p>Core request and response structure</p>
+			</li>
+			<!--li>
+				<h3><a href="/docs/class-items">Items</a></h3>
+				<p>Querying items and item data</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
+				<p>Creating and manipulating itemtypes</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-superuser">Superusers</a></h3>
+				<p>Getting, creating and manipulating users</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-user">Users</a></h3>
+				<p>Plain user creation and manipulation</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-html">HTML</a></h3>
+				<p>HTML class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-image">Image</a></h3>
+				<p>Image class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-video">Video</a></h3>
+				<p>Video class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-audio">Audio</a></h3>
+				<p>Audio class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-filesystem">Filesystem</a></h3>
+				<p>Filesystem class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/api-autoconversion">Media auto-conversion (API)</a></h3>
+				<p>Media scaling and format conversion (Image, Video, Audio)</p>
+			</li-->
+		</ul>
 	</div>
 
 </div>

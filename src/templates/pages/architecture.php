@@ -1,7 +1,11 @@
+<?php
+$this->bodyClass("gettingstarted");
+$this->pageTitle("Architecture of Janitor");
+?>
 <div class="scene gettingstarted i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
-		<h1 itemprop="name">Create Janitor project. Quickly.</h1>
+		<h1 itemprop="name">Architecture of Janitor</h1>
 
 		<dl class="info">
 			<dt class="published_at">Date published</dt>
@@ -11,18 +15,11 @@
 		</dl>
 
 		<div class="articlebody" itemprop="articleBody">
-			<p>
-				This is <strong>not</strong> a guide for 
-				<a href="/getting-started/set-up-an-existing-janitor-project">setting up an existing Janitor project</a>.
+
+			<p>Part of milestone for v0.8 - Check the
+				<a href="/pages/milestones">Milestones</a> for more information.
 			</p>
 
-			<ul class="toc i:toc"></ul>
-
-			<h2>Introduction</h2>
-			<p>
-				Yes we need this - because the full version becomes so extensive. Will be a summerization, once the full 
-				version is tested and understood by Stefan, Thao and Thuyet.
-			</p>
 		</div>
 	</div>
 

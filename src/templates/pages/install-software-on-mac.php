@@ -1,3 +1,7 @@
+<?php
+$this->bodyClass("gettingstarted");
+$this->pageTitle("Howto ...");
+?>
 <div class="scene gettingstarted i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
@@ -11,6 +15,11 @@
 		</dl>
 
 		<div class="articlebody" itemprop="articleBody">
+			<p>This is work in progress and part of milestone for v0.8 - Check the
+				<a href="/pages/milestones">Milestones</a> for more information.
+			</p>
+
+
 			<p>
 				This guides you through a complete setup, using the preferred
 				Janitor development environment layout.
