@@ -6764,1017 +6764,6 @@ if(u.ga_account) {
 }
 
 
-/*u-form.js*/
-Util.Form = u.f = new function() {
-	this.customInit = {};
-	this.customValidate = {};
-	this.customSend = {};
-	this.init = function(form, _options) {
-		var i, j, field, action, input, hidden_field;
-		form._focus_z_index = 50;
-		form._validation = true;
-		form._debug_init = false;
-		if(typeof(_options) == "object") {
-			var _argument;
-			for(_argument in _options) {
-				switch(_argument) {
-					case "validation"       : form._validation      = _options[_argument]; break;
-					case "focus_z"          : form._focus_z_index   = _options[_argument]; break;
-					case "debug"            : form._debug_init      = _options[_argument]; break;
-				}
-			}
-		}
-		form.onsubmit = function(event) {return false;}
-		form.setAttribute("novalidate", "novalidate");
-		form.DOMsubmit = form.submit;
-		form.submit = this._submit;
-		form.fields = {};
-		form.actions = {};
-		form.labelstyle = u.cv(form, "labelstyle");
-		var fields = u.qsa(".field", form);
-		for(i = 0; field = fields[i]; i++) {
-			field._base_z_index = u.gcs(field, "z-index");
-			field._help = u.qs(".help", field);
-			field._hint = u.qs(".hint", field);
-			field._error = u.qs(".error", field);
-			if(typeof(u.f.fixFieldHTML) == "function") {
-				u.f.fixFieldHTML(field);
-			}
-			field._indicator = u.ae(field, "div", {"class":"indicator"});
-			field._initialized = false;
-			var custom_init;
-			for(custom_init in this.customInit) {
-				if(field.className.match(custom_init)) {
-					this.customInit[custom_init](form, field);
-					field._initialized = true;
-				}
-			}
-			if(!field._initialized) {
-				if(u.hc(field, "string|email|tel|number|integer|password|date|datetime")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.inputOnEnter(field._input);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "text")) {
-					field._input = u.qs("textarea", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					if(u.hc(field, "autoexpand")) {
-						var current_height = parseInt(u.gcs(field._input, "height"));
-						var current_value = field._input.val();
-						field._input.value = "";
-						u.as(field._input, "overflow", "hidden");
-						field._input.autoexpand_offset = 0;
-						if(parseInt(u.gcs(field._input, "height")) != field._input.scrollHeight) {
-							field._input.autoexpand_offset = field._input.scrollHeight - parseInt(u.gcs(field._input, "height"));
-						}
-						field._input.value = current_value;
-						field._input.setHeight = function() {
-							var textarea_height = parseInt(u.gcs(this, "height"));
-							if(this.val()) {
-								if(u.browser("webkit") || u.browser("firefox", ">=29")) {
-									if(this.scrollHeight - this.autoexpand_offset > textarea_height) {
-										u.a.setHeight(this, this.scrollHeight);
-									}
-								}
-								else if(u.browser("opera") || u.browser("explorer")) {
-									if(this.scrollHeight > textarea_height) {
-										u.a.setHeight(this, this.scrollHeight);
-									}
-								}
-								else {
-									u.a.setHeight(this, this.scrollHeight);
-								}
-							}
-						}
-						u.e.addEvent(field._input, "keyup", field._input.setHeight);
-						field._input.setHeight();
-					}
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "select")) {
-					field._input = u.qs("select", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value_select;
-					u.e.addEvent(field._input, "change", this._updated);
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "checkbox|boolean")) {
-					field._input = u.qs("input[type=checkbox]", field);
-					field._input.field = field;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					form.fields[field._input.name] = field._input;
-					field._input.val = this._value_checkbox;
-					if(u.browser("explorer", "<=8")) {
-						field._input.pre_state = field._input.checked;
-						field._input._changed = this._changed;
-						field._input._updated = this._updated;
-						field._input._update_checkbox_field = this._update_checkbox_field;
-						field._input._clicked = function(event) {
-							if(this.checked != this.pre_state) {
-								this._changed(window.event);
-								this._updated(window.event);
-								this._update_checkbox_field(window.event);
-							}
-							this.pre_state = this.checked;
-						}
-						u.e.addEvent(field._input, "click", field._input._clicked);
-					}
-					else {
-						u.e.addEvent(field._input, "change", this._changed);
-						u.e.addEvent(field._input, "change", this._updated);
-						u.e.addEvent(field._input, "change", this._update_checkbox_field);
-					}
-					this.inputOnEnter(field._input);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "radiobuttons")) {
-					field._inputs = u.qsa("input", field);
-					field._input = field._inputs[0];
-					form.fields[field._input.name] = field._input;
-					for(j = 0; input = field._inputs[j]; j++) {
-						input.field = field;
-						input._label = u.qs("label[for="+input.id+"]", field);
-						input.val = this._value_radiobutton;
-						if(u.browser("explorer", "<=8")) {
-							input.pre_state = input.checked;
-							input._changed = this._changed;
-							input._updated = this._updated;
-							input._clicked = function(event) {
-								var i, input;
-								if(this.checked != this.pre_state) {
-									this._changed(window.event);
-									this._updated(window.event);
-								}
-								for(i = 0; input = this.field._input[i]; i++) {
-									input.pre_state = input.checked;
-								}
-							}
-							u.e.addEvent(input, "click", input._clicked);
-						}
-						else {
-							u.e.addEvent(input, "change", this._changed);
-							u.e.addEvent(input, "change", this._updated);
-						}
-						this.inputOnEnter(input);
-						this.activateInput(input);
-					}
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "files")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					u.e.addEvent(field._input, "change", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					u.e.addEvent(field._input, "focus", this._focus);
-					u.e.addEvent(field._input, "blur", this._blur);
-					if(u.e.event_pref == "mouse") {
-						u.e.addEvent(field._input, "dragenter", this._focus);
-						u.e.addEvent(field._input, "dragleave", this._blur);
-						u.e.addEvent(field._input, "mouseenter", this._mouseenter);
-						u.e.addEvent(field._input, "mouseleave", this._mouseleave);
-					}
-					u.e.addEvent(field._input, "blur", this._validate);
-					field._input.val = this._value_file;
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "tags")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.inputOnEnter(field._input);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "prices")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.inputOnEnter(field._input);
-					this.activateInput(field._input);
-					this.validate(field._input);
-				}
-				else {
-					u.bug("UNKNOWN FIELD IN FORM INITIALIZATION:" + u.nodeId(field));
-				}
-			}
-		}
-		var hidden_fields = u.qsa("input[type=hidden]", form);
-		for(i = 0; hidden_field = hidden_fields[i]; i++) {
-			if(!form.fields[hidden_field.name]) {
-				form.fields[hidden_field.name] = hidden_field;
-				hidden_field.val = this._value;
-			}
-		}
-		var actions = u.qsa(".actions li input[type=button],.actions li input[type=submit],.actions li a.button", form);
-		for(i = 0; action = actions[i]; i++) {
-			if(!action.form) {
-				action.form = form;
-			}
-			this.activateButton(action);
-		}
-		if(form._debug_init) {
-			u.bug(u.nodeId(form) + ", fields:");
-			u.xInObject(form.fields);
-			u.bug(u.nodeId(form) + ", actions:");
-			u.xInObject(form.actions);
-		}
-	}
-	this._submit = function(event, iN) {
-		for(name in this.fields) {
-			if(this.fields[name].field) {
-				this.fields[name].used = true;
-				u.f.validate(this.fields[name]);
-			}
-		}
-		if(u.qs(".field.error", this)) {
-			if(typeof(this.validationFailed) == "function") {
-				this.validationFailed();
-			}
-		}
-		else {
-			if(typeof(this.submitted) == "function") {
-				this.submitted(iN);
-			}
-			else {
-				this.DOMsubmit();
-			}
-		}
-	}
-	this._value = function(value) {
-		if(value !== undefined) {
-			this.value = value;
-			if(value !== this.default_value) {
-				u.rc(this, "default");
-				if(this.pseudolabel) {
-					u.as(this.pseudolabel, "display", "none");
-				}
-			}
-			u.f.validate(this);
-		}
-		return (this.value != this.default_value) ? this.value : "";
-	}
-	this._value_radiobutton = function(value) {
-		var i, option;
-		if(value !== undefined) {
-			for(i = 0; option = this.form[this.name][i]; i++) {
-				if(option.value == value || (option.value == "true" && value) || (option.value == "false" && value === false)) {
-					option.checked = true;
-					u.f.validate(this);
-				}
-			}
-		}
-		else {
-			for(i = 0; option = this.form[this.name][i]; i++) {
-				if(option.checked) {
-					return option.value;
-				}
-			}
-		}
-		return "";
-	}
-	this._value_checkbox = function(value) {
-		if(value !== undefined) {
-			if(value) {
-				this.checked = true
-				u.ac(this.field, "checked");
-			}
-			else {
-				this.checked = false;
-				u.rc(this.field, "checked");
-			}
-			u.f.validate(this);
-		}
-		else {
-			if(this.checked) {
-				return this.value;
-			}
-		}
-		return "";
-	}
-	this._value_select = function(value) {
-		if(value !== undefined) {
-			var i, option;
-			for(i = 0; option = this.options[i]; i++) {
-				if(option.value == value) {
-					this.selectedIndex = i;
-					u.f.validate(this);
-					return i;
-				}
-			}
-			return false;
-		}
-		else {
-			return this.default_value != this.options[this.selectedIndex].value ? this.options[this.selectedIndex].value : "";
-		}
-	}
-	this._value_file = function(value) {
-		if(value !== undefined) {
-			this.value = value;
-		}
-		else {
-			if(this.value && this.files && this.files.length) {
-				var i, file, files = [];
-				for(i = 0; file = this.files[i]; i++) {
-					files.push(file);
-				}
-				return files;
-			}
-			else if(this.value) {
-				return this.value;
-			}
-			else if(u.hc(this, "uploaded")){
-				return true;
-			}
-			return "";
-		}
-	}
-	this.inputOnEnter = function(node) {
-		node.keyPressed = function(event) {
-			if(this.nodeName.match(/input/i) && (event.keyCode == 40 || event.keyCode == 38)) {
-				this._submit_disabled = true;
-			}
-			else if(this.nodeName.match(/input/i) && this._submit_disabled && (
-				event.keyCode == 46 || 
-				(event.keyCode == 39 && u.browser("firefox")) || 
-				(event.keyCode == 37 && u.browser("firefox")) || 
-				event.keyCode == 27 || 
-				event.keyCode == 13 || 
-				event.keyCode == 9 ||
-				event.keyCode == 8
-			)) {
-				this._submit_disabled = false;
-			}
-			else if(event.keyCode == 13 && !this._submit_disabled) {
-				u.e.kill(event);
-				this.blur();
-				this.form.submitInput = this;
-				this.form.submitButton = false;
-				this.form.submit(event, this);
-			}
-		}
-		u.e.addEvent(node, "keydown", node.keyPressed);
-	}
-	this.buttonOnEnter = function(node) {
-		node.keyPressed = function(event) {
-			if(event.keyCode == 13 && !u.hc(this, "disabled")) {
-				u.e.kill(event);
-				this.form.submit_input = false;
-				this.form.submit_button = this;
-				this.form.submit(event);
-			}
-		}
-		u.e.addEvent(node, "keydown", node.keyPressed);
-	}
-	this._changed = function(event) {
-		this.used = true;
-		if(typeof(this.changed) == "function") {
-			this.changed(this);
-		}
-		else if(this.field._input && typeof(this.field._input.changed) == "function") {
-			this.field._input.changed(this);
-		}
-		if(typeof(this.form.changed) == "function") {
-			this.form.changed(this);
-		}
-	}
-	this._updated = function(event) {
-		if(event.keyCode != 9 && event.keyCode != 13 && event.keyCode != 16 && event.keyCode != 17 && event.keyCode != 18) {
-			if(this.used || u.hc(this.field, "error")) {
-				u.f.validate(this);
-			}
-			if(typeof(this.updated) == "function") {
-				this.updated(this);
-			}
-			else if(this.field._input && typeof(this.field._input.updated) == "function") {
-				this.field._input.updated(this);
-			}
-			if(typeof(this.form.updated) == "function") {
-				this.form.updated(this);
-			}
-		}
-	}
-	this._update_checkbox_field = function(event) {
-		if(this.checked) {
-			u.ac(this.field, "checked");
-		}
-		else {
-			u.rc(this.field, "checked");
-		}
-	}
-	this._validate = function(event) {
-		u.f.validate(this);
-	}
-	this._mouseenter = function(event) {
-		u.ac(this.field, "hover");
-		u.ac(this, "hover");
-		u.as(this.field, "zIndex", this.field._input.form._focus_z_index);
-		u.f.positionHint(this.field);
-	}
-	this._mouseleave = function(event) {
-		u.rc(this.field, "hover");
-		u.rc(this, "hover");
-		u.as(this.field, "zIndex", this.field._base_z_index);
-		u.f.positionHint(this.field);
-	}
-	this._focus = function(event) {
-		this.field.is_focused = true;
-		this.is_focused = true;
-		u.ac(this.field, "focus");
-		u.ac(this, "focus");
-		u.as(this.field, "zIndex", this.form._focus_z_index);
-		u.f.positionHint(this.field);
-		if(typeof(this.focused) == "function") {
-			this.focused();
-		}
-		else if(this.field._input && typeof(this.field._input.focused) == "function") {
-			this.field._input.focused(this);
-		}
-		if(typeof(this.form.focused) == "function") {
-			this.form.focused(this);
-		}
-	}
-	this._blur = function(event) {
-		this.field.is_focused = false;
-		this.is_focused = false;
-		u.rc(this.field, "focus");
-		u.rc(this, "focus");
-		u.as(this.field, "zIndex", this.field._base_z_index);
-		u.f.positionHint(this.field);
-		this.used = true;
-		if(typeof(this.blurred) == "function") {
-			this.blurred();
-		}
-		else if(this.field._input && typeof(this.field._input.blurred) == "function") {
-			this.field._input.blurred(this);
-		}
-		if(typeof(this.form.blurred) == "function") {
-			this.form.blurred(this);
-		}
-	}
-	this._button_focus = function(event) {
-		u.ac(this, "focus");
-		if(typeof(this.focused) == "function") {
-			this.focused();
-		}
-		if(typeof(this.form.focused) == "function") {
-			this.form.focused(this);
-		}
-	}
-	this._button_blur = function(event) {
-		u.rc(this, "focus");
-		if(typeof(this.blurred) == "function") {
-			this.blurred();
-		}
-		if(typeof(this.form.blurred) == "function") {
-			this.form.blurred(this);
-		}
-	}
-	this._changed_state = function() {
-		u.f.updateDefaultState(this);
-	}
-	this.positionHint = function(field) {
-		if(field._help) {
-			var f_h =  field.offsetHeight;
-			var f_p_t = parseInt(u.gcs(field, "padding-top"));
-			var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
-			var f_b_t = parseInt(u.gcs(field, "border-top-width"));
-			var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
-			var f_h_h = field._help.offsetHeight;
-			if(u.hc(field, "html")) {
-				var l_h = field._input._label.offsetHeight;
-				var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2)) - (f_h_h / 2) + l_h;
-				u.as(field._help, "top", help_top + "px");
-			}
-			else {
-				var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2)
-				u.as(field._help, "top", help_top + "px");
-			}
-		}
-	}
-	this.activateInput = function(iN) {
-		u.e.addEvent(iN, "focus", this._focus);
-		u.e.addEvent(iN, "blur", this._blur);
-		if(u.e.event_pref == "mouse") {
-			u.e.addEvent(iN, "mouseenter", this._mouseenter);
-			u.e.addEvent(iN, "mouseleave", this._mouseleave);
-		}
-		u.e.addEvent(iN, "blur", this._validate);
-		if(iN.form.labelstyle == "inject") {
-			if(!iN.type || !iN.type.match(/file|radio|checkbox/)) {
-				iN.default_value = u.text(iN._label);
-				u.e.addEvent(iN, "focus", this._changed_state);
-				u.e.addEvent(iN, "blur", this._changed_state);
-				if(iN.type.match(/number|integer/)) {
-					iN.pseudolabel = u.ae(iN.parentNode, "span", {"class":"pseudolabel", "html":iN.default_value});
-					iN.pseudolabel.iN = iN;
-					u.as(iN.pseudolabel, "top", iN.offsetTop+"px");
-					u.as(iN.pseudolabel, "left", iN.offsetLeft+"px");
-					u.ce(iN.pseudolabel)
-					iN.pseudolabel.inputStarted = function(event) {
-						u.e.kill(event);
-						this.iN.focus();
-					}
-				}
-				u.f.updateDefaultState(iN);
-			}
-		}
-		else {
-			iN.default_value = "";
-		}
-	}
-	this.activateButton = function(action) {
-		if(action.type && action.type == "submit") {
-			action.onclick = function(event) {
-				u.e.kill(event ? event : window.event);
-			}
-		}
-		u.ce(action);
-		action.clicked = function(event) {
-			u.e.kill(event);
-			if(!u.hc(this, "disabled")) {
-				if(this.type && this.type.match(/submit/i)) {
-					this.form._submit_button = this;
-					this.form._submit_input = false;
-					this.form.submit(event, this);
-				}
-			}
-		}
-		this.buttonOnEnter(action);
-		var action_name = action.name ? action.name : action.parentNode.className;
-		if(action_name) {
-			action.form.actions[action_name] = action;
-		}
-		if(typeof(u.k) == "object" && u.hc(action, "key:[a-z0-9]+")) {
-			u.k.addKey(action, u.cv(action, "key"));
-		}
-		u.e.addEvent(action, "focus", this._button_focus);
-		u.e.addEvent(action, "blur", this._button_blur);
-	}
-	this.updateDefaultState = function(iN) {
-		if(iN.is_focused || iN.val() !== "") {
-			u.rc(iN, "default");
-			if(iN.val() === "") {
-				iN.val("");
-			}
-			if(iN.pseudolabel) {
-				u.as(iN.pseudolabel, "display", "none");
-			}
-		}
-		else {
-			if(iN.val() === "") {
-				u.ac(iN, "default");
-				if(iN.pseudolabel) {
-					iN.val(iN.default_value);
-					u.as(iN.pseudolabel, "display", "block");
-				}
-				else {
-					iN.val(iN.default_value);
-				}
-			}
-		}
-	}
-	this.fieldError = function(iN) {
-		u.rc(iN, "correct");
-		u.rc(iN.field, "correct");
-		if(iN.used || iN.val() !== "") {
-			u.ac(iN, "error");
-			u.ac(iN.field, "error");
-			this.positionHint(iN.field);
-			if(typeof(iN.validationFailed) == "function") {
-				iN.validationFailed();
-			}
-		}
-	}
-	this.fieldCorrect = function(iN) {
-		if(iN.val() !== "") {
-			u.ac(iN, "correct");
-			u.ac(iN.field, "correct");
-			u.rc(iN, "error");
-			u.rc(iN.field, "error");
-		}
-		else {
-			u.rc(iN, "correct");
-			u.rc(iN.field, "correct");
-			u.rc(iN, "error");
-			u.rc(iN.field, "error");
-		}
-	}
-	this.validate = function(iN) {
-		if(!iN.form._validation) {
-			return true;
-		}
-		var min, max, pattern;
-		var validated = false;
-		if(!u.hc(iN.field, "required") && iN.val() === "") {
-			this.fieldCorrect(iN);
-			return true;
-		}
-		else if(u.hc(iN.field, "required") && iN.val() === "") {
-			this.fieldError(iN);
-			return false;
-		}
-		var custom_validate;
-		for(custom_validate in u.f.customValidate) {
-			if(u.hc(iN.field, custom_validate)) {
-				u.f.customValidate[custom_validate](iN);
-				validated = true;
-			}
-		}
-		if(!validated) {
-			if(u.hc(iN.field, "password")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 8;
-				max = max ? max : 20;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min && 
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "number")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 0;
-				max = max ? max : 99999999999999999999999999999;
-				pattern = iN.getAttribute("pattern");
-				if(
-					!isNaN(iN.val()) && 
-					iN.val() >= min && 
-					iN.val() <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "integer")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 0;
-				max = max ? max : 99999999999999999999999999999;
-				pattern = iN.getAttribute("pattern");
-				if(
-					!isNaN(iN.val()) && 
-					Math.round(iN.val()) == iN.val() && 
-					iN.val() >= min && 
-					iN.val() <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "tel")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\+0-9\-\.\s\(\)]){5,18}$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "email")) {
-				if(
-					!pattern && iN.val().match(/^([^<>\\\/%$])+\@([^<>\\\/%$])+\.([^<>\\\/%$]{2,20})$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "text")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 10000000;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min && 
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "date")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\d]{4}[\-\/\ ]{1}[\d]{2}[\-\/\ ][\d]{2})$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "datetime")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\d]{4}[\-\/\ ]{1}[\d]{2}[\-\/\ ][\d]{2} [\d]{2}[\-\/\ \:]{1}[\d]{2}[\-\/\ \:]{0,1}[\d]{0,2})$/) ||
-					(pattern && iN.val().match(pattern))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "files")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 10000000;
-				if(
-					u.hc(iN, "uploaded") ||
-					(iN.val().length >= min && 
-					iN.val().length <= max)
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "select")) {
-				if(iN.val() !== "") {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "checkbox|boolean|radiobuttons")) {
-				if(iN.val() !== "") {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "string")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 255;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min &&
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "tags")) {
-				if(
-					!pattern && iN.val().match(/\:/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "prices")) {
-				if(
-					!isNaN(iN.val())
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-		}
-		if(u.hc(iN.field, "error")) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-}
-u.f.getParams = function(form, _options) {
-	var send_as = "params";
-	var ignore_inputs = "ignoreinput";
-	if(typeof(_options) == "object") {
-		var _argument;
-		for(_argument in _options) {
-			switch(_argument) {
-				case "ignore_inputs"    : ignore_inputs     = _options[_argument]; break;
-				case "send_as"          : send_as           = _options[_argument]; break;
-			}
-		}
-	}
-	var i, input, select, textarea, param, params;
-	if(send_as == "formdata" && (typeof(window.FormData) == "function" || typeof(window.FormData) == "object")) {
-		params = new FormData();
-	}
-	else {
-		if(send_as == "formdata") {
-			send_as == "params";
-		}
-		params = new Object();
-		params.append = function(name, value, filename) {
-			this[name] = value;
-		}
-	}
-	if(form._submit_button && form._submit_button.name) {
-		params.append(form._submit_button.name, form._submit_button.value);
-	}
-	var inputs = u.qsa("input", form);
-	var selects = u.qsa("select", form)
-	var textareas = u.qsa("textarea", form)
-	for(i = 0; input = inputs[i]; i++) {
-		if(!u.hc(input, ignore_inputs)) {
-			if((input.type == "checkbox" || input.type == "radio") && input.checked) {
-				if(typeof(input.val) == "function") {
-					params.append(input.name, input.val());
-				}
-				else {
-					params.append(input.name, input.value);
-				}
-			}
-			else if(input.type == "file") {
-				var f, file, files;
-				if(typeof(input.val) == "function") {
-					files = input.val();
-				}
-				else {
-					files = input.value;
-				}
-				if(files) {
-					for(f = 0; file = files[f]; f++) {
-						params.append(input.name, file, file.name);
-					}
-				}
-				else {
-					params.append(input.name, "");
-				}
-			}
-			else if(!input.type.match(/button|submit|reset|file|checkbox|radio/i)) {
-				if(typeof(input.val) == "function") {
-					params.append(input.name, input.val());
-				}
-				else {
-					params.append(input.name, input.value);
-				}
-			}
-		}
-	}
-	for(i = 0; select = selects[i]; i++) {
-		if(!u.hc(select, ignore_inputs)) {
-			if(typeof(select.val) == "function") {
-				params.append(select.name, select.val());
-			}
-			else {
-				params.append(select.name, select.options[select.selectedIndex].value);
-			}
-		}
-	}
-	for(i = 0; textarea = textareas[i]; i++) {
-		if(!u.hc(textarea, ignore_inputs)) {
-			if(typeof(textarea.val) == "function") {
-				params.append(textarea.name, textarea.val());
-			}
-			else {
-				params.append(textarea.name, textarea.value);
-			}
-		}
-	}
-	if(send_as && typeof(this.customSend[send_as]) == "function") {
-		return this.customSend[send_as](params, form);
-	}
-	else if(send_as == "json") {
-		return u.f.convertNamesToJsonObject(params);
-	}
-	else if(send_as == "formdata") {
-		return params;
-	}
-	else if(send_as == "object") {
-		params.append = null;
-		return params;
-	}
-	else {
-		var string = "";
-		for(param in params) {
-			if(typeof(params[param]) != "function") {
-				string += (string ? "&" : "") + param + "=" + encodeURIComponent(params[param]);
-			}
-		}
-		return string;
-	}
-}
-u.f.convertNamesToJsonObject = function(params) {
- 	var indexes, root, indexes_exsists, param;
-	var object = new Object();
-	for(param in params) {
-	 	indexes_exsists = param.match(/\[/);
-		if(indexes_exsists) {
-			root = param.split("[")[0];
-			indexes = param.replace(root, "");
-			if(typeof(object[root]) == "undefined") {
-				object[root] = new Object();
-			}
-			object[root] = this.recurseName(object[root], indexes, params[param]);
-		}
-		else {
-			object[param] = params[param];
-		}
-	}
-	return object;
-}
-u.f.recurseName = function(object, indexes, value) {
-	var index = indexes.match(/\[([a-zA-Z0-9\-\_]+)\]/);
-	var current_index = index[1];
-	indexes = indexes.replace(index[0], "");
- 	if(indexes.match(/\[/)) {
-		if(object.length !== undefined) {
-			var i;
-			var added = false;
-			for(i = 0; i < object.length; i++) {
-				for(exsiting_index in object[i]) {
-					if(exsiting_index == current_index) {
-						object[i][exsiting_index] = this.recurseName(object[i][exsiting_index], indexes, value);
-						added = true;
-					}
-				}
-			}
-			if(!added) {
-				temp = new Object();
-				temp[current_index] = new Object();
-				temp[current_index] = this.recurseName(temp[current_index], indexes, value);
-				object.push(temp);
-			}
-		}
-		else if(typeof(object[current_index]) != "undefined") {
-			object[current_index] = this.recurseName(object[current_index], indexes, value);
-		}
-		else {
-			object[current_index] = new Object();
-			object[current_index] = this.recurseName(object[current_index], indexes, value);
-		}
-	}
-	else {
-		object[current_index] = value;
-	}
-	return object;
-}
-
-
 /*u-form-geolocation-desktop_light.js*/
 Util.Form.customInit["location"] = function(form, field) {
 	field._inputs = u.qsa("input", field);
@@ -7929,6 +6918,57 @@ Util.Objects["page"] = new function() {
 window.onload = u.init;
 
 
+/*i-login-desktop_light.js*/
+Util.Objects["login"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this._form = u.qs("form", this);
+			u.f.init(this._form);
+			page.cN.scene = this;
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-signup-desktop_light.js*/
+Util.Objects["signup"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this._form = u.qs("form", this);
+			u.f.init(this._form);
+			page.cN.scene = this;
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-newsletter-desktop_light.js*/
+Util.Objects["newsletter"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this._form = u.qs("form", this);
+			u.f.init(this._form);
+			page.cN.scene = this;
+		}
+		scene.ready();
+	}
+}
+
+
 
 /*i-documentation-desktop_light.js*/
 Util.Objects["docpage"] = new function() {
@@ -7941,6 +6981,7 @@ Util.Objects["docpage"] = new function() {
 			func._header = u.qs(".header", func);
 			func._header._func = func;
 			func._body = u.qs(".body", func);
+			u.as(func._body, "display", "none");
 			func._body._func = func;
 			u.e.click(func._header);
 			func._header.clicked = function(event) {
@@ -7966,6 +7007,44 @@ Util.Objects["docpage"] = new function() {
 					selected_function._header.clicked();
 				}
 				window.scrollTo(0, u.absY(selected_function));
+			}
+		}
+		scene._files = u.qs("div.includefiles", scene);
+		if(scene._files) {
+			scene._files._header = u.qs("div.header", scene._files);
+			scene._files._header._files = scene._files;
+			scene._files._body = u.qs("div.body", scene._files);
+			u.as(scene._files._body, "display", "none");
+			scene._files._body._files = scene._files;
+			u.e.click(scene._files._header);
+			scene._files._header.clicked = function(event) {
+				if(u.hc(this._files, "open")) {
+				u.as(this._files._body, "display", "none");
+					u.rc(this._files, "open");
+				}
+				else {
+					u.as(this._files._body, "display", "block");
+					u.ac(this._files, "open");
+				}
+			}
+		}
+		scene._segments = u.qs("div.segmentsupport", scene);
+		if(scene._segments) {
+			scene._segments._header = u.qs("div.header", scene._segments);
+			scene._segments._header._segments = scene._segments;
+			scene._segments._body = u.qs("div.body", scene._segments);
+			u.as(scene._segments._body, "display", "none");
+			scene._segments._body._segments = scene._segments;
+			u.e.click(scene._segments._header);
+			scene._segments._header.clicked = function(event) {
+				if(u.hc(this._segments, "open")) {
+				u.as(this._segments._body, "display", "none");
+					u.rc(this._segments, "open");
+				}
+				else {
+					u.as(this._segments._body, "display", "block");
+					u.ac(this._segments, "open");
+				}
 			}
 		}
 	}

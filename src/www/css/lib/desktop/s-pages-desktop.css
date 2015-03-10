@@ -1,2 +1,13 @@
-/* UNTIL JANITOR NAVIGATION IS ENABLED */
-#navigation {display: none;}
+/* CHANGELOG */
+#content .scene.changelog ul.changes {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
+#content .scene.changelog ul.changes li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+
+
+/* MILESTONES */
+#content .scene.milestones ul.todo {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
+#content .scene.milestones ul.todo li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+
+
+/* FOLDER LAYOUT */
+#content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
+#content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}

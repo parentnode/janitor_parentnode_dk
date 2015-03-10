@@ -4,7 +4,7 @@
 /*seg_mobile_light_include.css*/
 
 /*s-page-mobile.css*/
-* {font-family: Verdana, Arial, sans-serif; color: #000000;}
+* {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;}
 html {}
 body {background: #ffffff; margin: 0;}
 h1, h2, h3, h4, h5, h6, p, ul, li, dl, dd, dt {padding: 0; margin: 0;}
@@ -18,10 +18,10 @@ input, select, textarea {font-size: 14px;}
 input, textarea {outline: none;}
 a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
 h1 {padding: 0 10px 20px; font-size: 24px; line-height: 1.05em;
-	font-family: Times, serif;
+	font-family: "PT Serif", Times, serif;
 }
 h2 {padding: 0 10px 20px; font-size: 20px; line-height: 1.1em;
-	font-family: Times, serif;
+	font-family: "PT Serif", Times, serif;
 }
 h3 {padding: 0 10px 10px; font-size: 16px; line-height: 1.25em;}
 h4 {padding: 0 10px 5px; font-size: 13px; line-height: 1em; font-weight: bold;}
@@ -47,7 +47,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 /*s-header-mobile.css*/
 #header {padding: 10px;}
 #header .logo {font-size: 30px; padding: 10px 20px; color: #888888; cursor: pointer; display: inline-block;
-	font-family: Times, serif;
+	font-family: "PT Serif", Times, serif;
 }
 #header .servicenavigation li.navigation {}
 #header .servicenavigation li.navigation a {}
@@ -56,7 +56,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #navigation {}
 #navigation ul {border-top: 1px solid #888888;}
 #navigation ul li {padding: 10px; font-size: 18px; color: #888888; display: block; text-align: center;
-	font-family: Times, serif;
+	font-family: "PT Serif", Times, serif;
 }
 
 

@@ -20,6 +20,7 @@ fieldset {border: none;}
 input, select, textarea {font-size: 14px; color: #333333;}
 input, textarea {outline: none;}
 a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
+em, strong {font-size: inherit; font-family: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
 h1 {padding: 0 50px 30px; font-size: 48px; line-height: 1.05em;
 	font-family: "PT Serif", Times, serif;
 }
@@ -61,8 +62,10 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 }
 #header .logo {position: fixed;}
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
-#header .servicenavigation li {padding-left: 10px; display: inline-block; vertical-align: top;}
+#header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb;}
 #header .servicenavigation li.navigation {display: none;}
+#header .servicenavigation li:after {content: "\00a0\00a0|\00a0\00a0";}
+#header .servicenavigation li:last-child:after {content: "";}
 #navigation {z-index: 10; position: fixed; right: 40px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
 #navigation ul {}
 #navigation ul li {display: inline-block; vertical-align: top; padding: 10px; font-size: 20px; color: #888888;
@@ -142,21 +145,21 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 30px 30px; width: 540px; border-radius: 5px; }
 #content .scene li div.geomap {}
 #content .scene div.image {position: relative; z-index: 1;}
-#content .scene div.image {cursor: zoom-in;}
-#content .scene div.image img {margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
+#content .scene div.image {}
+#content .scene div.image img {cursor: zoom-in; margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
 #content .scene div.image p {margin-top: -20px; padding: 0 50px 30px; font-size: 0;}
 #content .scene div.image p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none;}
 #content .scene div.image.loaded p a {display: block;}
-#content .scene div.image.fullsize {cursor: zoom-out;}
-#content .scene div.image.fullsize img {width: 100%; margin: 0 0 30px; border-radius: 0;}
+#content .scene div.image.fullsize {}
+#content .scene div.image.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
 #content .scene div.media {position: relative; z-index: 1;}
-#content .scene div.media {cursor: zoom-in;}
-#content .scene div.media img {margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
+#content .scene div.media {}
+#content .scene div.media img {cursor: zoom-in;margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
 #content .scene div.media p {margin-top: -20px; padding: 0 50px 30px; font-size: 0;}
 #content .scene div.media p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none;}
 #content .scene div.media.loaded p a {display: block;}
-#content .scene div.media.fullsize {cursor: zoom-out;}
-#content .scene div.media.fullsize img {width: 100%; margin: 0 0 30px; border-radius: 0;}
+#content .scene div.media.fullsize {}
+#content .scene div.media.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
 #content .scene .pagination {display: none;}
 #content .scene div.categories {padding-bottom: 20px; display: inline-block; vertical-align: top; width: 250px;}
 #content .scene div.categories ul {padding-right: 0;}
@@ -198,7 +201,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene li div.sharing.hover {z-index: 2;}
 #content .scene li div.sharing.hover h3,
 #content .scene li div.sharing.hover p {display: block;}
-#content .scene li div.sharing svg {z-index: 0; margin-left: 50px; position: relative; width: 500px; height: 300px; top: -130px;}
+#content .scene li div.sharing svg {z-index: 0; margin-left: 50px; position: absolute; width: 500px; height: 300px; top: -130px;}
 #content .scene li div.sharing svg rect {cursor: pointer;}
 #content .scene li div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
 #content .scene li div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
@@ -319,9 +322,9 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 	-webkit-user-select: none;
 	user-select: none;
 }
-#content ul.actions input.button {width: auto; height: 28px; padding: 3px 12px; display: inline-block; vertical-align: top;}
+#content ul.actions input.button {width: auto; height: 28px; padding: 3px 9px; display: inline-block; vertical-align: top;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	#content ul.actions input.button {padding-bottom: 5px;}
+	#content ul.actions input.button {padding: 3px 12px 5px;}
 }
 #content ul.actions a.button {display: block; text-decoration: none; height: 14px; padding: 6px 12px 8px;}
 #content ul.actions input.button,
@@ -574,7 +577,13 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 
 
 /*s-pages-desktop.css*/
-#navigation {display: none;}
+#content .scene.changelog ul.changes {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
+#content .scene.changelog ul.changes li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+#content .scene.milestones ul.todo {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
+#content .scene.milestones ul.todo li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+#content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
+#content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+
 
 /*s-colorscheme-desktop.css*/
 * {color: #ff7c00;}
