@@ -1160,9 +1160,9 @@
 							<dt class="name">Name</dt>
 							<dd class="name">segment</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">String</span> = 
+							<dd class="syntax"><span class="type">String|void</span> = 
 								Page::segment(
-									<span class="type">String</span> <span class="var">format</span> 
+									[<span class="type">String</span> <span class="var">$value</span>]
 								);
 							</dd>
 						</dl>
@@ -1170,7 +1170,10 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get/set segment current session (desktop, dekstop_ie, dekstop_light, mobile_light, mobile, mobile_touch, tablet, tv). Calls http://devices.dearapi.com for device detection.</p>
+						<p>
+							Get or set segment for current session (desktop, dekstop_ie, dekstop_light, mobile_light, mobile, mobile_touch, tablet, tv). 
+							Calls http://detector.dearapi.com for device detection.
+						</p>
 					</div>
 
 					<div class="parameters">
@@ -1180,7 +1183,7 @@
 							<dt><span class="var">$value</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">String</span> Set the segment?
+									<span class="type">String</span> Set session segment to $value
 								</div>
 							</dd>
 						</dl>
@@ -1188,33 +1191,22 @@
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">String | void</span> The segment string</p>
+						<p><span class="type">String|void</span> It the $value parameter is omitted, the segment string is returned (desktop, dekstop_ie, dekstop_light, mobile_light, mobile, mobile_touch, tablet, tv)</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$this->segment()</code>
-							<p>Prints the sessions segment.</p>
-						</div>
+						<p>No example</p>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
-
 						<div class="janitor">
-							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>Session</li>
 							</ul>
 						</div>
 
@@ -1223,14 +1215,137 @@
 				</div>
 			</div>
 
-validatePath
-validPath
+			<div class="function" id="Page::validatePath">
+				<div class="header">
+					<h3>Page::validatePath</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">validatePath</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Boolean</span> = 
+								Page::validatePath(
+									<span class="type">String</span> <span class="var">$path</span>
+								);
+							</dd>
+						</dl>
+					</div>
 
-logOff
-throwOff
+					<div class="description">
+						<h4>Description</h4>
+						<p>
+							Checks if the current user has permission to access the specified path
+						</p>
+					</div>
 
+					<div class="parameters">
+						<h4>Parameters</h4>
 
+						<dl class="parameters">
+							<dt><span class="var">$path</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> The path to validate
+								</div>
+							</dd>
+						</dl>
+					</div>
 
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Boolean</span> True if current user has access to path, false if not</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Page::checkPermissions</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::validPath">
+				<div class="header">
+					<h3>Page::validPath</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">validPath</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">String</span> = 
+								Page::validPath(
+									<span class="type">String</span> <span class="var">$path</span>
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>
+							Checks if the current user has permission to access the specified path and 
+							returns path when user has permission. This is simply a quick way to use validatePath and have the
+							path returned directly.
+						</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$path</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> The path to validate
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">String</span> The path is returned if current user has access to path, empty string if not</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Page::validatePath</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
 
 			<div class="function" id="Page::actions">
 				<div class="header">
@@ -1241,81 +1356,154 @@ throwOff
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">actions</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
-								);
+							<dd class="syntax"><span class="type">Array</span> = 
+								Page::actions();
 							</dd>
 						</dl>
 					</div>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Get Array containing current url fragments, excluding controller path.</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
-						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-							</dd>
-						</dl>
+						<p>No parameters</p>
 					</div>
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">Array</span> containing current url fragments, excluding controller path</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
-						</div>
+						<p>No example</p>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
+						<div class="janitor">
+							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>Nothing</li>
 							</ul>
 						</div>
 
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::logOff">
+				<div class="header">
+					<h3>Page::logOff</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">logOff</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Void</span> = 
+								Page::logOff();
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Log off the current user, reset session and return user to frontpage.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<p>No parameters</p>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Void</span></p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
 						<div class="janitor">
-							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>Page::addLog</li>
+								<li>Session</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::throwOff">
+				<div class="header">
+					<h3>Page::throwOff</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">throwOff</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Void</span> = 
+								Page::throwOff();
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Throw user off the system, send email to ADMIN_EMAIL, reset session and return user to login page.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<p>No parameters</p>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Void</span></p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Page::addLog</li>
+								<li>Page::mail</li>
+								<li>Session</li>
 							</ul>
 						</div>
 
@@ -1333,14 +1521,11 @@ throwOff
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">mail</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">Boolean</span> = 
+								Page::mail(
+									<span class="type">Array</span> <span class="var">$_options</span> 
 								);
 							</dd>
 						</dl>
@@ -1348,33 +1533,34 @@ throwOff
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Send mail, using specified mailer account</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">$_options</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">Array</span> Mail options
 								</div>
-								<!-- optional details -->
 								<div class="details">
-									<!-- write parameter details -->
 									<h5>Options</h5>
 									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
+										<dt><span class="value">subject</span></dt>
+										<dd>Subject of mail</dd>
+										<dt><span class="value">message</span></dt>
+										<dd>Mail message body</dd>
+										<dt><span class="value">recipients</span></dt>
+										<dd>Recipients, comma or semicolon separated</dd>
+										<dt><span class="value">template</span></dt>
+										<dd>Mail template to use for parsing message data</dd>
+										<dt><span class="value">object</span></dt>
+										<dd>Data Array to make available for template</dd>
+										<dt><span class="value">attachments</span></dt>
+										<dd>File attachments (single as string or multiple as strings in array)</dd>
 									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
 								</div>
 							</dd>
 						</dl>
@@ -1382,32 +1568,28 @@ throwOff
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">Boolean</span> true on success, false on error</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
 						<div class="example">
+							<code>$page->mail(array(
+	"subject" => "Hello world",
+	"message" => "What do you want to say!",
+	"recipients" => info@parentnode.dk
+));</code>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
-
 						<div class="janitor">
-							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>Nothing</li>
 							</ul>
 						</div>
 
@@ -1425,14 +1607,12 @@ throwOff
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">addLog</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">Void</span> = 
+								Page::addLog(
+									<span class="type">String</span> <span class="var">$message</span> 
+									[, <span class="type">String</span> <span class="var">$collection</span> ]
 								);
 							</dd>
 						</dl>
@@ -1440,33 +1620,23 @@ throwOff
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>Add message to Janitor log. Logging message, timestamp, user_id and IP-address in optional <span class="value">$collection</span>. Defaults to the <span class="value">framework</span> collection</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">$message</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
+									<span class="type">String</span> message to log
 								</div>
 							</dd>
-							<dt><span class="var">identifier</span></dt>
+							<dt><span class="var">$collection</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">String</span> Optional collection to add log to. Defaults to <span class="value">framework</span>
 								</div>
 							</dd>
 						</dl>
@@ -1474,32 +1644,25 @@ throwOff
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">Void</span></p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
 						<div class="example">
+							<code>$page->addLog("I think this is interesting");</code>
 						</div>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
-
 						<div class="janitor">
-							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>FileSystem::makeDirRecursively</li>
+								<li>Session</li>
 							</ul>
 						</div>
 
@@ -1517,14 +1680,12 @@ throwOff
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
+							<dd class="name">collectNotification</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+								Page::collectNotification(
+									<span class="type">String</span> <span class="var">$message</span> 
+									[, <span class="type">String</span> <span class="var">$collection</span> ]
 								);
 							</dd>
 						</dl>
@@ -1532,33 +1693,26 @@ throwOff
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>_description_</p>
+						<p>
+							Save message to collection to be emailed to ADMIN_EMAIL when collection limit is reached.
+							Limit is defined in SITE_COLLECT_NOTIFICATIONS in config.php.
+						</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
+							<dt><span class="var">$message</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
+									<span class="type">String</span> message to log
 								</div>
 							</dd>
-							<dt><span class="var">identifier</span></dt>
+							<dt><span class="var">$collection</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">_type_</span> _summary_
+									<span class="type">String</span> Optional collection to add log to. Defaults to <span class="value">framework</span>
 								</div>
 							</dd>
 						</dl>
@@ -1566,32 +1720,23 @@ throwOff
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
+						<p><span class="type">Void</span></p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
-						</div>
+						<p>No example</p>
 					</div>
 
 					<div class="uses">
 						<h4>Uses</h4>
 
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
-						</div>
-
 						<div class="janitor">
-							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>FileSystem::makeDirRecursively</li>
+								<li>Session</li>
 							</ul>
 						</div>
 
