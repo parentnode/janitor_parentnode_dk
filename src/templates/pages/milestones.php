@@ -25,6 +25,8 @@ $this->pageTitle("Where we are heading ...");
 		<li>Add way of specifying controller path for page Itemtype (per node) - DONE</li>
 		<li>Implement fallback option for navigation nodes (if not accessible to user, hide or show fallback) - DONE</li>
 
+		<li>Clear stored navigation session value when updating a navigation</li>
+
 		<li>Add full documentation for Page, Items, Itemtypes, Model and Queryi</li>
 
 		<li>Add fully accessible demo site on janitor-demo.parentnode.dk</li>
@@ -41,6 +43,12 @@ $this->pageTitle("Where we are heading ...");
 	<ul class="todo">
 		<li>Update tag method in list view to match edit view</li>
 		<li>Add tag based filtering in backend lists</li>
+	</ul>
+
+	<h3>Setup</h3>
+	<ul class="todo">
+		<li>Fix: missing errormessage in Database setup, when database name is invalid (try using - in name)</li>
+		<li>Add navigation nodes when injecting data (front + one more?)</li>
 	</ul>
 
 
