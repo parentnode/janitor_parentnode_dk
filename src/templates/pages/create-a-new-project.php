@@ -108,6 +108,11 @@ $this->pageTitle("Howto ...");
 
 			<h2>2. Clone to Woking Directory</h2>
 			<p>
+				Add some details for GitHub cloning.
+			</p>
+
+
+			<p>
 				The second step is to clone a working copy from the Git Repository, to where you are going to work on it. 
 				This location is called the <strong>Woking Directory</strong>.
 			</p>
@@ -177,20 +182,20 @@ git push
 			</p>
 
 			<code>&lt;VirtualHost *:80&gt;
-	DocumentRoot &quot;_WOKING_DIRECTORY_PATH_/submodules/janitor/src&quot;
+	DocumentRoot "_WOKING_DIRECTORY_PATH_/submodules/janitor/src"
 	ServerName _DOMAIN_NAME_
 
 	Alias "/setup" "_WOKING_DIRECTORY_PATH_/submodules/janitor/src/setup"
-	Alias "/janitor/admin" _WOKING_DIRECTORY_PATH_/submodules/janitor/src/www"
+	Alias "/janitor/admin" "_WOKING_DIRECTORY_PATH_/submodules/janitor/src/www"
 &lt;/VirtualHost&gt;</code>
 
 			<p>It should look something like this:</p>
 			<code>&lt;VirtualHost *:80&gt;
-	DocumentRoot &quot;/Users/mkn/Sites/my_first_working_directory/submodules/janitor/src&quot;
+	DocumentRoot "/Users/mkn/Sites/my_first_working_directory/submodules/janitor/src"
 	ServerName fjp.local
 
 	Alias "/setup" "/Users/mkn/Sites/my_first_working_directory/submodules/janitor/src/setup"
-	Alias "/janitor/admin" /Users/mkn/Sites/my_first_working_directory/submodules/janitor/src/www"
+	Alias "/janitor/admin" "/Users/mkn/Sites/my_first_working_directory/submodules/janitor/src/www"
 &lt;/VirtualHost&gt;</code>
 
 			<p>
