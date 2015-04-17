@@ -108,14 +108,14 @@ $this->pageTitle("Howto ...");
 
 			<h2>2. Clone to Woking Directory</h2>
 			<p>
-				Add some details for GitHub cloning.
-			</p>
-
-
-			<p>
 				The second step is to clone a working copy from the Git Repository, to where you are going to work on it. 
 				This location is called the <strong>Woking Directory</strong>.
 			</p>
+			<p>
+				If you have chosen to host your repository on GitHub you might want to use the GitHub App to clone your new repository - or you may do it manually as described below.
+			</p>
+
+			<h3>Manual cloning</h3>
 			<p>
 				Decide the location of your Woking Directory, and we'll refer to that as the _WOKING_DIRECTORY_PATH_. 
 			</p>
@@ -127,6 +127,10 @@ $this->pageTitle("Howto ...");
 				In case you are in doubt, it could look something like this:
 			</p>
 			<code>git clone /Users/mkn/Dropbox/my_first_repos.git /Users/mkn/Sites/my_first_working_directory</code>
+			<p>
+				Or:
+			</p>
+			<code>git clone https://github.com/parentnode/my_first_repos.git /Users/mkn/Sites/my_first_working_directory</code>
 
 
 			<h2>3. Clone Git Submodules</h2>
