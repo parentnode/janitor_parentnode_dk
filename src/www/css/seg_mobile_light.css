@@ -120,6 +120,10 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.media {display: none;}
 #content .scene .pagination {}
 #content .scene div.categories {padding-bottom: 10px;}
+#content .scene ul.articles {padding: 0;}
+#content .scene ul.articles li.article {padding: 10px 0 0; border-top: 1px solid #dedede;}
+#content .scene div.comments {display: none;}
+#content .scene div.readstate {display: none;}
 #content .scene code {padding: 10px 10px; margin: 0 0 15px; background-color: #ededed; color: #333333; font-size: 11px; display: block; overflow: hidden; white-space: pre-wrap;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -146,6 +150,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard .name {padding: 0 0 15px;}
 #content .scene div.vcard .tel,
 #content .scene div.vcard .email {font-size: 13px;}
+#content .scene .usedby {display: none;}
 
 
 /*s-form-mobile.css*/
@@ -273,6 +278,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
+#content .scene div.functions .function .body .examples h4 {padding-bottom: 5px;}
+#content .scene div.functions .function .body .example h5 {padding-bottom: 5px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 5px;}
 #content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 10px;}
 #content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 10px;}

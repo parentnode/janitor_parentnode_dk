@@ -8,6 +8,7 @@
 
 /*u-settings.js*/
 u.site_name = "Janitor";
+u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
 
 /*ga.js*/
 u.ga_account = 'UA-49739795-1';

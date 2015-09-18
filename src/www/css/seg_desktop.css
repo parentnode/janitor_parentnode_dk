@@ -57,15 +57,17 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 
 /*s-header-desktop.css*/
 #header {position: relative; height: 100px;}
-#header .logo {z-index: 10; position: absolute; top: 10px; left: 40px; font-size: 30px; padding: 10px; color: #888888; cursor: pointer;  background-color: rgba(255,255,255, 0.8); border-radius: 5px;
+#header .logo {z-index: 10; position: absolute; top: 10px; left: 40px; font-size: 30px; padding: 10px; color: #888888; cursor: pointer; background-color: rgba(255,255,255, 0.8); border-radius: 5px;
 	font-family: "PT Serif", Times, serif;
 }
 #header .logo {position: fixed;}
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
-#header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb;}
+#header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb; padding: 3px 0;}
 #header .servicenavigation li.navigation {display: none;}
-#header .servicenavigation li:after {content: "\00a0\00a0|\00a0\00a0";}
-#header .servicenavigation li:last-child:after {content: "";}
+#header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0";}
+#header .servicenavigation li.github:before,
+#header .servicenavigation li:nth-child(2):before {content: "";}
+#header .servicenavigation li.github {margin: 0 0 0 10px; padding: 4px 12px; background: #8c9399; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ffffff;}
 #navigation {z-index: 10; position: fixed; right: 40px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
 #navigation ul {}
 #navigation ul li {display: inline-block; vertical-align: top; padding: 10px; font-size: 20px; color: #888888;
@@ -76,7 +78,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 
 /*s-footer-desktop.css*/
 #footer {text-align: center; border-top: 1px solid #888888;}
-#footer p {padding: 10px; cursor: pointer;}
+#footer p {padding: 10px; cursor: pointer; font-size: 13px;}
 
 /*s-content-desktop.css*/
 #content {position: relative;}
@@ -121,7 +123,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene dl h4,
 #content .scene dl h5,
 #content .scene dl h6 {padding-left: 0; padding-right: 0; padding-top: 10px;}
-#content .scene > ul.actions {border-top: 1px solid #dedede; margin: 0 0 20px; padding: 15px 50px;}
+#content .scene > ul.actions {margin: 0 0 20px; padding: 15px 50px;}
 #content .scene ul.tags {position: relative; z-index: 1; padding-bottom: 20px;}
 #content .scene ul.tags li {font-size: 12px; display: inline-block; vertical-align: top;}
 #content .scene ul.tags li:after {content: "\00a0|\00a0"; color: #dedede;}
@@ -167,6 +169,57 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.categories ul.tags li:after {content: "";}
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
+#content .scene div.article ul.tags {padding-bottom: 30px;}
+#content .scene div.article ul.tags a {color: #cccccc;}
+#content .scene ul.articles {padding: 0;}
+#content .scene ul.articles li.article {padding: 20px 0 0; border-top: 1px solid #dedede; position: relative;}
+#content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
+#content .scene ul.articles li.article:first-child {border-top: none;}
+#content .scene ul.articles li.article h3 {font-size: 18px; line-height: 1em; padding-bottom: 5px;}
+#content .scene ul.articles li.article p {font-size: 13px; color: #888888;}
+#content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 25px;}
+#content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
+#content .scene div.related {border-top: 1px solid #ccdbcd; padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.related ul.articles {padding: 0;}
+#content .scene div.related li.article:first-child {border-top: none;}
+#content .scene div.sharing {padding: 0; position: relative; height: 40px;}
+#content .scene div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 100px; display: none; font-size: 11px; color: #999999;}
+#content .scene div.sharing h3 {position: absolute; top: 0px; left: 100px; padding: 0; display: none;}
+#content .scene div.sharing.hover {z-index: 2;}
+#content .scene div.sharing.hover h3,
+#content .scene div.sharing.hover p {display: block;}
+#content .scene div.sharing svg {z-index: 0; margin-left: 50px; position: absolute; width: 500px; height: 300px; top: -130px;}
+#content .scene div.sharing svg rect {cursor: pointer;}
+#content .scene div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
+#content .scene div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
+#content .scene div.sharing svg line.primary {stroke: #666666;}
+#content .scene div.sharing svg line {stroke: #cccccc; stroke-width: 1px;}
+#content .scene div.sharing svg rect.primary {fill: #ff0000;}
+#content .scene div.readstate div {margin-left: 50px; margin-bottom: 40px; padding: 10px; position: relative; z-index: 1; border-radius: 5px; border: 1px solid #dedede; width: 478px;}
+#content .scene div.readstate p {font-size: 13px; color: #dedede; padding: 0 50px 0 0; width: auto;}
+#content .scene div.readstate div {cursor: pointer;}
+#content .scene div.readstate svg {position: absolute; top: 11px; right: 10px;}
+#content .scene div.readstate svg line {stroke: #dedede; stroke-width: 3px;}
+#content .scene div.readstate.is_read svg line {stroke: #666666;}
+#content .scene div.comments {padding-bottom: 15px; position: relative; z-index: 1;}
+#content .scene div.comments h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
+#content .scene div.comments h2 svg.arrow {position: absolute; top: 6px; right: 55px;}
+#content .scene div.comments h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
+#content .scene div.comments > p,
+#content .scene div.comments ul.comments,
+#content .scene div.comments ul.actions {display: none;}
+#content .scene div.comments.open h2 {color: #888888;}
+#content .scene div.comments.open > p,
+#content .scene div.comments.open ul.comments,
+#content .scene div.comments.open ul.actions {display: block;}
+#content .scene div.comments > p {color: #999999; font-size: 13px; padding-bottom: 25px;}
+#content .scene div.comments ul.comments {padding: 0; margin: 0;}
+#content .scene div.comments ul.comments > li {padding-bottom: 10px; padding-left: 0;}
+#content .scene div.comments ul.comments > li ul.info {padding-bottom: 0; margin: 0; list-style: none;}
+#content .scene div.comments ul.comments > li ul.info li {display: inline-block; vertical-align: top; color: #999999; font-size: 12px; padding-bottom: 0; padding-left: 0;}
+#content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
+#content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
+#content .scene div.comments .field {padding-bottom: 10px;}
 #content .scene code {padding: 10px 10px; margin: 0 30px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -195,19 +248,21 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.vcard .name {padding: 0 0 15px;}
 #content .scene div.vcard .tel,
 #content .scene div.vcard .email {font-size: 13px; padding: 0 0 3px;}
-#content .scene li div.sharing {padding: 0; position: relative; height: 40px;}
-#content .scene li div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 100px; display: none; font-size: 11px; color: #999999;}
-#content .scene li div.sharing h3 {position: absolute; top: 0px; left: 100px; padding: 0; display: none;}
-#content .scene li div.sharing.hover {z-index: 2;}
-#content .scene li div.sharing.hover h3,
-#content .scene li div.sharing.hover p {display: block;}
-#content .scene li div.sharing svg {z-index: 0; margin-left: 50px; position: absolute; width: 500px; height: 300px; top: -130px;}
-#content .scene li div.sharing svg rect {cursor: pointer;}
-#content .scene li div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
-#content .scene li div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
-#content .scene li div.sharing svg line.primary {stroke: #666666;}
-#content .scene li div.sharing svg line {stroke: #cccccc; stroke-width: 1px;}
-#content .scene li div.sharing svg rect.primary {fill: #ff0000;}
+#content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
+#content .scene .usedby h2 {display: none; text-align: center; padding-bottom: 5px; font-size: 11px; width: auto; color: #bbbbbb; text-transform: uppercase;
+	font-family: "OpenSans", Verdana, Arial, sans-serif;
+}
+#content .scene .usedby ul {padding-bottom: 0;}
+#content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
+#content .scene .usedby ul li.metro {background-image: url(/img/logos/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(/img/logos/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(/img/logos/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(/img/logos/tuborg.png);}
+#content .scene .usedby ul li.distortion {background-image: url(/img/logos/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(/img/logos/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(/img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(/img/logos/oeo.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(/img/logos/peoplegroup.png);}
 #content .scene.login form {padding-bottom: 20px;}
 #content .errormessage {color: #df0000;}
 
@@ -502,6 +557,8 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block; padding-left: 20px;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
+#content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
+#content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
 #content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
 #content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 90px; stroke: #999999; stroke-width: 3px;}
@@ -538,6 +595,9 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 body #selection_options ul.actions input.button:hover,
 body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.docsindex .search .results .function:hover {background: #ededed;}
+#content .scene div.readstate:hover p {color: #000000;}
+#content .scene div.comments h2:hover {color: #888888;}
+#content .scene div.comments h2:hover svg.arrow line {stroke: #888888;}
 
 
 
@@ -594,7 +654,8 @@ body {}
 #content .scene dl.geo.active dd {color: #04859d;}
 #content .scene hr {border-color: #ffb773;}
 #content ul.actions input.button.primary,
-#content ul.actions a.button.primary {background-color: #04859d;}
+#content ul.actions a.button.primary,
+#header ul.servicenavigation li.github {background-color: #04859d;}
 #footer {border-color: #ffb773;}
 .terms_notification .accept,
 .terms_notification .details {color: #04859d;}
@@ -606,5 +667,6 @@ body {}
 
 /*s-pages-hovers-desktop.css*/
 #content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover {background-color: #ff7c00;}
+#content ul.actions a.button.primary:hover,
+#header ul.servicenavigation li.github:hover {background-color: #ff7c00;}
 

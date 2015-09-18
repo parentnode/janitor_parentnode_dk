@@ -5123,6 +5123,7 @@ if(u.a.vendor() == "ms") {
 
 /*u-settings.js*/
 u.site_name = "Janitor";
+u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
 
 /*ga.js*/
 u.ga_account = 'UA-49739795-1';
@@ -5159,6 +5160,159 @@ if(u.ga_account) {
 			}
 		}
 	}
+}
+
+
+/*u-form-builder.js*/
+u.f.addForm = function(node, _options) {
+	var form_name = "js_form";
+	var form_action = "#";
+	var form_method = "post";
+	var form_class = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "name"			: form_name				= _options[_argument]; break;
+				case "action"		: form_action			= _options[_argument]; break;
+				case "method"		: form_method			= _options[_argument]; break;
+				case "class"		: form_class			= _options[_argument]; break;
+			}
+		}
+	}
+	var form = u.ae(node, "form", {"class":form_class, "name": form_name, "action":form_action, "method":form_method});
+	return form;
+}
+u.f.addFieldset = function(node) {
+	return u.ae(node, "fieldset");
+}
+u.f.addField = function(node, _options) {
+	var field_type = "string";
+	var field_label = "Value";
+	var field_name = "js_name";
+	var field_value = "";
+	var field_class = "";
+	var field_maxlength = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "type"			: field_type			= _options[_argument]; break;
+				case "label"		: field_label			= _options[_argument]; break;
+				case "name"			: field_name			= _options[_argument]; break;
+				case "value"		: field_value			= _options[_argument]; break;
+				case "class"		: field_class			= _options[_argument]; break;
+				case "max"			: field_maxlength		= _options[_argument]; break;
+			}
+		}
+	}
+	var input_id = "input_"+field_type+"_"+field_name;
+	var field = u.ae(node, "div", {"class":"field "+field_type+" "+field_class});
+	if(field_type == "string") {
+		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
+		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":"text", "maxlength":field_maxlength});
+	}
+	else if(field_type == "email" || field_type == "number" || field_type == "tel") {
+		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
+		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":field_type});
+	}
+	else if(field_type == "checkbox") {
+		var input = u.ae(field, "input", {"id":input_id, "value":"true", "name":field_name, "type":field_type});
+		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
+	}
+	else if(field_type == "text") {
+		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
+		var input = u.ae(field, "textarea", {"id":input_id, "html":field_value, "name":field_name});
+	}
+	else if(field_type == "select") {
+		u.bug("Select not implemented yet")
+	}
+	else {
+		u.bug("input type not implemented yet")
+	}
+	return field;
+}
+u.f.addAction = function(node, _options) {
+	var action_type = "submit";
+	var action_name = "js_name";
+	var action_value = "";
+	var action_class = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "type"			: action_type			= _options[_argument]; break;
+				case "name"			: action_name			= _options[_argument]; break;
+				case "value"		: action_value			= _options[_argument]; break;
+				case "class"		: action_class			= _options[_argument]; break;
+			}
+		}
+	}
+	var p_ul = node.nodeName.toLowerCase() == "ul" ? node : u.pn(node, {"include":"ul"});
+	if(!p_ul || !u.hc(p_ul, "actions")) {
+		p_ul = u.ae(node, "ul", {"class":"actions"});
+	}
+	var p_li = node.nodeName.toLowerCase() == "li" ? node : u.pn(node, {"include":"li"});
+	if(!p_li || p_ul != p_li.parentNode) {
+		p_li = u.ae(p_ul, "li", {"class":action_name});
+	}
+	else {
+		p_li = node;
+	}
+	var action = u.ae(p_li, "input", {"type":action_type, "class":action_class, "value":action_value, "name":action_name})
+	return action;
+}
+
+
+/*u-svg.js*/
+Util.svg = function(svg_object) {
+	var svg, shape, svg_shape;
+	if(svg_object.name && u._svg_cache && u._svg_cache[svg_object.name]) {
+		svg = u._svg_cache[svg_object.name].cloneNode(true);
+	}
+	if(!svg) {
+		svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		if(svg_object.title) {
+			svg.setAttributeNS(null, "title", svg_object.title);
+		}
+		if(svg_object.class) {
+			svg.setAttributeNS(null, "class", svg_object.class);
+		}
+		if(svg_object.width) {
+			svg.setAttributeNS(null, "width", svg_object.width);
+		}
+		if(svg_object.height) {
+			svg.setAttributeNS(null, "height", svg_object.height);
+		}
+		if(svg_object.id) {
+			svg.setAttributeNS(null, "id", svg_object.id);
+		}
+		if(svg_object.node) {
+			svg.node = svg_object.node;
+		}
+		for(shape in svg_object.shapes) {
+			Util.svgShape(svg, svg_object.shapes[shape]);
+		}
+		if(svg_object.name) {
+			if(!u._svg_cache) {
+				u._svg_cache = {};
+			}
+			u._svg_cache[svg_object.name] = svg.cloneNode(true);
+		}
+	}
+	if(svg_object.node) {
+		svg_object.node.appendChild(svg);
+	}
+	return svg;
+}
+Util.svgShape = function(svg, svg_object) {
+	svg_shape = document.createElementNS("http://www.w3.org/2000/svg", svg_object["type"]);
+	svg_object["type"] = null;
+	delete svg_object["type"];
+	for(detail in svg_object) {
+		svg_shape.setAttributeNS(null, detail, svg_object[detail]);
+	}
+	return svg.appendChild(svg_shape);
 }
 
 
@@ -6600,38 +6754,112 @@ u.f.textEditor = function(field) {
 
 
 /*beta-u-animation-to.js*/
+	u.a.parseSVGPolygon = function(value) {
+		var pairs = value.trim().split(" ");
+		var sets = [];
+		for(x in pairs) {
+			parts = pairs[x].trim().split(",");
+			for(part in parts) {
+				parts[part] = Number(parts[part]);
+			}
+			sets[x] = parts;
+		}
+		return sets;
+	}
+	u.a.parseSVGPath = function(value) {
+		var pairs = {"m":2, "l":2, "a":7, "c":6, "s":4, "q":4, "z":0};
+		value = value.replace(/-/g, " -");
+		value = value.replace(/,/g, " ");
+		value = value.replace(/(m|l|a|c|s|q|M|L|A|C|S|Q)/g, " $1 ");
+		value = value.replace(/  /g, " ");
+		sets = value.match(/(m|l|a|c|s|q|M|L|A|C|S|Q)([0-9 \-\.]+)/g);
+		for(x in sets) {
+			parts = sets[x].trim().split(" ");
+			sets[x] = parts;
+			if(parts && pairs[parts[0].toLowerCase()] == parts.length-1) {
+			}
+			else {
+			}
+		}
+		return sets;
+	}
 	u.a.getInitialValue = function(node, attribute) {
 		var value = (node.getAttribute(attribute) ? node.getAttribute(attribute) : u.gcs(node, attribute)).replace(node._unit[attribute], "")
-		return Number(value.replace(/auto/, 0));
+		if(attribute.match(/^(d|points)$/)) {
+			return value;
+		}
+		else {
+			return Number(value.replace(/auto/, 0));
+		}
 	}
 	u.a.to = function(node, transition, attributes) {
-		var duration = transition.match(/[0-9.]+[ms]+/g);
-		if(duration) {
-			node.duration = duration[0].match("ms") ? parseFloat(duration[0]) : (parseFloat(duration[0]) * 1000);
+		var transition_parts = transition.split(" ");
+		if(transition_parts.length >= 3) {
+			node._target = transition_parts[0];
+			node.duration = transition_parts[1].match("ms") ? parseFloat(transition_parts[1]) : (parseFloat(transition_parts[1]) * 1000);
+			node._ease = transition_parts[2];
+			if(transition_parts.length == 4) {
+				node.delay = transition_parts[3].match("ms") ? parseFloat(transition_parts[3]) : (parseFloat(transition_parts[3]) * 1000);
+			}
 		}
+		var value, d;
 		node._start = {};
 		node._end = {};
 		node._unit = {};
 		for(attribute in attributes) {
-			node._unit[attribute] = attributes[attribute].toString().match(/\%|px/);
-			node._start[attribute] = Number(this.getInitialValue(node, attribute));
-			node._end[attribute] = attributes[attribute].toString().replace(node._unit[attribute], "");
+			if(attribute.match(/^(d)$/)) {
+				node._start[attribute] = this.parseSVGPath(this.getInitialValue(node, attribute));
+				node._end[attribute] = this.parseSVGPath(attributes[attribute]);
+			}
+			else if(attribute.match(/^(points)$/)) {
+				node._start[attribute] = this.parseSVGPolygon(this.getInitialValue(node, attribute));
+				node._end[attribute] = this.parseSVGPolygon(attributes[attribute]);
+			}
+			else {
+				node._unit[attribute] = attributes[attribute].toString().match(/\%|px/);
+				node._start[attribute] = this.getInitialValue(node, attribute);
+				node._end[attribute] = attributes[attribute].toString().replace(node._unit[attribute], "");
+			}
 		}
+		node.easing = u.easings[node._ease];
 		node.transitionTo = function(progress) {
+			var easing = node.easing(progress);
 			for(attribute in attributes) {
-				if(attribute.match(/translate|rotate|scale/)) {
+				if(attribute.match(/^(translate|rotate|scale)$/)) {
 					if(attribute == "translate") {
-						u.a.translate(this, Math.round((this._end_x - this._start_x) * progress), Math.round((this._end_y - this._start_y) * progress))
+						u.a.translate(this, Math.round((this._end_x - this._start_x) * easing), Math.round((this._end_y - this._start_y) * easing))
 					}
 					else if(attribute == "rotate") {
 					}
 				}
-				else if(attribute.match(/x1|y1|x2|y2|r|cx|cy/)) {
-					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
+				else if(attribute.match(/^(x1|y1|x2|y2|r|cx|cy|stroke-width)$/)) {
+					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * easing)) +  this._unit[attribute]
+					this.setAttribute(attribute, new_value);
+				}
+				else if(attribute.match(/^(d)$/)) {
+					var new_value = "";
+					for(x in this._start[attribute]) {
+						for(y in this._start[attribute][x]) {
+							if(parseFloat(this._start[attribute][x][y]) == this._start[attribute][x][y]) {
+								new_value += (Number(this._start[attribute][x][y]) + ((Number(this._end[attribute][x][y]) - Number(this._start[attribute][x][y])) * easing)) + " ";
+							}
+							else {
+								new_value += this._end[attribute][x][y] + " ";
+							}
+						}
+					}
+					this.setAttribute(attribute, new_value);
+				}
+				else if(attribute.match(/^(points)$/)) {
+					var new_value = "";
+					for(x in this._start[attribute]) {
+						new_value += (this._start[attribute][x][0] + ((this._end[attribute][x][0] - this._start[attribute][x][0]) * easing)) + ",";
+						new_value += (this._start[attribute][x][1] + ((this._end[attribute][x][1] - this._start[attribute][x][1]) * easing)) + " ";
+					}
 					this.setAttribute(attribute, new_value);
 				}
 				else {
-					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
+					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * easing)) +  this._unit[attribute]
 					u.as(node, attribute, new_value, false);
 				}
 			}
@@ -6640,10 +6868,33 @@ u.f.textEditor = function(field) {
 	}
 
 
+/*u-easings.js*/
+u.easings = new function() {
+	this["ease-in"] = function(progress) {
+		return Math.pow((progress*this.duration) / this.duration, 3);
+	}
+	this["linear"] = function(progress) {
+		return progress;
+	}
+	this["ease-out"] = function(progress) {
+		return 1 - Math.pow(1 - ((progress*this.duration) / this.duration), 3);
+	}
+	this["linear"] = function(progress) {
+		return (progress*this.duration) / this.duration;
+	}
+	this["ease-in-out"] = function(progress) {
+		if((progress*this.duration) > (this.duration / 2)) {
+			return 1 - Math.pow(1 - ((progress*this.duration) / this.duration), 3);
+		}
+		return Math.pow((progress*this.duration) / this.duration, 3);
+	}
+}
+
 /*i-page-desktop.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
+			window.page = page;
 			page.style_tag = document.createElement("style");
 			page.style_tag.setAttribute("media", "all")
 			page.style_tag.setAttribute("type", "text/css")
@@ -6669,6 +6920,10 @@ Util.Objects["page"] = new function() {
 			page.logo.top_offset = u.absY(page.nN) + parseInt(u.gcs(page.nN, "padding-top"));
 			page.style_tag.sheet.insertRule("#header a.logo {}", 0);
 			page.logo.css_rule = page.style_tag.sheet.cssRules[0];
+			if(u.github_fork) {
+				var github = u.ae(page.hN.service, "li", {"html":'<a href="'+u.github_fork.url+'">'+u.github_fork.text+'</a>', "class":"github"});
+				u.ce(github, {"type":"link"});
+			}
 			page.resized = function() {
 				u.bug("page resized")
 				page.browser_h = u.browserH();
@@ -6799,6 +7054,7 @@ Util.Objects["login"] = new function() {
 		scene.ready = function() {
 			this._form = u.qs("form", this);
 			u.f.init(this._form);
+			this._form.fields["username"].focus();
 			page.cN.scene = this;
 			page.resized();
 		}
@@ -6845,176 +7101,9 @@ Util.Objects["newsletter"] = new function() {
 
 
 /*i-article-desktop.js*/
-Util.Objects["articlelist"] = new function() {
-	this.init = function(list) {
-		list.popstate = ("onpopstate" in window);
-		list.items = u.qsa(".item", list);
-		if(list.items) {
-			var i, node;
-			for(i = 0; node = list.items[i]; i++) {
-				node.article_list = list;
-			}
-			list.scrolled = function() {
-				u.bug("list scrolled:" + u.scrollY());
-				u.t.resetTimer(this.t_init);
-				this.scroll_y = u.scrollY();
-				this.browser_h = u.browserH();
-				this.screen_middle = this.browser_h/2;
-				var i, node, node_y, list_y;
-				list_y = u.absY(this);
-				if(this._prev_url && list_y + this.browser_h > this.scroll_y) {
-					this.loadPrev();
-				}
-				else if(this._next_url && list_y + this.offsetHeight < this.scroll_y + (this.browser_h*2)) {
-					this.loadNext();
-				}
-				if(this.initial_scroll !== 0 && list_y > this.scroll_y + this.screen_middle) {
-					var root_link = this.getRootLink();
-					if(root_link) {
-						history.replaceState({}, root_link, root_link);
-						this.current_node = false;
-					}
-				}
-				else {
-					for(i = 0; node = this.items[i]; i++) {
-						node_y = u.absY(node);
-						if(node_y > this.scroll_y + this.browser_h) {
-							break;
-						}
-						else if(node_y <= this.scroll_y + this.screen_middle && node_y + node.offsetHeight > this.scroll_y + this.screen_middle) {
-							this.current_node = node;
-							if(this.popstate && node._ready && node.hardlink) {
-								history.replaceState({}, node.hardlink, node.hardlink);
-							}
-						}
-					}
-				}
-				this.t_init = u.t.setTimer(this, this.initFocusedArticles, 500);
-			}
-			list.initFocusedArticles = function() {
-				var i, node, node_y;
-				for(i = 0; node = this.items[i]; i++) {
-					if(!node._ready) {
-						node_y = u.absY(node);
-						if(node_y > this.scroll_y + this.browser_h) {
-							break;
-						}
-						else if(
-							(
-								node_y + node.offsetHeight > this.scroll_y && 
-								node_y + node.offsetHeight < this.scroll_y + this.browser_h
-							)
-							 || 
-							(
-								node_y > this.scroll_y &&
-								node_y < this.scroll_y + this.browser_h
-							)
-							 ||
-							(
-								node_y < this.scroll_y &&
-								node_y + node.offsetHeight > this.scroll_y + this.browser_h
-							)
-						) {
-							u.o.article.init(node);
-							node._ready = true;
-							this.scrolled();
-						}
-					}
-				}
-			}
-			list.all_hardlinks = [];
-			list.addHardlink = function(hardlink) {
-				if(this.all_hardlinks.indexOf(hardlink) == -1) {
-					this.all_hardlinks.push(hardlink);
-				}
-			}
-			list.getRootLink = function() {
-				if(this.all_hardlinks.indexOf(location.href) != -1) {
-					return location.href.replace(/\/[a-zA-Z0-9\-_]+$/, "");
-				}
-				return false;
-			}
-			list.correctScroll = function(article_node, new_node, additional_offset) {
-				if(this.current_node) {
-					additional_offset = additional_offset ? additional_offset : 0;
-					var a_node_y = u.absY(article_node);
-					var c_node_y = u.absY(this.current_node);
-					if(a_node_y < c_node_y) {
-						if(this.initial_scroll === 0) {
-							var current_scroll = u.absY(this) - 100;
-							this.initial_scroll = false;
-						}
-						else {
-							var current_scroll = u.scrollY();
-						}
-						var new_scroll_y = (current_scroll + (new_node.offsetHeight + additional_offset));
-						window.scrollTo(0, new_scroll_y);
-					}
-				}
-			}
-			var next = u.qs(".pagination li.next a", list.parentNode);
-			var prev = u.qs(".pagination li.previous a", list.parentNode);
-			list._prev_url = prev ? prev.href : false;
-			list._next_url = next ? next.href : false;
-			list.loadPrev = function() {
-				if(this._prev_url) {
-					this.response = function(response) {
-						var items = u.qsa(".item", response);
-						var i, node;
-						for(i = items.length; i; i--) {
-							node = u.ie(this, items[i-1]);
-							node.article_list = this;
-							this.correctScroll(node, node);
-						}
-						var prev = u.qs(".pagination li.previous a", response);
-						this._prev_url = prev ? prev.href : false;
-						this.items = u.qsa(".item", this);
-					}
-					u.request(this, this._prev_url);
-					this._prev_url = false;
-				}
-			}
-			list.loadNext = function() {
-				if(this._next_url) {
-					this.response = function(response) {
-						var items = u.qsa(".item", response);
-						var i, node;
-						for(i = 0; i < items.length; i++) {
-							node = u.ae(this, items[i]);
-							node.article_list = this;
-						}
-						var next = u.qs(".pagination li.next a", response);
-						this._next_url = next ? next.href : false;
-						this.items = u.qsa(".item", this);
-					}
-					u.request(this, this._next_url);
-					this._next_url = false;
-				}
-			}
-			list.initial_scroll = u.scrollY();
-			list.current_node = false;
-			var hardlink = u.qs("dd.hardlink a", list.items[0]);
-			if(hardlink) {
-				if(location.href == hardlink.href) {
-					list.current_node = list.items[0];
-				}
-			}
-			if(list.current_node && (!list._prev_url || list.initial_scroll)) {
-				window.scrollTo(0, u.absY(list.current_node)-100);
-				list.initial_scroll = false;
-			}
-			list.scrolled();
-			u.e.addWindowScrollEvent(list, list.scrolled);
-		}
-	}
-}
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
-		var hardlink = u.qs("dd.hardlink a", article);
-		article.hardlink = hardlink ? hardlink.href : false;
-		if(article.article_list) {
-			article.article_list.addHardlink(article.hardlink);
-		}
+		u.bug("article init:" + u.nodeId(article) + "," + u.qs("h1,h2,h3", article).innerHTML)
 		var i, image;
 		article._images = u.qsa("div.image,div.media", article);
 		for(i = 0; image = article._images[i]; i++) {
@@ -7068,223 +7157,16 @@ Util.Objects["article"] = new function() {
 			}
 		}
 		article.geolocation = u.qs("dl.geo", article);
-		if(article.geolocation && !u.browser("IE", "<=9")) {
-			article.geolocation.article = article;
-			var dd_longitude = u.qs("dd.longitude", article.geolocation);
-			var dd_latitude = u.qs("dd.latitude", article.geolocation);
-			if(dd_longitude && dd_latitude) {
-				article.geo_longitude = parseFloat(dd_longitude.innerHTML);
-				article.geo_latitude = parseFloat(dd_latitude.innerHTML);
-				article.showMap = function() {
-					if(!this.geomap) {
-						this.geomap = u.ae(this, "div", {"class":"geomap"});
-						this.insertBefore(this.geomap, u.qs("dl.info", this));
-						var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
-						var html = '<html><head>';
-						html += '<style type="text/css">body {margin: 0;}#map {height: 200px; height: 200px;}</style>';
-						html += '<script type="text/javascript" src="'+maps_url+'"></script>';
-						html += '<script type="text/javascript">';
-						html += 'var map, marker;';
-						html += 'var initialize = function() {';
-						html += '	window._map_loaded = true;';
-						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12};';
-						html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
-						html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'), draggable:true});';
-						html += '	marker.setMap(map);';
-						html += '};';
-						html += 'google.maps.event.addDomListener(window, "load", initialize);';
-						html += '</script>';
-						html += '</head><body><div id="map"></div></body></html>';
-						this.mapsiframe = u.ae(this.geomap, "iframe");
-						this.mapsiframe.doc = this.mapsiframe.contentDocument? this.mapsiframe.contentDocument: this.mapsiframe.contentWindow.document;
-						this.mapsiframe.doc.open();
-						this.mapsiframe.doc.write(html);
-						this.mapsiframe.doc.close();
-					}
-				}
-				article.geolocation.clicked = function() {
-					this.article.showMap();
-				}
-				u.ce(article.geolocation);
-				u.ac(article.geolocation, "active");
-			}
+		if(article.geolocation && typeof(u.injectGeolocation) == "function") {
+			u.injectGeolocation(article);
 		}
-		if(article.hardlink) {
-			article.sharing = u.ae(article, "div", {"class":"sharing"});
-			if(article.article_list) {
-				article.article_list.correctScroll(article, article.sharing);
+		var hardlink = u.qs("dd.hardlink", article);
+		article.hardlink = hardlink ? hardlink.innerHTML : false;
+		if(article.hardlink && typeof(u.injectSharing) == "function") {
+			article.shareInjected = function() {
+				this.article_list.correctScroll(this, this.sharing);
 			}
-			article.h3_share = u.ae(article.sharing, "h3", {"html":"Share"})
-			article.p_share = u.ae(article.sharing, "p", {"html":article.hardlink})
-			u.e.click(article.p_share);
-			article.p_share.clicked = function() {
-				u.selectText(this);
-			}
-			article.sharing.svg = u.svg({
-				"node":article.sharing,
-				"class":"sharing",
-				"width":500,
-				"height":300,
-				"shapes":[
-					{
-						"type": "line",
-						"class": "primary",
-						"x1": 6,
-						"y1": 150,
-						"x2": 22,
-						"y2": 150
-					},
-					{
-						"type": "circle",
-						"class": "primary",
-						"cx": 6,
-						"cy": 150,
-						"r": 5
-					},
-					{
-						"type": "circle",
-						"class": "primary",
-						"cx": 22,
-						"cy": 150,
-						"r": 3
-					}
-				]
-			});
-			article.sharing.svg.drawings = 0;
-			article.sharing.drawCircle = function(svg, cx, cy) {
-				var circle = u.svgShape(svg, {
-					"type": "circle",
-					"cx": cx,
-					"cy": cy,
-					"r":  1,
-				});
-				circle.svg = svg;
-				var new_radius = u.random(2, 5);
-				circle.transitioned = svg._circle_transitioned;
-				u.a.to(circle, "all linear 100ms", {"r":new_radius});
-				return circle;
-			}
-			article.sharing.drawLine = function(svg, x1, y1, x2, y2) {
-				x2 = x2 ? x2 : (x1 + u.random(30, 50));
-				if(!y2) {
-					if(y1 < 150) {
-						y2 = y1 + u.random(-50, 30);
-					}
-					else {
-						y2 = y1 + u.random(-30, 50);
-					}
-				}
-				if(x2 < 490 && y2 > 10 && y2 < 290 && (x2 < 70 || x2 > 450 || (y2 < 130 && y1 < 130) || (y2 > 170 && y1 > 170))) {
-					var line = u.svgShape(svg, {
-						"type": "line",
-						"x1": x1,
-						"y1": y1,
-						"x2": x1,
-						"y2": y1
-					});
-					u.ie(svg, line);
-					line.svg = svg;
-					line.transitioned = svg._line_transitioned;
-					u.a.to(line, "all linear 150ms", {"x2": x2, "y2": y2});
-					return line;
-				}
-				return false;
-			}
-			article.sharing.svg._line_transitioned = function() {
-				this.transitioned = null;
-				if(!this.svg.hide) {
-					var key = u.randomString(4);
-					var cx = Number(this.getAttribute("x2"));
-					var cy = Number(this.getAttribute("y2"));
-					var circle = this.svg.node.drawCircle(this.svg, cx, cy);
-					circle.id = key;
-				}
-			}
-			article.sharing.svg._circle_transitioned = function() {
-				this.transitioned = null;
-				if(!this.svg.hide) {
-					this.svg.drawings++;
-					if(this.svg.drawings < 50) {
-						var x1 = Number(this.getAttribute("cx"));
-						var y1 = Number(this.getAttribute("cy"));
-						var r = Number(this.getAttribute("r"));
-						var line, i;
-						if(r >= 5 && this.svg.drawings < 6) {
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(30, 60), y1 + u.random(-40, -60));
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(50, 60), y1 + u.random(-20, 20));
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(30, 60), y1 + u.random(40, 60));
-						}
-						else if(r >= 4) {
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(20, 70), y1 + u.random(-15, -40));
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(20, 70), y1 + u.random(15, 40));
-						}
-						else if(r >= 3 || this.svg.drawings%2 == 1) {
-							line = this.svg.node.drawLine(this.svg, x1, y1, x1 + u.random(30, 60), y1 + u.random(-40, 40));
-						}
-						else {}
-					}
-				}
-			}
-			article.sharing.button = u.svgShape(article.sharing.svg, {
-				"type": "rect",
-				"class": "share",
-				"x": 0,
-				"y": 130,
-				"width": 40,
-				"height": 40,
-				"fill": "transparent"
-			});
-			article.sharing.button._x1 = 22;
-			article.sharing.button._y1 = 150;
-			article.sharing.button.sharing = article.sharing;
-			article.sharing.button.over = function() {
-				u.t.resetTimer(this.t_hide);
-				u.ac(this.sharing, "hover");
-				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(this._x1, 70), this._y1 + u.random(-55, -40));
-				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(70, 120), this._y1 + u.random(-20, -15));
-				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(70, 120), this._y1 + u.random(15, 20));
-				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(this._x1, 70), this._y1 + u.random(40, 55));
-			}
-			article.sharing.button.out = function() {
-				var circles = u.qsa("circle:not(.primary)", this.sharing.svg);
-				var lines = u.qsa("line:not(.primary)", this.sharing.svg);
-				var line, circle, i;
-				u.rc(this.sharing, "hover");
-				this.sharing.svg.hide = true;
-				this.sharing.svg.drawings = 0;
-				for(i = 0; circle = circles[i]; i++) {
-					circle.transitioned = function() {
-						this.transitioned = null;
-						this.svg.removeChild(this);
-					}
-					u.a.to(circle, "all linear 0.15s", {"r":0})
-				}
-				for(i = 0; line = lines[i]; i++) {
-					x1 = Number(line.getAttribute("x1"));
-					y1 = Number(line.getAttribute("y1"));
-					x2 = Number(line.getAttribute("x2"));
-					y2 = Number(line.getAttribute("y2"));
-					new_x = x2 - ((x2-x1)/2);
-					if(y1 < y2) {
-						new_y = y2 - ((y2-y1)/2);
-					}
-					else {
-						new_y = y1 - ((y1-y2)/2);
-					}
-					line.transitioned = function() {
-						this.transitioned = null;
-						this.svg.removeChild(this);
-					}
-					u.a.to(line, "all linear 0.25s", {"x1":new_x, "y1":new_y, "x2":new_x, "y2":new_y})
-				}
-				u.t.setTimer(this.sharing.svg, function() {this.hide = false;}, 250)
-			}
-			article.sharing.autohide = function() {
-				u.t.resetTimer(this.button.t_hide);
-				this.button.t_hide = u.t.setTimer(this.button, this.button.out, 500);
-			}
-			u.e.addEvent(article.sharing.button, "mouseover", article.sharing.button.over);
-			u.e.addEvent(article.sharing, "mouseleave", article.sharing.autohide);
+			u.injectSharing(article);
 		}
 	}
 }

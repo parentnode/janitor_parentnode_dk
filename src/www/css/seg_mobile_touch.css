@@ -34,7 +34,7 @@ h3 {padding: 0 20px 10px; font-size: 18px; line-height: 1.25em;}
 h4 {padding: 0 20px 5px; font-size: 13px; line-height: 1em; font-weight: bold;}
 h5 {padding: 0 20px 2px; font-size: 13px; line-height: 1em; font-weight: bold;}
 h6 {padding: 0 20px 2px; font-size: 13px; line-height: 1em; font-weight: bold;}
-p {padding: 0 20px 18px; font-size: 13px; line-height: 1.38em;} 
+p {padding: 0 20px 18px; font-size: 13px; line-height: 1.538em;} 
 ul,
 ol {font-size: 0;}
 li {font-size: 13px; line-height: 1.25em;}
@@ -164,6 +164,18 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.categories ul.tags li:after {content: "";}
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
+#content .scene ul.articles {padding: 0;}
+#content .scene.articles ul.articles {padding: 20px 0 30px;}
+#content .scene ul.articles li.article {padding: 20px 0 0; border-top: 1px solid #ccdbcd;}
+#content .scene ul.articles li.article h3 {font-size: 18px; line-height: 1em; padding-bottom: 5px;}
+#content .scene ul.articles li.article p {font-size: 13px; color: #888888;}
+#content .scene.article div.article h2 br {display: none;}
+#content .scene .article ul.tags {padding-bottom: 10px;}
+#content .scene .article ul.tags a {color: #dedede;}
+#content .scene .article ul.tags a:active {color: #00c90d;}
+#content .scene div.related {padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.comments {display: none;}
+#content .scene div.readstate {display: none;}
 #content .scene code {color: #333333; padding: 10px 20px; margin: 0 0 15px; background-color: #ededed; font-size: 11px; display: block; overflow: hidden; white-space: pre-wrap;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -190,6 +202,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard .name {padding: 0 0 15px;}
 #content .scene div.vcard .tel,
 #content .scene div.vcard .email {font-size: 13px;}
+#content .scene .usedby {display: none;}
 #content .scene.login form {padding-bottom: 20px;}
 #content .errormessage {color: #df0000;}
 
@@ -502,6 +515,8 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
+#content .scene div.functions .function .body .examples h4 {padding-bottom: 5px;}
+#content .scene div.functions .function .body .example h5 {padding-bottom: 5px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 5px;}
 #content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
 #content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 60px; stroke: #999999; stroke-width: 2px;}
