@@ -6,18 +6,18 @@ $this->pageTitle("It's just improvements");
 
 	<h1>Changelog</h1>
 
-	<h2>Version 0.8</h2>
-	<p>
-		Currently in development.
-	</p>
+	<h2>Version 0.7.6</h2>
 	<p>
 		The most important updates are:
 	</p>
 
 	<ul class="changes">
+		<li>Navigation nodes updated</li>
+		<li>Add way of specifying controller path for page Itemtype (per node) - DONE</li>
+		<li>Updated to Detector-v3</li>
 		<li>
 			Non-privleged user creation (members), via plain signup or newsletter signup.
-			Includes activation email and confirmation process.
+			Includes activation email and confirmation process.<br /><br />
 
 			NOTE: controllers are not included in Janitor yet!<br />
 			(they are frontend controllers and are currently located in 
@@ -30,7 +30,7 @@ $this->pageTitle("It's just improvements");
 		<li>
 			Simple automated version control on all main item data updates. This is considered a
 			data protection enhancement - Revisions are still only availble
-			via DB access. Revision interface will be added in v0.9.
+			via DB access. Revision interface could be included in v0.9.
 		</li>
 		<li>
 			Global item comments added. Now any item can have comments added.

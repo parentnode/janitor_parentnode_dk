@@ -15,14 +15,14 @@
 				Welcome to the basement. It's dusky but it is ok - no one really wants to know how, as long as it works.
 			</h2>
 			<p>
-				Janitor is currently in v0.8 Alpha.
+				Janitor is currently in v0.7.6.
 			</p>
 			<p>
 				Janitor is a PHP content management and distribution developer toolkit, with a unique focus on frontend development.
 				It has been designed from ground up to facilitate the frontend development process. Implementing the unique 
 				combination of the <a href="http://modulator.parentnode.dk" target="_blank">Modulator</a> markup model, the
 				<a href="http://detector.parentnode.dk" target="_blank">Detector</a> segments and a very user friendly 
-				<a href="http://detector.parentnode.dk" target="_blank">Manipulator</a> enhanced backend interface, Janitor 
+				<a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a> enhanced backend interface, Janitor 
 				is ready to distribute content to any HTML capable browser.
 			</p>
 			<p>
@@ -39,10 +39,10 @@
 				As a frontend programmer, I have always had a hard time with backend systems. They tend to enforce their
 				arrogant lack of understanding HTML, CSS and JavaScript on the frontend development. In my opinion it is
 				an epic failure that these monsters get to dictate the frontned output, when it should be the other way around.
-				I mean what is more important in the end: The website or the backend?
+				I mean, what is more important in the end: The website or the backend?
 			</p>
 			<p>
-				That is why I decided to build Janitor.
+				I needed a system that was designed to work to my advantage. That is why I decided to build Janitor.
 			</p>
 
 			<h3>Github</h3>
@@ -57,6 +57,17 @@
 
 		</div>
 
+	</div>
+
+	<div class="usedby">
+		<h2>Selected clients</h2>
+		<ul>
+			<li class="oeo" title="oeo.dk">oeo.dk</li>
+			<li class="landskabsarkitekter" title="Danske Landskabsarkitekter">Danske Landskabsarkitekter</li>
+			<li class="metro" title="Copenhagen Metro">Copenhagen Metro</li>
+			<li class="urbangreen" title="Urban Green">Urban Green</li>
+			<li class="distortion" title="Distortion">Distortion</li>
+		</ul>
 	</div>
 
 </div>

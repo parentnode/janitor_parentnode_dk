@@ -15,23 +15,14 @@ $this->pageTitle("Where we are heading ...");
 		Below you'll find the current roadmap for reaching version 1.
 	</p>
 
-
 	<h2>Version 0.8</h2>
 
 	<h3>General</h3>
 	<ul class="todo">
-		<li>Only show TODOs and Questions on user dashboard if user has correct permissions - DONE</li>
-		<li>Add target option to Navigation nodes - DONE</li>
-		<li>Add way of specifying controller path for page Itemtype (per node) - DONE</li>
-		<li>Implement fallback option for navigation nodes (if not accessible to user, hide or show fallback) - DONE</li>
-
 		<li>Clear stored navigation session value when updating a navigation</li>
 
 		<li>Add full documentation for Page, Items, Itemtypes, Model and Queryi</li>
-
 		<li>Add fully accessible demo site on janitor-demo.parentnode.dk</li>
-		<li>Add "Fork me on Github" to this website</li>
-		<li>Add "used by" footer to this website</li>
 		<li>Add architecture documentation</li>
 		<li>Add folder layout documentation</li>
 		<li>Finish "Create Janitor project. Quickly." tutorial</li>
@@ -47,8 +38,7 @@ $this->pageTitle("Where we are heading ...");
 
 	<h3>Setup</h3>
 	<ul class="todo">
-		<li>Fix: missing errormessage in Database setup, when database name is invalid (try using - in name)</li>
-		<li>Add navigation nodes when injecting data (front + one more?)</li>
+		<li>Add navigation nodes when injecting default data on setup (front + one more?)</li>
 	</ul>
 
 
