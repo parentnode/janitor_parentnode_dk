@@ -58,12 +58,16 @@
 			<li>
 				<h3><a href="/docs/class-audio">Audio</a></h3>
 				<p>Audio class</p>
+			</li-->
+			<li>
+				<h3><a href="/docs/class-filesystem">FileSystem</a></h3>
+				<p>FileSystem helper class</p>
 			</li>
 			<li>
-				<h3><a href="/docs/class-filesystem">Filesystem</a></h3>
-				<p>Filesystem class</p>
+				<h3><a href="/docs/class-zipper">Zipper</a></h3>
+				<p>Zip helper class</p>
 			</li>
-			<li>
+			<!--li>
 				<h3><a href="/docs/api-autoconversion">Media auto-conversion (API)</a></h3>
 				<p>Media scaling and format conversion (Image, Video, Audio)</p>
 			</li-->

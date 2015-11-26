@@ -12,8 +12,12 @@ $this->pageTitle("It's just improvements");
 	</p>
 
 	<ul class="changes">
+		<li>Reworked FileSystem functionality for improved edge-case handling</li>
+		<li>Added Zipper.class for easier creation of zip-files</li>
+		
+		<li>Added headerIncludes function to add header CSS and JS includes from content templates</li>
 		<li>Navigation nodes updated</li>
-		<li>Add way of specifying controller path for page Itemtype (per node) - DONE</li>
+		<li>Add way of specifying controller path for page Itemtype (per node)</li>
 		<li>Updated to Detector-v3</li>
 		<li>
 			Non-privleged user creation (members), via plain signup or newsletter signup.

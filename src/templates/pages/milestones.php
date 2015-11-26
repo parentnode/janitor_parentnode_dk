@@ -41,6 +41,14 @@ $this->pageTitle("Where we are heading ...");
 		<li>Add navigation nodes when injecting default data on setup (front + one more?)</li>
 	</ul>
 
+	<h3>Security / Accounts</h3>
+	<ul class="todo">
+		<li>Add timelock on repeated failed login attempts</li>
+		<li>Add "forgot password"</li>
+		<li>Add token login</li>
+		<li>Refine content tab of user profile (and make it default)</li>
+	</ul>
+
 
 	<h2>Version 0.9</h2>
 
@@ -69,14 +77,6 @@ $this->pageTitle("Where we are heading ...");
 	<h3>Queries</h3>
 	<ul class="todo">
 		<li>Optimize complex queries in Items::getItems for better performance (if possible)</li>
-	</ul>
-
-	<h3>Security / Accounts</h3>
-	<ul class="todo">
-		<li>Add timelock on repeated failed login attempts</li>
-		<li>Add "forgot password"</li>
-		<li>Add token login</li>
-		<li>Refine content tab of user profile</li>
 	</ul>
 
 	<h3>Shop</h3>
