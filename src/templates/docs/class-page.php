@@ -457,6 +457,77 @@
 				</div>
 			</div>
 
+			<div class="function" id="Page::headerIncludes">
+				<div class="header">
+					<h3>Page::headerIncludes</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">headerIncludes</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">String </span> = 
+								Page::headerIncludes(
+									[<span class="type">Array</span> <span class="var">$files</span>]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>
+							Getter/setter of header includes. 
+						</p>
+						<p>
+							Can be used to add JavaScript and CSS header includes from inside your templates.
+						</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">Array</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">$files</span> Add files to the header includes list. If parameter is omitted,
+									the added files will be returned as a string of include statements.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">String|void</span> if no $files are passed, it returns the includes string.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<div class="example"><code>$this->headerIncludes(array("/js/include_me.js", "/css/include_me.css"));</code>
+							<p>Add <span class="value">/js/include_me.js</span> and <span class="value">/css/include_me.css</span> to the document head.</p>
+						</div>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Nothing</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
 			<div class="function" id="Page::template">
 				<div class="header">
 					<h3>Page::template</h3>
