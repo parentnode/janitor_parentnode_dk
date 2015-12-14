@@ -20,7 +20,10 @@ $this->pageTitle("Where we are heading ...");
 	<h3>General</h3>
 	<ul class="todo">
 		<li>Clear stored navigation session value when updating a navigation</li>
-
+		<li>Consider possiblity to skip "New"-step and instead create "temp"-item to allow entering into "Edit"-state immediately</li>
+		<li>Find smarter way to differentiate "back"-buttons and redirects, based on origin (partially implemented in wishlists as "return_to_wishlist")</li>
+		<li>Add pre/post state callbacks to model on all itemtype.core functions (partially implemented in wishlists)</li>
+		<li>Extend JML template helper functions for customization in templates (partially implemented in wishlists)</li>
 		<li>Add full documentation for Page, Items, Itemtypes, Model and Queryi</li>
 		<li>Add fully accessible demo site on janitor-demo.parentnode.dk</li>
 		<li>Add architecture documentation</li>
@@ -45,7 +48,6 @@ $this->pageTitle("Where we are heading ...");
 	<ul class="todo">
 		<li>Add timelock on repeated failed login attempts</li>
 		<li>Add "forgot password"</li>
-		<li>Add token login</li>
 		<li>Refine content tab of user profile (and make it default)</li>
 	</ul>
 

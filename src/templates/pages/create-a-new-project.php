@@ -151,7 +151,7 @@ $this->pageTitle("Howto ...");
 			<code>git submodule add https://github.com/parentnode/janitor.git submodules/janitor
 git commit -m 'added janitor submodule'
 git push
-		
+
 git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
 git commit -m 'added js-merger submodule'
 git push

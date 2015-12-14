@@ -12,6 +12,7 @@ $this->pageTitle("It's just improvements");
 	</p>
 
 	<ul class="changes">
+		<li>Added token login</li>
 		<li>Reworked FileSystem functionality for improved edge-case handling</li>
 		<li>Added Zipper.class for easier creation of zip-files</li>
 		
