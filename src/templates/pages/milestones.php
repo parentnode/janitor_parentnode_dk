@@ -21,7 +21,7 @@ $this->pageTitle("Where we are heading ...");
 	<ul class="todo">
 		<li>Clear stored navigation session value when updating a navigation</li>
 		<li>Consider possiblity to skip "New"-step and instead create "temp"-item to allow entering into "Edit"-state immediately</li>
-		<li>Find smarter way to differentiate "back"-buttons and redirects, based on origin (partially implemented in wishlists as "return_to_wishlist")</li>
+		<li>Find smarter way to differentiate "back"-buttons and fart redirects, based on origin (partially implemented in wishlists as "return_to_wishlist")</li>
 		<li>Add pre/post state callbacks to model on all itemtype.core functions (partially implemented in wishlists)</li>
 		<li>Extend JML template helper functions for customization in templates (partially implemented in wishlists)</li>
 		<li>Add full documentation for Page, Items, Itemtypes, Model and Queryi</li>
