@@ -4737,26 +4737,155 @@ Util.videoPlayer = function(_options) {
 }
 
 
+/*u-basics.js*/
+u.toggleHeader = function(div, header) {
+	header = header ? header : "h2";
+	div._toggle_header = u.qs(header, div);
+	div._toggle_header_id = div.className.replace(/item_id:[0-9]+/, "").trim();
+	div._toggle_header.div = div;
+	u.e.click(div._toggle_header);
+	div._toggle_header.clicked = function() {
+		if(this.div._toggle_is_closed) {
+			u.as(this.div, "height", "auto");
+			this.div._toggle_is_closed = false;
+			u.saveCookie(this.div._toggle_header_id+"_open", 1);
+		}
+		else {
+			u.as(this.div, "height", this.offsetHeight+"px");
+			this.div._toggle_is_closed = true;
+			u.saveCookie(this.div._toggle_header_id+"_open", 0);
+		}
+	}
+	var state = u.getCookie(div._toggle_header_id+"_open");
+	if(state == "0") {
+		div._toggle_header.clicked();
+	}
+}
+
+/*beta-u-notifier.js*/
+u.notifier = function(node) {
+	var notifications = u.qs("div.notifications", node);
+	if(!notifications) {
+		node.notifications = u.ae(node, "div", {"id":"notifications"});
+	}
+	node.notifications.hide_delay = 4500;
+	node.notifications.hide = function() {
+		u.a.transition(this, "all 0.5s ease-in-out");
+		u.a.translate(this, 0, -this.offsetHeight);
+	}
+	node.notify = function(response, _options) {
+		var class_name = "message";
+		if(typeof(_options) == "object") {
+			var argument;
+			for(argument in _options) {
+				switch(argument) {
+					case "class"	: class_name	= _options[argument]; break;
+				}
+			}
+		}
+		var output;
+		if(typeof(response) == "object" && response.isJSON) {
+			var message = response.cms_message;
+			var cms_status = response.cms_status;
+			if(typeof(message) == "object") {
+				for(type in message) {
+					if(typeof(message[type]) == "string") {
+						output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message[type]});
+					}
+					else if(typeof(message[type]) == "object" && message[type].length) {
+						var node, i;
+						for(i = 0; _message = message[type][i]; i++) {
+							output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":_message});
+						}
+					}
+				}
+			}
+			else if(typeof(message) == "string") {
+				output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message});
+			}
+			if(typeof(this.notifications.show) == "function") {
+				this.notifications.show();
+			}
+		}
+		else if(typeof(response) == "object" && response.isHTML) {
+			var login = u.qs(".scene.login", response);
+			if(login) {
+				if(page.t_autosave) {
+					u.t.resetTimer(page.t_autosave);
+				}
+				var overlay = u.ae(document.body, "div", {"id":"login_overlay"});
+				u.ae(overlay, login);
+				u.as(document.body, "overflow", "hidden");
+				var form = u.qs("form", overlay);
+				form.overlay = overlay;
+				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
+				u.f.init(form);
+				form.submitted = function() {
+					this.response = function(response) {
+						if(response.isJSON && response.cms_status) {
+							var csrf_token = response.cms_object["csrf-token"];
+							u.bug("new token:" + csrf_token);
+							var data_vars = u.qsa("[data-csrf-token]", page);
+							var input_vars = u.qsa("[name=csrf-token]", page);
+							var dom_vars = u.qsa("*", page);
+							var i, node;
+							for(i = 0; node = data_vars[i]; i++) {
+								u.bug("data:" + u.nodeId(node) + ", " + node.getAttribute("data-csrf-token"));
+								node.setAttribute("data-csrf-token", csrf_token);
+							}
+							for(i = 0; node = input_vars[i]; i++) {
+								u.bug("input:" + u.nodeId(node) + ", " + node.value);
+								node.value = csrf_token;
+							}
+							for(i = 0; node = dom_vars[i]; i++) {
+								if(node.csrf_token) {
+									u.bug("dom:" + u.nodeId(node) + ", " + node.csrf_token);
+									node.csrf_token = csrf_token;
+								}
+							}
+							this.overlay.parentNode.removeChild(this.overlay);
+							u.as(document.body, "overflow", "auto");
+							if(page._autosave_node && page._autosave_interval) {
+								u.t.setTimer(page._autosave_node, "autosave", page._autosave_interval);
+							}
+						}
+						else {
+							alert("login error")
+						}
+					}
+					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
+				}
+			}
+		}
+		u.t.setTimer(this.notifications, this.notifications.hide, this.notifications.hide_delay);
+	}
+}
+
+
 /*u-navigation.js*/
 u.navigation = function(_options) {
-	var callback_navigate = "navigate";
 	var navigation_node = page;
+	var callback_navigate = "_navigate";
+	var initialization_scope = page.cN;
 	if(typeof(_options) == "object") {
 		var argument;
 		for(argument in _options) {
 			switch(argument) {
-				case "callback"       : callback_navigate      = _options[argument]; break;
-				case "node"           : navigation_node        = _options[argument]; break;
+				case "callback"       : callback_navigate           = _options[argument]; break;
+				case "node"           : navigation_node             = _options[argument]; break;
+				case "scope"          : initialization_scope        = _options[argument]; break;
 			}
 		}
 	}
-	navigation_node._nav_path = navigation_node._nav_path ? navigation_node._nav_path : u.h.getCleanUrl(location.href, 1);
-	navigation_node._nav_history = navigation_node._nav_history ? navigation_node._nav_history : [];
+	window._man_nav_path = window._man_nav_path ? window._man_nav_path : u.h.getCleanUrl(location.href, 1);
 	navigation_node._navigate = function(url) {
 		url = u.h.getCleanUrl(url);
-		navigation_node._nav_history.unshift(url);
 		u.stats.pageView(url);
-		if(!this._nav_path || ((this._nav_path != u.h.getCleanHash(location.hash, 1) && !u.h.popstate) || (this._nav_path != u.h.getCleanUrl(location.href, 1) && u.h.popstate))) {
+		if(
+			!window._man_nav_path || 
+			(!u.h.popstate && window._man_nav_path != u.h.getCleanHash(location.hash, 1)) || 
+			(u.h.popstate && window._man_nav_path != u.h.getCleanUrl(location.href, 1))
+		) {
 			if(this.cN && typeof(this.cN.navigate) == "function") {
 				this.cN.navigate(url);
 			}
@@ -4770,69 +4899,192 @@ u.navigation = function(_options) {
 			}
 		}
 		if(!u.h.popstate) {
-			this._nav_path = u.h.getCleanHash(location.hash, 1);
+			window._man_nav_path = u.h.getCleanHash(location.hash, 1);
 		}
 		else {
-			this._nav_path = u.h.getCleanUrl(location.href, 1);
-		}
-	}
-	navigation_node.navigate = function(url, node) {
-		this.history_node = node ? node : false;
-		if(u.h.popstate) {
-			history.pushState({}, url, url);
-			navigation_node._navigate(url);
-		}
-		else {
-			location.hash = u.h.getCleanUrl(url);
+			window._man_nav_path = u.h.getCleanUrl(location.href, 1);
 		}
 	}
 	if(location.hash.length && location.hash.match(/^#!/)) {
 		location.hash = location.hash.replace(/!/, "");
 	}
-	if(!u.h.popstate) {
-		if(location.hash.length < 2) {
-			navigation_node.navigate(location.href, page);
-			navigation_node._nav_path = u.h.getCleanUrl(location.href);
-			u.init(navigation_node.cN);
-		}
-		else if(u.h.getCleanHash(location.hash) != u.h.getCleanUrl(location.href) && location.hash.match(/^#\//)) {
-			navigation_node._nav_path = u.h.getCleanUrl(location.href);
-			navigation_node._navigate(u.h.getCleanHash(location.hash), page);
+	var callback_after_init = false;
+	if(!this.is_initialized) {
+		this.is_initialized = true;
+		if(!u.h.popstate) {
+			if(location.hash.length < 2) {
+				window._man_nav_path = u.h.getCleanUrl(location.href);
+				u.h.navigate(window._man_nav_path);
+				u.init(initialization_scope);
+			}
+			else if(location.hash.match(/^#\//) && u.h.getCleanHash(location.hash) != u.h.getCleanUrl(location.href)) {
+				callback_after_init = u.h.getCleanHash(location.hash);
+			}
+			else {
+				u.init(initialization_scope);
+			}
 		}
 		else {
-			u.init(navigation_node.cN);
+			if(u.h.getCleanHash(location.hash) != u.h.getCleanUrl(location.href) && location.hash.match(/^#\//)) {
+				window._man_nav_path = u.h.getCleanHash(location.hash);
+				u.h.navigate(window._man_nav_path);
+				callback_after_init = window._man_nav_path;
+			}
+			else {
+				u.init(initialization_scope);
+			}
 		}
+		var random_string = u.randomString(8);
+		if(callback_after_init) {
+			eval('navigation_node._initNavigation_'+random_string+' = function() {u.h.addEvent(this, {"callback":"'+callback_navigate+'"});u.h.callback("'+callback_after_init+'");}');
+		}
+		else {
+			eval('navigation_node._initNavigation_'+random_string+' = function() {u.h.addEvent(this, {"callback":"'+callback_navigate+'"});}');
+		}
+		u.t.setTimer(navigation_node, "_initNavigation_"+random_string, 100);
 	}
 	else {
-		if(u.h.getCleanHash(location.hash) != u.h.getCleanUrl(location.href) && location.hash.match(/^#\//)) {
-			navigation_node._nav_path = u.h.getCleanHash(location.hash);
-			navigation_node.navigate(u.h.getCleanHash(location.hash), page);
+		u.h.callbacks.push({"node":navigation_node, "callback":callback_navigate});
+	}
+}
+
+
+/*u-history.js*/
+Util.History = u.h = new function() {
+	this.popstate = ("onpopstate" in window);
+	this.callbacks = [];
+	this.is_listening = false;
+	this.navigate = function(url, node) {
+		if(this.popstate) {
+			history.pushState({}, url, url);
+			this.callback(url);
 		}
 		else {
-			u.init(navigation_node.cN);
+			location.hash = u.h.getCleanUrl(url);
 		}
 	}
-	navigation_node._initHistory = function() {
-		u.h.catchEvent(page, {"callback":"_navigate"});
+	this.callback = function(url) {
+		var i, recipient;
+		for(i = 0; recipient = this.callbacks[i]; i++) {
+			if(typeof(recipient.node[recipient.callback]) == "function") {
+				recipient.node[recipient.callback](url);
+			}
+		}
 	}
-	u.t.setTimer(page, navigation_node._initHistory, 100);
-	navigation_node.historyBack = function() {
-		if(this._nav_history.length > 1) {
-			this._nav_history.shift();
-			return this._nav_history.shift();
+	this.removeEvent = function(node, _options) {
+		var callback_urlchange = "navigate";
+		if(typeof(_options) == "object") {
+			var argument;
+			for(argument in _options) {
+				switch(argument) {
+					case "callback"		: callback_urlchange		= _options[argument]; break;
+				}
+			}
+		}
+		var i, recipient;
+		for(i = 0; recipient = this.callbacks[i]; i++) {
+			if(recipient.node == node && recipient.callback == callback_urlchange) {
+				this.callbacks.splice(i, 1);
+				break;
+			}
+		}
+	}
+	this.addEvent = function(node, _options) {
+		var callback_urlchange = "navigate";
+		if(typeof(_options) == "object") {
+			var argument;
+			for(argument in _options) {
+				switch(argument) {
+					case "callback"		: callback_urlchange		= _options[argument]; break;
+				}
+			}
+		}
+		if(!this.is_listening) {
+			this.is_listening = true;
+			if(this.popstate) {
+				u.e.addEvent(window, "popstate", this._urlChanged);
+			}
+			else if("onhashchange" in window && !u.browser("explorer", "<=7")) {
+				u.e.addEvent(window, "hashchange", this._hashChanged);
+			}
+			else {
+				u.h._current_hash = window.location.hash;
+				window.onhashchange = this._hashChanged;
+				setInterval(
+					function() {
+						if(window.location.hash !== u.h._current_hash) {
+							u.h._current_hash = window.location.hash;
+							window.onhashchange();
+						}
+					}, 200
+				);
+			}
+		}
+		this.callbacks.push({"node":node, "callback":callback_urlchange});
+	}
+	this._urlChanged = function(event) {
+		var url = u.h.getCleanUrl(location.href);
+		if(event.state || (!event.state && event.path)) {
+			u.h.callback(url);
 		}
 		else {
-			return "/";
+			history.replaceState({}, url, url);
 		}
+	}
+	this._hashChanged = function(event) {
+		if(!location.hash || !location.hash.match(/^#\//)) {
+			location.hash = "#/"
+			return;
+		}
+		var url = u.h.getCleanHash(location.hash);
+		u.h.callback(url);
+	}
+	this.trail = [];
+	this.addToTrail = function(url, node) {
+		this.trail.push({"url":url, "node":node});
+	}
+	this.getCleanUrl = function(string, levels) {
+		string = string.replace(location.protocol+"//"+document.domain, "").match(/[^#$]+/)[0];
+		if(!levels) {
+			return string;
+		}
+		else {
+			var i, return_string = "";
+			var path = string.split("/");
+			levels = levels > path.length-1 ? path.length-1 : levels;
+			for(i = 1; i <= levels; i++) {
+				return_string += "/" + path[i];
+			}
+			return return_string;
+		}
+	}
+	this.getCleanHash = function(string, levels) {
+		string = string.replace("#", "");
+		if(!levels) {
+			return string;
+		}
+		else {
+			var i, return_string = "";
+			var hash = string.split("/");
+			levels = levels > hash.length-1 ? hash.length-1 : levels;
+			for(i = 1; i <= levels; i++) {
+				return_string += "/" + hash[i];
+			}
+			return return_string;
+		}
+	}
+	this.resolveCurrentUrl = function() {
+		return !location.hash ? this.getCleanUrl(location.href) : this.getCleanHash(location.hash);
 	}
 }
 
 
 /*u-form-htmleditor.js*/
-Util.Form.customInit["html"] = function(form, field) {
+Util.Form.customInit["html"] = function(_form, field) {
 	field._input = u.qs("textarea", field);
+	field._input._form = _form;
 	field._input.field = field;
-	form.fields[field._input.name] = field._input;
+	_form.fields[field._input.name] = field._input;
 	field._input._label = u.qs("label[for='"+field._input.id+"']", field);
 	field._input.val = u.f._value;
 	u.f.textEditor(field);
@@ -4937,7 +5189,7 @@ u.f.textEditor = function(field) {
 	field.media_add_action = field.getAttribute("data-media-add");
 	field.media_delete_action = field.getAttribute("data-media-delete");
 	field.item_id;
-	var item_id_match = field._input.form.action.match(/\/([0-9]+)(\/|$)/);
+	var item_id_match = field._input._form.action.match(/\/([0-9]+)(\/|$)/);
 	if(item_id_match) {
 		field.item_id = item_id_match[1];
 	}
@@ -5037,11 +5289,11 @@ u.f.textEditor = function(field) {
 	field.update = function() {
 		this.updateViewer();
 		this.updateContent();
-		if(this._input.form && typeof(this._input.form.updated) == "function") {
-			this._input.form.updated(this._input);
+		if(this._input._form && typeof(this._input._form.updated) == "function") {
+			this._input._form.updated(this._input);
 		}
-		if(this._input.form && typeof(this._input.form.changed) == "function") {
-			this._input.form.changed(this._input);
+		if(this._input._form && typeof(this._input._form.changed) == "function") {
+			this._input._form.changed(this._input);
 		}
 	}
 	field.updateViewer = function() {
@@ -5142,7 +5394,7 @@ u.f.textEditor = function(field) {
 			tag.parentNode.removeChild(tag);
 			u.sortable(this._editor, {"draggables":"tag", "targets":"editor"});
 			this.update();
-			this._input.form.submit();
+			this._input._form.submit();
 		}
 	}
 	field.createTagSelector = function(tag, allowed_tags) {
@@ -5299,7 +5551,7 @@ u.f.textEditor = function(field) {
 	}
 	field.deleteMedia = function(tag) {
 		var form_data = new FormData();
-		form_data.append("csrf-token", this._input.form.fields["csrf-token"].val());
+		form_data.append("csrf-token", this._input._form.fields["csrf-token"].val());
 		tag.response = function(response) {
 			page.notify(response);
 			if(response.cms_status && response.cms_status == "success") {
@@ -5311,7 +5563,7 @@ u.f.textEditor = function(field) {
 	field._media_updated = function(event) {
 		var form_data = new FormData();
 		form_data.append(this.name, this.files[0], this.value);
-		form_data.append("csrf-token", this.form.fields["csrf-token"].val());
+		form_data.append("csrf-token", this._form.fields["csrf-token"].val());
 		this.response = function(response) {
 			page.notify(response);
 			if(response.cms_status && response.cms_status == "success") {
@@ -5342,7 +5594,7 @@ u.f.textEditor = function(field) {
 				u.e.addEvent(this.tag._input, "blur", this.tag.field._blurred_content);
 				u.ac(this.tag, "done");
 				this.tag.field.update();
-				this.tag.field._input.form.submit();
+				this.tag.field._input._form.submit();
 			}
 		}
 		u.request(this, this.field.media_add_action+"/"+this.field.item_id, {"method":"post", "params":form_data});
@@ -5400,7 +5652,7 @@ u.f.textEditor = function(field) {
 	}
 	field.deleteFile = function(tag) {
 		var form_data = new FormData();
-		form_data.append("csrf-token", this._input.form.fields["csrf-token"].val());
+		form_data.append("csrf-token", this._input._form.fields["csrf-token"].val());
 		tag.response = function(response) {
 			page.notify(response);
 			if(response.cms_status && response.cms_status == "success") {
@@ -5412,7 +5664,7 @@ u.f.textEditor = function(field) {
 	field._file_updated = function(event) {
 		var form_data = new FormData();
 		form_data.append(this.name, this.files[0], this.value);
-		form_data.append("csrf-token", this.form.fields["csrf-token"].val());
+		form_data.append("csrf-token", this._form.fields["csrf-token"].val());
 		this.response = function(response) {
 			page.notify(response);
 			if(response.cms_status && response.cms_status == "success") {
@@ -5438,7 +5690,7 @@ u.f.textEditor = function(field) {
 				u.e.addEvent(this.tag._input, "blur", this.tag.field._blurred_content);
 				u.ac(this.tag, "done");
 				this.tag.field.update();
-				this.tag.field._input.form.submit();
+				this.tag.field._input._form.submit();
 			}
 		}
 		u.request(this, this.field.file_add_action+"/"+this.field.item_id, {"method":"post", "params":form_data});
@@ -5722,7 +5974,7 @@ u.f.textEditor = function(field) {
 		this.field.is_focused = true;
 		u.ac(this.tag, "focus");
 		u.ac(this.field, "focus");
-		u.as(this.field, "zIndex", this.field._input.form._focus_z_index);
+		u.as(this.field, "zIndex", this.field._input._form._focus_z_index);
 		u.f.positionHint(this.field);
 		if(this.field.backwards_tab) {
 			this.field.backwards_tab = false;
@@ -6292,6 +6544,7 @@ Util.Form.geoLocation = function(field) {
 
 
 /*u-form-builder.js*/
+u.f.customBuild = {};
 u.f.addForm = function(node, _options) {
 	var form_name = "js_form";
 	var form_action = "#";
@@ -6311,54 +6564,203 @@ u.f.addForm = function(node, _options) {
 	var form = u.ae(node, "form", {"class":form_class, "name": form_name, "action":form_action, "method":form_method});
 	return form;
 }
-u.f.addFieldset = function(node) {
-	return u.ae(node, "fieldset");
-}
-u.f.addField = function(node, _options) {
-	var field_type = "string";
-	var field_label = "Value";
-	var field_name = "js_name";
-	var field_value = "";
-	var field_class = "";
-	var field_maxlength = "";
+u.f.addFieldset = function(node, _options) {
+	var fieldset_class = "";
 	if(typeof(_options) == "object") {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
-				case "type"			: field_type			= _options[_argument]; break;
-				case "label"		: field_label			= _options[_argument]; break;
-				case "name"			: field_name			= _options[_argument]; break;
-				case "value"		: field_value			= _options[_argument]; break;
-				case "class"		: field_class			= _options[_argument]; break;
-				case "max"			: field_maxlength		= _options[_argument]; break;
+				case "class"			: fieldset_class			= _options[_argument]; break;
 			}
 		}
 	}
-	var input_id = "input_"+field_type+"_"+field_name;
-	var field = u.ae(node, "div", {"class":"field "+field_type+" "+field_class});
-	if(field_type == "string") {
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
-		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":"text", "maxlength":field_maxlength});
+	return u.ae(node, "fieldset", {"class":fieldset_class});
+}
+u.f.addField = function(node, _options) {
+	var field_name = "js_name";
+	var field_label = "Label";
+	var field_type = "string";
+	var field_value = "";
+	var field_options = [];
+	var field_class = "";
+	var field_id = "";
+	var field_max = false;
+	var field_min = false;
+	var field_disabled = false;
+	var field_readonly = false;
+	var field_required = false;
+	var field_pattern = false;
+	var field_error_message = "There is an error in your input";
+	var field_hint_message = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "name"					: field_name			= _options[_argument]; break;
+				case "label"				: field_label			= _options[_argument]; break;
+				case "type"					: field_type			= _options[_argument]; break;
+				case "value"				: field_value			= _options[_argument]; break;
+				case "options"				: field_options			= _options[_argument]; break;
+				case "class"				: field_class			= _options[_argument]; break;
+				case "id"					: field_id				= _options[_argument]; break;
+				case "max"					: field_max				= _options[_argument]; break;
+				case "min"					: field_min				= _options[_argument]; break;
+				case "disabled"				: field_disabled		= _options[_argument]; break;
+				case "readonly"				: field_readonly		= _options[_argument]; break;
+				case "required"				: field_required		= _options[_argument]; break;
+				case "pattern"				: field_pattern			= _options[_argument]; break;
+				case "error_message"		: field_error_message	= _options[_argument]; break;
+				case "hint_message"			: field_hint_message	= _options[_argument]; break;
+			}
+		}
 	}
-	else if(field_type == "email" || field_type == "number" || field_type == "tel") {
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
-		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":field_type});
+	var custom_build;
+	if(field_type in u.f.customBuild) {
+		return u.f.customBuild[field_type](node, _options);
+	}
+	field_id = field_id ? field_id : "input_"+field_type+"_"+field_name;
+	field_disabled = !field_disabled ? (field_class.match(/(^| )disabled( |$)/) ? "disabled" : false) : "disabled";
+	field_readonly = !field_readonly ? (field_class.match(/(^| )readonly( |$)/) ? "readonly" : false) : "readonly";
+	field_required = !field_required ? (field_class.match(/(^| )required( |$)/) ? true : false) : true;
+	field_class += field_disabled ? (!field_class.match(/(^| )disabled( |$)/) ? " disabled" : "") : "";
+	field_class += field_readonly ? (!field_class.match(/(^| )readonly( |$)/) ? " readonly" : "") : "";
+	field_class += field_required ? (!field_class.match(/(^| )required( |$)/) ? " required" : "") : "";
+	field_class += field_min ? (!field_class.match(/(^| )min:[0-9]+( |$)/) ? " min:"+field_min : "") : "";
+	field_class += field_max ? (!field_class.match(/(^| )max:[0-9]+( |$)/) ? " max:"+field_max : "") : "";
+	var field = u.ae(node, "div", {"class":"field "+field_type+" "+field_class});
+	var attributes = {};
+	if(field_type == "string") {
+		field_max = field_max ? field_max : 255;
+		attributes = {
+			"type":"text", 
+			"id":field_id, 
+			"value":field_value, 
+			"name":field_name, 
+			"maxlength":field_max, 
+			"minlength":field_min,
+			"pattern":field_pattern,
+			"readonly":field_readonly,
+			"disabled":field_disabled
+		};
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		u.ae(field, "input", u.f.verifyAttributes(attributes));
+	}
+	else if(field_type == "email" || field_type == "tel" || field_type == "password") {
+		field_max = field_max ? field_max : 255;
+		attributes = {
+			"type":field_type, 
+			"id":field_id, 
+			"value":field_value, 
+			"name":field_name, 
+			"maxlength":field_max, 
+			"minlength":field_min,
+			"pattern":field_pattern,
+			"readonly":field_readonly,
+			"disabled":field_disabled
+		};
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		u.ae(field, "input", u.f.verifyAttributes(attributes));
+	}
+	else if(field_type == "number" || field_type == "integer" || field_type == "date" || field_type == "datetime") {
+		attributes = {
+			"type":field_type, 
+			"id":field_id, 
+			"value":field_value, 
+			"name":field_name, 
+			"max":field_max, 
+			"min":field_min,
+			"pattern":field_pattern,
+			"readonly":field_readonly,
+			"disabled":field_disabled
+		};
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		u.ae(field, "input", u.f.verifyAttributes(attributes));
 	}
 	else if(field_type == "checkbox") {
-		var input = u.ae(field, "input", {"id":input_id, "value":"true", "name":field_name, "type":field_type});
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
+		attributes = {
+			"type":field_type, 
+			"id":field_id, 
+			"value":field_value ? field_value : "true", 
+			"name":field_name, 
+			"disabled":field_disabled
+		};
+		u.ae(field, "input", u.f.verifyAttributes(attributes));
+		u.ae(field, "label", {"for":field_id, "html":field_label});
 	}
 	else if(field_type == "text") {
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
-		var input = u.ae(field, "textarea", {"id":input_id, "html":field_value, "name":field_name});
+		attributes = {
+			"id":field_id, 
+			"html":field_value, 
+			"name":field_name, 
+			"maxlength":field_max, 
+			"minlength":field_min,
+			"pattern":field_pattern,
+			"readonly":field_readonly,
+			"disabled":field_disabled
+		};
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		u.ae(field, "textarea", u.f.verifyAttributes(attributes));
 	}
 	else if(field_type == "select") {
-		u.bug("Select not implemented yet")
+		attributes = {
+			"id":field_id, 
+			"name":field_name, 
+			"disabled":field_disabled
+		};
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		var select = u.ae(field, "select", u.f.verifyAttributes(attributes));
+		if(field_options) {
+			var i, option;
+			for(i = 0; option = field_options[i]; i++) {
+				if(option.value == field_value) {
+					u.ae(select, "option", {"value":option.value, "html":option.text, "selected":"selected"});
+				}
+				else {
+					u.ae(select, "option", {"value":option.value, "html":option.text});
+				}
+			}
+		}
+	}
+	else if(field_type == "radiobuttons") {
+		u.ae(field, "label", {"html":field_label});
+		if(field_options) {
+			var i, option;
+			for(i = 0; option = field_options[i]; i++) {
+				var div = u.ae(field, "div", {"class":"item"});
+				if(option.value == field_value) {
+					u.ae(div, "input", {"value":option.value, "id":field_id+"-"+i, "type":"radio", "name":field_name, "checked":"checked"});
+					u.ae(div, "label", {"for":field_id+"-"+i, "html":option.text});
+				}
+				else {
+					u.ae(div, "input", {"value":option.value, "id":field_id+"-"+i, "type":"radio", "name":field_name});
+					u.ae(div, "label", {"for":field_id+"-"+i, "html":option.text});
+				}
+			}
+		}
+	}
+	else if(field_type == "files") {
+		u.ae(field, "label", {"for":field_id, "html":field_label});
+		u.ae(field, "input", {"id":field_id, "name":field_name, "type":"file"});
 	}
 	else {
-		u.bug("input type not implemented yet")
+		u.bug("input type not implemented")
+	}
+	if(field_hint_message || field_error_message) {
+		var help = u.ae(field, "div", {"class":"help"});
+		if(field_hint_message) {
+			u.ae(field, "div", {"class":"hint", "html":field_hint_message});
+			u.ae(field, "div", {"class":"error", "html":field_error_message});
+		}
 	}
 	return field;
+}
+u.f.verifyAttributes = function(attributes) {
+	for(attribute in attributes) {
+		if(attributes[attribute] === undefined || attributes[attribute] === false || attributes[attribute] === null) {
+			delete attributes[attribute];
+		}
+	}
+	return attributes;
 }
 u.f.addAction = function(node, _options) {
 	var action_type = "submit";
@@ -6378,7 +6780,10 @@ u.f.addAction = function(node, _options) {
 	}
 	var p_ul = node.nodeName.toLowerCase() == "ul" ? node : u.pn(node, {"include":"ul"});
 	if(!p_ul || !u.hc(p_ul, "actions")) {
-		p_ul = u.ae(node, "ul", {"class":"actions"});
+		if(node.nodeName.toLowerCase() == "form") {
+			p_ul = u.qs("ul.actions", node);
+		}
+		p_ul = p_ul ? p_ul : u.ae(node, "ul", {"class":"actions"});
 	}
 	var p_li = node.nodeName.toLowerCase() == "li" ? node : u.pn(node, {"include":"li"});
 	if(!p_li || p_ul != p_li.parentNode) {
@@ -6700,6 +7105,7 @@ Util.Objects["defaultList"] = new function() {
 					node._tag_options = u.ae(node, "div", {"class":"tagoptions"});
 					node._tag_options._field = u.ae(node._tag_options, "div", {"class":"field"});
 					node._tag_options._tagfilter = u.ae(node._tag_options._field, "input", {"class":"filter ignoreinput"});
+					node._tag_options._tagfilter.focus();
 					node._tag_options._tagfilter.node = node;
 					node._tag_options._tagfilter.onkeyup = function() {
 						if(this.node._new_tags) {
@@ -6841,9 +7247,6 @@ Util.Objects["defaultEdit"] = new function() {
 		var form = u.qs("form", div);
 		form.div = div;
 		u.f.init(form);
-		form.actions["cancel"].clicked = function(event) {
-			location.href = this.url;
-		}
 		form.submitted = function(iN) {
 			u.t.resetTimer(page.t_autosave);
 			this.response = function(response) {
@@ -6903,7 +7306,7 @@ Util.Objects["defaultNew"] = new function() {
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				if(response.cms_status == "success" && response.cms_object) {
-					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
+					location.href = this.action.replace("\/save", "/edit/"+response.cms_object.item_id);
 				}
 				else {
 					page.notify(response);
@@ -7966,31 +8369,81 @@ Util.Objects["password"] = new function() {
 		var new_password = u.qs("div.new_password", div);
 		var a_create = u.qs(".password_missing a");
 		var a_change = u.qs(".password_set a");
-		a_create.new_password = new_password;
-		a_change.new_password = new_password;
-		a_create.password_state = password_state;
-		a_change.password_state = password_state;
+		a_create._new_password = new_password;
+		a_change._new_password = new_password;
+		a_create._password_state = password_state;
+		a_change._password_state = password_state;
 		u.ce(a_create);
 		u.ce(a_change);
 		a_create.clicked = a_change.clicked = function() {
-			u.as(this.password_state, "display", "none");
-			u.as(this.new_password, "display", "block");
+			u.as(this._password_state, "display", "none");
+			u.as(this._new_password, "display", "block");
 		}
 		var form = u.qs("form", div);
-		form.password_state = password_state;
-		form.new_password = new_password;
+		form._password_state = password_state;
+		form._new_password = new_password;
 		u.f.init(form);
+		form.actions["cancel"].clicked = function() {
+			u.as(this.form._password_state, "display", "block");
+			u.as(this.form._new_password, "display", "none");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				if(response.cms_status == "success") {
-					u.ac(this.password_state, "set");
-					u.as(this.password_state, "display", "block");
-					u.as(this.new_password, "display", "none");
+					u.ac(this._password_state, "set");
+					u.as(this._password_state, "display", "block");
+					u.as(this._new_password, "display", "none");
 				}
 				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 			this.fields["password"].val("");
+		}
+	}
+}
+Util.Objects["apitoken"] = new function() {
+	this.init = function(div) {
+		var token = u.qs("p.token", div);
+		var renew_form = u.qs("form.renew", div);
+		var disable_form = u.qs("form.disable", div);
+		if(renew_form) {
+			renew_form._token = token;
+			if(disable_form) {
+				renew_form.disable_form = disable_form;
+			}
+			u.f.init(renew_form);
+			renew_form.submitted = function(iN) {
+				this.response = function(response) {
+					if(response.cms_status == "success") {
+						this._token.innerHTML = response.cms_object;
+						if(this.disable_form) {
+							u.rc(this.disable_form.actions["disable"], "disabled");
+						}
+						page.notify({"isJSON":true, "cms_status":"success", "cms_message":"API token updated"});
+					}
+					else {
+						page.notify({"isJSON":true, "cms_status":"error", "cms_message":"API token could not be updated"});
+					}
+				}
+				u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
+			}
+		}
+		if(disable_form) {
+			disable_form._token = token;
+			u.f.init(disable_form);
+			disable_form.submitted = function(iN) {
+				this.response = function(response) {
+					if(response.cms_status == "success") {
+						this._token.innerHTML = "N/A";
+						u.ac(this.actions["disable"], "disabled");
+						page.notify({"isJSON":true, "cms_status":"success", "cms_message":"API token disabled"});
+					}
+					else {
+						page.notify({"isJSON":true, "cms_status":"error", "cms_message":"API token could not be disables"});
+					}
+				}
+				u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
+			}
 		}
 	}
 }
@@ -8076,7 +8529,7 @@ Util.Objects["accessEdit"] = new function() {
 	}
 }
 
-/*i-profile-desktop.js*/
+/*i-profile.js*/
 Util.Objects["editProfile"] = new function() {
 	this.init = function(div) {
 		div._item_id = u.cv(div, "item_id");
@@ -8144,23 +8597,27 @@ Util.Objects["passwordProfile"] = new function() {
 		var password_state = u.qs("div.password_state", div);
 		var new_password = u.qs("div.new_password", div);
 		var a_change = u.qs(".password_set a");
-		a_change.new_password = new_password;
-		a_change.password_state = password_state;
+		a_change._new_password = new_password;
+		a_change._password_state = password_state;
 		u.ce(a_change);
 		a_change.clicked = function() {
-			u.as(this.password_state, "display", "none");
-			u.as(this.new_password, "display", "block");
+			u.as(this._password_state, "display", "none");
+			u.as(this._new_password, "display", "block");
 		}
 		var form = u.qs("form", div);
-		form.password_state = password_state;
-		form.new_password = new_password;
+		form._password_state = password_state;
+		form._new_password = new_password;
 		u.f.init(form);
+		form.actions["cancel"].clicked = function() {
+			u.as(this.form._password_state, "display", "block");
+			u.as(this.form._new_password, "display", "none");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				if(response.cms_status == "success") {
-					u.ac(this.password_state, "set");
-					u.as(this.password_state, "display", "block");
-					u.as(this.new_password, "display", "none");
+					u.ac(this._password_state, "set");
+					u.as(this._password_state, "display", "block");
+					u.as(this._new_password, "display", "none");
 					page.notify({"isJSON":true, "cms_status":"success", "cms_message":"Password updated"});
 				}
 				else {
@@ -8168,7 +8625,28 @@ Util.Objects["passwordProfile"] = new function() {
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
-			this.fields["password"].val("");
+			this.fields["new_password"].val("");
+			this.fields["old_password"].val("");
+		}
+	}
+}
+Util.Objects["apitokenProfile"] = new function() {
+	this.init = function(div) {
+		var token = u.qs("p.token", div);
+		var form = u.qs("form", div);
+		form._token = token;
+		u.f.init(form);
+		form.submitted = function(iN) {
+			this.response = function(response) {
+				if(response.cms_status == "success") {
+					this._token.innerHTML = response.cms_object;
+					page.notify({"isJSON":true, "cms_status":"success", "cms_message":"API token updated"});
+				}
+				else {
+					page.notify({"isJSON":true, "cms_status":"error", "cms_message":"API token could not be updated"});
+				}
+			}
+			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
 	}
 }
@@ -8245,143 +8723,6 @@ Util.Objects["newslettersProfile"] = new function() {
 					}
 					u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 				}
-			}
-		}
-	}
-}
-
-
-/*u-notifier.js*/
-u.notifier = function(node) {
-	var notifications = u.qs("div.notifications", node);
-	if(!notifications) {
-		node.notifications = u.ae(node, "div", {"id":"notifications"});
-	}
-	node.notifications.hide = function() {
-		this.transitioned = function() {
-			u.a.transition(this, "none");
-		}
-		u.a.transition(this, "all 0.5s ease-in-out");
-		u.a.translate(this, 0, -this.offsetHeight);
-	}
-	node.notify = function(response, _options) {
-		var class_name = "message";
-		if(typeof(_options) == "object") {
-			var argument;
-			for(argument in _options) {
-				switch(argument) {
-					case "class"	: class_name	= _options[argument]; break;
-				}
-			}
-		}
-		var output;
-		if(typeof(response) == "object" && response.isJSON) {
-			var message = response.cms_message;
-			var cms_status = response.cms_status;
-			if(typeof(message) == "object") {
-				for(type in message) {
-					if(typeof(message[type]) == "string") {
-						output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message[type]});
-					}
-					else if(typeof(message[type]) == "object" && message[type].length) {
-						var node, i;
-						for(i = 0; _message = message[type][i]; i++) {
-							output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":_message});
-						}
-					}
-				}
-			}
-			else if(typeof(message) == "string") {
-				output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message});
-			}
-		}
-		else if(typeof(response) == "object" && response.isHTML) {
-			var login = u.qs(".scene.login", response);
-			if(login) {
-				if(page.t_autosave) {
-					u.t.resetTimer(page.t_autosave);
-				}
-				var overlay = u.ae(document.body, "div", {"id":"login_overlay"});
-				u.ae(overlay, login);
-				u.as(document.body, "overflow", "hidden");
-				var form = u.qs("form", overlay);
-				form.overlay = overlay;
-				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
-				u.f.init(form);
-				form.submitted = function() {
-					this.response = function(response) {
-						if(response.isJSON && response.cms_status) {
-							var csrf_token = response.cms_object["csrf-token"];
-							u.bug("new token:" + csrf_token);
-							var data_vars = u.qsa("[data-csrf-token]", page);
-							var input_vars = u.qsa("[name=csrf-token]", page);
-							var dom_vars = u.qsa("*", page);
-							var i, node;
-							for(i = 0; node = data_vars[i]; i++) {
-								u.bug("data:" + u.nodeId(node) + ", " + node.getAttribute("data-csrf-token"));
-								node.setAttribute("data-csrf-token", csrf_token);
-							}
-							for(i = 0; node = input_vars[i]; i++) {
-								u.bug("input:" + u.nodeId(node) + ", " + node.value);
-								node.value = csrf_token;
-							}
-							for(i = 0; node = dom_vars[i]; i++) {
-								if(node.csrf_token) {
-									u.bug("dom:" + u.nodeId(node) + ", " + node.csrf_token);
-									node.csrf_token = csrf_token;
-								}
-							}
-							this.overlay.parentNode.removeChild(this.overlay);
-							u.as(document.body, "overflow", "auto");
-							if(page._autosave_node && page._autosave_interval) {
-								u.t.setTimer(page._autosave_node, "autosave", page._autosave_interval);
-							}
-						}
-						else {
-							alert("login error")
-						}
-					}
-					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
-				}
-			}
-		}
-		u.t.setTimer(this.notifications, this.notifications.hide, 4500);
-	}
-}
-
-
-/*ga.js*/
-u.ga_account = 'UA-49739795-1';
-u.ga_domain = 'janitor.parentnode.dk';
-
-
-/*u-googleanalytics.js*/
-if(u.ga_account) {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', u.ga_account, u.ga_domain);
-    ga('send', 'pageview');
-	u.stats = new function() {
-		this.pageView = function(url) {
-			ga('send', 'pageview', url);
-		}
-		this.event = function(node, action, label) {
-			ga('_trackEvent', location.href.replace(document.location.protocol + "//" + document.domain, ""), action, (label ? label : this.nodeSnippet(node)));
-		}
-		this.customVar = function(slot, name, value, scope) {
-			//       slot,		
-			//       name,		
-			//       value,	
-			//       scope		
-		}
-		this.nodeSnippet = function(e) {
-			if(e.textContent != undefined) {
-				return u.cutString(e.textContent.trim(), 20) + "(<"+e.nodeName+">)";
-			}
-			else {
-				return u.cutString(e.innerText.trim(), 20) + "(<"+e.nodeName+">)";
 			}
 		}
 	}

@@ -15,6 +15,13 @@ $this->pageTitle("Where we are heading ...");
 		Below you'll find the current roadmap for reaching version 1.
 	</p>
 
+	<h2>Version 0.7.6</h2>
+	<h3>General</h3>
+	<ul class="todo">
+
+	</ul>
+
+
 	<h2>Version 0.8</h2>
 
 	<h3>General</h3>

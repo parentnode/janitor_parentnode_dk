@@ -1,6 +1,6 @@
 @import url(http://parentnode.local/css/global/seg_tablet_include.css);
 @import url(/css/lib/s-fonts.css);
 
-@import url(/css/lib/desktop/s-pages-desktop.css);
-@import url(/css/lib/desktop/s-colorscheme-desktop.css);
-@import url(/css/lib/tablet/s-pages-active-tablet.css);
+@import url(/css/lib/desktop/s-pages.css);
+@import url(/css/lib/desktop/s-colorscheme.css);
+@import url(/css/lib/tablet/s-pages-active.css);
