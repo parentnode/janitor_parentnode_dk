@@ -7,6 +7,8 @@
 
 			<?= $HTML->link("Navigations", "/janitor/admin/navigation/list", array("wrapper" => "li.navigation")) ?>
 
+			<?= $HTML->link("Todos", "/janitor/admin/todo/list", array("wrapper" => "li.todo")) ?>
+
 			<?= $HTML->link("Tags", "/janitor/admin/tag/list", array("wrapper" => "li.tags")) ?>
 			<?= $HTML->link("Users", "/janitor/admin/user/list", array("wrapper" => "li.user")) ?>
 
