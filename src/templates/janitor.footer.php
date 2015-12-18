@@ -5,9 +5,11 @@
 
 			<?= $HTML->link("Tests", "/janitor/tests", array("wrapper" => "li.test")) ?>
 
-			<?= $HTML->link("Navigations", "/janitor/admin/navigation/list", array("wrapper" => "li.navigation")) ?>
 
+			<?= $HTML->link("Pages", "/janitor/admin/page/list", array("wrapper" => "li.page")) ?>
 			<?= $HTML->link("Todos", "/janitor/admin/todo/list", array("wrapper" => "li.todo")) ?>
+
+			<?= $HTML->link("Navigations", "/janitor/admin/navigation/list", array("wrapper" => "li.navigation")) ?>
 
 			<?= $HTML->link("Tags", "/janitor/admin/tag/list", array("wrapper" => "li.tags")) ?>
 			<?= $HTML->link("Users", "/janitor/admin/user/list", array("wrapper" => "li.user")) ?>
