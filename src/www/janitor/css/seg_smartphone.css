@@ -661,11 +661,15 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.todoList div.item {padding: 0 0 20px; border-bottom: 1px solid #aaaaaa;}
 #content .scene.todoList > div > h2 {font-size: 0.8em; text-transform: uppercase; padding-top: 7px; padding-bottom: 10px; margin: 0 0 20px;}
 #content .scene.todolistList ul.items > li h3,
-#content .scene.todolistEdit div.todos ul.items > li h3 {padding-bottom: 16px; padding-right: 250px;}
+#content .scene.todolistEdit div.todos ul.items > li h3 {padding-bottom: 10px; padding-right: 250px;}
+#content .scene.todolistEdit div.todos ul.items > li p.description {padding-bottom: 6px; display: block;}
+#content .scene.todolistEdit div.todos ul.items > li dt {color: #313942;}
 #content .scene.todolistEdit div.todos ul.items > li dd.overdue,
 #content .scene.todolistEdit div.todos ul.items > li dd.high {color: #df0000;}
 #content .scene.todoList div.todolists {padding: 0 0 50px; border-bottom: 1px solid #aaaaaa;}
-#content .scene.todoList ul.items > li h3 {padding-bottom: 16px; padding-right: 250px;}
+#content .scene.todoList ul.items > li h3 {padding-bottom: 10px; padding-right: 250px;}
+#content .scene.todoList ul.items > li p.description {padding-bottom: 6px; display: block;}
+#content .scene.todoList ul.items > li dt {color: #313942;}
 #content .scene.todoList ul.items > li dd.overdue,
 #content .scene.todoList ul.items > li dd.high {color: #df0000;}
 #content .qnaList ul.items > li p {padding-bottom: 0px; padding-right: 220px;}
@@ -717,7 +721,8 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content div.all_items div.filter .field {padding: 0;}
 #content div.all_items div.filter .field label {display: inline-block; vertical-align: top; padding: 3px 4px; color: #aaaaaa;}
 #content div.all_items div.filter .field input {width: 100px; height: 16px; font-size: 12px;}
-#content div.all_items.sortable ul.items > li.item h3 {padding-left: 60px;}
+#content div.all_items.sortable ul.items > li.item h3,
+#content div.all_items.sortable ul.items > li.item p {padding-left: 60px;}
 #content div.all_items.sortable ul.items > li.item div.drag {width: 30px; height: 30px; position: absolute; top: 8px; left: 20px; background: transparent url(/janitor/admin/img//bg_icons2.png) no-repeat 10px -440px; cursor: move;}
 #content div.all_items.sortable ul.items > li.item ul.tags {padding-left: 55px;}
 #content div.all_items.sortable ul.items > li.item dl {padding-left: 60px;}
