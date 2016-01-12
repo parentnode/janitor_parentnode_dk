@@ -1,2 +1,9 @@
 /* UNTIL JANITOR NAVIGATION IS ENABLED */
 #navigation {display: none;}
+
+/* ARTICLES */
+#content .scene .article dl.info {display: none;}
+
+/* MiLESTONES */
+#content .scene.milestones div.todolists ul.todolists {list-style: none; margin: 0;}
+#content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}

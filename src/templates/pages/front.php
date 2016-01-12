@@ -6,6 +6,8 @@
 		<dl class="info">
 			<dt class="published_at">Date published</dt>
 			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
+			<dt class="modified_at">Date modified</dt>
+			<dd class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", strtotime($page["modified_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($page["published_at"])) ?></dd>
 			<dt class="author">Author</dt>
 			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 		</dl>
@@ -31,7 +33,7 @@
 				Janitor is a powerful and simple full range developer toolkit.
 			</p>
 			<p>
-				Janitor is NOT a CMS. It is designed, to build optimized custom CMS' for custom needs.
+				Janitor is NOT a CMS. It is designed to build optimized custom CMS' for custom needs.
 			</p>
 
 			<h3>Why is Janitor here</h3>
@@ -50,8 +52,8 @@
 
 
 			<p class="note">
-				We are currently in the process of updating the documentation, while working on the release of
-				Janitor 0.8. Until then, we apoligize the incomplete online documentation. Check the
+				We are currently in the process of updating the documentation. Until it is finished, we apoligize 
+				the incomplete online documentation. Check the
 				<a href="/pages/milestones">Milestones</a> for more information.
 			</p>
 

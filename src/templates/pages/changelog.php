@@ -17,17 +17,13 @@ $this->pageTitle("It's just improvements");
 		<li>Added Zipper.class for easier creation of zip-files</li>
 		
 		<li>Added headerIncludes function to add header CSS and JS includes from content templates</li>
-		<li>Navigation nodes updated</li>
-		<li>Add way of specifying controller path for page Itemtype (per node)</li>
+		<li>Navigation nodes now allow for specifying controller path for page Itemtype (per node)</li>
 		<li>Updated to Detector-v3</li>
 		<li>
 			Non-privleged user creation (members), via plain signup or newsletter signup.
 			Includes activation email and confirmation process.<br /><br />
 
-			NOTE: controllers are not included in Janitor yet!<br />
-			(they are frontend controllers and are currently located in 
-			kaestel_dk/src/www/newsletter.php and
-			kaestel_dk/src/www/signup.php)
+			NOTE: controllers are not included in Janitor, but will be exemplified in the Janitor demo shortly.<br />
 		</li>
 		<li>
 			User profile module.

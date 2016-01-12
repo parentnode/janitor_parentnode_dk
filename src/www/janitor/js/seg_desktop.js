@@ -5175,7 +5175,6 @@ Util.cookieReference = function(node, _options) {
 			ref = node_identifier;
 		}
 	}
-	u.bug("ref:" + ref)
 	return ref;
 }
 

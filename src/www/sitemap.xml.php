@@ -15,4 +15,16 @@ print '<?xml version="1.0" encoding="UTF-8"?>';
 		<changefreq>weekly</changefreq>
 		<priority>1</priority>
 	</url>
+	<url>
+		<loc>http://janitor.parentnode.dk/getting-started</loc>
+		<lastmod><?= date("Y-m-d", filemtime(LOCAL_PATH."/templates/pages/getting-started.php")) ?></lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>1</priority>
+	</url>
+	<url>
+		<loc>http://janitor.parentnode.dk/docs</loc>
+		<lastmod><?= date("Y-m-d", filemtime(LOCAL_PATH."/templates/docs/index.php")) ?></lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>1</priority>
+	</url>
 </urlset>

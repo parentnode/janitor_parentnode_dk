@@ -12,8 +12,8 @@
 	</p>
 
 	<p class="note">
-		We are currently in the process of updating the documentation, while working on the release of
-		Janitor 0.8. Until then, we apoligize the incomplete online documentation. Check the
+		We are currently in the process of updating the documentation. Until it is finished, we apoligize 
+		the incomplete online documentation. Check the
 		<a href="/pages/milestones">Milestones</a> for more information.
 	</p>
 
@@ -62,6 +62,10 @@
 			<li>
 				<h3><a href="/docs/class-filesystem">FileSystem</a></h3>
 				<p>FileSystem helper class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-session">Session</a></h3>
+				<p>Session helper class</p>
 			</li>
 			<li>
 				<h3><a href="/docs/class-zipper">Zipper</a></h3>

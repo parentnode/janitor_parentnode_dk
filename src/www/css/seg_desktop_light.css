@@ -407,6 +407,10 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 
 /*s-pages.css*/
 #navigation {display: none;}
+#content .scene .article dl.info {display: none;}
+#content .scene.milestones div.todolists ul.todolists {list-style: none; margin: 0;}
+#content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
+
 
 /*s-colorscheme.css*/
 * {color: #ff7c00;}
