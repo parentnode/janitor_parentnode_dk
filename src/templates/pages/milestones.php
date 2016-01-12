@@ -56,6 +56,9 @@ $todotags_priority = array("General", "Backend interface");
 				
 					<li class="todolist item_id:<?= $todolist["id"] ?>">
 						<h2><?= $todolist["name"] ?></h2>
+						<? if($todolist["description"]): ?>
+							<p><?= nl2br($todolist["description"]) ?></p>
+						<? endif; ?>
 						<?
 
 						$todolist_tags = $IC->getTags(array("item_id" => $todolist["id"], "context" => "todolist"));
