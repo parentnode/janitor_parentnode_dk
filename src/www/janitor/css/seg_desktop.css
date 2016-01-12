@@ -704,7 +704,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.defaultEdit > div.prices ul.prices li form {display: inline-block; vertical-align: top;}
 #content .scene.defaultEdit > div.prices ul.prices li input.delete {padding: 0; margin: 0; line-height: 20px; cursor: pointer; color: #999999; text-decoration: underline; box-shadow: none; text-shadow: none; border: none; background: none; border-radius: 0;}
 #content .scene.defaultEdit > div.prices ul.prices li input.delete:hover {color: #000000;}
-#content .scene.defaultEdit > div.media {padding: 0 0 10px; border-bottom: 1px solid #bbbbbb; position: relative;}
+#content .scene.defaultEdit > div.media {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.media form.upload {text-align: left; position: relative; z-index: 2;}
 #content .scene.defaultEdit > div.media form.upload .actions {display: none;}
 #content .scene.defaultEdit > div.media form.delete {padding: 0; position: absolute; top: 0; right: 0;}
@@ -720,9 +720,10 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.defaultEdit > div.media > div.videoplayer {margin: 0 28px; position: absolute; top: 47px; left: 0; z-index: 1;}
 #content .scene.defaultEdit > div.media > form.delete {left: 412px; right: auto; top: 47px; z-index: 11;}
 #content .scene.defaultEdit > div.media > form.delete input {position: absolute; top: 0; right: 0;}
+#content .scene.defaultEdit > div.single_media form.upload {padding-bottom: 10px;}
 #content .scene.defaultEdit > div.single_media form.upload input[type=file] {height: 204px;}
 #content .scene.defaultEdit > div.single_media form.upload label {margin-top: 90px;}
-#content .scene.defaultEdit > div.media ul.mediae {padding: 0 20px 0; text-align: left;}
+#content .scene.defaultEdit > div.media ul.mediae {padding: 0 20px 10px; text-align: left;}
 #content .scene.defaultEdit > div.media ul.mediae > li {margin: 0 10px 20px; position: relative; text-align: center;}
 #content .scene.defaultEdit > div.media ul.mediae > li.dragged {z-index: 2;}
 #content .scene.defaultEdit > div.media ul.mediae > li h4 {padding: 0 0 5px;}
