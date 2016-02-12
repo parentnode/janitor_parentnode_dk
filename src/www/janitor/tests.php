@@ -48,6 +48,7 @@ if(is_array($action) && count($action)) {
 
 
 $page->page(array(
+	"type" => "janitor",
 	"templates" => "tests/index.php"
 ));
 exit();
