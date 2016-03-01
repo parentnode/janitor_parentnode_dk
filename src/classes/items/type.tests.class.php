@@ -153,6 +153,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("name"))) {
+			message()->addMessage("String ok");
 			return true;
 		}
 		return false;
@@ -162,6 +163,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_text"))) {
+			message()->addMessage("Text ok");
 			return true;
 		}
 		return false;
@@ -171,6 +173,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_html"))) {
+			message()->addMessage("HTML ok");
 			return true;
 		}
 		return false;
@@ -180,6 +183,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_select"))) {
+			message()->addMessage("Select ok");
 			return true;
 		}
 		return false;
@@ -189,6 +193,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_email"))) {
+			message()->addMessage("Email ok");
 			return true;
 		}
 		return false;
@@ -198,6 +203,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_tel"))) {
+			message()->addMessage("Tel ok");
 			return true;
 		}
 		return false;
@@ -207,6 +213,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_password"))) {
+			message()->addMessage("Password ok");
 			return true;
 		}
 		return false;
@@ -216,6 +223,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_date"))) {
+			message()->addMessage("Date ok");
 			return true;
 		}
 		return false;
@@ -225,6 +233,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_datetime"))) {
+			message()->addMessage("Datetime ok");
 			return true;
 		}
 		return false;
@@ -234,6 +243,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_integer"))) {
+			message()->addMessage("Integer ok");
 			return true;
 		}
 		return false;
@@ -243,6 +253,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_number"))) {
+			message()->addMessage("Number ok");
 			return true;
 		}
 		return false;
@@ -252,6 +263,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_checkbox"))) {
+			message()->addMessage("Checkbox ok");
 			return true;
 		}
 		return false;
@@ -261,6 +273,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_radiobuttons"))) {
+			message()->addMessage("Radiobuttons ok");
 			return true;
 		}
 		return false;
@@ -270,6 +283,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("tag"))) {
+			message()->addMessage("Tag ok");
 			return true;
 		}
 		return false;
@@ -279,6 +293,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("file"))) {
+			message()->addMessage("File ok");
 			return true;
 		}
 		return false;
@@ -286,6 +301,51 @@ class TypeTests extends Itemtype {
 
 
 	function testAll() {}
+
+
+
+	// ADDITIONAL TEST FUNCTIONS
+	function testPath($path, $allowed) {
+		global $page;
+		$result = $page->validatePath($path);
+		if(($result && $allowed) || (!$result && !$allowed)) {
+			print '<div class="testpassed">'.$path."</div>\n";
+		}
+		else {
+			print '<div class="testfailed">'.$path."</div>\n";
+		}
+	}
+
+
+	// test item status
+	function testStatus($expected) {
+		global $test_item_id;
+		$IC = new Items();
+
+		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
+		if($compare_item["status"] == $expected) {
+			print '<div class="testpassed">Status ok</div>'."\n";
+		}
+		else {
+			print '<div class="testfailed">Status error</div>'."\n";
+		}
+	}
+
+	// test item name
+	function testExistence($expected) {
+		global $test_item_id;
+		$IC = new Items();
+
+		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
+		if(($compare_item && $expected) || (!$compare_item && !$expected)) {
+			print '<div class="testpassed">Existence ok</div>'."\n";
+		}
+		else {
+			print '<div class="testfailed">Existence error</div>'."\n";
+		}
+	}
+
+
 }
 
 ?>

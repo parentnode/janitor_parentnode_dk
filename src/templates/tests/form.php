@@ -1,9 +1,24 @@
 <?
 global $model;
 global $IC;
+global $itemtype;
+
 
 //$model = new Tests();
-$item = $IC->getItem(array("id" => 1, "extend" => array("tags" => false, "mediae" => false)));
+$items = $IC->getItems(array("itemtype" => $itemtype));
+if(!$items) {
+
+	unset($_POST);
+	$_POST["name"] = "Test item";
+
+	$item = $model->save(array("save", "tests"));
+	$item_id = $item["id"];
+}
+else {
+	$item_id = $items[0]["id"];
+}
+
+$item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => false, "mediae" => false)));
 	
 ?>
 <script type="text/javascript">
@@ -12,9 +27,13 @@ u.o["testForm"] = new function() {
 	this.init = function(form) {
 		u.bug("init")
 		u.f.init(form, {"validation":false});
+
 		form.submitted = function() {
 			this.response = function(response) {
+				page.notify(response);
+
 				u.xInObject(response);
+
 			}
 			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
 
@@ -24,18 +43,19 @@ u.o["testForm"] = new function() {
 
 </script>
 
-<div class="scene tests defaultEdit i:scene">
+<div class="scene tests i:scene">
 	<h1>HTML Class</h1>	
+	<h2>Testing Janitor backend interface</h2>
+
 	<ul class="actions">
 		<?= $model->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
 
-	<h2>Testing Janitor backend interface</h2>
+	<div class="tests">
 
-	<div class="item">
-
-		<h3>All-in-one content</h3>
+		<h3>All-in-one item</h3>
+		<p>No clientside validation</p>
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
