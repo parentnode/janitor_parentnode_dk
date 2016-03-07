@@ -1,12 +1,6 @@
 <?
-$navigation = session()->value("navigation_main");
-// or get complete structure from system
-if(!$navigation) {
-
-	$NC = new Navigation();
-	$navigation = $NC->getNavigations(array("handle" => "main"));
-	session()->value("navigation_main", $navigation);
-}
+//$NC = new Navigation();
+$navigation = $this->navigation("main");
 ?>
 	</div>
 
