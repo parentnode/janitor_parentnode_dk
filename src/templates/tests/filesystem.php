@@ -11,12 +11,11 @@ function checkFiles($files, $expected) {
 	foreach($files as $file) {
 		$index = array_search(str_replace(PUBLIC_FILE_PATH, "", $file), $expected);
 		if($index !== false) {
-			array_slice($expected, $index, 1);
+			array_splice($expected, $index, 1);
 		}
-		
 	}
 
-	if(count($expected == 0)) {
+	if(count($expected) == 0) {
 		return true;
 	}
 
@@ -93,12 +92,7 @@ function checkFiles($files, $expected) {
 			"/filesystem-test/level2/level21/test.jpg",
 			"/filesystem-test/level2/level22/level221/I'm a fake.pdf",
 			"/filesystem-test/level2/level22/test.txt"
-		))
-			// str_replace(PUBLIC_FILE_PATH, "", $files[0]) == "/filesystem-test/level1/test.txt" &&
-			// str_replace(PUBLIC_FILE_PATH, "", $files[1]) == "/filesystem-test/level2/level21/test.jpg" &&
-			// str_replace(PUBLIC_FILE_PATH, "", $files[2]) == "/filesystem-test/level2/level22/level221/I'm a fake.pdf" &&
-			// str_replace(PUBLIC_FILE_PATH, "", $files[3]) == "/filesystem-test/level2/level22/test.txt"
-		):
+		))):
 		?>
 		<div class="testpassed"><p>FileSystem::files (ignore tempfiles) - correct</p></div>
 		<? else: ?>
@@ -108,16 +102,14 @@ function checkFiles($files, $expected) {
 		<?
 
 		$files = $fs->files(PUBLIC_FILE_PATH."/filesystem-test", array("include_tempfiles" => true));
-		print_r($files);
-		
-		if(count($files) == 6 &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[0]) == "/filesystem-test/level1/level11/.systemfile" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[1]) == "/filesystem-test/level1/level12/_tempfile.txt" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[2]) == "/filesystem-test/level1/test.txt" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[3]) == "/filesystem-test/level2/level21/test.jpg" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[4]) == "/filesystem-test/level2/level22/level221/I'm a fake.pdf" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[5]) == "/filesystem-test/level2/level22/test.txt"
-		):
+		if(count($files) == 6 && checkFiles($files, array(
+			"/filesystem-test/level1/level11/.systemfile",
+			"/filesystem-test/level1/level12/_tempfile.txt",
+			"/filesystem-test/level1/test.txt",
+			"/filesystem-test/level2/level21/test.jpg",
+			"/filesystem-test/level2/level22/level221/I'm a fake.pdf",
+			"/filesystem-test/level2/level22/test.txt"
+		))):
 		
 		?>
 		<div class="testpassed"><p>FileSystem::files (include tempfiles) - correct</p></div>
@@ -127,11 +119,10 @@ function checkFiles($files, $expected) {
 
 		<?
 		$files = $fs->files(PUBLIC_FILE_PATH."/filesystem-test", array("allow_extensions" => "txt,jpg", "deny_folders" => "level21"));
-		print_r($files);
-		if(count($files) == 2 &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[0]) == "/filesystem-test/level1/test.txt" &&
-			str_replace(PUBLIC_FILE_PATH, "", $files[1]) == "/filesystem-test/level2/level22/test.txt"
-		):
+		if(count($files) == 2 && checkFiles($files, array(
+			"/filesystem-test/level1/test.txt",
+			"/filesystem-test/level2/level22/test.txt"
+		))):
 		?>
 		<div class="testpassed"><p>FileSystem::files (allow/deny) - correct</p></div>
 		<? else: ?>
