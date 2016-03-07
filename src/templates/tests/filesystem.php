@@ -69,6 +69,7 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 		<h3>FileSystem::files</h3>
 		<?
 		$files = $fs->files(PUBLIC_FILE_PATH."/filesystem-test");
+		print_r($files);
 		if(count($files) == 4 &&
 			str_replace(PUBLIC_FILE_PATH, "", $files[0]) == "/filesystem-test/level1/test.txt" &&
 			str_replace(PUBLIC_FILE_PATH, "", $files[1]) == "/filesystem-test/level2/level21/test.jpg" &&
@@ -84,6 +85,7 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 		<?
 
 		$files = $fs->files(PUBLIC_FILE_PATH."/filesystem-test", array("include_tempfiles" => true));
+		print_r($files);
 		if(count($files) == 6 &&
 			str_replace(PUBLIC_FILE_PATH, "", $files[0]) == "/filesystem-test/level1/level11/.systemfile" &&
 			str_replace(PUBLIC_FILE_PATH, "", $files[1]) == "/filesystem-test/level1/level12/_tempfile.txt" &&
