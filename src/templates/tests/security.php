@@ -204,45 +204,6 @@ class CurlRequest {
 }
 
 
-// get cookie from result
-function getCookie($result) {
-
-	preg_match_all("/Set\-Cookie: (.+);/", $result["header"], $cookie_match);
-	$cookie = $cookie_match[1][count($cookie_match[1])-1];
-
-	return $cookie;
-}
-
-// get CSRF from result
-function getCSRF($result) {
-
-	// look for input
-	preg_match("/name\=\"csrf\-token\" value=\"(.+)\"/", $result["body"], $csrf_match);
-	if(!$csrf_match) {
-		// look for ajax response
-		preg_match("/\"csrf\-token\":\"(.+)\"}/", $result["body"], $csrf_match);
-	}
-
-	$csrf = $csrf_match[1];
-
-	return $csrf;
-}
-
-
-// test item name
-function testName($expected) {
-	global $IC;
-	global $test_item_id;
-	global $test_item_name;
-
-	$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-	if($compare_item["name"] != $test_item_name) {
-		print '<div style="color: red">CRITICAL: NAME IS NOW "'.$compare_item["name"].'"</div>'."\n";
-	}
-}
-
-
-
 $curl = new CurlRequest();
 
 
@@ -329,152 +290,150 @@ $curl->init($params);
 	<div class="tests">
 		<h3>Testing HTTP POST requests: advanced requests</h3>
 		<?
+		$curl->exec(SITE_URL."/janitor/admin/items/status/".$test_item_id."/0", false);
+		$model->testStatus($test_item_status);
+		$curl->exec(SITE_URL."/janitor/admin/items/delete/".$test_item_id, false);
+		$model->testExistence(1);
+
+
+		$params["post_fields"] = "name=hacked";
+		$curl->init($params);
+
+		$result = $curl->exec(SITE_URL."/janitor/admin/items/update/".$test_item_id, false);
+		$model->testName($test_item_name);
 		?>
 	</div>
-<?
-
-//
-// print "<br>\nTest advanced requests<br>\n";
-// $result = $curl->exec($domain."/janitor/admin/items/status/".$item_id."/0", false);
-// testStatus();
-// $result = $curl->exec($domain."/janitor/admin/items/delete/".$item_id, false);
-// testExistence();
-//
-//
-// // try setting name value
-// print "<br>\nPosting name<br>\n";
-// $params["post_fields"] = "name=hacked";
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/update/".$item_id, false);
-// testName();
-//
-// print "<br>\n";
-//
-//
-//
-//
-// // TESTING HTTP POST (HACKiNG)
-//
-//
-// print "<h2>Testing HTTP POST requests WITH Session and CSRF hacking</h2>\n";
-//
-// // parse last result (should be done on result with login form)
-// // when sending cookie, csrf should be the same between requests
-// $csrf = getCSRF($result);
-//
-//
-// print "<br>\nAttempting to establish session<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/post", false);
-//
-//
-// // test if session is established
-// $csrf_compare = getCSRF($result);
-// if($csrf_compare == $csrf) {
-// 	print "<br>\nSession established<br>\n";
-// }
-//
-//
-// print "<br>\nTest unrestricted pages<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/", true);
-//
-//
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/animation", true);
-//
-//
-// print "<br>\nTest restricted pages<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor", false);
-//
-//
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/user/list", false);
-//
-//
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/tags", false);
-//
-//
-// // try setting name value
-// print "<br>\nTest setting name using Guest session<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/update/".$item_id, false);
-// testName();
-//
-//
-//
-//
-// // TESTING HTTP POST (LOGGING IN)
-//
-//
-// print "<br>\nLOGGING IN<br>\n";
-//
-//
-// $params = array(
-// 	"method" => "POST"
-// );
-//
-//
-// // try setting name value
-// $params["post_fields"] = "username=security@security.dk&password=s3curltA&ajaxlogin=true";
-// $curl->init($params);
-// $result = $curl->exec($domain."/?login=true", true);
-//
-// print_r($result);
-//
-// // get CSRF and Cookie after logging in
-// $csrf = getCSRF($result);
-//
-//
-// // get list page
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/allinone/list", true);
-//
-//
-// // try setting name value
-// print "<br>\nUpdating item name to: hacked<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/update/".$item_id, true);
-// testName();
-//
-//
-// // setting name back
-// print "<br>\nRestoring name to: $item_name<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "csrf-token=".$csrf."&name=".$item_name;
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/update/".$item_id, true);
-// testName();
-//
-//
-// // csrf failure
-// print "<br>\nTesting missing CSRF<br>\n";
-// $params["header"] = array("Cookie: ".getCookie($result));
-// $params["post_fields"] = "name=hacked";
-// $curl->init($params);
-// $result = $curl->exec($domain."/janitor/admin/items/update/".$item_id, false);
 
 
-?>
+	<div class="tests">
+		<h3>Testing HTTP POST requests WITH Session and CSRF hacking</h3>
+		<?
+		// parse last result (should be done on result with login form)
+		// when sending cookie, csrf should be the same between requests
+		$csrf = $model->getCSRF($result);
+
+		// attemptiong to establish session connection
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/post", false);
+
+
+		// test if session is established
+		$csrf_compare = $model->getCSRF($result);
+		if($csrf_compare == $csrf) {
+			print '<div class="testpassed">Session established</div>'."\n";
+		}
+		else {
+			print '<div class="testfailed">Session failed</div>'."\n";
+		}
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Testing HTTP POST requests WITH Session and CSRF hacking (unrestricted pages)</h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/", true);
+
+
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/getting-started", true);
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Testing HTTP POST requests WITH Session and CSRF hacking (restricted pages)</h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor", false);
+
+
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/user/list", false);
+
+
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/items/tags", false);
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Test setting "Test item" name using Guest session</h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/items/update/".$test_item_id, false);
+		$model->testName($test_item_name);
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Test Logging in</h3>
+		<?
+		$params = array(
+			"method" => "POST"
+		);
+
+		// try setting name value
+		$params["post_fields"] = "username=security@security.dk&password=s3curltA&ajaxlogin=true";
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/?login=true", true);
+
+		// get CSRF and Cookie after logging in
+		$csrf = $model->getCSRF($result);
+
+		// get list page
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/post/list", true);
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Updating "Test item" name to: hacked</h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/tests/update/".$test_item_id, true);
+		$model->testName("hacked");
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Restoring "Test item" name to: <?= $test_item_name ?></h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "csrf-token=".$csrf."&name=".$test_item_name;
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/items/update/".$test_item_id, true);
+		$model->testName($test_item_name);
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>CSRF failure</h3>
+		<?
+		$params["header"] = array("Cookie: ".$model->getCookie($result));
+		$params["post_fields"] = "name=hacked";
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/tests/update/".$test_item_id, false);
+		?>
+		<p>The last test should cause a "Thowoff"-email.</p>
+	</div>
 
 </div>

@@ -14,6 +14,23 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
+	<div class="tests">
+		<h3>FileSystem::makeDirRecursively</h3>
+		<? if(file_exists(PUBLIC_FILE_PATH."/filesystem-test/level1/level11")): ?>
+		<div class="testpassed"><p>FileSystem::makeDirRecursively - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>FileSystem::makeDirRecursively - error</p></div>
+		<? endif; ?>
+	</div>
+
+	<div class="tests">
+		<h3>FileSystem::copy</h3>
+		<? if(file_exists(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt")): ?>
+		<div class="testpassed"><p>FileSystem::copy - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>FileSystem::copy - error</p></div>
+		<? endif; ?>
+	</div>
 
 	<div class="tests">
 		<h3>FileSystem::valid</h3>
@@ -30,15 +47,15 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 	// print "9:" . $fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("allow_folders" => "level1"))."\n";
 	
 		if(
-			$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt") &&
-			!$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/level11/.systemfile") &&
-			$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/level11/.systemfile", array("include_tempfiles" => true)) &&
-			$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("allow_extensions" => "txt")) &&
-			!$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("allow_extensions" => "pdf")) &&
-			!$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("deny_extensions" => "txt")) &&
-			$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("deny_extensions" => "pdf")) &&
-			!$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("deny_folders" => "level1")) &&
-			$fs->valid(LOCAL_PATH."/templates/tests/filesystem-test-structure/level1/test.txt", array("allow_folders" => "level1"))
+			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt") &&
+			!$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/level11/.systemfile") &&
+			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/level11/.systemfile", array("include_tempfiles" => true)) &&
+			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("allow_extensions" => "txt")) &&
+			!$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("allow_extensions" => "pdf")) &&
+			!$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("deny_extensions" => "txt")) &&
+			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("deny_extensions" => "pdf")) &&
+			!$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("deny_folders" => "level1")) &&
+			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("allow_folders" => "level1"))
 		):
 		?>
 		<div class="testpassed"><p>FileSystem::valid - correct</p></div>
@@ -99,30 +116,7 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 
 	<div class="tests">
 		<h3>FileSystem::removeEmptyDirRecursively</h3>
-	<?
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("allow_folders" => "level2"));
-		//
-		// print "\n#\n";
-		//
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("allow_folders" => "level1"));
-		//
-		// print "\n#\n";
-		//
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("allow_folders" => "level1", "delete_tempfiles" => true));
-		//
-		// print "\n#\n";
-		//
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("allow_folders" => "level2", "delete_tempfiles" => true));
-		//
-		// print "\n#\n";
-		//
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("deny_folders" => "level2", "delete_tempfiles" => true));
-		//
-		// print "\n#\n";
-		//
-		// $fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("deny_folders" => "level1", "delete_tempfiles" => true));
-
-
+		<?
 		$passed = false;
 
 		$fs->removeEmptyDirRecursively(PUBLIC_FILE_PATH."/filesystem-test", array("allow_folders" => "level1"));
@@ -172,9 +166,29 @@ unlink(PUBLIC_FILE_PATH."/filesystem-test/level2/level23/level232/empty.txt");
 		<? endif; ?>
 	</div>
 
+	<div class="tests">
+		<h3>FileSystem::filesize</h3>
+		<? if($fs->filesize(PUBLIC_FILE_PATH."/filesystem-test/level2/level21/test.jpg") == "12.23K" && $fs->filesize(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt") == "16.00B"): ?>
+		<div class="testpassed"><p>FileSystem::makeDirRecursively - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>FileSystem::makeDirRecursively - error</p></div>
+		<? endif; ?>
+
+	</div>
+
 	<?
-		// cleanup
-		$fs->removeDirRecursively(PUBLIC_FILE_PATH."/filesystem-test");
+	// cleanup
+	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/filesystem-test");
 	?>
+
+	<div class="tests">
+		<h3>FileSystem::removeDirRecursively</h3>
+		<? if(!file_exists(PUBLIC_FILE_PATH."/filesystem-test")): ?>
+		<div class="testpassed"><p>FileSystem::removeDirRecursively - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>FileSystem::removeDirRecursively - error</p></div>
+		<? endif; ?>
+
+	</div>
 
 </div>

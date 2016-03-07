@@ -345,7 +345,44 @@ class TypeTests extends Itemtype {
 		}
 	}
 
+	// test item name
+	function testName($expected) {
+		global $test_item_id;
+		global $test_item_name;
+		$IC = new Items();
 
+		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
+		if($compare_item["name"] == $expected) {
+			print '<div class="testpassed">Name ok</div>'."\n";
+		}
+		else {
+			print '<div class="testfailed">Name error</div>'."\n";
+		}
+	}
+
+	// get cookie from result
+	function getCookie($result) {
+
+		preg_match_all("/Set\-Cookie: (.+);/", $result["header"], $cookie_match);
+		$cookie = $cookie_match[1][count($cookie_match[1])-1];
+
+		return $cookie;
+	}
+
+	// get CSRF from result
+	function getCSRF($result) {
+
+		// look for input
+		preg_match("/name\=\"csrf\-token\" value=\"(.+)\"/", $result["body"], $csrf_match);
+		if(!$csrf_match) {
+			// look for ajax response
+			preg_match("/\"csrf\-token\":\"(.+)\"}/", $result["body"], $csrf_match);
+		}
+
+		$csrf = $csrf_match[1];
+
+		return $csrf;
+	}
 }
 
 ?>

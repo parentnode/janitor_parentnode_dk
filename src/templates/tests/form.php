@@ -54,7 +54,7 @@ u.o["testForm"] = new function() {
 
 	<div class="tests">
 
-		<h3>All-in-one item</h3>
+		<h3>Test item (All-in-one)</h3>
 		<p>No clientside validation</p>
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
