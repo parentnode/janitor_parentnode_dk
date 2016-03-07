@@ -6,6 +6,17 @@ $this->pageTitle("It's just improvements");
 
 	<h1>Changelog</h1>
 
+	<h2>Version 0.7.7 - current development</h2>
+	<p>
+		The most important updates are:
+	</p>
+
+	<ul class="changes">
+		<li>Video auto conversion now supports output in mp4, webm, ogv, 3gp and mov.</li>
+		<li>Person model added to core itemtypes.</li>
+	</ul>
+
+
 	<h2>Version 0.7.6</h2>
 	<p>
 		The most important updates are:
