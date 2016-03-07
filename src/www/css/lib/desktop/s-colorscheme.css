@@ -19,6 +19,14 @@ body {}
 #content ul.actions a.button.primary,
 #header ul.servicenavigation li.github {background-color: #04859d;}
 
+#content .scene h3,
+#content .scene h4,
+#content .scene h5,
+#content .scene h6,
+#content .scene p,
+#content .scene li,
+#content .scene dd {color: #777777;}
+
 #footer {border-color: #ffb773;}
 
 .terms_notification .accept,

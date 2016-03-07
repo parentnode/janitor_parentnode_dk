@@ -21,17 +21,17 @@ input, select, textarea {font-size: 14px; color: #333333;}
 input, textarea {outline: none;}
 a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
 em, strong {font-size: inherit; font-family: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
-h1 {padding: 0 50px 30px; font-size: 48px; line-height: 1.05em;
+h1 {padding: 0 70px 30px; font-size: 48px; line-height: 1.05em;
 	font-family: "PT Serif", Times, serif;
 }
-h2 {padding: 0 50px 30px; font-size: 30px; line-height: 1.1em;
+h2 {padding: 0 70px 30px; font-size: 30px; line-height: 1.1em;
 	font-family: "PT Serif", Times, serif;
 }
-h3 {padding: 0 50px 10px; font-size: 20px; line-height: 1.25em;}
-h4 {padding: 0 50px 5px; font-size: 14px; line-height: 1em; font-weight: bold;}
-h5 {padding: 0 50px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
-h6 {padding: 0 50px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
-p {padding: 0 50px 20px; font-size: 14px; line-height: 1.38em;} 
+h3 {padding: 0 70px 10px; font-size: 20px; line-height: 1.25em;}
+h4 {padding: 0 70px 5px; font-size: 14px; line-height: 1em; font-weight: bold;}
+h5 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
+h6 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
+p {padding: 0 70px 20px; font-size: 14px; line-height: 1.38em;} 
 ul,
 ol {font-size: 0;}
 li {font-size: 13px; line-height: 1.25em;}
@@ -46,29 +46,30 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 .c200 {width: 50%;}
 .c133 {width: 34%;}
 .c100 {width: 25%;}
-#page {position: relative; min-height: 100%; min-width: 600px;}
+#page {position: relative; min-height: 100%; min-width: 640px;}
 #page.fixed {width: 1300px; margin: 0 auto;}
-.terms_notification {position: fixed; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border: 1px solid #888888; background: #ffffff; border-right: none;}
-.terms_notification h3 {padding: 0; font-size: 14px;}
+.terms_notification {opacity: 0; position: fixed; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border: 1px solid #888888; background: #ffffff; border-right: none;}
+.terms_notification h3 {padding: 0 0 20px; font-size: 14px;}
 .terms_notification .accept,
-.terms_notification .details {padding: 0; font-size: 13px; display: inline-block; vertical-align: bottom; padding: 0 15px 0 0;}
-.terms_notification .details {}
+.terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0;}
+.terms_notification .accept {float: left;}
+.terms_notification .details {float: right;}
 
 
 /*s-header.css*/
 #header {position: relative; height: 100px;}
-#header .logo {z-index: 10; position: absolute; top: 10px; left: 40px; font-size: 30px; padding: 10px; color: #888888; cursor: pointer; background-color: rgba(255,255,255, 0.8); border-radius: 5px;
+#header .logo {z-index: 10; position: absolute; top: 10px; left: 30px; font-size: 30px; padding: 10px; color: #888888; cursor: pointer; background-color: rgba(255,255,255, 0.8); border-radius: 5px;
 	font-family: "PT Serif", Times, serif;
 }
 #header .logo {position: fixed;}
-#header .servicenavigation {position: absolute; top: 5px; right: 50px;}
+#header .servicenavigation {position: absolute; top: 5px; right: 40px;}
 #header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb; padding: 3px 0;}
 #header .servicenavigation li.navigation {display: none;}
 #header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0";}
 #header .servicenavigation li.github:before,
 #header .servicenavigation li:nth-child(2):before {content: "";}
 #header .servicenavigation li.github {margin: 0 0 0 10px; padding: 4px 12px; background: #8c9399; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ffffff;}
-#navigation {z-index: 10; position: fixed; right: 40px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
+#navigation {z-index: 10; position: fixed; right: 60px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
 #navigation ul {}
 #navigation ul li {display: inline-block; vertical-align: top; padding: 10px; font-size: 20px; color: #888888;
 	font-family: "PT Serif", Times, serif;
@@ -82,7 +83,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 
 /*s-content.css*/
 #content {position: relative;}
-#content .scene {position: relative; padding: 50px 0;}
+#content .scene {position: relative; padding: 50px 0 75px;}
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #888888;}
 #content .scene h1,
@@ -91,7 +92,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene h4,
 #content .scene h5,
 #content .scene h6,
-#content .scene p {width: 500px;}
+#content .scene p {width: 500px; position: relative;}
 #content .scene hr {border: none; border-top: 1px solid #888888; margin: 30px 0 50px; padding: 0;}
 #content .scene p.note {font-style: italic;}
 #content .scene p+h2,
@@ -103,15 +104,16 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene code+h2 {padding-top: 20px;}
 #content .scene ul.tags+h2,
 #content .scene dl.geo+h2,
-#content .scene dl.info+h2 {padding-top: 0;}
+#content .scene dl.info+h2,
+#content .scene ul.info+h2 {padding-top: 0;}
 #content .scene p+code {margin-top: -15px;}
 #content .scene dl.info+dl.geo {padding-left: 0;}
 #content .scene ul,
-#content .scene ol {padding: 0 50px 15px;}
+#content .scene ol {padding: 0 70px 15px;}
 #content .scene ul.items {padding: 0;}
 #content .scene ul.items li.item {display: block; padding-top: 20px; padding-bottom: 30px; border-top: 1px solid #dedede;}
 #content .scene ul.items li.item h2 {position: relative; z-index: 1;}
-#content .scene dl {padding: 0 50px 15px; width: 500px;}
+#content .scene dl {padding: 0 70px 15px; width: 500px;}
 #content .scene dt {width: 100px; text-align: right; padding: 0 5px 0 0; color: #999999;} 
 #content .scene dt:after {content: ":";}
 #content .scene dd {padding: 0 0 6px; width: 394px;}
@@ -123,7 +125,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene dl h4,
 #content .scene dl h5,
 #content .scene dl h6 {padding-left: 0; padding-right: 0; padding-top: 10px;}
-#content .scene > ul.actions {margin: 0 0 20px; padding: 15px 50px;}
+#content .scene > ul.actions {margin: 0 0 20px; padding: 15px 70px;}
 #content .scene ul.tags {position: relative; z-index: 1; padding-bottom: 20px;}
 #content .scene ul.tags li {font-size: 12px; display: inline-block; vertical-align: top;}
 #content .scene ul.tags li:after {content: "\00a0|\00a0"; color: #dedede;}
@@ -133,12 +135,19 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene ul.tags li.editing:after {content: "";}
 #content .scene dl.info {position: relative; z-index: 1; padding-bottom: 20px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
 #content .scene dl.info dt {display: none;}
-#content .scene dl.info dd {width: auto; font-size: 12px; color: #999999;}
+#content .scene dl.info dd {width: auto; font-size: 12px; color: #cccccc;}
 #content .scene dl.info dd.author:before {content: "\00a0|\00a0"; color: #dedede;}
-#content .scene dl.info dd.hardlink {display: none;}
+#content .scene dl.info dd.main_entity {display: none;}
 #content .scene dl.info dd.publisher {display: none;}
 #content .scene dl.info dd.image_info {display: none;}
 #content .scene dl.info dd.modified_at {display: none;}
+#content .scene ul.info {position: relative; z-index: 1; padding-bottom: 26px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
+#content .scene ul.info li {width: auto; font-size: 12px; color: #cccccc; display: inline-block; vertical-align: top;}
+#content .scene ul.info li.author:before {content: "\00a0|\00a0"; color: #dedede;}
+#content .scene ul.info li.main_entity {display: none;}
+#content .scene ul.info li.publisher {display: none;}
+#content .scene ul.info li.image_info {display: none;}
+#content .scene ul.info li.modified_at {display: none;}
 #content .scene dl.geo {position: relative; z-index: 1; padding-bottom: 20px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
 #content .scene dl.geo .location:before {content: "|\00a0"; color: #dedede;}
 #content .scene dl.geo dd {padding-right: 0; width: auto; font-size: 12px; color: #999999;}
@@ -150,64 +159,65 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 30px 30px; width: 540px; border-radius: 5px; }
 #content .scene li div.geomap {}
 #content .scene div.image {position: relative; z-index: 1;}
-#content .scene div.image {}
-#content .scene div.image img {cursor: zoom-in; margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
-#content .scene div.image p {margin-top: -20px; padding: 0 50px 30px; font-size: 0;}
+#content .scene div.image img {cursor: zoom-in; margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
+#content .scene div.image p {margin-top: -20px; padding: 0 70px 40px; font-size: 0;}
 #content .scene div.image p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none; cursor: default;}
 #content .scene div.image.loaded p a {display: block;}
 #content .scene div.image.fullsize {}
 #content .scene div.image.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
 #content .scene div.media {position: relative; z-index: 1;}
 #content .scene div.media {}
-#content .scene div.media img {cursor: zoom-in;margin: 0 30px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
-#content .scene div.media p {margin-top: -20px; padding: 0 50px 30px; font-size: 0;}
+#content .scene div.media img {cursor: zoom-in;margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
+#content .scene div.media p {margin-top: -20px; padding: 0 70px 30px; font-size: 0;}
 #content .scene div.media p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none;}
 #content .scene div.media.loaded p a {display: block;}
 #content .scene div.media.fullsize {}
 #content .scene div.media.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
 #content .scene .pagination {display: none;}
-#content .scene div.categories {padding-bottom: 20px; display: inline-block; vertical-align: top; width: 250px;}
+#content .scene div.categories {padding-bottom: 5px; display: inline-block; vertical-align: top; width: 250px;}
 #content .scene div.categories ul {padding-right: 0;}
 #content .scene div.categories ul.tags li {font-size: 14px; padding-bottom: 5px; display: block;}
 #content .scene div.categories ul.tags li:after {content: "";}
+#content .scene div.categories ul.tags li.selected:before {width: 15px; content: "*"; color: #000000; display: inline-block; vertical-align: top; padding-top: 9px; line-height: 6px;}
+#content .scene div.categories ul.tags li.selected {margin-left: -15px;}
+#content .scene div.categories ul.tags li.selected a {color: #000000;  display: inline-block; vertical-align: top; }
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
 #content .scene div.article {position: relative;}
 #content .scene div.article ul.tags {padding-bottom: 30px;}
 #content .scene div.article ul.tags a {color: #cccccc;}
 #content .scene ul.articles {padding: 0;}
-#content .scene ul.articles li.article {padding: 20px 0 0; border-top: 1px solid #dedede; position: relative;}
+#content .scene ul.articles li.article {padding: 20px 0 5px; border-top: 1px solid #dedede; position: relative;}
 #content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
-#content .scene ul.articles li.article:first-child {border-top: none;}
-#content .scene ul.articles li.article h3 {font-size: 18px; line-height: 1em; padding-bottom: 5px;}
-#content .scene ul.articles li.article p {font-size: 13px; color: #888888;}
-#content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 25px;}
+#content .scene ul.articles li.article ul.tags li a {color: #cccccc;}
+#content .scene ul.articles li.article h3 {font-size: 22px; line-height: 1em; padding-bottom: 10px;
+	font-family: "PT Serif", Times, serif;
+}
+#content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 45px;}
 #content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
-#content .scene div.related {border-top: 1px solid #ccdbcd; padding-top: 40px; position: relative; z-index: 1;}
-#content .scene div.related ul.articles {padding: 0;}
-#content .scene div.related li.article:first-child {border-top: none;}
-#content .scene div.sharing {padding: 0; position: relative; height: 40px;}
-#content .scene div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 100px; display: none; font-size: 11px; color: #999999;}
-#content .scene div.sharing h3 {position: absolute; top: 0px; left: 100px; padding: 0; display: none;}
+#content .scene div.related {padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px;}
+#content .scene div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 120px; display: none; font-size: 11px; color: #999999;}
+#content .scene div.sharing h3 {position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
 #content .scene div.sharing.hover {z-index: 2;}
 #content .scene div.sharing.hover h3,
 #content .scene div.sharing.hover p {display: block;}
-#content .scene div.sharing svg {z-index: 0; margin-left: 50px; position: absolute; width: 500px; height: 300px; top: -130px;}
+#content .scene div.sharing svg {z-index: 0; margin-left: 70px; position: absolute; width: 500px; height: 300px; top: -130px;}
 #content .scene div.sharing svg rect {cursor: pointer;}
 #content .scene div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
 #content .scene div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
 #content .scene div.sharing svg line.primary {stroke: #666666;}
 #content .scene div.sharing svg line {stroke: #cccccc; stroke-width: 1px;}
 #content .scene div.sharing svg rect.primary {fill: #ff0000;}
-#content .scene div.readstate div {margin-left: 50px; margin-bottom: 40px; padding: 10px; position: relative; z-index: 1; border-radius: 5px; border: 1px solid #dedede; width: 478px;}
-#content .scene div.readstate p {font-size: 13px; color: #dedede; padding: 0 50px 0 0; width: auto;}
-#content .scene div.readstate div {cursor: pointer;}
-#content .scene div.readstate svg {position: absolute; top: 11px; right: 10px;}
-#content .scene div.readstate svg line {stroke: #dedede; stroke-width: 3px;}
-#content .scene div.readstate.is_read svg line {stroke: #666666;}
+#content .scene svg.checkmark {position: absolute; top: 0; left: 0;}
+#content .scene h1 svg.checkmark {top: 13px; left: 35px; transform: scale(1.5);}
+#content .scene h2 svg.checkmark {top: 8px; left: 40px; transform: scale(1.2);}
+#content .scene h3 svg.checkmark {top: 3px; left: 45px;}
+#content .scene svg.checkmark line {stroke: #dedede; stroke-width: 3px;}
+#content .scene svg.checkmark.read line {stroke: #666666;}
 #content .scene div.comments {padding-bottom: 15px; position: relative; z-index: 1;}
 #content .scene div.comments h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
-#content .scene div.comments h2 svg.arrow {position: absolute; top: 6px; right: 55px;}
+#content .scene div.comments h2 svg.arrow {position: absolute; top: 3px; left: 45px;}
 #content .scene div.comments h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
 #content .scene div.comments > p,
 #content .scene div.comments ul.comments,
@@ -219,12 +229,12 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.comments > p {color: #999999; font-size: 13px; padding-bottom: 25px;}
 #content .scene div.comments ul.comments {padding: 0; margin: 0;}
 #content .scene div.comments ul.comments > li {padding-bottom: 10px; padding-left: 0;}
-#content .scene div.comments ul.comments > li ul.info {padding-bottom: 0; margin: 0; list-style: none;}
-#content .scene div.comments ul.comments > li ul.info li {display: inline-block; vertical-align: top; color: #999999; font-size: 12px; padding-bottom: 0; padding-left: 0;}
+#content .scene div.comments ul.comments > li ul.info {padding-bottom: 0; margin: 0; list-style: none; display: block;}
+#content .scene div.comments ul.comments > li ul.info li {display: inline-block; vertical-align: top; color: #cccccc; font-size: 12px; padding-bottom: 0; padding-left: 0;}
 #content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
 #content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
 #content .scene div.comments .field {padding-bottom: 10px;}
-#content .scene code {padding: 10px 10px; margin: 0 30px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
+#content .scene code {padding: 10px 10px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
 	-moz-tab-size: 4;
@@ -246,12 +256,17 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene span.file {color: #a62300;}
 #content .scene span.htmltag {text-transform: uppercase;}
 #content .scene span.command {color: #4b5cd7;}
-#content .scene div.vcard {padding: 0 50px 25px;}
-#content .scene div.vcard ul {padding: 0;}
-#content .scene div.vcard h3 {font-size: 18px;}
-#content .scene div.vcard .name {padding: 0 0 15px;}
-#content .scene div.vcard .tel,
-#content .scene div.vcard .email {font-size: 13px; padding: 0 0 3px;}
+#content .scene div.vcard {padding: 0 70px 25px;}
+#content .scene div.vcard div {font-size: 14px; color: #777777;}
+#content .scene div.vcard .name {padding: 0 0 15px; font-size: 30px;
+	font-family: "PT Serif", Times, serif;
+}
+#content .scene div.vcard dl.info {padding: 0 0 30px;}
+#content .scene div.vcard dl.info dt,
+#content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
+#content .scene div.vcard dl.info dd {padding-bottom: 10px;}
+#content .scene div.vcard dl.info dd ul {padding: 0;}
+#content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
 #content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
 #content .scene .usedby h2 {display: none; text-align: center; padding-bottom: 5px; font-size: 11px; width: auto; color: #bbbbbb; text-transform: uppercase;
 	font-family: "OpenSans", Verdana, Arial, sans-serif;
@@ -276,7 +291,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content form {
 }
 #content fieldset {border: none; display: block;}
-#content .field {padding: 0 48px 15px; position: relative; font-size: 0; z-index: 1;}
+#content .field {padding: 0 68px 15px; position: relative; font-size: 0; z-index: 1;}
 #content label {display: none;}
 #content .field input,
 #content .field select,
@@ -306,7 +321,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .field.radiobuttons div.item {padding: 10px 0 0;}
 #content .field.radiobuttons div.item input {width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
 #content .field.radiobuttons div.item label {font-size: 14px; line-height: 1em; display: inline-block; vertical-align: top; text-align: left; width: auto;}
-#content .field.files {border: 3px dashed #dedede; display: block; width: 378px; border-radius: 5px; position: relative; margin: 2px 48px 17px; padding: 0;}
+#content .field.files {border: 3px dashed #dedede; display: block; width: 378px; border-radius: 5px; position: relative; margin: 2px 68px 17px; padding: 0;}
 #content .field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;}
 #content .field.files label {color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
 #content .field.files.loading label {display: none;}
@@ -347,7 +362,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field select.default,
 #content .field textarea.default,
 #content .field .pseudolabel {color: #aaaaaa;}
-#content .field .indicator {position: absolute; top: 4px; left: 435px; width: 25px; height: 25px;}
+#content .field .indicator {position: absolute; top: 4px; left: 455px; width: 25px; height: 25px;}
 #content .field.required .indicator { 
 	background: transparent url(/janitor/admin/img/bg_icons.png) no-repeat 0 -292px;
 }
@@ -355,7 +370,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field.radiobuttons .indicator,
 #content .field.checkbox .indicator,
 #content .field.boolean .indicator {top: -5px;}
-#content .field.files .indicator {left: 384px; top: -1px;}
+#content .field.files .indicator {left: 404px; top: -1px;}
 #content .field.correct .indicator {background-position: 2px -320px;}
 #content .field.text.correct .indicator {background-position: 2px -321px;}
 #content .field.error input,
@@ -392,7 +407,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content ul.actions a.button.primary {background-color: #8c9399; color: #ffffff;}
 #content ul.actions input.button.secondary,
 #content ul.actions a.button.secondary {background-color: #8c9399; color: #ffffff;}
-#content .field div.help {position: absolute; left: 455px; top: 6px; width: 200px;}
+#content .field div.help {position: absolute; left: 475px; top: 6px; width: 200px;}
 #content .field.files div.help {left: 404px;}
 #content .field div.error,
 #content .field div.hint {display: none; padding: 5px; border-radius: 3px; font-size: 12px; margin-top: -3px;}
@@ -667,6 +682,13 @@ body {}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary,
 #header ul.servicenavigation li.github {background-color: #04859d;}
+#content .scene h3,
+#content .scene h4,
+#content .scene h5,
+#content .scene h6,
+#content .scene p,
+#content .scene li,
+#content .scene dd {color: #777777;}
 #footer {border-color: #ffb773;}
 .terms_notification .accept,
 .terms_notification .details {color: #04859d;}

@@ -22,6 +22,14 @@ body {}
 #content ul.actions input.button.primary:active,
 #content ul.actions a.button.primary:active {background-color: #ff7c00;}
 
+#content .scene h3,
+#content .scene h4,
+#content .scene h5,
+#content .scene h6,
+#content .scene p,
+#content .scene li,
+#content .scene dd {color: #777777;}
+
 #footer {border-color: #ffb773;}
 
 .terms_notification .accept,

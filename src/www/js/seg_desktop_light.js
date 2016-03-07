@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2016-01-12 10:18:27
+js-merged @ 2016-03-07 01:12:23
 */
 
 /*seg_desktop_light_include.js*/
@@ -3691,6 +3691,7 @@ if(u.ga_account) {
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
+		window.page = page;
 		page.hN = u.qs("#header");
 		page.hN.service = u.qs(".servicenavigation", page.hN);
 		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
@@ -3743,8 +3744,10 @@ Util.Objects["login"] = new function() {
 		scene.scrolled = function() {
 		}
 		scene.ready = function() {
-			this._form = u.qs("form", this);
-			u.f.init(this._form);
+			u.ae(this, "p", {"html":"Your browser is not supported by the Administration system.<br />Please upgrade:"})
+			var ul = u.ae(this, "ul");
+			u.ae(ul, "li", {"html":'<a href="https://firefox.com/download" target="_blank">Firefox</a>'});
+			u.ae(ul, "li", {"html":'<a href="https://www.google.com/chrome/" target="_blank">Chrome</a>'});
 			page.cN.scene = this;
 		}
 		scene.ready();
