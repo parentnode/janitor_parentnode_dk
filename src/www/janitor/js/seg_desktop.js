@@ -6606,6 +6606,9 @@ Util.Objects["page"] = new function() {
 		page.initHeader = function() {
 			var janitor = u.ie(this.hN, "ul", {"class":"janitor"});
 			u.ae(janitor, u.qs(".servicenavigation .front", page.hN));
+			var janitor_text = u.qs("li a", janitor);
+			janitor_text.innerHTML = "<span>"+janitor_text.innerHTML.split("").join("</span><span>")+"</span>"; 
+			page.hN.janitor_spans = u.qsa("span", janitor_text);
 			u.ae(page, u.qs(".servicenavigation", page.hN));
 			page.nN.sections = u.qsa("ul.sections > li", page.nN);
 			if(page.nN.sections) {
@@ -6636,7 +6639,61 @@ Util.Objects["page"] = new function() {
 					section.header.clicked();
 				}
 			}
-			u.bug(page.nN.sections);
+			u.e.hover(page.hN);
+			page.hN.over = function() {
+				u.t.resetTimer(this.t_navigation);
+				u.a.transition(this, "all 0.3s ease-in-out");
+				u.ass(this, {
+					"width":"230px"
+				});
+				u.a.transition(page.nN, "all 0.3s ease-in");
+				u.ass(page.nN, {
+					"opacity":1
+				});
+				for(i = 0; span = page.hN.janitor_spans[i]; i++) {
+					if(i == 0) {
+						u.a.transition(span, "all 0.2s ease-in " + (i*50) + "ms");
+						u.ass(span, {
+							"transform":"translate(0, 0)"
+						});
+					}
+					else {
+						u.a.transition(span, "all 0.2s ease-in " + (i*50) + "ms");
+						u.ass(span, {
+							"opacity":1,
+							"transform":"translate(0, 0)"
+						});
+					}
+				}
+			}
+			page.hN.out = function() {
+				u.rc(this, "over");
+				var span, i;
+				for(i = 0; span = page.hN.janitor_spans[i]; i++) {
+					if(i == 0) {
+						u.a.transition(span, "all 0.2s ease-in " + ((page.hN.janitor_spans.length-i)*50) + "ms");
+						u.ass(span, {
+							"transform":"translate(-8px, 0)"
+						});
+					}
+					else {
+						u.a.transition(span, "all 0.2s ease-in " + ((page.hN.janitor_spans.length-i)*50) + "ms");
+						u.ass(span, {
+							"opacity":0,
+							"transform":"translate(-8px, -30px)"
+						});
+					}
+				}
+				u.a.transition(page.nN, "all 0.2s ease-in");
+				u.ass(page.nN, {
+					"opacity":0
+				});
+				u.a.transition(this, "all 0.2s ease-in-out 300ms");
+				u.ass(this, {
+					"width":"30px"
+				});
+			}
+			page.hN.t_navigation = u.t.setTimer(page.hN, "out", 500);
 		}
 		page.svgIcon = function(icon) {
 			var path;
@@ -8370,6 +8427,27 @@ Util.Objects["accessEdit"] = new function() {
 				for(i = 0; input = inputs[i]; i++) {
 					input.val(1);
 				}
+			}
+		}
+	}
+}
+Util.Objects["flushUserSession"] = new function() {
+	this.init = function(div) {
+		u.bug("div flushUserSession")
+		div.csrf_token = div.getAttribute("data-csrf-token");
+		div.flush_url = div.getAttribute("data-flush-url");
+		var users = u.qsa("li.item:not(.current_user)", div);
+		var i, user;
+		for(i = 0; user = users[i]; i++) {
+			var action = u.f.addAction(u.qs("ul.actions", user), {"type":"button", "class":"button", "value":"Flush"});
+			action.div = div;
+			action.user_id = u.cv(user, "user_id");
+			u.ce(action);
+			action.clicked = function() {
+				this.response = function(response) {
+					page.notify(response);
+				}
+				u.request(this, this.div.flush_url+"/"+this.user_id, {"method":"post", "params" : "csrf-token="+this.div.csrf_token});
 			}
 		}
 	}

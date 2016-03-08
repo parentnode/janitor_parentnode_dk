@@ -601,6 +601,11 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
 
 
+/*s-header.css*/
+#header .servicenavigation li.admin,
+#header .servicenavigation li.user {display: none;}
+
+
 /*s-active.css*/
 #header .logo:active,
 #navigation ul li:active {text-decoration: none;}

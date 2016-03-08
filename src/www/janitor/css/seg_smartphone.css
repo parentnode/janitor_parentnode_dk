@@ -545,6 +545,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 
 
 /*s-user.css*/
+#content .defaultList.userList > .actions li.online {float: right; padding: 0 0 10px 10px;}
 #content .defaultList.userList ul.items > li h3 {padding-bottom: 16px;}
 #content .defaultList.userList .userGroups {background-color: #dedede;}
 #content .defaultList.userList .userGroups li {padding: 15px 30px; border-right: 1px solid #dedede;}
@@ -609,6 +610,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .defaultList.userContentList div.comments ul.items > li ul.info li {display: inline-block; vertical-align: top;}
 #content .defaultList.userContentList div.comments ul.items > li ul.info li.user:after {content: ",\00a0";}
 #content .defaultList.userContentList div.comments ul.items > li p.comment {color: #313942; padding-bottom: 15px;}
+#content .defaultList.userOnlineList div.users ul.items dl.info {padding-top: 5px; padding-bottom: 16px;}
 #content .scene.profileEdit h1,
 #content .scene.profileContentList h1 {border-bottom: 1px solid #dedede; padding-bottom: 74px;}
 #content .scene.profileEdit div.password label {display: block; padding-left: 3px;}
