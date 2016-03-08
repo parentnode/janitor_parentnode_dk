@@ -975,7 +975,7 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get all available languages in nested Array structure</p>
+						<p>Get all available languages in nested Array structure from cache or DB</p>
 					</div>
 
 					<div class="parameters">
@@ -1105,7 +1105,7 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get all available countries in nested Array structure</p>
+						<p>Get all available countries in nested Array structure from cache or DB</p>
 					</div>
 
 					<div class="parameters">
@@ -1243,7 +1243,7 @@
 						<h4>Description</h4>
 						<p>
 							Get or set segment for current session (desktop, dekstop_ie, dekstop_light, mobile_light, mobile, mobile_touch, tablet, tv). 
-							Calls http://detector.dearapi.com for device detection.
+							Calls http://detector-v3.dearapi.com for device detection.
 						</p>
 					</div>
 
@@ -1278,6 +1278,74 @@
 							<h5>Janitor</h5>
 							<ul>
 								<li>Session</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::navigation">
+				<div class="header">
+					<h3>Page::navigation</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">navigation</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array|Boolean</span> = 
+								Page::navigation(
+									<span class="type">String</span> <span class="var">$handle</span>
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>
+							Get the nested navigation for <span class="var">handle</span> from cache or DB (if not currently cached)
+						</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$handle</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> Navigation handle
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Array|Boolean</span> The navigation structure in nested array or <span class="value">false</span>.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Cache</li>
+								<li>Query</li>
+								<li>Items</li>
+								<li>superNormalize</li>
 							</ul>
 						</div>
 

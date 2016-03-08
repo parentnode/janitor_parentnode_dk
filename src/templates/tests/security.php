@@ -30,7 +30,7 @@ else {
 }
 
 
-
+include_once("classes/users/superuser.class.php");
 $UC = new Superuser();
 $user = $UC->getUsers(array("email" => "security@security.dk"));
 
@@ -317,11 +317,13 @@ $curl->init($params);
 		$params["post_fields"] = "csrf-token=".$csrf;
 
 		$curl->init($params);
-		$result = $curl->exec(SITE_URL."/janitor/admin/post", false);
+		$result = $curl->exec(SITE_URL."/login", false);
 
+//		print_r($result);
 
 		// test if session is established
 		$csrf_compare = $model->getCSRF($result);
+//		print "csrf:".$csrf.", " .$csrf_compare."<br>";
 		if($csrf_compare == $csrf) {
 			print '<div class="testpassed">Session established</div>'."\n";
 		}
