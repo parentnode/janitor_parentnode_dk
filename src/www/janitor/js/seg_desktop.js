@@ -4513,48 +4513,62 @@ u.notifier = function(node) {
 		}
 		else if(typeof(response) == "object" && response.isHTML) {
 			var login = u.qs(".scene.login", response);
-			if(login) {
+			if(login && !u.qs("#login_overlay")) {
+				this.autosave_disabled = true;
 				if(page.t_autosave) {
 					u.t.resetTimer(page.t_autosave);
 				}
 				var overlay = u.ae(document.body, "div", {"id":"login_overlay"});
+				overlay.node = this;
 				u.ae(overlay, login);
 				u.as(document.body, "overflow", "hidden");
 				var form = u.qs("form", overlay);
 				form.overlay = overlay;
 				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
 				u.f.init(form);
+				form.fields["username"].focus();
 				form.submitted = function() {
 					this.response = function(response) {
-						if(response.isJSON && response.cms_status) {
+						if(response.isJSON && response.cms_status == "success") {
 							var csrf_token = response.cms_object["csrf-token"];
-							u.bug("new token:" + csrf_token);
 							var data_vars = u.qsa("[data-csrf-token]", page);
 							var input_vars = u.qsa("[name=csrf-token]", page);
 							var dom_vars = u.qsa("*", page);
 							var i, node;
 							for(i = 0; node = data_vars[i]; i++) {
-								u.bug("data:" + u.nodeId(node) + ", " + node.getAttribute("data-csrf-token"));
 								node.setAttribute("data-csrf-token", csrf_token);
 							}
 							for(i = 0; node = input_vars[i]; i++) {
-								u.bug("input:" + u.nodeId(node) + ", " + node.value);
 								node.value = csrf_token;
 							}
 							for(i = 0; node = dom_vars[i]; i++) {
 								if(node.csrf_token) {
-									u.bug("dom:" + u.nodeId(node) + ", " + node.csrf_token);
 									node.csrf_token = csrf_token;
 								}
 							}
 							this.overlay.parentNode.removeChild(this.overlay);
+							var multiple_overlays = u.qsa("#login_overlay");
+							if(multiple_overlays) {
+								for(i = 0; overlay = multiple_overlays[i]; i++) {
+									overlay.parentNode.removeChild(overlay);
+								}
+							}
 							u.as(document.body, "overflow", "auto");
-							if(page._autosave_node && page._autosave_interval) {
-								u.t.setTimer(page._autosave_node, "autosave", page._autosave_interval);
+							this.overlay.node.autosave_disabled = false;
+							if(this.overlay.node._autosave_node && this.overlay.node._autosave_interval) {
+								u.t.setTimer(this.overlay.node._autosave_node, "autosave", this.overlay.node._autosave_interval);
 							}
 						}
 						else {
-							alert("login error")
+							this.fields["username"].focus();
+							this.fields["password"].val("");
+							var error_message = u.qs(".errormessage", response);
+							if(error_message) {
+								this.overlay.node.notify({"isJSON":true, "cms_status":"error", "cms_message":error_message.innerHTML});
+							}
+							else {
+								this.overlay.node.notify({"isJSON":true, "cms_status":"error", "cms_message":"An error occured"});
+							}
 						}
 					}
 					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
