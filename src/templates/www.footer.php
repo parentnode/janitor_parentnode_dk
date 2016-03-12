@@ -1,16 +1,13 @@
-<?
-//$NC = new Navigation();
-$navigation = $this->navigation("main");
-?>
+<? $navigation = $this->navigation("main"); ?>
 	</div>
 
 	<div id="navigation">
 		<ul class="navigation">
-<?		if($navigation):
-			foreach($navigation["nodes"] as $node): ?>
+		<? if($navigation): ?>
+			<? foreach($navigation["nodes"] as $node): ?>
 			<?= $HTML->navigationLink($node); ?>
-<?			endforeach;
-	 	endif; ?>
+			<? endforeach; ?>
+	 	<? endif; ?>
 		</ul>
 	</div>
 
