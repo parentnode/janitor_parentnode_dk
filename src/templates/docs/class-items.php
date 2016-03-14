@@ -53,6 +53,10 @@
 										<dd>id of item to fetch</dd>
 										<dt><span class="value">sindex</span></dt>
 										<dd>sindex of item to fetch</dd>
+										<dt><span class="value">tags</span></dt>
+										<dd>Match item by tag</dd>
+										<dt><span class="value">itemtype</span></dt>
+										<dd>Match item by itemtype</dd>
 									</dl>
 								</div>
 							</dd>

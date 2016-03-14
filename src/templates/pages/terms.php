@@ -93,6 +93,10 @@
 				The source code of this website is licensed under a 
 				<a rel="license" href="https://github.com/parentnode/janitor_parentnode_dk/blob/master/LICENSE-CPAL.md">CPAL-1.0 licence</a>.
 			</p>
+			<p>
+				The source code of Janitor is licensed under a 
+				<a rel="license" href="https://github.com/parentnode/janitor/blob/master/MIT-LICENSE.txt">MIT-licence</a>.
+			</p>
 		</div>
 	</div>
 
