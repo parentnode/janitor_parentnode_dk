@@ -18,7 +18,8 @@ body {}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary {background-color: #04859d;}
 #content ul.actions input.button.primary:active,
-#content ul.actions a.button.primary:active {background-color: #ff7c00;}
+#content ul.actions a.button.primary:active {background-color: #04859d;}
+#content .scene div.categories ul.tags li.selected a {color: #04859d;}
 
 #content .scene h3,
 #content .scene h4,
@@ -29,11 +30,11 @@ body {}
 #content .scene dd {color: #777777;}
 
 #footer {border-color: #ffb773;}
-#footer p {color: #ff7c00;}
+#footer p {color: #04859d;}
+
 
 
 /* LOCAL */
-
 .front #navigation .front,
 .segments #navigation ul li.segments,
 .about #navigation ul li.about,

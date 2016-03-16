@@ -427,8 +427,9 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 
 
 /*s-pages.css*/
-#navigation {display: none;}
-#content .scene .article dl.info {display: none;}
+#content .scene ul.info {display: none;}
+#content div.post div.article ul.info {display: block;}
+#content div.login form {display: none;}
 #content .scene.milestones div.todolists ul.todolists {list-style: none; margin: 0;}
 #content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
 
@@ -448,6 +449,8 @@ body {}
 #content ul.actions a.button.primary:hover,
 #content .scene .pagination .next:hover,
 #content .scene .pagination .previous:hover {background-color: #ff7c00;}
+#content .scene div.categories ul.tags li.selected a {color: #04859d;}
+#content .scene ul.tags a:hover {color: #04859d;}
 #content .scene h3,
 #content .scene h4,
 #content .scene h5,
@@ -456,9 +459,8 @@ body {}
 #content .scene li,
 #content .scene dd {color: #777777;}
 #footer {border-color: #ffb773;}
-.terms_notification .accept,
-.terms_notification .details {color: #04859d;}
-.terms_notification {border-color: #ffb773;}
+#footer a {color: #04859d;}
+.terms_notification {background-color: #04859d;}
 .front #header .logo,
 .segments #navigation ul li.segments a,
 .about #navigation ul li.about a,

@@ -1,8 +1,13 @@
-/* UNTIL JANITOR NAVIGATION IS ENABLED */
-#navigation {display: none;}
+#content .scene ul.info {display: none;}
 
-/* ARTICLES */
-#content .scene .article dl.info {display: none;}
+
+/* LOGIN */
+#content div.login form {display: none;}
+
+
+/* POST ARTICLE */
+#content div.post div.article ul.info {display: block;}
+
 
 /* MILESTONES */
 #content .scene.milestones div.todolists ul.todolists {list-style: none; padding-left: 0; padding-right: 0; margin: 0;}

@@ -22,6 +22,7 @@ body {}
 
 #content .scene div.categories ul.tags li.selected a,
 #content .scene div.categories ul.tags li.selected:before {color: #ff7c00;}
+#content .scene div.comments.open h2 {color: #04859d;}
 
 #content .scene h3,
 #content .scene h4,

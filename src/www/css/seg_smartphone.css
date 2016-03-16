@@ -620,6 +620,10 @@ body {}
 #content ul.actions a.button.primary {background-color: #04859d;}
 #content ul.actions input.button.primary:active,
 #content ul.actions a.button.primary:active {background-color: #ff7c00;}
+#content .scene div.article ul.tags li a:active,
+#content .scene ul.articles li.article ul.tags li a:active {color: #04859d;}
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #04859d;}
 #content .scene h3,
 #content .scene h4,
 #content .scene h5,
@@ -628,6 +632,7 @@ body {}
 #content .scene li,
 #content .scene dd {color: #777777;}
 #footer {border-color: #ffb773;}
+#footer a {color: #04859d;}
 .terms_notification .accept,
 .terms_notification .details {color: #04859d;}
 .terms_notification {border-color: #ff7c00;}
@@ -639,8 +644,8 @@ body {}
 
 
 /*s-pages.css*/
-#header .servicenavigation {display: none;}
-#content .scene .article dl.info {display: none;}
+#content .scene ul.info {display: none;}
+#content .scene.post div.article ul.info {display: block;}
 #content .scene.milestones div.todolists ul.todolists {list-style: none; padding-left: 0; padding-right: 0; margin: 0;}
 #content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
 

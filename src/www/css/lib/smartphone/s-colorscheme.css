@@ -21,6 +21,11 @@ body {}
 #content ul.actions a.button.primary {background-color: #04859d;}
 #content ul.actions input.button.primary:active,
 #content ul.actions a.button.primary:active {background-color: #ff7c00;}
+#content .scene div.article ul.tags li a:active,
+#content .scene ul.articles li.article ul.tags li a:active {color: #04859d;}
+
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #04859d;}
 
 #content .scene h3,
 #content .scene h4,
@@ -31,6 +36,7 @@ body {}
 #content .scene dd {color: #777777;}
 
 #footer {border-color: #ffb773;}
+#footer a {color: #04859d;}
 
 .terms_notification .accept,
 .terms_notification .details {color: #04859d;}

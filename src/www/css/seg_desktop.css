@@ -673,13 +673,14 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 
 
 /*s-pages.css*/
+#content .scene ul.info {display: none;}
+#content .scene.post div.article ul.info {display: block;}
 #content .scene.changelog ul.changes {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
 #content .scene.changelog ul.changes li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
 #content .scene.milestones div.todolists ul.todolists {list-style: none; padding-left: 0; padding-right: 0; margin: 0;}
 #content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
 #content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
 #content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
-#content .scene .article dl.info {display: none;}
 
 
 /*s-colorscheme.css*/
@@ -695,6 +696,7 @@ body {}
 #header ul.servicenavigation li.github {background-color: #04859d;}
 #content .scene div.categories ul.tags li.selected a,
 #content .scene div.categories ul.tags li.selected:before {color: #ff7c00;}
+#content .scene div.comments.open h2 {color: #04859d;}
 #content .scene h3,
 #content .scene h4,
 #content .scene h5,
@@ -714,4 +716,7 @@ body {}
 #content ul.actions input.button.primary:hover,
 #content ul.actions a.button.primary:hover,
 #header ul.servicenavigation li.github:hover {background-color: #ff7c00;}
+#content .scene .article ul.tags a:hover {color: #04859d;}
+#content .scene div.comments h2:hover {color: #04859d;}
+#content .scene div.comments h2:hover svg.arrow line {stroke: #04859d;}
 
