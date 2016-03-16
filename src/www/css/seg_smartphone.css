@@ -50,10 +50,10 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 .c133 {width: 34%;}
 .c100 {width: 25%;}
 #page {position: relative;}
-.terms_notification {opacity: 0; padding: 15px 20px 20px; border-bottom: 1px solid #888888; border-top: 1px solid #888888; background: #ffffff;}
-.terms_notification h3 {padding: 0 0 15px; font-size: 13px;}
+.terms_notification {opacity: 0; padding: 15px 20px 20px; background: #888888;}
+.terms_notification h3 {padding: 0 0 15px; font-size: 13px; color: #ffffff;}
 .terms_notification .accept,
-.terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0;}
+.terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0; color: #ffffff;}
 .terms_notification .details {float: right;}
 .terms_notification .accept:active,
 .terms_notification .details:active {text-decoration: underline;}
@@ -134,7 +134,9 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.tags li {font-size: 12px; display: inline-block; padding: 3px 0;}
 #content .scene ul.tags li:after {content: "\00a0\00a0|\00a0\00a0"; color: #dedede;}
 #content .scene ul.tags li:last-child:after {content: "";}
-#content .scene ul.tags li.editing {background: #666666; border-radius: 5px; color: #ffffff; margin: -2px 10px 5px -4px; padding: 2px 10px; display: inline-block; vertical-align: top;}
+#content .scene ul.tags a:active {color: #888888;}
+#content .scene ul.tags li.editing {background: #666666; border-radius: 5px; color: #ffffff; margin: 1px 10px 5px -4px; padding: 2px 10px; display: inline-block; vertical-align: top;}
+#content .scene ul.tags li.editing:after {content: "";}
 #content .scene dl.info {padding-right: 0; width: auto;}
 #content .scene dl.info dt {display: none;}
 #content .scene dl.info dd {color: #cccccc; padding-left: 0; padding-right: 0; padding-bottom: 6px; width: auto; font-size: 12px; display: inline-block; vertical-align: top;}
@@ -186,11 +188,11 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.articles li.article h3 {font-size: 20px; line-height: 1em; padding-bottom: 10px;
 	font-family: "PT Serif", Times, serif;
 }
+#content .scene div.article {padding-bottom: 30px;}
 #content .scene div.article h2 br {display: none;}
 #content .scene div.article ul.tags {padding-bottom: 20px;}
 #content .scene div.article ul.tags a {color: #dedede;}
-#content .scene div.article ul.tags a:active {color: #00c90d;}
-#content .scene div.related {padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.related {padding-top: 10px; position: relative; z-index: 1;}
 #content .scene div.comments {display: none;}
 #content .scene div.readstate {display: none;}
 #content .scene code {color: #333333; padding: 10px 20px; margin: 0 0 15px; background-color: #ededed; font-size: 11px; display: block; overflow: hidden; white-space: pre-wrap;
@@ -215,12 +217,15 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene span.file {color: #a62300;}
 #content .scene span.htmltag {text-transform: uppercase;}
 #content .scene span.command {color: #4b5cd7;}
-#content .scene div.vcard {padding: 0 20px 20px;}
+#content .scene div.vcard {margin-top: 52px; border-top: 1px solid #dedede; padding: 0 0 20px;}
+#content .scene div.vcard h2 {margin-top: -52px; padding-bottom: 48px;}
+#content .scene div.vcard dl.info {padding: 0 20px 20px; display: block;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
+#content .scene div.vcard dl.info dd li a {padding-bottom: 10px; display: inline-block;}
 #content .scene .usedby {display: none;}
 #content .scene.login form {padding-bottom: 20px;}
 #content .errormessage {color: #df0000;}
@@ -494,6 +499,13 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 #content .scene ul.todos > li ul.actions.closed .close {display: none;}
 #content .scene ul.todos > li ul.actions .open {display: none;}
 #content .scene ul.todos > li ul.actions.closed .open {display: inline-block;}
+#content .scene ul.wishlist {}
+#content .scene ul.wishes > li .image {height: 30px; background-position: center center; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 10px; cursor: default;}
+#content .scene ul.wishes dl.info dd {font-size: 13px; display: block; padding-bottom: 8px;}
+#content .scene ul.wishes > li ul.actions {padding: 0 25px 10px;}
+#content .scene ul.wishes > li ul.actions.reserved .reserve {display: none;}
+#content .scene ul.wishes > li ul.actions .unreserve {display: none;}
+#content .scene ul.wishes > li ul.actions.reserved .unreserve {display: inline-block;}
 
 
 /*s-documentation.css*/

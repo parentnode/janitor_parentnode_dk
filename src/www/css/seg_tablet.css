@@ -48,10 +48,10 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 .c100 {width: 25%;}
 #page {position: relative; min-height: 100%; min-width: 640px;}
 #page.fixed {width: 1300px; margin: 0 auto;}
-.terms_notification {opacity: 0; position: fixed; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border: 1px solid #888888; background: #ffffff; border-right: none;}
-.terms_notification h3 {padding: 0 0 20px; font-size: 14px;}
+.terms_notification {opacity: 0; position: fixed; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; background: #888888; border-right: none;}
+.terms_notification h3 {padding: 0 0 20px; font-size: 14px; color: #ffffff;}
 .terms_notification .accept,
-.terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0;}
+.terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0; color: #ffffff;}
 .terms_notification .accept {float: left;}
 .terms_notification .details {float: right;}
 
@@ -67,7 +67,8 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #header .servicenavigation li.navigation {display: none;}
 #header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0";}
 #header .servicenavigation li.github:before,
-#header .servicenavigation li:nth-child(2):before {content: "";}
+#header .servicenavigation li.navigation:before,
+#header .servicenavigation li:first-child:before {content: "";}
 #header .servicenavigation li.github {margin: 0 0 0 10px; padding: 4px 12px; background: #8c9399; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ffffff;}
 #navigation {z-index: 10; position: fixed; right: 60px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
 #navigation ul {}
@@ -183,7 +184,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.categories ul.tags li.selected a {color: #000000;  display: inline-block; vertical-align: top; }
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
-#content .scene div.article {position: relative;}
+#content .scene div.article {position: relative; padding-bottom: 30px;}
 #content .scene div.article ul.tags {padding-bottom: 30px;}
 #content .scene div.article ul.tags a {color: #cccccc;}
 #content .scene ul.articles {padding: 0;}
@@ -195,7 +196,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 }
 #content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 45px;}
 #content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
-#content .scene div.related {padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.related {padding-top: 10px; position: relative; z-index: 1;}
 #content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px;}
 #content .scene div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 120px; display: none; font-size: 11px; color: #999999;}
 #content .scene div.sharing h3 {position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
@@ -234,7 +235,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
 #content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
 #content .scene div.comments .field {padding-bottom: 10px;}
-#content .scene code {padding: 10px 10px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
+#content .scene code {padding: 10px 20px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
 	-moz-tab-size: 4;
@@ -256,12 +257,9 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene span.file {color: #a62300;}
 #content .scene span.htmltag {text-transform: uppercase;}
 #content .scene span.command {color: #4b5cd7;}
-#content .scene div.vcard {padding: 0 70px 25px;}
-#content .scene div.vcard div {font-size: 14px; color: #777777;}
-#content .scene div.vcard .name {padding: 0 0 15px; font-size: 30px;
-	font-family: "PT Serif", Times, serif;
-}
-#content .scene div.vcard dl.info {padding: 0 0 30px;}
+#content .scene div.vcard.company {margin-top: 65px; border-top: 1px solid #dedede; padding: 0 70px 25px;}
+#content .scene div.vcard.company h2 {margin-top: -65px; padding: 0 0 60px;}
+#content .scene div.vcard dl.info {width: 230px; padding: 0 0 30px; display: inline-block; vertical-align: top;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px;}
@@ -537,6 +535,19 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene ul.todos > li ul.actions.closed .close {display: none;}
 #content .scene ul.todos > li ul.actions .open {display: none;}
 #content .scene ul.todos > li ul.actions.closed .open {display: inline-block;}
+#content .scene ul.wishlists {padding-left: 50px; padding-right: 50px;}
+#content .scene ul.wishes {padding-left: 70px; padding-right: 70px;}
+#content .scene ul.wishes > li .image,
+#content .scene ul.wishes > li .text {display: inline-block; vertical-align: top;}
+#content .scene ul.wishes > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 0px; cursor: default;}
+#content .scene ul.wishes > li h3 {padding: 0 25px 10px;}
+#content .scene ul.wishes > li div.description p {padding: 0 25px;}
+#content .scene ul.wishes dl.info {padding: 0 25px 20px;}
+#content .scene ul.wishes dl.info dd {font-size: 13px; display: block;}
+#content .scene ul.wishes > li ul.actions {padding: 0 25px;}
+#content .scene ul.wishes > li ul.actions.reserved .reserve {display: none;}
+#content .scene ul.wishes > li ul.actions .unreserve {display: none;}
+#content .scene ul.wishes > li ul.actions.reserved .unreserve {display: inline-block;}
 
 
 /*s-documentation.css*/

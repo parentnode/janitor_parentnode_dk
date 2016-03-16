@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2016-03-08 05:17:23
+js-merged @ 2016-03-16 18:43:21
 */
 
 /*seg_desktop_light_include.js*/
@@ -3649,11 +3649,6 @@ if(String.prototype.substr == undefined || "ABC".substr(-1,1) == "A") {
 u.site_name = "Janitor";
 u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
 
-/*ga.js*/
-u.ga_account = 'UA-49739795-1';
-u.ga_domain = 'janitor.parentnode.dk';
-
-
 /*u-googleanalytics.js*/
 if(u.ga_account) {
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -3692,42 +3687,75 @@ u.bug_console_only = true;
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
 		window.page = page;
+		u.bug_force = true;
+		u.bug("think.dk is built using Manipulator, Janitor and Detector");
+		u.bug("Visit http://parentnode.dk for more information");
+		u.bug("Free lunch for new contributers ;-)");
+		u.bug_force = false;
 		page.hN = u.qs("#header");
 		page.hN.service = u.qs(".servicenavigation", page.hN);
+		page.cN = u.qs("#content", page);
+		page.nN = u.qs("#navigation", page);
+		page.nN = u.ie(page.hN, page.nN);
+		page.fN = u.qs("#footer");
+		page.fN.service = u.qs(".servicenavigation", page.fN);
 		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
 		u.ce(page.logo);
 		page.logo.clicked = function(event) {
 			location.href = '/';
 		}
-		page.cN = u.qs("#content", page);
-		page.nN = u.qs("#navigation", page);
-		page.nN.list = u.qs("ul", page.nN);
-		page.nN = u.ie(page.hN, page.nN);
-		page.fN = u.qs("#footer");
-		page.fN.service = u.qs(".servicenavigation", page.fN);
-		page.fN.slogan = u.qs("p", page.fN);
-		u.ce(page.fN.slogan);
-		page.fN.slogan.clicked = function(event) {
-			window.open("http://parentnode.dk");
+		page.resized = function() {
+			page.browser_h = u.browserH();
+			page.browser_w = u.browserW();
+			if(page.cN && page.cN.scene && typeof(page.cN.scene.resized) == "function") {
+				page.cN.scene.resized();
+			}
+		}
+		page.scrolled = function() {
+			page.scrolled_y = u.scrollY();
+			if(page.cN && page.cN.scene && typeof(page.cN.scene.scrolled) == "function") {
+				page.cN.scene.scrolled();
+			}
 		}
 		page.ready = function() {
 			if(!u.hc(this, "ready")) {
 				u.ac(this, "ready");
-				if(!u.getCookie("terms_v1")) {
-					var terms = u.ie(document.body, "div", {"class":"terms_notification"});
-					u.ae(terms, "h3", {"html":"We love <br />cookies and privacy"});
-					var bn_accept = u.ae(terms, "a", {"class":"accept", "html":"Accept"});
-					bn_accept.terms = terms;
-					u.ce(bn_accept);
-					bn_accept.clicked = function() {
-						this.terms.parentNode.removeChild(this.terms);
-						u.saveCookie("terms_v1", true, {"expiry":new Date(new Date().getTime()+(1000*60*60*24*365)).toGMTString()});
-					}
-					if(!location.href.match(/\/terms/)) {
-						var bn_details = u.ae(terms, "a", {"class":"details", "html":"Details", "href":"/terms"});
-						u.ce(bn_details, {"type":"link"});
-					}
+				this.initNavigation();
+				this.resized();
+				page.acceptCookies();
+			}
+		}
+		page.acceptCookies = function() {
+			if(u.terms_version && !u.getCookie(u.terms_version)) {
+				var terms = u.ie(document.body, "div", {"class":"terms_notification"});
+				u.ae(terms, "h3", {"html":"We love <br />cookies and privacy"});
+				var bn_accept = u.ae(terms, "a", {"class":"accept", "html":"Accept"});
+				bn_accept.terms = terms;
+				u.ce(bn_accept);
+				bn_accept.clicked = function() {
+					this.terms.parentNode.removeChild(this.terms);
+					u.saveCookie(u.terms_version, true, {"expiry":new Date(new Date().getTime()+(1000*60*60*24*365)).toGMTString()});
 				}
+				if(!location.href.match(/\/terms\//)) {
+					var bn_details = u.ae(terms, "a", {"class":"details", "html":"Details", "href":"/terms"});
+					u.ce(bn_details, {"type":"link"});
+				}
+			}
+		}
+		page.initNavigation = function() {
+			var i, node, nodes;
+			if(page.hN.service) {
+				var nav_anchor = u.qs("li.navigation", page.hN.service);
+				if(nav_anchor) {
+					page.hN.service.removeChild(nav_anchor);
+				}
+			}
+			if(page.fN.service) {
+				nodes = u.qsa("li", page.fN.service);
+				for(i = 0; node = nodes[i]; i++) {
+					u.ie(page.hN.service, node);
+				}
+				page.fN.removeChild(page.fN.service);
 			}
 		}
 		page.ready();

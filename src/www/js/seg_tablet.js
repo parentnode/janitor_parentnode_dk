@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2016-03-08 05:17:24
+js-merged @ 2016-03-16 18:43:22
 */
 
 /*seg_tablet_include.js*/
@@ -4305,11 +4305,6 @@ Util.getVar = function(param, url) {
 u.site_name = "Janitor";
 u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
 
-/*ga.js*/
-u.ga_account = 'UA-49739795-1';
-u.ga_domain = 'janitor.parentnode.dk';
-
-
 /*u-googleanalytics.js*/
 if(u.ga_account) {
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -5929,29 +5924,299 @@ u.f.textEditor = function(field) {
 	}
 
 
+/*beta-u-fontsReady.js*/
+u.fontsReady = function(node, fonts, _options) {
+	var callback_loaded = "fontsLoaded";
+	var callback_timeout = "fontsNotLoaded";
+	var max_time = 3000;
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "callback"					: callback_loaded		= _options[_argument]; break;
+				case "timeout"					: callback_timeout		= _options[_argument]; break;
+				case "max"						: max_time				= _options[_argument]; break;
+			}
+		}
+	}
+	var font, node, i;
+	var loadkey = u.randomString(8);
+	if(typeof(fonts.length) == "undefined") {
+		font = fonts;
+		fonts = new Array();
+		fonts.push(font);
+	}
+	window["_man_fonts_"+loadkey] = u.ae(document.body, "div");
+	window["_man_fonts_"+loadkey].nodes = [];
+	window["_man_fonts_"+loadkey].font_style_weight = {};
+	window["_man_fonts_"+loadkey].callback_node = node;
+	window["_man_fonts_"+loadkey].callback_name = callback_loaded;
+	window["_man_fonts_"+loadkey].callback_timeout = callback_timeout;
+	window["_man_fonts_"+loadkey].max_time = max_time;
+	window["_man_fonts_"+loadkey].start_time = new Date().getTime();
+	for(i = 0; font = fonts[i]; i++) {
+		font.style = font.style ? font.style : "normal";
+		font.weight = font.weight ? font.weight : "400";
+		if(!window["_man_fonts_"+loadkey].font_style_weight[font.style+font.weight]) {
+			window["_man_fonts_"+loadkey].font_style_weight[font.style+font.weight] = u.ae(window["_man_fonts_"+loadkey], "span", {"html":"I'm waiting for your fonts to load!","style":"font-family: Times !important; font-style: "+font.style+" !important; font-weight: "+font.weight+" !important; font-size: 20px !important; line-height: 1em !important; opacity: 0 !important;"});
+		}
+		node = u.ae(window["_man_fonts_"+loadkey], "span", {"html":"I'm waiting for your fonts to load!+?","style":"font-family: '"+font.family+"', Times !important; font-style: "+font.style+" !important; font-weight: "+font.weight+" !important; font-size: 20px !important; line-height: 1em !important; opacity: 0 !important;"});
+		node._family = font.family;
+		node._weight = font.weight;
+		node._style = font.style;
+		window["_man_fonts_"+loadkey].nodes.push(node);
+	}
+	window["_man_fonts_"+loadkey].checkfonts = function() {
+		var basenode, i, node, loaded = 0;
+		for(i = 0; node = this.nodes[i]; i++) {
+			basenode = this.font_style_weight[node._style+node._weight];
+			if(node.offsetWidth != basenode.offsetWidth || node.offsetHeight != basenode.offsetHeight) {
+				loaded++;
+			}
+		}
+		if(loaded == this.nodes.length) {
+			if(typeof(this.callback_node[this.callback_name]) == "function") {
+				this.callback_node[this.callback_name]();
+			}
+			this.parentNode.removeChild(this);
+		}
+		else {
+			if(this.start_time + this.max_time > new Date().getTime()) {
+				u.t.setTimer(this, "checkfonts", 30);
+			}
+			else {
+				if(typeof(this.callback_node[this.callback_timeout]) == "function") {
+					this.callback_node[this.callback_timeout]();
+				}
+				else if(typeof(this.callback_node[this.callback_name]) == "function") {
+					this.callback_node[this.callback_name]();
+				}
+			}
+		}
+	}
+	window["_man_fonts_"+loadkey].checkfonts();
+}
+
+/*u-textscaler.js*/
+u.textscaler = function(node, _settings) {
+	if(typeof(_settings) != "object") {
+		_settings = {
+			"*":{
+				"unit":"rem",
+				"min_size":1,
+				"min_width":200,
+				"min_height":200,
+				"max_size":40,
+				"max_width":3000,
+				"max_height":2000
+			}
+		};
+	}
+	node.text_key = u.randomString(8);
+	u.ac(node, node.text_key);
+	node.text_settings = JSON.parse(JSON.stringify(_settings));
+	node.scaleText = function() {
+		var tag;
+		for(tag in this.text_settings) {
+			var settings = this.text_settings[tag];
+			var width_wins = false;
+			var height_wins = false;
+			if(settings.width_factor && settings.height_factor) {
+				if(window._man_text._height - settings.min_height < window._man_text._width - settings.min_width) {
+					height_wins = true;
+				}
+				else {
+					width_wins = true;
+				}
+			}
+			if(settings.width_factor && !height_wins) {
+				if(settings.min_width <= window._man_text._width && settings.max_width >= window._man_text._width) {
+					var font_size = settings.min_size + (settings.size_factor * (window._man_text._width - settings.min_width) / settings.width_factor);
+					settings.css_rule.style.setProperty("font-size", font_size + settings.unit, "important");
+				}
+				else if(settings.max_width < window._man_text._width) {
+					settings.css_rule.style.setProperty("font-size", settings.max_size + settings.unit, "important");
+				}
+				else if(settings.min_width > window._man_text._width) {
+					settings.css_rule.style.setProperty("font-size", settings.min_size + settings.unit, "important");
+				}
+			}
+			else if(settings.height_factor) {
+				if(settings.min_height <= window._man_text._height && settings.max_height >= window._man_text._height) {
+					var font_size = settings.min_size + (settings.size_factor * (window._man_text._height - settings.min_height) / settings.height_factor);
+					settings.css_rule.style.setProperty("font-size", font_size + settings.unit, "important");
+				}
+				else if(settings.max_height < window._man_text._height) {
+					settings.css_rule.style.setProperty("font-size", settings.max_size + settings.unit, "important");
+				}
+				else if(settings.min_height > window._man_text._height) {
+					settings.css_rule.style.setProperty("font-size", settings.min_size + settings.unit, "important");
+				}
+			}
+		}
+	}
+	node.cancelTextScaling = function() {
+		u.e.removeEvent(window, "resize", window._man_text.scale);
+	}
+	if(!window._man_text) {
+		var man_text = {};
+		man_text.nodes = [];
+		var style_tag = document.createElement("style");
+		style_tag.setAttribute("media", "all")
+		style_tag.setAttribute("type", "text/css")
+		man_text.style_tag = u.ae(document.head, style_tag);
+		man_text.style_tag.appendChild(document.createTextNode(""))
+		window._man_text = man_text;
+		window._man_text._width = u.browserW();
+		window._man_text._height = u.browserH();
+		window._man_text.scale = function() {
+			window._man_text._width = u.browserW();
+			window._man_text._height = u.browserH();
+			var i, node;
+			for(i = 0; node = window._man_text.nodes[i]; i++) {
+				if(node.parentNode) { 
+					node.scaleText();
+				}
+				else {
+					window._man_text.nodes.splice(window._man_text.nodes.indexOf(node), 1);
+					if(!window._man_text.nodes.length) {
+						u.e.removeEvent(window, "resize", window._man_text.scale);
+						window._man_text = false;
+						break;
+					}
+				}
+			}
+		}
+		u.e.addEvent(window, "resize", window._man_text.scale);
+		window._man_text.precalculate = function() {
+			var i, node, tag;
+			for(i = 0; node = window._man_text.nodes[i]; i++) {
+				if(node.parentNode) { 
+					var settings = node.text_settings;
+					for(tag in settings) {
+						if(settings[tag].max_width && settings[tag].min_width) {
+							settings[tag].width_factor = settings[tag].max_width-settings[tag].min_width;
+						}
+						else if(node._man_text.max_width && node._man_text.min_width) {
+							settings[tag].max_width = node._man_text.max_width;
+							settings[tag].min_width = node._man_text.min_width;
+							settings[tag].width_factor = node._man_text.max_width-node._man_text.min_width;
+						}
+						else {
+							settings[tag].width_factor = false;
+						}
+						if(settings[tag].max_height && settings[tag].min_height) {
+							settings[tag].height_factor = settings[tag].max_height-settings[tag].min_height;
+						}
+						else if(node._man_text.max_height && node._man_text.min_height) {
+							settings[tag].max_height = node._man_text.max_height;
+							settings[tag].min_height = node._man_text.min_height;
+							settings[tag].height_factor = node._man_text.max_height-node._man_text.min_height;
+						}
+						else {
+							settings[tag].height_factor = false;
+						}
+						settings[tag].size_factor = settings[tag].max_size-settings[tag].min_size;
+						if(!settings[tag].unit) {
+							settings[tag].unit = node._man_text.unit;
+						}
+					}
+				}
+			}
+		}
+	}
+	var tag;
+	node._man_text = {};
+	for(tag in node.text_settings) {
+		if(tag == "min_height" || tag == "max_height" || tag == "min_width" || tag == "max_width" || tag == "unit") {
+			node._man_text[tag] = node.text_settings[tag];
+			node.text_settings[tag] = null;
+			delete node.text_settings[tag];
+		}
+		else {
+			selector = "."+node.text_key + ' ' + tag + ' ';
+			node.css_rules_index = window._man_text.style_tag.sheet.insertRule(selector+'{}', 0);
+			node.text_settings[tag].css_rule = window._man_text.style_tag.sheet.cssRules[0];
+		}
+	}
+	window._man_text.nodes.push(node);
+	window._man_text.precalculate();
+	node.scaleText();
+}
+
+/*u-svg.js*/
+Util.svg = function(svg_object) {
+	var svg, shape, svg_shape;
+	if(svg_object.name && u._svg_cache && u._svg_cache[svg_object.name]) {
+		svg = u._svg_cache[svg_object.name].cloneNode(true);
+	}
+	if(!svg) {
+		svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		for(shape in svg_object.shapes) {
+			Util.svgShape(svg, svg_object.shapes[shape]);
+		}
+		if(svg_object.name) {
+			if(!u._svg_cache) {
+				u._svg_cache = {};
+			}
+			u._svg_cache[svg_object.name] = svg.cloneNode(true);
+		}
+	}
+	if(svg_object.title) {
+		svg.setAttributeNS(null, "title", svg_object.title);
+	}
+	if(svg_object.class) {
+		svg.setAttributeNS(null, "class", svg_object.class);
+	}
+	if(svg_object.width) {
+		svg.setAttributeNS(null, "width", svg_object.width);
+	}
+	if(svg_object.height) {
+		svg.setAttributeNS(null, "height", svg_object.height);
+	}
+	if(svg_object.id) {
+		svg.setAttributeNS(null, "id", svg_object.id);
+	}
+	if(svg_object.node) {
+		svg.node = svg_object.node;
+	}
+	if(svg_object.node) {
+		svg_object.node.appendChild(svg);
+	}
+	return svg;
+}
+Util.svgShape = function(svg, svg_object) {
+	svg_shape = document.createElementNS("http://www.w3.org/2000/svg", svg_object["type"]);
+	svg_object["type"] = null;
+	delete svg_object["type"];
+	for(detail in svg_object) {
+		svg_shape.setAttributeNS(null, detail, svg_object[detail]);
+	}
+	return svg.appendChild(svg_shape);
+}
+
+
 /*i-page.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
 		window.page = page;
+		u.bug_force = true;
+		u.bug("think.dk is built using Manipulator, Janitor and Detector");
+		u.bug("Visit http://parentnode.dk for more information");
+		u.bug("Free lunch for new contributers ;-)");
+		u.bug_force = false;
 		page.style_tag = document.createElement("style");
 		page.style_tag.setAttribute("media", "all")
 		page.style_tag.setAttribute("type", "text/css")
 		page.style_tag = u.ae(document.head, page.style_tag);
 		page.hN = u.qs("#header");
-		page.hN.service = u.qs(".servicenavigation", page.hN);
+		page.hN.service = u.qs("ul.servicenavigation", page.hN);
 		page.cN = u.qs("#content", page);
 		page.nN = u.qs("#navigation", page);
 		page.nN = u.ie(page.hN, page.nN);
 		page.fN = u.qs("#footer");
-		page.fN.service = u.qs(".servicenavigation", page.fN);
-		page.fN.slogan = u.qs("p", page.fN);
-		if(page.fN.slogan) {
-			u.ce(page.fN.slogan);
-			page.fN.slogan.clicked = function(event) {
-				window.open("http://parentnode.dk");
-			}
-		}
+		page.fN.service = u.qs("ul.servicenavigation", page.fN);
 		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
 		page.logo.url = '/';
 		page.logo.font_size = parseInt(u.gcs(page.logo, "font-size"));
@@ -5959,12 +6224,7 @@ Util.Objects["page"] = new function() {
 		page.logo.top_offset = u.absY(page.nN) + parseInt(u.gcs(page.nN, "padding-top"));
 		page.style_tag.sheet.insertRule("#header a.logo {}", 0);
 		page.logo.css_rule = page.style_tag.sheet.cssRules[0];
-		if(u.github_fork) {
-			var github = u.ae(page.hN.service, "li", {"html":'<a href="'+u.github_fork.url+'">'+u.github_fork.text+'</a>', "class":"github"});
-			u.ce(github, {"type":"link"});
-		}
 		page.resized = function() {
-			u.bug("page resized")
 			page.browser_h = u.browserH();
 			page.browser_w = u.browserW();
 			page.available_height = page.browser_h - page.hN.offsetHeight - page.fN.offsetHeight;
@@ -5978,10 +6238,8 @@ Util.Objects["page"] = new function() {
 			else {
 				u.rc(page, "fixed");
 			}
-			if(page.cN && page.cN.scene) {
-				if(typeof(page.cN.scene.resized) == "function") {
-					page.cN.scene.resized();
-				}
+			if(page.cN && page.cN.scene && typeof(page.cN.scene.resized) == "function") {
+				page.cN.scene.resized();
 			}
 		}
 		page.scrolled = function() {
@@ -6022,7 +6280,7 @@ Util.Objects["page"] = new function() {
 			}
 		}
 		page.acceptCookies = function() {
-			if(!u.getCookie("terms_v1")) {
+			if(u.terms_version && !u.getCookie(u.terms_version)) {
 				var terms = u.ie(document.body, "div", {"class":"terms_notification"});
 				u.ae(terms, "h3", {"html":"We love <br />cookies and privacy"});
 				var bn_accept = u.ae(terms, "a", {"class":"accept", "html":"Accept"});
@@ -6030,11 +6288,10 @@ Util.Objects["page"] = new function() {
 				u.ce(bn_accept);
 				bn_accept.clicked = function() {
 					this.terms.parentNode.removeChild(this.terms);
-					u.saveCookie("terms_v1", true, {"expiry":new Date(new Date().getTime()+(1000*60*60*24*365)).toGMTString()});
+					u.saveCookie(u.terms_version, true, {"expiry":new Date(new Date().getTime()+(1000*60*60*24*365)).toGMTString()});
 				}
-				if(!location.href.match(/\/terms/)) {
-					var bn_details = u.ae(terms, "a", {"class":"details", "html":"Details"});
-					bn_details.url = "/terms";
+				if(!location.href.match(/\/terms\//)) {
+					var bn_details = u.ae(terms, "a", {"class":"details", "html":"Details", "href":"/terms"});
 					u.ce(bn_details, {"type":"link"});
 				}
 				u.a.transition(terms, "all 0.5s ease-in");
@@ -6044,7 +6301,7 @@ Util.Objects["page"] = new function() {
 			}
 		}
 		page.initNavigation = function() {
-			var i, node;
+			var i, node, nodes;
 			page.nN.list = u.qs("ul", page.nN);
 			page.nN.list.nodes = u.qsa("li", page.nN.list);
 			if(page.nN.list.nodes.length) {
@@ -6057,7 +6314,7 @@ Util.Objects["page"] = new function() {
 				page.style_tag.sheet.insertRule("#navigation ul li {}", 0);
 				page.nN.list.css_rule = page.style_tag.sheet.cssRules[0];
 			}
-			var nodes = u.qsa("#navigation li,a.logo", page.hN);
+			nodes = u.qsa("#navigation li,a.logo", page.hN);
 			for(i = 0; node = nodes[i]; i++) {
 				u.ce(node, {"type":"link"});
 				u.e.hover(node);
@@ -6088,12 +6345,63 @@ Util.Objects["page"] = new function() {
 					u.a.scale(this, 0.8);
 				}
 			}
+			if(page.hN.service) {
+				var nav_anchor = u.qs("li.navigation", page.hN.service);
+				if(nav_anchor) {
+					page.hN.service.removeChild(nav_anchor);
+				}
+			}
+			if(page.fN.service) {
+				nodes = u.qsa("li", page.fN.service);
+				for(i = 0; node = nodes[i]; i++) {
+					u.ie(page.hN.service, node);
+				}
+				page.fN.removeChild(page.fN.service);
+			}
+			if(u.github_fork) {
+				var github = u.ae(page.hN.service, "li", {"html":'<a href="'+u.github_fork.url+'">'+u.github_fork.text+'</a>', "class":"github"});
+				u.ce(github, {"type":"link"});
+			}
 		}
 		page.ready();
 	}
 }
 u.e.addDOMReadyEvent(u.init);
 
+
+/*i-front.js*/
+Util.Objects["scene"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+			this.offsetHeight;
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			page.cN.scene = this;
+			page.acceptCookies();
+			page.resized();
+		}
+		scene.ready();
+	}
+}
+
+/*i-scene.js*/
+Util.Objects["front"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+			this.offsetHeight;
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			page.cN.scene = this;
+			page.acceptCookies();
+			page.resized();
+		}
+		scene.ready();
+	}
+}
 
 /*i-login.js*/
 Util.Objects["login"] = new function() {

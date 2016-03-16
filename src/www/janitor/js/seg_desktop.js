@@ -6623,13 +6623,35 @@ Util.Objects["page"] = new function() {
 			var janitor_text = u.qs("li a", janitor);
 			janitor_text.innerHTML = "<span>"+janitor_text.innerHTML.split("").join("</span><span>")+"</span>"; 
 			page.hN.janitor_spans = u.qsa("span", janitor_text);
+			var i, span, j, section, node;
+			for(i = 0; span = page.hN.janitor_spans[i]; i++) {
+				if(i == 0) {
+					u.ass(span, {
+						"transform":"translate(-8px, 0)"
+					});
+				}
+				else {
+					u.ass(span, {
+						"opacity":0,
+						"transform":"translate(-8px, -30px)"
+					});
+				}
+			}
+			u.ass(janitor_text, {"opacity": 1});
 			u.ae(page, u.qs(".servicenavigation", page.hN));
 			page.nN.sections = u.qsa("ul.sections > li", page.nN);
 			if(page.nN.sections) {
-				var i, section;
 				for(i = 0; section = page.nN.sections[i]; i++) {
 					section.header = u.qs("h3", section);
 					section.header.section = section;
+					section.nodes = u.qsa("li", section);
+					for(j = 0; node = section.nodes[j]; j++) {
+						u.ce(node);
+						node.clicked = function() {
+							page.hN.out();
+							location.href = this.url;
+						}
+					}
 					u.e.click(section.header);
 					section.header.clicked = function() {
 						if(this.section.is_open) {

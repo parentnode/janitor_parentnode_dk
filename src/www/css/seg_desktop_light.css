@@ -43,10 +43,10 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 .c133 {width: 34%;}
 .c100 {width: 25%;}
 #page {position: relative; min-height: 100%;}
-.terms_notification {position: absolute; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; background: #ffffff; border: 1px solid #888888; border-right: none;}
-.terms_notification h3 {padding: 0; font-size: 14px;}
+.terms_notification {position: absolute; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; background: #888888; border-right: none;}
+.terms_notification h3 {padding: 0 0 15px; font-size: 14px; color: #ffffff;}
 .terms_notification .accept,
-.terms_notification .details {text-decoration: underline; padding: 0; font-size: 13px; line-height: 18px; display: inline; vertical-align: bottom; padding: 0 15px 0 0;}
+.terms_notification .details {text-decoration: underline; padding: 0; font-size: 13px; line-height: 18px; display: inline; vertical-align: bottom; padding: 0 15px 0 0; color: #ffffff;}
 
 
 /*s-header.css*/
@@ -56,7 +56,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 }
 #header .logo:hover {text-decoration: underline;}
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
-#header .servicenavigation li {display: inline; vertical-align: top;}
+#header .servicenavigation li {display: inline; vertical-align: top; color: #bbbbbb;}
 #header .servicenavigation li.navigation,
 #header .servicenavigation li.admin,
 #header .servicenavigation li.user {display: none;}
@@ -164,6 +164,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene div.categories ul.tags li.selected a {color: #000000;}
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
+#content .scene div.article {padding-bottom: 30px;}
 #content .scene div.article ul.tags {padding-bottom: 20px;}
 #content .scene ul.tags a:hover {color: #888888;}
 #content .scene ul.articles li.article {padding: 20px 0 0; border-top: 1px solid #dedede; position: relative;}
@@ -171,7 +172,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.articles li.article h3 {font-size: 22px; line-height: 1em; padding-bottom: 15px;
 	font-family: "PT Serif", Times, serif;
 }
-#content .scene div.related {padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.related {padding-top: 10px; position: relative; z-index: 1;}
 #content .scene div.comments {display: none;}
 #content .scene code {width: 480px; padding: 10px 10px; margin: 0 70px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; white-space: pre-wrap; overflow: auto;
 	font-family: "Monaco", "Courier New", "Courier";
@@ -195,11 +196,10 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene span.file {color: #a62300;}
 #content .scene span.htmltag {text-transform: uppercase;}
 #content .scene span.command {color: #4b5cd7;}
-#content .scene div.vcard {padding: 0 70px 25px;}
-#content .scene div.vcard .name {padding: 0 0 15px; font-size: 30px;
-	font-family: "PT Serif", Times, serif;
-}
-#content .scene div.vcard dl.info {padding: 0 0 30px;}
+#content .scene div.vcard {height: 160px; margin-top: 65px; border-top: 1px solid #dedede; padding: 0 70px 25px;}
+#content .scene div.vcard h2 {margin-top: -65px; padding: 0 0 60px;}
+#content .scene div.vcard dl.info {width: 230px; padding: 0 0 30px; display: inline; float: left; vertical-align: top;}
+#content .scene div.vcard dl.info.financial {display: none;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px; color: #cccccc;}
@@ -323,6 +323,8 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene .articlebody ul.actions li {padding-left: 0;}
 #content .scene ul.todos dl.info {padding-bottom: 10px;}
 #content .scene ul.todos > li ul.actions {display: none;}
+#content .scene ul.wishlist {}
+#content .scene ul.wishes > li ul.actions {display: none;}
 
 
 /*s-documentation.css*/

@@ -63,6 +63,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 /*s-footer.css*/
 #footer {text-align: center; border-top: 1px solid #888888; margin: 0;}
 #footer p {padding: 10px;}
+#footer .servicenavigation {display: none;}
+
 
 /*s-content.css*/
 #content {position: relative;}
@@ -126,12 +128,13 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.media {display: none;}
 #content .scene .pagination {}
 #content .scene div.categories {padding-bottom: 10px;}
+#content .scene div.article {padding-bottom: 20px;}
 #content .scene div.article ul.tags a {color: #cccccc;}
 #content .scene ul.articles {padding: 0;}
 #content .scene ul.articles li.article {padding: 10px 0 0; border-top: 1px solid #dedede;}
 #content .scene ul.articles li.article ul.tags {padding-bottom: 10px;}
 #content .scene ul.articles li.article ul.tags li a {color: #cccccc;}
-#content .scene div.related {padding-top: 20px;}
+#content .scene div.related {}
 #content .scene div.comments {display: none;}
 #content .scene div.readstate {display: none;}
 #content .scene code {padding: 10px 10px; margin: 0 0 15px; background-color: #ededed; color: #333333; font-size: 11px; display: block; overflow: hidden; white-space: pre-wrap;
@@ -156,8 +159,10 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene span.file {color: #a62300;}
 #content .scene span.htmltag {text-transform: uppercase;}
 #content .scene span.command {color: #4b5cd7;}
-#content .scene div.vcard {padding: 0 0 15px;}
+#content .scene div.vcard {padding: 0 0 15px; margin-top: 45px; border-top: 1px solid #dedede;}
+#content .scene div.vcard h2 {margin-top: -45px; padding-bottom: 50px;}
 #content .scene div.vcard dl.info {}
+#content .contact div.vcard dl.financial {display: none;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px; color: #cccccc;}
@@ -251,6 +256,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene .articlebody ul.actions li {padding-left: 0;}
 #content .scene ul.todos dl.info {padding-bottom: 10px;}
 #content .scene ul.todos > li ul.actions {display: none;}
+#content .scene ul.wishlist {}
+#content .scene ul.wishes > li ul.actions {display: none;}
 
 
 /*s-documentation.css*/
