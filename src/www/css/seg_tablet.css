@@ -697,6 +697,8 @@ body {}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary,
 #header ul.servicenavigation li.github {background-color: #04859d;}
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #ff7c00;}
 #content .scene h3,
 #content .scene h4,
 #content .scene h5,
@@ -705,9 +707,8 @@ body {}
 #content .scene li,
 #content .scene dd {color: #777777;}
 #footer {border-color: #ffb773;}
-.terms_notification .accept,
-.terms_notification .details {color: #04859d;}
-.terms_notification {border-color: #ffb773;}
+#footer a {color: #04859d;}
+.terms_notification {background-color: #04859d;}
 .front #header .logo,
 .docs #navigation ul li.docs,
 .gettingstarted #navigation ul li.gettingstarted {color: #ff7c00;}
