@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2016-03-16 18:43:21
+js-merged @ 2016-03-16 18:49:07
 */
 
 /*seg_desktop_light_include.js*/
@@ -3647,7 +3647,11 @@ if(String.prototype.substr == undefined || "ABC".substr(-1,1) == "A") {
 
 /*u-settings.js*/
 u.site_name = "Janitor";
+u.terms_version = "terms_v1";
 u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
+u.ga_account = 'UA-49739795-1';
+u.ga_domain = 'janitor.parentnode.dk';
+
 
 /*u-googleanalytics.js*/
 if(u.ga_account) {
