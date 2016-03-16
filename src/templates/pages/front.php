@@ -22,7 +22,7 @@
 			<p>
 				Janitor is an open source PHP content management and distribution developer toolkit, with a unique focus on frontend development.
 				It has been designed from ground up to facilitate the frontend development process. Implementing the unique 
-				combination of the <a href="http://modulator.parentnode.dk" target="_blank">Modulator</a> markup model, the
+				combination of the <a href="http://templator.parentnode.dk" target="_blank">Templator</a> markup model, the
 				<a href="http://detector.parentnode.dk" target="_blank">Detector</a> segments and a very user friendly 
 				<a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a> enhanced backend interface, Janitor 
 				is ready to distribute content to any HTML capable browser.
