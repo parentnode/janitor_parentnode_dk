@@ -6494,6 +6494,10 @@ Util.Objects["page"] = new function() {
 				u.navigation();
 			}
 		}
+		page.cN.navigate = function(url) {
+			u.bug("page.navigated");
+			location.href = url;
+		}
 		page.initHeader = function() {
 			var janitor = u.ie(this.hN, "ul", {"class":"janitor"});
 			u.ae(janitor, u.qs(".servicenavigation .front", page.hN));
@@ -6523,10 +6527,9 @@ Util.Objects["page"] = new function() {
 					section.header.section = section;
 					section.nodes = u.qsa("li", section);
 					for(j = 0; node = section.nodes[j]; j++) {
-						u.ce(node);
-						node.clicked = function() {
+						u.ce(node, {"type":"link"});
+						node.preClicked = function(event) {
 							page.hN.out();
-							location.href = this.url;
 						}
 					}
 					u.e.click(section.header);
