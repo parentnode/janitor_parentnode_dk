@@ -3,7 +3,7 @@
 	<p>
 		The Page class is the core controller and template toolset. This class is automatically instatiated and 
 		available in $page, after the init file has been included in your controller. It provides all the base
-		functionality needed to process a request and output relevant templates.
+		functionality needed to process a request and output your page and templates.
 	</p>
 
 	<div class="section functions">

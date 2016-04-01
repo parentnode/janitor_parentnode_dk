@@ -6,7 +6,7 @@ $model = $IC->typeObject("todo");
 $this->bodyClass("gettingstarted");
 $this->pageTitle("Where we are heading ...");
 
-$page = $IC->getItem(array("tags" => "page:milestones", "extend" => true));
+$page = $IC->getItem(array("tags" => "page:milestones", "extend" => array("user" => true)));
 
 $todolists = $IC->getItems(array("itemtype" => "todolist", "status" => 1, "order" => "position ASC", "extend" => true));
 $todotags = $IC->getTags(array("context" => "todo"));
