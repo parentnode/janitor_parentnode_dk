@@ -8,5 +8,13 @@
 		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
 		<?= $HTML->link("Form validation", "/janitor/tests/form-validation", array("wrapper" => "li.formvalidation")) ?>
 		<?= $HTML->link("Security", "/janitor/tests/security", array("wrapper" => "li.security")) ?>
+
+
+		<?= $HTML->link("CSS Scene (General)", "/janitor/tests/css-scene", array("wrapper" => "li.css")) ?>
+		<?= $HTML->link("CSS DefaultList", "/janitor/tests/css-default-list", array("wrapper" => "li.css")) ?>
+
+
+		<?= $HTML->link("CSS DefaultEdit", "/janitor/tests/css-default-edit", array("wrapper" => "li.css")) ?>
+		<?= $HTML->link("CSS DefaultNew", "/janitor/tests/css-default-new", array("wrapper" => "li.css")) ?>
 	</ul>
 </div>
