@@ -1,0 +1,25 @@
+/* TESTS */
+#content .tests.front ul.tests {padding: 20px 0;}
+#content .tests.front ul.tests li {display: block; padding: 10px 20px; font-size: 16px;}
+
+
+#content .scene.tests div.tests {padding: 30px 20px 0;}
+#content .scene.tests div.tests form {margin-left: -20px; margin-right: -20px;}
+
+#content .scene.tests div.tests h3 {padding-left: 0; padding-right: 0;}
+#content .scene.tests div.tests p {padding: 0px 0px 10px;}
+
+#content .scene.tests div.tests div.testpassed {background: green;}
+#content .scene.tests div.tests div.testfailed {background: red;}
+
+#content .scene.tests div.tests div.testpassed,
+#content .scene.tests div.tests div.testfailed {margin: 0 0 3px; padding: 1px 5px 3px;}
+
+#content .scene.tests div.tests div.testpassed,
+#content .scene.tests div.tests div.testfailed,
+#content .scene.tests div.tests div.testpassed *,
+#content .scene.tests div.tests div.testfailed * {color: white; font-size: 13px; line-height: 16px;}
+
+#content .scene.tests div.tests div.testpassed *,
+#content .scene.tests div.tests div.testfailed * {padding: 0; margin: 0;}
+

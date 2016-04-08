@@ -1,4 +1,4 @@
-<div class="scene">
+<div class="scene i:scene">
 	<h1>Header</h1>
 	<h2>Subheader</h2>
 

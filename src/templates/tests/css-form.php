@@ -26,11 +26,10 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => false, 
 u.o["testForm"] = new function() {
 	this.init = function(form) {
 		u.bug("init")
-		u.f.init(form, {"validation":false});
+		u.f.init(form);
 
 		form.submitted = function() {
 			this.response = function(response) {
-				u.bug("response received")
 				page.notify(response);
 
 				u.xInObject(response);
@@ -45,8 +44,8 @@ u.o["testForm"] = new function() {
 </script>
 
 <div class="scene i:scene tests">
-	<h1>HTML Class</h1>	
-	<h2>Testing backend communication</h2>
+	<h1>Form CSS</h1>	
+	<h2>Testing backend UI</h2>
 
 	<ul class="actions">
 		<?= $model->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
@@ -56,7 +55,6 @@ u.o["testForm"] = new function() {
 	<div class="tests">
 
 		<h3>Test item (All-in-one)</h3>
-		<p>No clientside validation</p>
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
@@ -80,7 +78,7 @@ u.o["testForm"] = new function() {
 
 
 				<?= $model->inputHTML("v_html", array("value" => $item["v_html"])) ?>
-				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "label_lon" => $item["v_longitude"])) ?>
+				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "value_lon" => $item["v_longitude"])) ?>
 			</fieldset>
 
 			<?= $JML->editActions($item) ?>

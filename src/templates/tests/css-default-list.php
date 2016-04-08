@@ -1,8 +1,8 @@
-<div class="scene defaultList">
-	<h1>DefaultList</h1>
+<div class="scene i:scene defaultList">
+	<h1>DefaultList CSS</h1>
 
 	<ul class="actions">
-		<li class="new"><a href="/janitor/admin/tests/new" class="button primary key:n">New post</a></li>
+		<li class="new"><a href="/janitor/admin/tests/new" class="button primary key:n">New</a></li>
 	</ul>
 
 	<div class="all_items i:defaultList filters" data-csrf-token="<?= session()->value("csrf") ?>" data-item-order="/janitor/tests/updateOrder" data-tag-get="/janitor/admin/items/tags" data-tag-delete="/janitor/tests/deleteTag" data-tag-add="/janitor/tests/addTag">
@@ -462,6 +462,8 @@
 			</li>
 		 </ul>
 	</div>
+
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
 	<div class="all_items i:defaultList filters" data-csrf-token="<?= session()->value("csrf") ?>" data-item-order="/janitor/tests/updateOrder" data-tag-get="/janitor/admin/items/tags" data-tag-delete="/janitor/tests/deleteTag" data-tag-add="/janitor/tests/addTag">
 		<h2>Heading 2</h2>

@@ -62,7 +62,7 @@ $test_item_status = $test_item["status"];
 ?>
 
 
-<div class="scene tests i:scene">
+<div class="scene i:scene tests">
 	<h1>Security tests</h1>	
 	<h2>Testing Janitor access validation</h2>
 

@@ -11,7 +11,9 @@ u.o["testValidation"] = new function() {
 		u.f.init(form, {"validation":false});
 		form.submitted = function() {
 			this.response = function(response) {
+				u.bug("response received")
 				page.notify(response);
+
 				u.xInObject(response);
 			}
 			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
@@ -22,7 +24,7 @@ u.o["testValidation"] = new function() {
 
 </script>
 
-<div class="scene tests defaultEdit i:scene">
+<div class="scene i:scene tests defaultEdit">
 	<h1>HTML Class (Form interface)</h1>
 	<h2>Type validation test</h2>
 

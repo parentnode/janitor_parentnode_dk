@@ -188,7 +188,7 @@ $params = array(
 $curl->init($params);
 
 ?>
-<div class="scene tests defaultEdit i:scene">
+<div class="scene i:scene tests defaultEdit">
 	<h1>Autoconversion</h1>	
 
 	<h2>Media conversion test using the Autoconversion API</h2>

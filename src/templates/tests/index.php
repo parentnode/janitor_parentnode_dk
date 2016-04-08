@@ -1,4 +1,4 @@
-<div class="scene tests front i:scene">
+<div class="scene i:scene tests front">
 
 	<h1>Janitor Unit tests</h1>
 
@@ -11,6 +11,8 @@
 
 
 		<?= $HTML->link("CSS Scene (General)", "/janitor/tests/css-scene", array("wrapper" => "li.css")) ?>
+		<?= $HTML->link("CSS Form", "/janitor/tests/css-form", array("wrapper" => "li.css")) ?>
+
 		<?= $HTML->link("CSS DefaultList", "/janitor/tests/css-default-list", array("wrapper" => "li.css")) ?>
 
 

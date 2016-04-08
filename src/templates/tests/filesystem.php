@@ -25,7 +25,7 @@ function checkFiles($files, $expected) {
 
 ?>
 
-<div class="scene tests defaultEdit i:scene">
+<div class="scene i:scene tests defaultEdit">
 	<h1>FileSystem</h1>	
 	<h2>Testing filesystem read/write functions</h2>
 	<ul class="actions">
