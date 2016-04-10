@@ -4403,7 +4403,12 @@ u.defaultFilters = function(div) {
 	div._filter.div = div;
 	var i, node;
 	for(i = 0; node = div.nodes[i]; i++) {
-		node._c = u.text(node).toLowerCase().replace(/\n|\t|\r/g, " ").replace(/  /g, "");
+		node._c = "";
+		var text_nodes = u.qsa("h2,h3,h4,h5,p,ul.info,dl,li.tag", node);
+		for(j = 0; text_node = text_nodes[j]; j++) {
+			node._c += u.text(text_node).toLowerCase() + ";"; 
+		}
+		u.bug("c:" + node._c)
 	}
 	var tags = u.qsa("li.tag", div.list);
 	if(tags) {
@@ -4449,8 +4454,9 @@ u.defaultFilters = function(div) {
 	}
 	div._filter.checkTags = function(node) {
 		if(this.selected_tags.length) {
-			var regex = new RegExp(this.selected_tags.join("|"), "g");
+			var regex = new RegExp("("+this.selected_tags.join(";|")+";)", "g");
 			var match = node._c.match(regex);
+			u.bug("match:" + match + ", " + "("+this.selected_tags.join(";|")+";)")
 			if(!match || match.length != this.selected_tags.length) {
 				return false;
 			}
