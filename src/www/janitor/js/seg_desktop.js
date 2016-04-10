@@ -4352,29 +4352,6 @@ if(false && document.documentMode <= 10) {
 
 
 /*u-basics.js*/
-u.toggleHeader = function(div, header) {
-	header = header ? header : "h2";
-	div._toggle_header = u.qs(header, div);
-	div._toggle_header_id = div.className.replace(/item_id:[0-9]+/, "").trim();
-	div._toggle_header.div = div;
-	u.e.click(div._toggle_header);
-	div._toggle_header.clicked = function() {
-		if(this.div._toggle_is_closed) {
-			u.as(this.div, "height", "auto");
-			this.div._toggle_is_closed = false;
-			u.saveCookie(this.div._toggle_header_id+"_open", 1);
-		}
-		else {
-			u.as(this.div, "height", this.offsetHeight+"px");
-			this.div._toggle_is_closed = true;
-			u.saveCookie(this.div._toggle_header_id+"_open", 0);
-		}
-	}
-	var state = u.getCookie(div._toggle_header_id+"_open");
-	if(state == "0") {
-		div._toggle_header.clicked();
-	}
-}
 Util.Objects["collapseHeader"] = new function() {
 	this.init = function(div) {
 		u.bug("init collapseHeader");
@@ -4405,44 +4382,13 @@ Util.Objects["collapseHeader"] = new function() {
 		}
 	}
 }
-u.insertAfter = function(after_node, insert_node) {
-	var next_node = u.ns(after_node);
-	if(next_node) {
-		after_node.parentNode.insertBefore(next_node, insert_node);
-	}
-	else {
-		after_node.parentNode.appendChild(insert_node);
-	}
-}
 u.addExpandArrow = function(node) {
 	if(node.collapsearrow) {
 		u.bug("remove collapsearrow");
 		node.collapsearrow.parentNode.removeChild(node.collapsearrow);
 		node.collapsearrow = false;
 	}
-	node.expandarrow = u.svg({
-		"name":"expandarrow",
-		"node":node,
-		"class":"arrow",
-		"width":17,
-		"height":17,
-		"shapes":[
-			{
-				"type": "line",
-				"x1": 2,
-				"y1": 2,
-				"x2": 7,
-				"y2": 9
-			},
-			{
-				"type": "line",
-				"x1": 6,
-				"y1": 9,
-				"x2": 11,
-				"y2": 2
-			}
-		]
-	});
+	node.expandarrow = u.svgIcons("expandarrow", node);
 }
 u.addCollapseArrow = function(node) {
 	if(node.expandarrow) {
@@ -4450,29 +4396,7 @@ u.addCollapseArrow = function(node) {
 		node.expandarrow.parentNode.removeChild(node.expandarrow);
 		node.expandarrow = false;
 	}
-	node.collapsearrow = u.svg({
-		"name":"collapsearrow",
-		"node":node,
-		"class":"arrow",
-		"width":17,
-		"height":17,
-		"shapes":[
-			{
-				"type": "line",
-				"x1": 2,
-				"y1": 9,
-				"x2": 7,
-				"y2": 2
-			},
-			{
-				"type": "line",
-				"x1": 6,
-				"y1": 2,
-				"x2": 11,
-				"y2": 9
-			}
-		]
-	});
+	node.collapsearrow = u.svgIcons("collapsearrow", node);
 }
 u.defaultFilters = function(div) {
 	div._filter = u.ie(div, "div", {"class":"filter"});
@@ -4514,7 +4438,7 @@ u.defaultFilters = function(div) {
 		div._filter.selected_tags = [];
 	}
 	div._filter.form = u.f.addForm(div._filter, {"name":"filter", "class":"labelstyle:inject"});
-	u.f.addField(div._filter.form, {"name":"filter", "label":"Type to search"});
+	u.f.addField(div._filter.form, {"name":"filter", "label":"Type to filter"});
 	u.f.init(div._filter.form);
 	div._filter.form.div = div;
 	div._filter._input = div._filter.form.fields["filter"];
@@ -4712,6 +4636,79 @@ u.activateTag = function(tag_node) {
 				u.request(this, this.node.data_div.add_tag_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.data_div.csrf_token});
 			}
 		}
+	}
+}
+u.svgIcons = function(icon, node) {
+	switch(icon) {
+		case "expandarrow" : return u.svg({
+			"name":"expandarrow",
+			"node":node,
+			"class":"arrow",
+			"width":17,
+			"height":17,
+			"shapes":[
+				{
+					"type": "line",
+					"x1": 2,
+					"y1": 2,
+					"x2": 7,
+					"y2": 9
+				},
+				{
+					"type": "line",
+					"x1": 6,
+					"y1": 9,
+					"x2": 11,
+					"y2": 2
+				}
+			]
+		});
+		case "collapsearrow" : return u.svg({
+			"name":"collapsearrow",
+			"node":node,
+			"class":"arrow",
+			"width":17,
+			"height":17,
+			"shapes":[
+				{
+					"type": "line",
+					"x1": 2,
+					"y1": 9,
+					"x2": 7,
+					"y2": 2
+				},
+				{
+					"type": "line",
+					"x1": 6,
+					"y1": 2,
+					"x2": 11,
+					"y2": 9
+				}
+			]
+		});
+		case "totoparrow" : return u.svg({
+			"name":"totoparrow",
+			"node":node,
+			"class":"arrow",
+			"width":30,
+			"height":30,
+			"shapes":[
+				{
+					"type": "line",
+					"x1": 2,
+					"y1": 21,
+					"x2": 16,
+					"y2": 2
+				},
+				{
+					"type": "line",
+					"x1": 14,
+					"y1": 2,
+					"x2": 28,
+					"y2": 21
+				}
+			]
+		});
 	}
 }
 
@@ -4997,6 +4994,15 @@ Util.insertElement = u.ie = function(_parent, node_type, attributes) {
 		u.exception("u.ie", arguments, exception);
 	}
 	return false;
+}
+Util.insertAfter = u.ia = function(after_node, insert_node) {
+	var next_node = u.ns(after_node);
+	if(next_node) {
+		after_node.parentNode.insertBefore(next_node, insert_node);
+	}
+	else {
+		after_node.parentNode.appendChild(insert_node);
+	}
 }
 Util.wrapElement = u.we = function(node, node_type, attributes) {
 	try {
@@ -7598,7 +7604,7 @@ Util.Objects["page"] = new function() {
 		u.bug("init page:" + page)
 		window.page = page;
 		u.bug_force = true;
-		u.bug("think.dk is built using Manipulator, Janitor and Detector");
+		u.bug("This is built using Manipulator, Janitor and Detector");
 		u.bug("Visit http://parentnode.dk for more information");
 		u.bug("Free lunch for new contributers ;-)");
 		u.bug_force = false;
@@ -7763,12 +7769,6 @@ Util.Objects["page"] = new function() {
 				u.ass(this, {
 					"width":"30px"
 				});
-			}
-		}
-		page.svgIcon = function(icon) {
-			var path;
-			if(icon == "youtube") {
-				path = "";
 			}
 		}
 		page.ready();
@@ -9078,22 +9078,34 @@ Util.Objects["usernames"] = new function() {
 		var form;
 		form = u.qs("form.email", div);
 		u.f.init(form);
+		form.updated = function() {
+			u.ac(this.actions["save"], "primary");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				page.notify(response);
 				if(response.cms_status == "error") {
 					u.f.fieldError(this.fields["email"]);
 				}
+				else {
+					u.rc(this.actions["save"], "primary");
+				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
 		form = u.qs("form.mobile", div);
 		u.f.init(form);
+		form.updated = function() {
+			u.ac(this.actions["save"], "primary");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				page.notify(response);
 				if(response.cms_status == "error") {
 					u.f.fieldError(this.fields["mobile"]);
+				}
+				else {
+					u.rc(this.actions["save"], "primary");
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -9184,6 +9196,25 @@ Util.Objects["apitoken"] = new function() {
 		}
 	}
 }
+Util.Objects["editAddress"] = new function() {
+	this.init = function(form) {
+		u.f.init(form);
+		form.actions["cancel"].clicked = function(event) {
+			location.href = this.url;
+		}
+		form.submitted = function(iN) {
+			this.response = function(response) {
+				if(response.cms_status == "success") {
+					location.href = this.actions["cancel"].url;
+				}
+				else {
+					page.notify({"isJSON":true, "cms_status":"error", "cms_message":"Address could not be updated"});
+				}
+			}
+			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
+		}
+	}
+}
 Util.Objects["newsletters"] = new function() {
 	this.init = function(div) {
 		var i, node;
@@ -9232,6 +9263,25 @@ Util.Objects["newsletters"] = new function() {
 					u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 				}
 			}
+		}
+	}
+}
+Util.Objects["addNewsletter"] = new function() {
+	this.init = function(form) {
+		u.f.init(form);
+		form.actions["cancel"].clicked = function(event) {
+			location.href = this.url;
+		}
+		form.submitted = function(iN) {
+			this.response = function(response) {
+				if(response.cms_status == "success") {
+					location.href = this.actions["cancel"].url;
+				}
+				else {
+					page.notify({"isJSON":true, "cms_status":"error", "cms_message":"Address could not be updated"});
+				}
+			}
+			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
 	}
 }
@@ -9314,6 +9364,9 @@ Util.Objects["usernamesProfile"] = new function() {
 		var form;
 		form = u.qs("form.email", div);
 		u.f.init(form);
+		form.updated = function() {
+			u.ac(this.actions["save"], "primary");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				if(response.cms_object && response.cms_object.status == "USER_EXISTS") {
@@ -9325,6 +9378,7 @@ Util.Objects["usernamesProfile"] = new function() {
 					u.f.fieldError(this.fields["email"]);
 				}
 				else {
+					u.rc(this.actions["save"], "primary");
 					page.notify({"isJSON":true, "cms_status":"success", "cms_message":["Email updated"]});
 				}
 			}
@@ -9332,6 +9386,9 @@ Util.Objects["usernamesProfile"] = new function() {
 		}
 		form = u.qs("form.mobile", div);
 		u.f.init(form);
+		form.updated = function() {
+			u.ac(this.actions["save"], "primary");
+		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
 				if(response.cms_object && response.cms_object.status == "USER_EXISTS") {
@@ -9343,6 +9400,7 @@ Util.Objects["usernamesProfile"] = new function() {
 					u.f.fieldError(this.fields["mobile"]);
 				}
 				else {
+					u.rc(this.actions["save"], "primary");
 					page.notify({"isJSON":true, "cms_status":"success", "cms_message":["Mobile updated"]});
 				}
 			}

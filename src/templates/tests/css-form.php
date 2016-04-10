@@ -49,6 +49,13 @@ u.o["testForm"] = new function() {
 
 	<ul class="actions">
 		<?= $model->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
+		<?= $model->link("Back", "/janitor/tests", array("class" => "button primary", "wrapper" => "li.back")) ?>
+		<li class="delete">
+			<form enctype="application/x-www-form-urlencoded" method="post" action="/janitor/admin/user/delete/1" novalidate="novalidate">
+				<input type="hidden" value="9be4c079-8b38-4cf1-a773-cf00e773b928" name="csrf-token">
+				<input type="submit" class="button delete clickable" name="delete" value="Delete">
+			</form>
+		</li>
 	</ul>
 
 
@@ -82,6 +89,12 @@ u.o["testForm"] = new function() {
 			</fieldset>
 
 			<?= $JML->editActions($item) ?>
+
+			<ul class="actions">
+				<?= $model->submit("Button (submit)", array("class" => "primary", "wrapper" => "li.input")); ?>
+				<?= $model->submit("Button (button)", array("type" => "button", "wrapper" => "li.input")); ?>
+				<?= $model->link("Button (a)", "/janitor/tests", array("class" => "button", "wrapper" => "li.abutton")) ?>
+			</ul>
 		<?= $model->formEnd() ?>
 
 	</div>

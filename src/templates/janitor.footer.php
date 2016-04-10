@@ -25,14 +25,16 @@
 					<?= $HTML->link("Profile", "/janitor/admin/profile", array("wrapper" => "li.profile")) ?>
 				</ul>
 			</li>
-			<?= $HTML->link("Tests", "/janitor/tests", array("wrapper" => "li.test")) ?>
+			<?= $HTML->link("Tests", "/janitor/tests", array("wrapper" => "li.tests")) ?>
 		</ul>
 	</div>
 
 	<div id="footer">
 		<ul class="servicenavigation">
-			<li class="copyright">Copyright 2016, parentNode.dk</li>
+			<li class="totop"><a href="#header">To top</a></li>
 		</ul>
+
+		<p class="copyright">Copyright 2016, parentNode.dk</p>
 	</div>
 </div>
 
