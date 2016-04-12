@@ -34,8 +34,43 @@ new Items()
 
 Manual update (in most cases optional)
 
+Update access_item
+new Items (not Item)
+
+template section complate update
+
+
 
 # JANITOR TEMPLATE UPDATE
+
+Add i:scene to all templates
+
+Generally update HTML
+JML fot tags, actions
+Updated image data settings, getItems and item loop
+(compare to new template - lots of individual changes )
+
+
+
+# JANITOR CLASS UPDATE
+
+Type class extends Itemtype (not Model)
+
+Add to 	function __construct() {
+
+		// construct ItemType before adding to model
+		parent::__construct(get_class());
+
+Remove 
+		parent::__construct();
+
+Remove model data for tags, files, mediae unless customization is required (it now inherits from ItemType)
+
+
+# JANITOR DB UPDATE
+
+Add `SITE_DB`. to `items` (`SITE_DB`.`items`)
+
 
 
 
