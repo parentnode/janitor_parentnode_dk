@@ -4,3 +4,12 @@ u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me 
 
 u.ga_account = 'UA-49739795-1';
 u.ga_domain = 'janitor.parentnode.dk';
+
+
+// dynamic text
+u.txt = {};
+
+// terms
+u.txt["terms-headline"] = "We love <br />cookies and privacy";
+u.txt["terms-accept"] = "Accept";
+u.txt["terms-details"] = "Details";
