@@ -11,7 +11,7 @@ $this->pageTitle("Howto ...");
 			<dt class="published_at">Date published</dt>
 			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
 			<dt class="modified_at">Date modified</dt>
-			<dd class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
+			<dd class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"></dd>
 			<dt class="author">Author</dt>
 			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 			<dt class="publisher">Publisher</dt>
