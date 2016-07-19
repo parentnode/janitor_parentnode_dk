@@ -364,7 +364,8 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$this->bodyClass("front");</code>
+						<div class="example">
+							<code>$this->bodyClass("front");</code>
 							<p>Sets the current body class to <span class="value">front</span>.</p>
 						</div>
 					</div>
@@ -437,7 +438,8 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$this->contentClass("front");</code>
+						<div class="example">
+							<code>$this->contentClass("front");</code>
 							<p>Set the div#content class to <span class="value">front</span>.</p>
 						</div>
 					</div>
@@ -508,7 +510,8 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$this->headerIncludes(array("/js/include_me.js", "/css/include_me.css"));</code>
+						<div class="example">
+							<code>$this->headerIncludes(array("/js/include_me.js", "/css/include_me.css"));</code>
 							<p>Add <span class="value">/js/include_me.js</span> and <span class="value">/css/include_me.css</span> to the document head.</p>
 						</div>
 					</div>
@@ -915,6 +918,7 @@
 					<div class="description">
 						<h4>Description</h4>
 						<p>Get/set current language. Default should be defined in DEFAULT_LANGUAGE_ISO in config.php</p>
+						<p>If you attempt to set invalid language, DEFAULT_LANGUAGE_ISO will be used instead of specified value.</p>
 					</div>
 
 					<div class="parameters">
@@ -938,7 +942,15 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<p>No example</p>
+						<div class="example">
+							<code>$page->language();</code>
+							<p>Returns current session language, fx: <span class="value">DA</span></p>
+						</div>
+
+						<div class="example">
+							<code>$page->language("DA");</code>
+							<p>Sets current session language to <span class="value">DA</span></p>
+						</div>
 					</div>
 
 					<div class="uses">
@@ -948,6 +960,7 @@
 							<h5>Janitor</h5>
 							<ul>
 								<li>Session</li>
+								<li>Query</li>
 							</ul>
 						</div>
 
@@ -968,7 +981,9 @@
 							<dd class="name">languages</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array</span> = 
-								Page::languages();
+								Page::languages(
+									[<span class="type">String</span> <span class="var">$id</span>]
+								);
 							</dd>
 						</dl>
 					</div>
@@ -976,26 +991,35 @@
 					<div class="description">
 						<h4>Description</h4>
 						<p>Get all available languages in nested Array structure from cache or DB</p>
+						<p>Optionally get language details by passing valid language iso value as parameter.</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
-						<p>No parameters</p>
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> Optional ISO language to get details of.
+								</div>
+							</dd>
+						</dl>
 					</div>
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">Array</span> nested Array of available languages</p>
+						<p><span class="type">Array</span> nested Array of available languages or specified language details</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 						
 						<div class="example">
-						<code>$page->languages();</code>
-						<p>Could returns (depending on available languages):</p>
-						<code>Array(
+							<h5>Get all languages</h5>
+							<code>$page->languages();</code>
+							<p>Could returns (depending on available languages):</p>
+							<code>Array(
 	[0] => array(
 		["id"] => "en",
 		["name"] => "English"
@@ -1005,6 +1029,17 @@
 		["name"] => "Dansk"
 	)
 )</code>
+						</div>
+
+						<div class="example">
+							<h5>Get details for specific language</h5>
+							<code>$page->languages("DA");</code>
+							<p>Returns:</p>
+							<code>Array(
+	["id"] => "da",
+	["name"] => "Dansk"
+)</code>
+						</div>
 					</div>
 
 					<div class="uses">
@@ -1015,6 +1050,7 @@
 							<ul>
 								<li>Session</li>
 								<li>Query</li>
+								<li>Cache</li>
 							</ul>
 						</div>
 
@@ -1045,6 +1081,7 @@
 					<div class="description">
 						<h4>Description</h4>
 						<p>Get/set current country. Default should be defined in DEFAULT_COUNTRY_ISO in config.php</p>
+						<p>If you attempt to set invalid country, DEFAULT_COUNTRY_ISO will be used instead of specified value.</p>
 					</div>
 
 					<div class="parameters">
@@ -1068,7 +1105,15 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<p>No example</p>
+						<div class="example">
+							<code>$page->country();</code>
+							<p>Returns current session country, fx: <span class="value">DK</span></p>
+						</div>
+
+						<div class="example">
+							<code>$page->country("DK");</code>
+							<p>Sets current session country to <span class="value">DK</span></p>
+						</div>
 					</div>
 
 					<div class="uses">
@@ -1078,6 +1123,7 @@
 							<h5>Janitor</h5>
 							<ul>
 								<li>Session</li>
+								<li>Query</li>
 							</ul>
 						</div>
 
@@ -1098,7 +1144,9 @@
 							<dd class="name">countries</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array</span> = 
-								Page::countries();
+								Page::countries(
+									[<span class="type">String</span> <span class="var">$id</span>]
+								);
 							</dd>
 						</dl>
 					</div>
@@ -1106,34 +1154,65 @@
 					<div class="description">
 						<h4>Description</h4>
 						<p>Get all available countries in nested Array structure from cache or DB</p>
+						<p>Optionally get country details by passing valid country iso value as parameter.</p>
 					</div>
 
 					<div class="parameters">
 						<h4>Parameters</h4>
 
-						<p>No parameters</p>
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> Optional ISO country to get details of.
+								</div>
+							</dd>
+						</dl>
 					</div>
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">Array</span> nested Array of available countries</p>
+						<p><span class="type">Array</span> nested Array of available countries or specified country details</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 						
 						<div class="example">
-						<code>$page->countries();</code>
-						<p>Could returns (depending on available countries):</p>
-						<code>Array(
+							<h5>Get all countries</h5>
+							<code>$page->countries();</code>
+							<p>Could returns (depending on available countries):</p>
+							<code>Array(
 	[0] => array(
 		["id"] => "DK",
-		["name"] => "Danmark"
+		["name"] => "Danmark",
+		["phone_countrycode"] => 45,
+		["phone_format"] => "#### ####",
+		["language"] => "DA",
+		["currency"] => "DKK"
 	),
 	[1] => array(
 		["id"] => "US",
 		["name"] => "USA"
+		["phone_countrycode"] => 1,
+		["phone_format"] => "### ### ####",
+		["language"] => "EN",
+		["currency"] => "USD"
 	)
+)</code>
+						</div>
+
+						<div class="example">
+							<h5>Get details for specific country</h5>
+							<code>$page->countries("DK");</code>
+							<p>Returns:</p>
+							<code>Array(
+	["id"] => "DK",
+	["name"] => "Danmark",
+	["phone_countrycode"] => 45,
+	["phone_format"] => "#### ####",
+	["language"] => "DA",
+	["currency"] => "DKK"
 )</code>
 						</div>
 					</div>
@@ -1146,6 +1225,7 @@
 							<ul>
 								<li>Session</li>
 								<li>Query</li>
+								<li>Cache</li>
 							</ul>
 						</div>
 
@@ -1154,8 +1234,7 @@
 				</div>
 			</div>
 
-			<!-- CURRENT IMPLEMENTATION IS FLAWED -->
-			<!--div class="function" id="Page::currency">
+			<div class="function" id="Page::currency">
 				<div class="header">
 					<h3>Page::currency</h3>
 				</div>
@@ -1176,7 +1255,8 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get/set currency in ISO format. Default "DKK".</p>
+						<p>Get/set current currency. Default should be defined in DEFAULT_CURRENCY_ISO in config.php</p>
+						<p>If you attempt to set invalid currency, DEFAULT_CURRENCY_ISO will be used instead of specified value.</p>
 					</div>
 
 					<div class="parameters">
@@ -1186,7 +1266,7 @@
 							<dt><span class="var">$value</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">String</span> Set currency in ISO format. 
+									<span class="type">String</span> ISO currency to use for session.
 								</div>
 							</dd>
 						</dl>
@@ -1194,14 +1274,20 @@
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">String | void</span> The country string</p>
+						<p><span class="type">String | void</span> The currency ISO code of the session</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$this->currency()</code>
-							<p>Prints the sessions currency.</p>
+						<div class="example">
+							<code>$page->currency();</code>
+							<p>Returns current session currency, fx: <span class="value">DKK</span></p>
+						</div>
+
+						<div class="example">
+							<code>$page->currency("DKK");</code>
+							<p>Sets current session currency to <span class="value">DKK</span></p>
 						</div>
 					</div>
 
@@ -1211,14 +1297,314 @@
 						<div class="janitor">
 							<h5>Janitor</h5>
 							<ul>
-								<li>_function_</li>
+								<li>Session</li>
+								<li>Query</li>
 							</ul>
 						</div>
 
 					</div>
 
 				</div>
-			</div-->
+			</div>
+
+			<div class="function" id="Page::currencies">
+				<div class="header">
+					<h3>Page::currencies</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">currencies</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array</span> = 
+								Page::currencies(
+									[<span class="type">String</span> <span class="var">$id</span>]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Get all available currencies in nested Array structure from cache or DB</p>
+						<p>Optionally get currency details by passing valid currency iso value as parameter.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> Optional ISO currency to get details of.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Array</span> nested Array of available currencies or specified currency details</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						
+						<div class="example">
+							<h5>Get all currencies</h5>
+							<code>$page->currencies();</code>
+							<p>Could returns (depending on available currencies):</p>
+							<code>Array(
+	[0] => array(
+		["id"] => "DKK",
+		["name"] => "Kroner (Denmark)",
+		["abbreviation"] => "DKK",
+		["abbreviation_position"] => "after",
+		["decimals"] => "2",
+		["decimal_separator"] => ",",
+		["grouping_separator"] => "."
+	),
+	[1] => array(
+		["id"] => "USD",
+		["name"] => "US Dollar"
+		["abbreviation"] => "$",
+		["abbreviation_position"] => "before",
+		["decimals"] => "2",
+		["decimal_separator"] => ".",
+		["grouping_separator"] => ","
+	)
+)</code>
+						</div>
+
+						<div class="example">
+							<h5>Get details for specific currency</h5>
+							<code>$page->currencies("DKK");</code>
+							<p>Returns:</p>
+							<code>Array(
+	["id"] => "DKK",
+	["name"] => "Kroner (Denmark)",
+	["abbreviation"] => "DKK",
+	["abbreviation_position"] => "after",
+	["decimals"] => "2",
+	["decimal_separator"] => ",",
+	["grouping_separator"] => "."
+)</code>
+						</div>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session</li>
+								<li>Query</li>
+								<li>Cache</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::vatrates">
+				<div class="header">
+					<h3>Page::vatrates</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">vatrates</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array</span> = 
+								Page::vatrates(
+									[<span class="type">Integer</span> <span class="var">$id</span>]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Get all available vatrates in nested Array structure from cache or DB</p>
+						<p>Optionally get vatrate details by passing valid vatrate id as parameter.</p>
+						<p>Vatrates are used to specify VAT for Item prices.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Integer</span> Optional vatrate id to get details of.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Array</span> nested Array of available vatrates or specified vatrate details</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						
+						<div class="example">
+							<h5>Get all vatrates</h5>
+							<code>$page->vatrates();</code>
+							<p>Could returns (depending on available vatrates):</p>
+							<code>Array(
+	[0] => array(
+		["id"] => 1,
+		["name"] => "No VAT",
+		["vatrate"] => 0,
+		["country"] => "DK"
+	),
+	[1] => array(
+		["id"] => 2,
+		["name"] => "25%",
+		["vatrate"] => 0.25,
+		["country"] => "DK"
+	)
+)</code>
+						</div>
+
+						<div class="example">
+							<h5>Get details for specific vatrate</h5>
+							<code>$page->vatrates(1);</code>
+							<p>Returns:</p>
+							<code>Array(
+	["id"] => 1,
+	["name"] => "No VAT",
+	["vatrate"] => 0,
+	["country"] => "DK"
+)</code>
+						</div>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session</li>
+								<li>Query</li>
+								<li>Cache</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::subscriptionMethods">
+				<div class="header">
+					<h3>Page::subscriptionMethods</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">subscriptionMethods</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array</span> = 
+								Page::subscriptionMethods(
+									[<span class="type">Integer</span> <span class="var">$id</span>]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Get all available subscription methods in nested Array structure from cache or DB</p>
+						<p>Optionally get subscription method details by passing valid subscription method id as parameter.</p>
+						<p>Subscription methods are used to specify subscription renewal setting for item subscriptions.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Integer</span> Optional subscription method id to get details of.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Array</span> nested Array of available subscription methods or specified subscription method details</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						
+						<div class="example">
+							<h5>Get all subscription methods</h5>
+							<code>$page->subscriptionMethods();</code>
+							<p>Could returns (depending on available subscription methods):</p>
+							<code>Array(
+	[0] => array(
+		["id"] => 1,
+		["name"] => "Monthly",
+		["duration"] => "month",
+		["starts_on"] => NULL
+	),
+	[1] => array(
+		["id"] => 1,
+		["name"] => "Weekly",
+		["duration"] => "week",
+		["starts_on"] => NULL
+	)
+)</code>
+						</div>
+
+						<div class="example">
+							<h5>Get details for specific subscription method</h5>
+							<code>$page->subscriptionMethods(1);</code>
+							<p>Returns:</p>
+							<code>Array(
+	["id"] => 1,
+	["name"] => "Monthly",
+	["duration"] => "month",
+	["starts_on"] => NULL
+)</code>
+						</div>
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session</li>
+								<li>Query</li>
+								<li>Cache</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
 
 			<div class="function" id="Page::segment">
 				<div class="header">

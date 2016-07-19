@@ -3,6 +3,8 @@
 	<h1>Janitor Unit tests</h1>
 
 	<ul class="tests">
+		<?= $HTML->link("Page", "/janitor/tests/page", array("wrapper" => "li.page")) ?>
+
 		<?= $HTML->link("Autoconversion", "/janitor/tests/autoconversion", array("wrapper" => "li.autoconversion")) ?>
 		<?= $HTML->link("FileSystem", "/janitor/tests/filesystem", array("wrapper" => "li.filesystem")) ?>
 		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
