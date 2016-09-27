@@ -32,6 +32,14 @@ $this->pageTitle("Architecture of Janitor");
 
 		<div class="articlebody" itemprop="articleBody">
 
+			<p>
+				Janitor is a MVC based system. Only the controllers are exposed to the webserver and will control 
+				the routing of all requests. The controllers can interact with the model or return views based on the model.
+			</p>
+			<p>
+				You define the model the controller interactacts with and decide what to expose to the webserver.
+			</p>
+
 			<p>Part of milestone for v0.8 - Check the
 				<a href="/pages/milestones">Milestones</a> for more information.
 			</p>

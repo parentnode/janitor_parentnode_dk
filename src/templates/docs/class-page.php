@@ -1606,6 +1606,88 @@
 				</div>
 			</div>
 
+			<div class="function" id="Page::paymentMethods">
+				<div class="header">
+					<h3>Page::paymentMethods</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">paymentMethods</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array</span> = 
+								Page::paymentMethods(
+									[<span class="type">Integer</span> <span class="var">$id</span>]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Get all available payment methods in nested Array structure from cache or DB</p>
+						<p>Optionally get payment method details by passing valid payment method id as parameter.</p>
+						<p>Subscription methods are used to specify payment method for subscriptions.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$id</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Integer</span> Optional payment method id to get details of.
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Returns</h4>
+						<p><span class="type">Array</span> nested Array of available payment methods or specified payment method details</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						
+						<div class="example">
+							<h5>Get all payment methods</h5>
+							<code>$page->paymentMethods();</code>
+							<p>Could returns (depending on available payment methods):</p>
+							<code>Array(
+	[0] => array(
+		["id"] => 1,
+		["name"] => "Bank account"
+	),
+	[1] => array(
+		["id"] => 1,
+		["name"] => "Paypal"
+	)
+)</code>
+						</div>
+
+					</div>
+
+					<div class="uses">
+						<h4>Uses</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session</li>
+								<li>Query</li>
+								<li>Cache</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
 			<div class="function" id="Page::segment">
 				<div class="header">
 					<h3>Page::segment</h3>

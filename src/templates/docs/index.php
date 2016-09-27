@@ -27,11 +27,11 @@
 				<h3><a href="/docs/class-page">Page</a></h3>
 				<p>Core request and response structure</p>
 			</li>
-			<li>
+			<!--li>
 				<h3><a href="/docs/class-items">Items</a></h3>
 				<p>Querying items and item data</p>
 			</li>
-			<!--<li>
+			<li>
 				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
 				<p>Creating and manipulating itemtypes</p>
 			</li>
