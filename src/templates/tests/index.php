@@ -7,8 +7,15 @@
 
 		<?= $HTML->link("Autoconversion", "/janitor/tests/autoconversion", array("wrapper" => "li.autoconversion")) ?>
 		<?= $HTML->link("FileSystem", "/janitor/tests/filesystem", array("wrapper" => "li.filesystem")) ?>
+
+		<?= $HTML->link("User", "/janitor/tests/user", array("wrapper" => "li.user")) ?>
+		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
+
 		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
 		<?= $HTML->link("Form validation", "/janitor/tests/form-validation", array("wrapper" => "li.formvalidation")) ?>
+
+
+
 		<?= $HTML->link("Security", "/janitor/tests/security", array("wrapper" => "li.security")) ?>
 
 

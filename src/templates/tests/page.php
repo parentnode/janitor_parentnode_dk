@@ -24,7 +24,7 @@ cache()->reset("vatrates");
 
 <div class="scene i:scene tests defaultEdit">
 	<h1>Page</h1>	
-	<h2>Testing page functions</h2>
+	<h2>Testing Page class</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
