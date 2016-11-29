@@ -1,0 +1,116 @@
+#!/bin/bash
+
+# curl -L http://test.janitor.parentnode.dk/quick-installer-osx | bash
+# curl -L http://janitor.local/quick-installer-osx | bash
+
+# bash <(curl -s http://test.parentnode.dk/sh/install-ubuntu-stack.txt)
+
+echo 
+echo "Quick-installer downloaded."
+echo
+echo
+echo "Please enter you password to continue."
+sudo ls &>/dev/null
+
+echo
+
+#sudo ls | 
+
+# Core already exists
+if [ -d "core" ]; then
+
+
+	echo "I don't think you want to do this."
+	echo
+
+
+else 
+
+
+	read -p "Install Janitor in $PWD (Y/n): " install_current_path
+	if test "$install_current_path" = "Y"; then
+
+		echo
+		echo "Downloading Janitor"
+		echo
+
+
+		wget https://github.com/parentnode/janitor/archive/master.tar.gz
+		tar -xzf master.tar.gz
+
+
+
+		mkdir -p core
+		mv janitor-master core/janitor
+
+
+		read -p "Local domain for this installation: " domain
+		if test "$domain" = ""; then
+
+			echo
+			echo "Argh, I really wish you hadn't done that. I cannot install without a domain."
+			echo
+
+		else
+
+			echo
+			echo "Setting up initial Apache configuration."
+			echo
+
+
+			mkdir apache
+			touch apache/httpd-vhosts.conf
+			echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
+			echo "	DocumentRoot \"$PWD/core/janitor/src\"" >> apache/httpd-vhosts.conf
+			echo "	ServerName $domain" >> apache/httpd-vhosts.conf
+			echo "</VirtualHost>" >> apache/httpd-vhosts.conf
+
+
+			read -p "Include apache and hosts configuration (Y/n): " hosts_and_apache
+			if test "$hosts_and_apache" = "Y"; then
+
+				# if ! grep -R "$domain" "/etc/hosts"; then
+				#
+				# 	echo "Updating /etc/hosts"
+				#
+				# 	sudo chmod 777 -R /etc/hosts
+				#
+				# 	echo ""
+				# 	echo ""
+				# 	echo "127.0.0.1	$domain" >> /etc/hosts
+				# 	echo "fe80::1%lo0	$domain" >> /etc/hosts
+				# 	echo "::1			$domain" >> /etc/hosts
+				#
+				# 	sudo chmod 644 -R /etc/hosts
+				#
+				# fi
+
+				# add include to apache config
+
+				echo
+				echo "Your installation is done! (but remember hosts, apache and restart)"
+
+			else
+
+				echo
+				echo "Your installation is done! (but remember hosts, apache and restart)"
+
+			fi
+
+			echo
+			echo "Now go to http://$domain/janitor/admin/setup in your browser"
+			echo
+
+		fi
+
+	else
+
+		echo "Please navigate to the desired location and run the install script again."
+
+	fi
+
+	echo
+	echo "Thank you - come again!"
+
+fi
+
