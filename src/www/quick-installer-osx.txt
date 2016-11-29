@@ -3,7 +3,8 @@
 # curl -L http://test.janitor.parentnode.dk/quick-installer-osx | bash
 # curl -L http://janitor.local/quick-installer-osx | bash
 
-# bash <(curl -s http://test.parentnode.dk/sh/install-ubuntu-stack.txt)
+# bash <(curl -s http://test.janitor.parentnode.dk/quick-installer-osx)
+# bash <(curl -s http://janitor.local/quick-installer-osx)
 
 echo 
 echo "Quick-installer downloaded."
@@ -61,8 +62,18 @@ else
 			mkdir apache
 			touch apache/httpd-vhosts.conf
 			echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
-			echo "	DocumentRoot \"$PWD/core/janitor/src\"" >> apache/httpd-vhosts.conf
+			echo "	DocumentRoot \"$PWD/theme/www\"" >> apache/httpd-vhosts.conf
 			echo "	ServerName $domain" >> apache/httpd-vhosts.conf
+
+			echo "	SetEnv \"LOCAL_PATH\" \"$PWD/theme\"" >> apache/httpd-vhosts.conf
+			echo "	SetEnv \"FRAMEWORK_PATH\" \"$PWD/core/janitor/src\"" >> apache/httpd-vhosts.conf
+
+
+			mkdir theme
+			cp -R core/janitor/src/setup/defaults/config theme/config
+			cp -R core/janitor/src/setup/defaults/templates theme/templates
+			cp -R core/janitor/src/setup/defaults/www theme/www
+
 			echo "</VirtualHost>" >> apache/httpd-vhosts.conf
 
 
