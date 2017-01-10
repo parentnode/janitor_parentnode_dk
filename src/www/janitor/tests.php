@@ -31,6 +31,42 @@ if(is_array($action) && count($action)) {
 		exit();
 	}
 
+
+	// Custom test responses
+
+	// wkhtmlto - download pdf test
+	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 2 && $action[0] == "pdf" && $action[1] = "download") {
+
+		$file = PRIVATE_FILE_PATH."/pdf-test.pdf";
+
+		include_once("classes/system/pdf.class.php");
+		$PC = new PDF();
+
+		$PC->create(SITE_URL."/tests/pdf-template", $file);
+
+		if(file_exists($file)) {
+
+			header('Content-Description: File download');
+			header('Content-Type: application/octet-stream');
+			header("Content-Type: application/force-download");
+			header('Content-Disposition: attachment; filename=' . "pdf-test.pdf");
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($file));
+			ob_clean();
+			flush();
+			readfile($file);
+
+			// clean up
+			unlink($file);
+
+			exit();
+		}
+
+	}
+
+
 	// Class interface
 	else if($page->validateCsrfToken() && preg_match("/[a-zA-Z]+/", $action[0])) {
 

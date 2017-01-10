@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="DA">
+<head>
+	<!-- (c) & (p) think.dk, 2013-2017 //-->
+	<!-- All material protected by copyrightlaws, as if you didnt know //-->
+	<title>Print test template</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<script type="text/javascript" src="/js/seg_desktop.js"></script>
+	<link type="text/css" rel="stylesheet" media="all" href="/css/lib/seg_desktop_include.css" />
+	<style type="text/css">
+
+		div#page {width: 900px;}
+		div#page #header,
+		div#page #navigation,
+		div#page #footer {display: none;}
+		div#page .scene h1,
+		div#page .scene p {width: auto;}
+		img {margin: 0 70px;}
+		canvas {margin: 0 70px; background: #00ff00; width: 760px; height: 200px;}
+
+	</style>
+</head>
+
+<body>
+
+<div id="page">
+
+	<div id="content">
+		<div class="scene">
+			<h1>Lorem ipsum dolor sit amet</h1>
+			<p>
+				NOTE: Some versions of WKHTMLTO cannot create selectable text when using Webfonts (observed using 
+				Open Sans and WKHTMLTO 0.10.0 rc2).
+			</p>
+			<p>
+				NOTE: Some version of WKHTMLTO is more sensitive to script syntax than "normal" webkit. For example,
+				svg_object.class (a js object, with a property named class), caused an error in WKHTMLTO 0.10.0 rc2.
+				If script does not execute, try running wkhtmlto command with --debug-javascript flag. 
+			</p>
+			<p>
+				Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna 
+				aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip 
+				ex ea commodo consequat. Duis aute irure dolor in <a href="#">reprehenderit</a> in voluptate velit esse.
+			</p>
+
+			<canvas width="760" height="200"></canvas>
+
+			<img src="/img/logo-large.png">
+
+			<p>
+				Cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+				sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</div>
+
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+	var canvas = u.qs("canvas");
+
+	canvas._context = canvas.getContext("2d");
+
+	canvas._context.fillStyle = "#df0000";
+	canvas._context.strokeStyle = "#df0000";
+	canvas._context.lineWidth = 2;
+
+	canvas._fillRect = function() {
+
+		this._context.fillRect (0, 0, 50, 50);
+		this._context.fillRect (100, 0, 50, 50);
+		this._context.fillRect (200, 0, 50, 50);
+		this._context.fillRect (300, 0, 50, 50);
+		this._context.fillRect (400, 0, 50, 50);
+		this._context.fillRect (500, 0, 50, 50);
+		this._context.fillRect (600, 0, 50, 50);
+		this._context.fillRect (700, 0, 50, 50);
+	
+	}
+
+	canvas._lineTo = function() {
+
+		this._context.beginPath();
+		this._context.moveTo(0, 100);
+		this._context.lineTo(0, 200);
+		this._context.lineTo(100, 200);
+		this._context.lineTo(100, 100);
+		this._context.lineTo(200, 100);
+		this._context.lineTo(200, 200);
+		this._context.lineTo(300, 200);
+		this._context.lineTo(300, 100);
+		this._context.lineTo(400, 100);
+		this._context.lineTo(400, 200);
+		this._context.lineTo(500, 200);
+		this._context.lineTo(500, 100);
+		this._context.lineTo(600, 100);
+		this._context.lineTo(600, 200);
+		this._context.lineTo(700, 200);
+		this._context.lineTo(700, 100);
+		this._context.closePath();
+		this._context.stroke();
+
+	}
+
+	canvas._fillRect();
+	canvas._lineTo();
+
+</script>
+
+</body>
+</html>

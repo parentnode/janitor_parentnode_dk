@@ -31,6 +31,7 @@ class TypeTests extends Itemtype {
 			"type" => "text",
 			"label" => "Text",
 			"required" => true,
+			"hint_message" => "Type text",
 			"error_message" => "Text must be text"
 		));
 
@@ -38,6 +39,7 @@ class TypeTests extends Itemtype {
 			"type" => "email",
 			"label" => "Email",
 			"required" => true,
+			"hint_message" => "Type email",
 			"error_message" => "Email must be email"
 		));
 
@@ -45,6 +47,7 @@ class TypeTests extends Itemtype {
 			"type" => "tel",
 			"label" => "Phone",
 			"required" => true,
+			"hint_message" => "Type tel",
 			"error_message" => "Phone must be phone"
 		));
 
@@ -52,6 +55,7 @@ class TypeTests extends Itemtype {
 			"type" => "password",
 			"label" => "Password",
 			"required" => true,
+			"hint_message" => "Type password",
 			"error_message" => "Password must be password"
 		));
 
@@ -60,6 +64,7 @@ class TypeTests extends Itemtype {
 			"label" => "Select",
 			"options" => array("" => "Select option", "1" => "First option"),
 			"required" => true,
+			"hint_message" => "Type select",
 			"error_message" => "Option must be selected"
 		));
 
@@ -67,6 +72,7 @@ class TypeTests extends Itemtype {
 			"type" => "datetime",
 			"label" => "Datetime (yyyy-mm-dd hh:mm)",
 			"required" => true,
+			"hint_message" => "Type datetime",
 			"error_message" => "Datetime must be of format (yyyy-mm-dd hh:mm)"
 		));
 
@@ -74,6 +80,7 @@ class TypeTests extends Itemtype {
 			"type" => "date",
 			"label" => "Date (yyyy-mm-dd)",
 			"required" => true,
+			"hint_message" => "Type date",
 			"error_message" => "Date must be of format (yyyy-mm-dd)"
 		));
 
@@ -81,6 +88,7 @@ class TypeTests extends Itemtype {
 			"type" => "integer",
 			"label" => "Integer",
 			"required" => true,
+			"hint_message" => "Type integer",
 			"error_message" => "Must be Integer"
 		));
 
@@ -88,6 +96,7 @@ class TypeTests extends Itemtype {
 			"type" => "number",
 			"label" => "Number",
 			"required" => true,
+			"hint_message" => "Type number",
 			"error_message" => "Must be Number"
 		));
 
@@ -95,6 +104,7 @@ class TypeTests extends Itemtype {
 			"type" => "checkbox",
 			"label" => "Checkbox",
 			"required" => true,
+			"hint_message" => "Type checkbox",
 			"error_message" => "Must be checked"
 		));
 
@@ -103,6 +113,7 @@ class TypeTests extends Itemtype {
 			"label" => "Radiobuttons",
 			"options" => array("value1" => "text1", "value2" => "text2"),
 			"required" => true,
+			"hint_message" => "Type radiobuttons",
 			"error_message" => "One must be selected"
 		));
 
@@ -112,6 +123,7 @@ class TypeTests extends Itemtype {
 			"label" => "HTML",
 			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube", //",mp4",
 			"required" => true,
+			"hint_message" => "Type html",
 			"error_message" => "HTML must be HTML"
 		));
 
@@ -119,6 +131,7 @@ class TypeTests extends Itemtype {
 			"type" => "location",
 			"label" => "Location",
 			//"required" => true,
+			"hint_message" => "Type location",
 			"error_message" => "Must be location"
 		));
 		$this->addToModel("v_latitude", array(
@@ -135,6 +148,7 @@ class TypeTests extends Itemtype {
 			"type" => "tag",
 			"label" => "Tag",
 			"required" => true,
+			"hint_message" => "Type tag",
 			"error_message" => "Tag must be valid tag"
 		));
 
@@ -142,10 +156,32 @@ class TypeTests extends Itemtype {
 			"type" => "files",
 			"label" => "Files",
 			"required" => true,
+			"hint_message" => "Type files",
 			"error_message" => "Files must be added"
 		));
 
 	}
+
+
+	// CUSTOM SUBSCRIBE/UNSUBSCRIBE
+
+
+	function subscribed($user_id, $item_id) {
+		
+	}
+
+	// Do I really want this to work for all users
+	function unsubscribed($user_id, $item_id) {
+		global $page;
+		$IC = new Items();
+		
+		$page->mail(
+
+		);
+	}
+
+	function subscriptionRenewed() {}
+
 
 
 	// VALIDATION TESTS

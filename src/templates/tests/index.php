@@ -5,8 +5,10 @@
 	<ul class="tests">
 		<?= $HTML->link("Page", "/janitor/tests/page", array("wrapper" => "li.page")) ?>
 
-		<?= $HTML->link("Autoconversion", "/janitor/tests/autoconversion", array("wrapper" => "li.autoconversion")) ?>
+		<?= $HTML->link("Autoconversion (Image/Video/Audio)", "/janitor/tests/autoconversion", array("wrapper" => "li.autoconversion")) ?>
 		<?= $HTML->link("FileSystem", "/janitor/tests/filesystem", array("wrapper" => "li.filesystem")) ?>
+		<?= $HTML->link("Cache", "/janitor/tests/cache", array("wrapper" => "li.cache")) ?>
+		<?= $HTML->link("PDF", "/janitor/tests/pdf", array("wrapper" => "li.pdf")) ?>
 
 		<?= $HTML->link("User", "/janitor/tests/user", array("wrapper" => "li.user")) ?>
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
