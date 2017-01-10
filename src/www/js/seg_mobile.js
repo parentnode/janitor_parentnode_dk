@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2016-04-10 17:56:42
+js-merged @ 2017-01-11 00:33:51
 */
 
 /*seg_mobile_include.js*/
@@ -3651,7 +3651,10 @@ u.terms_version = "terms_v1";
 u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
 u.ga_account = 'UA-49739795-1';
 u.ga_domain = 'janitor.parentnode.dk';
-
+u.txt = {};
+u.txt["terms-headline"] = "We love <br />cookies and privacy";
+u.txt["terms-accept"] = "Accept";
+u.txt["terms-details"] = "Details";
 
 /*u-googleanalytics.js*/
 if(u.ga_account) {

@@ -54,7 +54,12 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 .terms_notification .details {padding: 0; font-size: 16px; display: inline-block; vertical-align: bottom; padding: 0; color: #ffffff;}
 .terms_notification .accept {float: left;}
 .terms_notification .details {float: right;}
-
+#page #notifications {position: fixed; z-index: 110; top: 0; width: 200px; left: 50%; margin-left: -100px; background: #333333; color: #ffffff;}
+#page #notifications div {padding: 10px 20px; color: #ffffff;}
+#page #notifications .error {background: #df0000;}
+body > div.hint {z-index: 100; position: absolute; top: 0; left: 0; padding: 3px 5px; background: #ffffff; color: #888888; border: 1px solid #888888; box-shadow: 1px 1px 2px #888888; border-radius: 5px; font-size: 12px; max-width: 400px;}
+body > div.hint p {padding: 5px; color: #888888; font-size: 12px;}
+body > div.hint a {text-decoration: underline; display: inline-block; vertical-align: top; padding: 5px;}
 
 /*s-header.css*/
 #header {position: relative; height: 100px;}
@@ -65,11 +70,12 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #header .servicenavigation {position: absolute; top: 5px; right: 40px;}
 #header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb; padding: 3px 0;}
 #header .servicenavigation li.navigation {display: none;}
-#header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0";}
+#header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0"; color: #bbbbbb;}
 #header .servicenavigation li.github:before,
 #header .servicenavigation li.navigation:before,
 #header .servicenavigation li:first-child:before {content: "";}
 #header .servicenavigation li.github {margin: 0 0 0 10px; padding: 4px 12px; background: #8c9399; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ffffff;}
+#header .servicenavigation li.cart.used {color: #df0000;}
 #navigation {z-index: 10; position: fixed; right: 60px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
 #navigation ul {}
 #navigation ul li {display: inline-block; vertical-align: top; padding: 10px; font-size: 20px; color: #888888;
@@ -79,7 +85,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 
 
 /*s-footer.css*/
-#footer {text-align: center; border-top: 1px solid #888888;}
+#footer {text-align: center; border-top: 1px solid #888888; opacity: 0;}
 #footer p {padding: 10px; cursor: pointer; font-size: 13px;}
 
 /*s-content.css*/
@@ -104,18 +110,15 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.article+h2,
 #content .scene code+h2 {padding-top: 20px;}
 #content .scene ul.tags+h2,
-#content .scene dl.geo+h2,
-#content .scene dl.info+h2,
 #content .scene ul.info+h2 {padding-top: 0;}
 #content .scene p+code {margin-top: -15px;}
-#content .scene dl.info+dl.geo {padding-left: 0;}
 #content .scene ul,
 #content .scene ol {padding: 0 70px 15px;}
 #content .scene ul.items {padding: 0;}
-#content .scene ul.items li.item {display: block; padding-top: 20px; padding-bottom: 30px; border-top: 1px solid #dedede;}
+#content .scene ul.items li.item {display: block; padding-top: 20px; padding-bottom: 30px; border-top: 1px solid #dedede; position: relative;}
 #content .scene ul.items li.item h2 {position: relative; z-index: 1;}
 #content .scene dl {padding: 0 70px 15px; width: 500px;}
-#content .scene dt {width: 100px; text-align: right; padding: 0 5px 0 0; color: #999999;} 
+#content .scene dt {width: 100px; text-align: right; padding: 0 5px 6px 0; color: #999999;} 
 #content .scene dt:after {content: ":";}
 #content .scene dd {padding: 0 0 6px; width: 394px;}
 #content .scene dt span {text-transform: none;}
@@ -132,32 +135,24 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene ul.tags li:after {content: "\00a0|\00a0"; color: #dedede;}
 #content .scene ul.tags li:last-child:after {content: "";}
 #content .scene li.item ul.tags {}
-#content .scene ul.tags li.editing {background: #666666; border-radius: 5px; color: #ffffff; margin: -2px 10px -2px -2px; padding: 2px 10px;}
+#content .scene ul.tags li.editing {background: #666666; border-radius: 5px; color: #ffffff !important; margin: -2px 10px -2px -2px; padding: 2px 10px;}
 #content .scene ul.tags li.editing:after {content: "";}
-#content .scene dl.info {position: relative; z-index: 1; padding-bottom: 20px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
-#content .scene dl.info dt {display: none;}
-#content .scene dl.info dd {width: auto; font-size: 12px; color: #cccccc;}
-#content .scene dl.info dd.author:before {content: "\00a0|\00a0"; color: #dedede;}
-#content .scene dl.info dd.main_entity {display: none;}
-#content .scene dl.info dd.publisher {display: none;}
-#content .scene dl.info dd.image_info {display: none;}
-#content .scene dl.info dd.modified_at {display: none;}
-#content .scene ul.info {position: relative; z-index: 1; padding-bottom: 26px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
-#content .scene ul.info li {width: auto; font-size: 12px; color: #cccccc; display: inline-block; vertical-align: top;}
-#content .scene ul.info li.author:before {content: "\00a0|\00a0"; color: #dedede;}
-#content .scene ul.info li.main_entity {display: none;}
-#content .scene ul.info li.publisher {display: none;}
-#content .scene ul.info li.image_info {display: none;}
-#content .scene ul.info li.modified_at {display: none;}
-#content .scene dl.geo {position: relative; z-index: 1; padding-bottom: 20px; padding-right: 0; display: inline-block; vertical-align: top; width: auto;}
-#content .scene dl.geo .location:before {content: "|\00a0"; color: #dedede;}
-#content .scene dl.geo dd {padding-right: 0; width: auto; font-size: 12px; color: #999999;}
-#content .scene dl.geo dt {display: none;}
-#content .scene dl.geo .latitude,
-#content .scene dl.geo .longitude {display: none;}
-#content .scene dl.geo.active {cursor: pointer;}
+#content .scene ul.info {position: relative; z-index: 1; padding-bottom: 26px; padding-right: 0; display: inline-block; vertical-align: top; width: auto; font-size: 0;}
+#content .scene ul.info li {width: auto; font-size: 12px; line-height: 12px; color: #cccccc; display: inline-block; vertical-align: top;}
+#content .scene ul.info > li.author:before,
+#content .scene ul.info > li.place:before {content: "\00a0|\00a0"; color: #dedede; display: inline-block; vertical-align: top; font-size: 12px; line-height: 10px; }
+#content .scene ul.info li.main_entity,
+#content .scene ul.info li.url,
+#content .scene ul.info li.publisher,
+#content .scene ul.info li.image_info,
+#content .scene ul.info li.modified_at,
+#content .scene ul.info li.latitude,
+#content .scene ul.info li.longitude {display: none;}
+#content .scene ul.info > li.place {font-size: 0;}
+#content .scene ul.geo.active li.location {cursor: pointer;}
+#content .scene ul.info ul.geo {padding: 0; display: inline-block; vertical-align: top; width: auto;}
 #content .scene div.geomap {position: relative; z-index: 1; height: 300px; width: 600px; margin-bottom: 20px;}
-#content .scene div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 30px 30px; width: 540px; border-radius: 5px; }
+#content .scene div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 50px 30px; width: 540px; border-radius: 5px; }
 #content .scene li div.geomap {}
 #content .scene div.image {position: relative; z-index: 1;}
 #content .scene div.image img {cursor: zoom-in; margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
@@ -185,22 +180,32 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
 #content .scene div.article {position: relative; padding-bottom: 30px;}
+#content .scene div.article h1 svg.checkmark {cursor: pointer;}
 #content .scene div.article ul.tags {padding-bottom: 30px;}
-#content .scene div.article ul.tags a {color: #cccccc;}
+#content .scene div.article ul.tags li,
+#content .scene div.article ul.tags li a {color: #cccccc;}
 #content .scene ul.articles {padding: 0;}
 #content .scene ul.articles li.article {padding: 20px 0 5px; border-top: 1px solid #dedede; position: relative;}
 #content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
+#content .scene ul.articles li.article ul.tags li,
 #content .scene ul.articles li.article ul.tags li a {color: #cccccc;}
 #content .scene ul.articles li.article h3 {font-size: 22px; line-height: 1em; padding-bottom: 10px;
 	font-family: "PT Serif", Times, serif;
 }
+#content .scene ul.articles li.article ul.actions {margin-top: -10px;}
+#content .scene ul.articles li.article ul.actions li {padding-bottom: 0;}
 #content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 45px;}
 #content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
 #content .scene div.related {padding-top: 10px; position: relative; z-index: 1;}
-#content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px;}
-#content .scene div.sharing p {padding: 0; z-index: 2; position: absolute; top: 22px; left: 120px; display: none; font-size: 11px; color: #999999;}
-#content .scene div.sharing h3 {position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
-#content .scene div.sharing.hover {z-index: 2;}
+#content .scene div.related h2 {padding-bottom: 15px;}
+#content .scene div.related h2 a {font-size: 12px; display: inline-block; vertical-align: middle;
+	font-family: "OpenSans";
+}
+#content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px; overflow: hidden;}
+#content .scene div.sharing p {z-index: 2; padding: 0; position: absolute; top: 25px; left: 120px; display: none; font-size: 11px; color: #999999;}
+#content .scene div.sharing h3 {z-index: 2; position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
+#content .scene div.sharing h3 span {display: inline-block; vertical-align: top; margin: 9px 0 0 7px; font-size: 11px; line-height: 11px;}
+#content .scene div.sharing.hover {z-index: 2; overflow: visible;}
 #content .scene div.sharing.hover h3,
 #content .scene div.sharing.hover p {display: block;}
 #content .scene div.sharing svg {z-index: 0; margin-left: 70px; position: absolute; width: 500px; height: 300px; top: -130px;}
@@ -217,6 +222,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene svg.checkmark line {stroke: #dedede; stroke-width: 3px;}
 #content .scene svg.checkmark.read line {stroke: #666666;}
 #content .scene div.comments {padding-bottom: 15px; position: relative; z-index: 1;}
+#content .scene div.articlebody + div.comments {padding-top: 20px;}
 #content .scene div.comments h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
 #content .scene div.comments h2 svg.arrow {position: absolute; top: 3px; left: 45px;}
 #content .scene div.comments h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
@@ -235,6 +241,48 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
 #content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
 #content .scene div.comments .field {padding-bottom: 10px;}
+#content .scene div.qnas {padding-bottom: 15px; position: relative; z-index: 1;}
+#content .scene div.articlebody + div.qnas {padding-top: 20px;}
+#content .scene div.qnas h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
+#content .scene div.qnas h2 svg.arrow {position: absolute; top: 3px; left: 45px;}
+#content .scene div.qnas h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
+#content .scene div.qnas > p,
+#content .scene div.qnas ul.qnas,
+#content .scene div.qnas ul.actions {display: none;}
+#content .scene div.qnas.open h2 {color: #00c90d;}
+#content .scene div.qnas.open > p,
+#content .scene div.qnas.open ul.qnas,
+#content .scene div.qnas.open ul.actions {display: block;}
+#content .scene div.qnas > p {color: #999999; font-size: 13px; padding-bottom: 25px;}
+#content .scene div.qnas ul.qnas {padding: 0; margin: 0;}
+#content .scene div.qnas ul.qnas > li {padding-bottom: 15px; padding-left: 0;}
+#content .scene div.qnas ul.qnas > li ul.info {padding-bottom: 0; margin: 0; list-style: none; display: block;}
+#content .scene div.qnas ul.qnas > li ul.info li {display: inline-block; vertical-align: top; color: #cccccc; font-size: 12px; padding-bottom: 0; padding-left: 0;}
+#content .scene div.qnas ul.qnas > li ul.info li.user:after {content: ",\00a0";}
+#content .scene div.qnas ul.qnas > li p.question {padding-bottom: 10px; font-size: 13px;}
+#content .scene div.qnas .field {padding-bottom: 10px;}
+#content .scene ul.offer,
+#content .scene .articlebody ul.offer {font-size: 0; padding: 0; margin: 0; list-style: none;}
+#content .scene ul.offer li.name,
+#content .scene ul.offer li.currency,
+#content .scene ul.offer li.url {display: none;}
+#content .scene ul.offer li {font-size: 11px; width: auto; display: inline-block; vertical-align: top; padding: 0 5px 0 0;}
+#content .scene ul.offer li.default {text-decoration: line-through;}
+#content .scene ul.offer li.description {padding-top: 4px; display: block;}
+#content .scene ul.offer li.description ul {list-style: disc;}
+#content .scene ul.offer li.description ul li {display: list-item; padding: 0 0 3px; font-size: 13px;}
+body > div.pagination li.next > svg.arrow {position: absolute; top: 14px; right: 2px;}
+body > div.pagination li.next > svg.arrow line {stroke: #26962d; stroke-width: 3px;}
+body > div.pagination li.previous > svg.arrow {position: absolute; top: 14px; left: 8px;}
+body > div.pagination li.previous > svg.arrow line {stroke: #26962d; stroke-width: 3px;}
+body > div.pagination li.previous,
+body > div.pagination li.next {z-index: 100; position: fixed; top: 50%; margin-top: -20px; height: 40px; width: 0; overflow: hidden; border: 1px solid #26962d; cursor: pointer; background: #ffffff;}
+body > div.pagination li.previous {left: 0; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-left: none; padding-left: 30px;}
+body > div.pagination li.next {right: 0; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-right: none; padding-right: 30px;}
+body > div.pagination li.previous a,
+body > div.pagination li.next a {font-size: 16px; line-height: 16px; display: inline-block; vertical-align: top; padding: 11px 12px 13px; white-space: nowrap; opacity: 0;}
+body > div.pagination li.previous a {padding-left: 0;}
+body > div.pagination li.next a {padding-right: 0;}
 #content .scene code {padding: 10px 20px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -259,6 +307,8 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene span.command {color: #4b5cd7;}
 #content .scene div.vcard.company {margin-top: 65px; border-top: 1px solid #dedede; padding: 0 70px 25px;}
 #content .scene div.vcard.company h2 {margin-top: -65px; padding: 0 0 60px;}
+#content .scene div.vcard.person {margin-top: 65px; border-top: 1px solid #dedede; padding: 0 70px 25px;}
+#content .scene div.vcard.person h2 {margin-top: -65px; padding: 0 0 60px;}
 #content .scene div.vcard dl.info {width: 230px; padding: 0 0 30px; display: inline-block; vertical-align: top;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
@@ -279,215 +329,235 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene .usedby ul li.landskabsarkitekter {background-image: url(/img/logos/landskabsarkitekter.png);}
 #content .scene .usedby ul li.urbangreen {background-image: url(/img/logos/urbangreen.png);}
 #content .scene .usedby ul li.oeo {background-image: url(/img/logos/oeo.png);}
+#content .scene .usedby ul li.torvehallerne {background-image: url(/img/logos/torvehallerne.png);}
 #content .scene .usedby ul li.peoplegroup {background-image: url(/img/logos/peoplegroup.png);}
 #content .scene.login form {padding-bottom: 20px;}
-#content .errormessage {color: #df0000;}
+#content .scene form li.forgot {padding-top: 5px;}
+#content .scene div.messages > p.error {color: #df0000;}
 
 
 /*s-form.css*/
-#content {}
-#content form {
+form {
 }
-#content fieldset {border: none; display: block;}
-#content .field {padding: 0 68px 15px; position: relative; font-size: 0; z-index: 1;}
-#content label {display: none;}
-#content .field input,
-#content .field select,
-#content .field textarea {box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; display: inline-block; vertical-align: top; border-radius: 3px; margin: 2px; outline: none; position: relative; z-index: 1;}
-#content .field input {width: 366px; height: 24px; padding: 2px 6px;}
-#content .field select {width: 381px; height: 33px; color: #333333; padding: 5px 3px 2px 2px;}
-#content .field select option {padding: 5px 3px 2px 6px;}
+fieldset {border: none; display: block;}	
+div.field {padding: 0 68px 15px; position: relative; font-size: 0; z-index: 1;}
+div.field label {display: none;}
+div.field input,
+div.field select,
+div.field textarea {box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; display: inline-block; vertical-align: top; border-radius: 3px; margin: 2px; outline: none; position: relative; z-index: 1;}
+div.field input {width: 366px; height: 24px; padding: 2px 6px;}
+div.field select {width: 381px; height: 33px; color: #333333; padding: 5px 3px 2px 2px;}
+div.field select option {padding: 5px 3px 2px 6px;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	#content .field select {width: 380px; height: 31px; padding: 2px 3px 2px 7px; 
+	div.field select {width: 380px; height: 31px; padding: 2px 3px 2px 7px;
 		background: #ffffff url(/janitor/admin/img/bg_icons.png) no-repeat 360px -977px;
 		-webkit-appearance: none;
 	}
 }
-#content .field textarea {width: 372px; height: 100px; overflow: auto; padding: 6px 0 2px 6px;}
-#content .field.short textarea {height: 40px;}
-#content .field textarea.autoexpand {width: 366px; padding: 6px 6px 2px; overflow: hidden;}
-#content .field .pseudolabel {position: absolute; font-size: 14px; display: inline-block; padding: 5px 6px; z-index: 2;}
-#content .field.checkbox,
-#content .field.boolean {}
-#content .field.checkbox input,
-#content .field.boolean input {display: inline-block; vertical-align: top; width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
-#content .field.checkbox label,
-#content .field.boolean label {width: auto; display: inline-block; vertical-align: top; font-size: 14px; line-height: 1em;}
-#content .field.radiobuttons {}
-#content .field.radiobuttons > label {display: block; font-size: 14px; line-height: 1em; padding: 0 0 0 3px;}
-#content .field.radiobuttons > label:after {content: ":";}
-#content .field.radiobuttons div.item {padding: 10px 0 0;}
-#content .field.radiobuttons div.item input {width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
-#content .field.radiobuttons div.item label {font-size: 14px; line-height: 1em; display: inline-block; vertical-align: top; text-align: left; width: auto;}
-#content .field.files {border: 3px dashed #dedede; display: block; width: 378px; border-radius: 5px; position: relative; margin: 2px 68px 17px; padding: 0;}
-#content .field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;}
-#content .field.files label {color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
-#content .field.files.loading label {display: none;}
-#content .field.files.loading {background: transparent url(/janitor/admin/img/gx_loader.gif) no-repeat center center;}
-#content .field.location {}
-#content .field.location div.location {padding-bottom: 2px;}
-#content .field.location div.latitude {padding-right: 2px;}
-#content .field.location div.latitude,
-#content .field.location div.longitude {display: inline-block; vertical-align: top;}
-#content .field.location div.latitude input,
-#content .field.location div.longitude input {width: 173px;}
-#content .field.location.geolocation div.geolocation {width: 30px; height: 30px; display: inline-block; vertical-align: top; cursor: pointer;
+div.field textarea {width: 372px; height: 100px; overflow: auto; padding: 6px 0 2px 6px;}
+div.field.short textarea {height: 40px;}
+div.field textarea.autoexpand {width: 366px; padding: 6px 6px 2px; overflow: hidden;}
+div.field .pseudolabel {position: absolute; font-size: 14px; display: inline-block; padding: 5px 6px; z-index: 2;}
+div.field.checkbox,
+div.field.boolean {}
+div.field.checkbox input,
+div.field.boolean input {display: inline-block; vertical-align: top; width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
+div.field.checkbox label,
+div.field.boolean label {width: auto; display: inline-block; vertical-align: top; font-size: 14px; line-height: 1em;}
+div.field.radiobuttons {}
+div.field.radiobuttons > label {display: block; font-size: 14px; line-height: 1em; padding: 0 0 0 3px;}
+div.field.radiobuttons > label:after {content: ":";}
+div.field.radiobuttons div.item {padding: 10px 0 0;}
+div.field.radiobuttons div.item input {width: auto; height: auto; padding: 0; margin: 1px 10px 0 3px; border: 0;}
+div.field.radiobuttons div.item label {font-size: 14px; line-height: 1em; display: inline-block; vertical-align: top; text-align: left; width: auto;}
+div.field input[type="integer"],
+div.field input[type="number"] {
+	-moz-appearance: textfield;
+}
+div.field input[type="integer"]::-webkit-inner-spin-button,
+div.field input[type="integer"]::-webkit-outer-spin-button,
+div.field input[type="number"]::-webkit-inner-spin-button,
+div.field input[type="number"]::-webkit-outer-spin-button {margin: 0;
+	-webkit-appearance: none;
+}
+div.field.files {border: 3px dashed #dedede; display: block; width: 378px; border-radius: 5px; position: relative; margin: 2px 68px 17px; padding: 0;}
+div.field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;}
+div.field.files label {color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
+div.field.files.loading label {display: none;}
+div.field.files.loading {background: transparent url(/janitor/admin/img/gx_loader.gif) no-repeat center center;}
+div.field.location {}
+div.field.location div.location {padding-bottom: 2px;}
+div.field.location div.latitude {padding-right: 2px;}
+div.field.location div.latitude,
+div.field.location div.longitude {display: inline-block; vertical-align: top;}
+div.field.location div.latitude input,
+div.field.location div.longitude input {width: 173px;}
+div.field.location.geolocation div.geolocation {width: 30px; height: 30px; display: inline-block; vertical-align: top; cursor: pointer;
 	background: transparent url(/janitor/admin/img/gx_geolocation.png) no-repeat 5px 8px;
 }
-#content .field.location.geolocation div.latitude input,
-#content .field.location.geolocation div.longitude input {width: 158px;}
+div.field.location.geolocation div.latitude input,
+div.field.location.geolocation div.longitude input {width: 158px;}
 iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; left: 0; z-index: 100; border: 1px solid #666666; background-color: #ffffff;}
-#content .field.focus input,
-#content .field.focus textarea {margin: 0;}
-#content .field.focus select {padding: 4px 3px 1px 0px;}
+div.field.focus input,
+div.field.focus textarea {margin: 0;}
+div.field.focus select {padding: 4px 3px 1px 0px;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	#content .field.focus select {padding: 2px 3px 3px 5px;
+	div.field.focus select {padding: 2px 3px 3px 5px;
 		background-position: 358px -979px;
 	}
 }
-#content .field.focus input,
-#content .field.focus select,
-#content .field.focus textarea {border: 3px solid #5c5c5c;}
-#content .field.radiobuttons.focus input,
-#content .field.checkbox.focus input,
-#content .field.boolean.focus input {margin: 1px 10px 0 3px; border: none;}
-#content .field.location.focus input {margin: 2px; border: 1px solid #dcdcdc;}
-#content .field.location.focus input.focus {margin: 0; border: 3px solid #5c5c5c;}
-#content .field.files.focus {border-color: #c8e183;}
-#content .field.files.focus input[type=file] {margin: 0; border: none;}
-#content .field.files.focus label {background-color: #c8e183;}
-#content .field input.default,
-#content .field select.default,
-#content .field textarea.default,
-#content .field .pseudolabel {color: #aaaaaa;}
-#content .field .indicator {position: absolute; top: 4px; left: 455px; width: 25px; height: 25px;}
-#content .field.required .indicator { 
+div.field.focus input,
+div.field.focus select,
+div.field.focus textarea {border: 3px solid #5c5c5c;}
+div.field.radiobuttons.focus input,
+div.field.checkbox.focus input,
+div.field.boolean.focus input {margin: 1px 10px 0 3px; border: none;}
+div.field.location.focus input {margin: 2px; border: 1px solid #dcdcdc;}
+div.field.location.focus input.focus {margin: 0; border: 3px solid #5c5c5c;}
+div.field.files.focus {border-color: #c8e183;}
+div.field.files.focus input[type=file] {margin: 0; border: none;}
+div.field.files.focus label {background-color: #c8e183;}
+div.field input.default,
+div.field select.default,
+div.field textarea.default,
+div.field .pseudolabel {color: #aaaaaa;}
+div.field .indicator {position: absolute; top: 4px; left: 455px; width: 25px; height: 25px;}
+div.field.required .indicator {
 	background: transparent url(/janitor/admin/img/bg_icons.png) no-repeat 0 -292px;
 }
-#content .field.text.required .indicator {background-position: 0 -296px;}
-#content .field.radiobuttons .indicator,
-#content .field.checkbox .indicator,
-#content .field.boolean .indicator {top: -5px;}
-#content .field.files .indicator {left: 404px; top: -1px;}
-#content .field.correct .indicator {background-position: 2px -320px;}
-#content .field.text.correct .indicator {background-position: 2px -321px;}
-#content .field.error input,
-#content .field.error textarea {margin: 0;}
-#content .field.error select {padding: 3px 3px 2px 0px;}
-#content .field.error input,
-#content .field.error select,
-#content .field.error textarea {border: 3px solid #a62300;}
+div.field.text.required .indicator {background-position: 0 -296px;}
+div.field.radiobuttons .indicator,
+div.field.checkbox .indicator,
+div.field.boolean .indicator {top: -5px;}
+div.field.files .indicator {left: 404px; top: -1px;}
+div.field.correct .indicator {background-position: 2px -320px;}
+div.field.text.correct .indicator {background-position: 2px -321px;}
+div.field.error input,
+div.field.error textarea {margin: 0;}
+div.field.error select {padding: 3px 3px 2px 0px;}
+div.field.error input,
+div.field.error select,
+div.field.error textarea {border: 3px solid #a62300;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	#content .field.error select {padding: 2px 3px 3px 5px;
+	div.field.error select {padding: 2px 3px 3px 5px;
 		background-position: 358px -979px;
 	}
 }
-#content .field.radiobuttons.error input,
-#content .field.checkbox.error input,
-#content .field.boolean.error input {margin: 1px 10px 0 3px; border: none;}
-#content .field.location.error input {margin: 2px; border: 1px solid #dcdcdc;}
-#content .field.location.error input.error {margin: 0; border: 3px solid #a62300;}
-#content .field.files.error {border-color: #a62300;}
-#content ul.actions {}
-#content ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 10px 10px 0; vertical-align: top;
+div.field.radiobuttons.error input,
+div.field.checkbox.error input,
+div.field.boolean.error input {margin: 1px 10px 0 3px; border: none;}
+div.field.location.error input {margin: 2px; border: 1px solid #dcdcdc;}
+div.field.location.error input.error {margin: 0; border: 3px solid #a62300;}
+div.field.files.error {border-color: #a62300;}
+ul.actions {}
+ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 10px 10px 0; vertical-align: top;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
 }
-#content ul.actions input.button {width: auto; height: 28px; padding: 3px 9px; display: inline-block; vertical-align: top;}
+ul.actions input.button {width: auto; height: 28px; padding: 3px 9px; display: inline-block; vertical-align: top;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	#content ul.actions input.button {padding: 3px 12px 5px;}
+	ul.actions input.button {padding: 3px 12px 5px;}
 }
-#content ul.actions a.button {display: block; text-decoration: none; height: 16px; padding: 6px 12px 8px;}
-#content ul.actions input.button,
+ul.actions a.button,
+#content ul.actions a.button {display: block; text-decoration: none; height: 16px; padding: 6px 12px 8px; text-decoration: none;}
+ul.actions input.button,
+ul.actions a.button,
 #content ul.actions a.button {font-size: 14px; background-color: #dedede; color: #333333; border: none; cursor: pointer; border-radius: 3px;}
-#content ul.actions input.button.primary,
-#content ul.actions a.button.primary {background-color: #8c9399; color: #ffffff;}
-#content ul.actions input.button.secondary,
-#content ul.actions a.button.secondary {background-color: #8c9399; color: #ffffff;}
-#content .field div.help {position: absolute; left: 475px; top: 6px; width: 200px;}
-#content .field.files div.help {left: 404px;}
-#content .field div.error,
-#content .field div.hint {display: none; padding: 5px; border-radius: 3px; font-size: 12px; margin-top: -3px;}
-#content .field div.error {border: 1px solid #a62300; color: #a62300; background: #ffddd5;}
-#content .field.error div.error {display: block;}
-#content .field div.hint {z-index: 9; border: 1px solid #007633; color: #007633; background: #d0f4e0;}
-#content .field.focus div.hint,
-#content .field.hover div.hint {display: block;}
-#content .field.html {z-index: 3;}
-#content .field.html.optionsshown {z-index: 60 !important;}
-#content .field.html div.html_editor_hint {width: 383px;}
-#content .field.html div.html_editor_hint_content {display: none;}
-#content .field.html div.html_editor_hint h3,
-#content .field.html div.html_editor_hint h4,
-#content .field.html div.html_editor_hint p {padding: 0 0 5px;}
-#content .field.html div.html_editor_hint p+h3,
-#content .field.html div.html_editor_hint p+h4 {padding: 10px 0 5px;}
-#content .field.html div.html_editor_hint .open,
-#content .field.html div.html_editor_hint .close {font-size: 13px; line-height: 1em; cursor: pointer; vertical-align: top; margin: 3px 3px 0; border-radius: 13px; background-color: #313942; padding: 6px 10px 7px; color: #ffffff; margin: 10px 0 20px; text-align: center;}
-#content .field.html > textarea {display: none;}
-#content .field.html > textarea.show {display: block; height: 200px;}
-#content .field.html > label {display: block; width: 377px;}
-#content .field.html > label span {font-size: 0.723em; float: right; padding: 3px 0 0; cursor: pointer;}
-#content .field.html > .indicator {top: 33px;}
-#content .field.html .viewer {display: none;}
-#content .field.html .editor {width: 385px; position: relative; z-index: 3;}
-#content .field.html ul.options {height: 40px; display: block; vertical-align: top; width: 30px; position: relative; z-index: 10; padding: 0;}
-#content .field.html ul.options li {font-size: 13px; line-height: 1em; cursor: pointer; vertical-align: top; margin: 3px 3px 0; border-radius: 13px; background-color: #313942; padding: 6px 10px 7px; color: #ffffff; width: 330px; display: none;}
-#content .field.html ul.options li.add {display: inline-block; font-size: 16px; line-height: 1em; padding: 2px 4px 4px; width: 14px; text-align: center;}
-#content .field.html ul.options.show li.add {top: 0; left: 0; background-color: #df0000;}
-#content .field.html ul.options.show li {display: inline-block; position: relative; top: -26px; left: 26px;}
-#content .field.html .editor div.tag {margin: 0 0 1px; padding: 0 0 0 30px; background-color: #dcdcdc; position: relative; border-radius: 3px; border: 2px solid #f5f7f8;}
-#content .field.html .editor div.dragged {z-index: 15;}
-#content .field.html .editor div.tag .drag {display: none; position: absolute; top: 0px; left: -20px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: move;}
-#content .field.html .editor div.tag .remove {display: none; position: absolute; top: 0px; right: -10px; border-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: pointer;
+ul.actions input.button.primary,
+ul.actions a.button.primary {background-color: #8c9399; color: #ffffff;}
+ul.actions input.button.secondary,
+ul.actions a.button.secondary {background-color: #8c9399; color: #ffffff;}
+ul.actions a.button.disabled,
+ul.actions input.button.disabled,
+ul.actions a.button.disabled:hover,
+ul.actions input.button.disabled:hover {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
+div.field div.help {position: absolute; left: 475px; top: 6px; width: 200px;}
+div.field.files div.help {left: 404px;}
+div.field div.error,
+div.field div.hint {display: none; padding: 5px; border-radius: 3px; font-size: 12px;}
+div.field div.error {border: 1px solid #a62300; color: #a62300; background: #ffddd5;}
+div.field.error div.error {display: block;}
+div.field div.hint {z-index: 9; border: 1px solid #007633; color: #007633; background: #d0f4e0;}
+div.field.focus div.hint,
+div.field.hover div.hint {display: block;}
+div.field.error div.hint {border-bottom-left-radius: 0; border-bottom-right-radius: 0;}
+div.field.focus div.hint+div.error,
+div.field.hover div.hint+div.error {border-top-left-radius: 0; border-top-right-radius: 0; border-top: none;}
+div.field.html {z-index: 3;}
+div.field.html.optionsshown {z-index: 60 !important;}
+div.field.html div.html_editor_hint {width: 383px;}
+div.field.html div.html_editor_hint_content {display: none;}
+div.field.html div.html_editor_hint h3,
+div.field.html div.html_editor_hint h4,
+div.field.html div.html_editor_hint p {padding: 0 0 5px;}
+div.field.html div.html_editor_hint p+h3,
+div.field.html div.html_editor_hint p+h4 {padding: 10px 0 5px;}
+div.field.html div.html_editor_hint .open,
+div.field.html div.html_editor_hint .close {font-size: 13px; line-height: 1em; cursor: pointer; vertical-align: top; margin: 3px 3px 0; border-radius: 13px; background-color: #313942; padding: 6px 10px 7px; color: #ffffff; margin: 10px 0 20px; text-align: center;}
+div.field.html > textarea {display: none;}
+div.field.html > textarea.show {display: block; height: 200px;}
+div.field.html > label {display: block; width: 377px;}
+div.field.html > label span {font-size: 0.723em; float: right; padding: 3px 0 0; cursor: pointer;}
+div.field.html > .indicator {top: 33px;}
+div.field.html .viewer {display: none;}
+div.field.html .editor {width: 385px; position: relative; z-index: 3;}
+div.field.html ul.options {height: 40px; display: block; vertical-align: top; width: 30px; position: relative; z-index: 10; padding: 0;}
+div.field.html ul.options li {font-size: 13px; line-height: 1em; cursor: pointer; vertical-align: top; margin: 3px 3px 0; border-radius: 13px; background-color: #313942; padding: 6px 10px 7px; color: #ffffff; width: 330px; display: none;}
+div.field.html ul.options li.add {display: inline-block; font-size: 16px; line-height: 1em; padding: 2px 4px 4px; width: 14px; text-align: center;}
+div.field.html ul.options.show li.add {top: 0; left: 0; background-color: #df0000;}
+div.field.html ul.options.show li {display: inline-block; position: relative; top: -26px; left: 26px;}
+div.field.html .editor div.tag {margin: 0 0 1px; padding: 0 0 0 30px; background-color: #dcdcdc; position: relative; border-radius: 3px; border: 2px solid #f5f7f8;}
+div.field.html .editor div.dragged {z-index: 15;}
+div.field.html .editor div.tag .drag {display: none; position: absolute; top: 0px; left: -20px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: move;}
+div.field.html .editor div.tag .remove {display: none; position: absolute; top: 0px; right: -10px; border-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: pointer;
 	background: #dedede url(/janitor/admin/img/bg_icons.png) no-repeat 8px -42px;
 }
-#content .field.html .editor div.tag ul.type {display: block; z-index: 5; position: absolute; width: 30px; top: 0px; left: 0px; padding: 0;}
-#content .field.html .editor div.tag ul.type li {display: none; text-transform: uppercase; padding: 9px 4px; text-align: center; font-size: 11px; cursor: default;}
-#content .field.html .editor div.tag ul.type.clickable li {cursor: pointer;}
-#content .field.html .editor div.tag ul.type li.selected {display: block;}
-#content .field.html .editor div.tag ul.type.open {z-index: 10; border: 2px solid #5c5c5c; margin: -2px; background-color: #F5F7F8;}
-#content .field.html .editor div.tag ul.type.open li {display: block; color: #5c5c5c !important;}
-#content .field.html .editor div.tag ul.type.open li:hover {background-color: #dedede;}
-#content .field.html .editor div.tag ul.type.open li.selected {background-color: #5c5c5c !important; color: #ffffff !important;}
-#content .field.html .editor div.tag ul.type li.code {font-size: 8px; padding-top: 11px;}
-#content .field.html .editor div.tag ul.type li.media {font-size: 8px; padding-top: 11px;}
-#content .field.html .editor div.tag ul.type li.youtube {font-size: 8px; padding: 7px 5px; max-width: 4.4ch; word-wrap: break-word;}
-#content .field.html .editor div.tag ul.type li.vimeo {font-size: 8px; padding-top: 11px;}
-#content .field.html .editor div.tag div.text {display: inline-block; vertical-align: top; width: 337px; height: auto; padding: 4px 6px; line-height: 1.375em; border-radius: 3px; background-color: #F5F7F8; color: #333333; box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; min-height: 20px;}
-#content .field.html .editor div.tag div.text em,
-#content .field.html .editor div.tag div.text strong,
-#content .field.html .editor div.tag div.text a {background-color: rgba(255, 0, 0, 0.3); cursor: default; font-size: inherit;}
-#content .field.html .editor div.tag.focus {background-color: #5c5c5c; padding: 0 0 0 30px; border: 2px solid #5c5c5c;}
-#content .field.html .editor div.tag.focus div.text {border-color: #5c5c5c;}
-#content .field.html .editor div.tag.focus .drag {background-color: #5c5c5c; top: -2px;}
-#content .field.html .editor div.tag.focus ul.type li {color: #ffffff;}
-#content .field.html .editor div.tag.h1 div.text {font-size: 36px;}
-#content .field.html .editor div.tag.h2 div.text {font-size: 30px;}
-#content .field.html .editor div.tag.h3 div.text {font-size: 30px;}
-#content .field.html .editor div.tag.h4 div.text {font-size: 16px;}
-#content .field.html .editor div.tag.h5 div.text {font-size: 14px;}
-#content .field.html .editor div.tag.p div.text {font-size: 14px;}
-#content .field.html .editor div.tag.ul {padding-left: 50px;}
-#content .field.html .editor div.tag.ol {padding-left: 50px;}
-#content .field.html .editor div.tag div.li {font-size: 14px;}
-#content .field.html .editor div.tag div.li div.text {width: 317px;}
-#content .field.html .editor div.tag.file .text {padding: 0 6px; height: 28px;}
-#content .field.html .editor div.tag.file.done .text {color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto; text-decoration: underline;}
-#content .field.html .editor div.tag.file.done.focus .text {color: #333333;}
-#content .field.html .editor div.tag.file .text label {padding: 5px 0 0; display: block; text-align: center; font-size: 13px; line-height: 20px; position: absolute; z-index: 1; width: 332px; color: #aaaaaa;}
-#content .field.html .editor div.tag.file input {width: 319px; opacity: 0; height: 18px; position: relative; z-index: 2;}
-#content .field.html .editor div.tag.media .text {padding: 0 6px; height: 28px;}
-#content .field.html .editor div.tag.media.done .text {color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto;}
-#content .field.html .editor div.tag.media.done.focus .text {color: #333333;}
-#content .field.html .editor div.tag.media .text label {padding: 5px 0 0; display: block; text-align: center; font-size: 13px; line-height: 20px; position: absolute; z-index: 1; width: 332px; color: #aaaaaa;}
-#content .field.html .editor div.tag.media input {width: 319px; opacity: 0; height: 18px; position: relative; z-index: 2;}
-#content .field.html .editor div.tag.media img {width: 347px; margin: 2px;}
-#content .field.html .editor div.tag.vimeo .text,
-#content .field.html .editor div.tag.youtube .text {padding: 0 6px; height: 28px; color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto;}
-#content .field.html .editor div.tag.vimeo.focus .text,
-#content .field.html .editor div.tag.youtube.focus .text {color: #333333;}
+div.field.html .editor div.tag ul.type {display: block; z-index: 5; position: absolute; width: 30px; top: 0px; left: 0px; padding: 0;}
+div.field.html .editor div.tag ul.type li {display: none; text-transform: uppercase; padding: 9px 4px; text-align: center; font-size: 11px; cursor: default;}
+div.field.html .editor div.tag ul.type.clickable li {cursor: pointer;}
+div.field.html .editor div.tag ul.type li.selected {display: block;}
+div.field.html .editor div.tag ul.type.open {z-index: 10; border: 2px solid #5c5c5c; margin: -2px; background-color: #F5F7F8;}
+div.field.html .editor div.tag ul.type.open li {display: block; color: #5c5c5c !important;}
+div.field.html .editor div.tag ul.type.open li:hover {background-color: #dedede;}
+div.field.html .editor div.tag ul.type.open li.selected {background-color: #5c5c5c !important; color: #ffffff !important;}
+div.field.html .editor div.tag ul.type li.code {font-size: 8px; padding-top: 11px;}
+div.field.html .editor div.tag ul.type li.media {font-size: 8px; padding-top: 11px;}
+div.field.html .editor div.tag ul.type li.youtube {font-size: 8px; padding: 7px 5px; max-width: 4.4ch; word-wrap: break-word;}
+div.field.html .editor div.tag ul.type li.vimeo {font-size: 8px; padding-top: 11px;}
+div.field.html .editor div.tag div.text {display: inline-block; vertical-align: top; width: 337px; height: auto; padding: 4px 6px; line-height: 1.375em; border-radius: 3px; background-color: #F5F7F8; color: #333333; box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; min-height: 20px;}
+div.field.html .editor div.tag div.text em,
+div.field.html .editor div.tag div.text strong,
+div.field.html .editor div.tag div.text a {background-color: rgba(255, 0, 0, 0.3); cursor: default; font-size: inherit;}
+div.field.html .editor div.tag.focus {background-color: #5c5c5c; padding: 0 0 0 30px; border: 2px solid #5c5c5c;}
+div.field.html .editor div.tag.focus div.text {border-color: #5c5c5c;}
+div.field.html .editor div.tag.focus .drag {background-color: #5c5c5c; top: -2px;}
+div.field.html .editor div.tag.focus ul.type li {color: #ffffff;}
+div.field.html .editor div.tag.h1 div.text {font-size: 36px;}
+div.field.html .editor div.tag.h2 div.text {font-size: 30px;}
+div.field.html .editor div.tag.h3 div.text {font-size: 30px;}
+div.field.html .editor div.tag.h4 div.text {font-size: 16px;}
+div.field.html .editor div.tag.h5 div.text {font-size: 14px;}
+div.field.html .editor div.tag.p div.text {font-size: 14px;}
+div.field.html .editor div.tag.ul {padding-left: 50px;}
+div.field.html .editor div.tag.ol {padding-left: 50px;}
+div.field.html .editor div.tag div.li {font-size: 14px;}
+div.field.html .editor div.tag div.li div.text {width: 317px;}
+div.field.html .editor div.tag.file .text {padding: 0 6px; height: 28px;}
+div.field.html .editor div.tag.file.done .text {color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto; text-decoration: underline;}
+div.field.html .editor div.tag.file.done.focus .text {color: #333333;}
+div.field.html .editor div.tag.file .text label {padding: 5px 0 0; display: block; text-align: center; font-size: 13px; line-height: 20px; position: absolute; z-index: 1; width: 332px; color: #aaaaaa;}
+div.field.html .editor div.tag.file input {width: 319px; opacity: 0; height: 18px; position: relative; z-index: 2;}
+div.field.html .editor div.tag.media .text {padding: 0 6px; height: 28px;}
+div.field.html .editor div.tag.media.done .text {color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto;}
+div.field.html .editor div.tag.media.done.focus .text {color: #333333;}
+div.field.html .editor div.tag.media .text label {padding: 5px 0 0; display: block; text-align: center; font-size: 13px; line-height: 20px; position: absolute; z-index: 1; width: 332px; color: #aaaaaa;}
+div.field.html .editor div.tag.media input {width: 319px; opacity: 0; height: 18px; position: relative; z-index: 2;}
+div.field.html .editor div.tag.media img {width: 347px; margin: 2px;}
+div.field.html .editor div.tag.vimeo .text,
+div.field.html .editor div.tag.youtube .text {padding: 0 6px; height: 28px; color: #aaaaaa; font-size: 13px; padding: 4px 6px; line-height: 20px; height: auto;}
+div.field.html .editor div.tag.vimeo.focus .text,
+div.field.html .editor div.tag.youtube.focus .text {color: #333333;}
 body #selection_options {z-index: 1100; position: absolute; background-color: #F5F7F8; border: 3px solid #5c5c5c; margin: 0px 0 0 10px; padding: 15px; border-radius: 5px;}
 body #selection_options h3 {padding: 10px 0 10px; text-align: left; font-size: 13px; margin-top: 10px; border-top: 1px solid #5c5c5c;}
 body #selection_options li {display: block; font-size: 13px; padding: 5px 0; cursor: pointer;}
@@ -512,9 +582,9 @@ body #selection_options ul.actions input.button,
 body #selection_options ul.actions a.button {background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px;}
 .delete_selection {position: absolute; z-index: 1150; top: 0; left: 0; border-radius: 8px; width: 14px; height: 14px; font-size: 10px; line-height: 14px; text-align: center; background: #ffffff; border: 1px solid #000000; cursor: pointer;}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-	#content .field.files input[type=file] {font-size: 130px;}
-	#content .field.html .editor div.tag.media input {font-size: 130px;}
-	#content .field.html .editor div.tag.file input {font-size: 130px;}	
+	div.field.files input[type=file] {font-size: 130px;}
+	div.field.html .editor div.tag.media input {font-size: 130px;}
+	div.field.html .editor div.tag.file input {font-size: 130px;}
 }
 
 
@@ -535,7 +605,7 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene ul.todos > li ul.actions.closed .close {display: none;}
 #content .scene ul.todos > li ul.actions .open {display: none;}
 #content .scene ul.todos > li ul.actions.closed .open {display: inline-block;}
-#content .scene ul.wishlists {padding-left: 50px; padding-right: 50px;}
+#content .scene ul.wishlists {padding-left: 70px; padding-right: 70px;}
 #content .scene ul.wishes {padding-left: 70px; padding-right: 70px;}
 #content .scene ul.wishes > li .image,
 #content .scene ul.wishes > li .text {display: inline-block; vertical-align: top;}
@@ -543,7 +613,10 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene ul.wishes > li h3 {padding: 0 25px 10px;}
 #content .scene ul.wishes > li div.description p {padding: 0 25px;}
 #content .scene ul.wishes dl.info {padding: 0 25px 20px;}
-#content .scene ul.wishes dl.info dd {font-size: 13px; display: block;}
+#content .scene ul.wishes dl.info dt.price {display: inline-block; vertical-align: top; width: auto;}
+#content .scene ul.wishes dl.info dd.price {display: inline-block; vertical-align: top; width: auto;}
+#content .scene ul.wishes dl.info dt.link {display: none;}
+#content .scene ul.wishes dl.info dd.link {font-size: 13px; display: block; width: auto;}
 #content .scene ul.wishes > li ul.actions {padding: 0 25px;}
 #content .scene ul.wishes > li ul.actions.reserved .reserve {display: none;}
 #content .scene ul.wishes > li ul.actions .unreserve {display: none;}
@@ -612,27 +685,44 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
 
 
+/*s-login_overlay.css*/
+#login_overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 10000;}
+#login_overlay .scene {margin: 100px auto 0; width: 304px; position: relative; padding: 50px; background: #ffffff;}
+#login_overlay .scene h1,
+#login_overlay .scene p {padding-left: 2px; padding-right: 2px;}
+#login_overlay div.field {padding: 0 0 15px;}
+#login_overlay div.field input {width: 286px;}
+#login_overlay div.field.required .indicator {left: 310px;}
+#login_overlay div.field div.help {left: 330px;}
+#login_overlay ul.actions {padding: 0 2px;}
+#login_overlay p,
+#login_overlay li.forgot {display: none;}
+#login_overlay p.relogin {display: block;}
+
+
 /*s-hovers.css*/
 #header .logo:hover,
 #navigation ul li:hover {text-decoration: none;}
 #content .scene a:hover {text-decoration: underline;}
 .terms_notification .accept:hover,
 .terms_notification .details:hover {text-decoration: underline;}
-#content ul.actions input.button:hover,
+ul.actions input.button:hover,
+ul.actions a.button:hover,
 #content ul.actions a.button:hover {background-color: #bebebe;}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover {background-color: #313942;}
-#content ul.actions input.button.secondary:hover,
-#content ul.actions a.button.secondary:hover {background-color: #313942;}
-#content .field.html ul.options li:hover {background-color: #64ad8e;}
-#content .field.html .editor div.tag:hover .drag {display: block;}
-#content .field.html .editor div.tag:hover .remove {display: block;}
+ul.actions input.button.primary:hover,
+ul.actions a.button.primary:hover {background-color: #313942;}
+ul.actions input.button.secondary:hover,
+ul.actions a.button.secondary:hover {background-color: #313942;}
+div.field.html ul.options li:hover {background-color: #64ad8e;}
+div.field.html .editor div.tag:hover .drag {display: block;}
+div.field.html .editor div.tag:hover .remove {display: block;}
 body #selection_options ul.actions input.button:hover,
 body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.docsindex .search .results .function:hover {background: #ededed;}
 #content .scene div.readstate:hover p {color: #000000;}
 #content .scene div.comments h2:hover {color: #888888;}
 #content .scene div.comments h2:hover svg.arrow line {stroke: #888888;}
+#content .scene ul.geo.active li.location:hover {text-decoration: underline;}
 #content .scene div.image p a:hover {text-decoration: none;}
 
 
@@ -671,7 +761,6 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 	font-style: normal;
 }
 
-
 /*s-pages.css*/
 #content .scene ul.info {display: none;}
 #content .scene.post div.article ul.info {display: block;}
@@ -689,7 +778,7 @@ body {}
 #header .logo {color: #04859d;}
 #navigation ul li {color: #04859d;}
 #content .scene a,
-#content .scene dl.geo.active dd {color: #04859d;}
+#content .scene ul.geo.active li.location {color: #04859d;}
 #content .scene hr {border-color: #ffb773;}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary,
