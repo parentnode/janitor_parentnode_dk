@@ -19,6 +19,7 @@ $page->pageTitle("Every good function deserves a test");
 
 if(is_array($action) && count($action)) {
 
+
 	// enable forwarding to Tests Class on all posts
 	if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 1) {
 

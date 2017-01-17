@@ -29,5 +29,8 @@
 
 		<?= $HTML->link("CSS DefaultEdit", "/janitor/tests/css-default-edit", array("wrapper" => "li.css")) ?>
 		<?= $HTML->link("CSS DefaultNew", "/janitor/tests/css-default-new", array("wrapper" => "li.css")) ?>
+
+
+		<?= $HTML->link("PHP info", "/janitor/tests/phpinfo", array("wrapper" => "li.phpinfo")) ?>
 	</ul>
 </div>
