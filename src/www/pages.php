@@ -18,9 +18,16 @@ if(is_array($action) && count($action)) {
 
 	if(count($action) == 1) {
 
-		$page->page(array(
-			"templates" => "pages/".$action[0].".php"
-		));
+		if(file_exists(LOCAL_PATH."/templates/pages/".$action[0].".php")) {
+			$page->page(array(
+				"templates" => "pages/".$action[0].".php"
+			));
+		}
+		else {
+			$page->page(array(
+				"templates" => "pages/view.php"
+			));
+		}
 		exit();
 	}
 

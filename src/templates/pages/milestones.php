@@ -6,7 +6,7 @@ $model = $IC->typeObject("todo");
 $this->bodyClass("gettingstarted");
 $this->pageTitle("Where we are heading ...");
 
-$page = $IC->getItem(array("tags" => "page:milestones", "extend" => array("user" => true)));
+$page_item = $IC->getItem(array("tags" => "page:milestones", "extend" => array("user" => true, "tags" => true, "mediae" => true)));
 
 $todolists = $IC->getItems(array("itemtype" => "todolist", "status" => 1, "order" => "position ASC", "extend" => true));
 $todotags = $IC->getTags(array("context" => "todo"));
@@ -16,38 +16,31 @@ $todotags_priority = array("General", "Backend interface");
 ?>
 <div class="scene milestones i:scene">
 
-	<div class="article id:<?= $page["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+<? if($page_item && $page_item["status"]): 
+	$media = $IC->sliceMedia($page_item); ?>
+	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
-		<h1 itemprop="headline"><?= $page["name"] ?></h1>
+		<? if($media): ?>
+		<div class="image item_id:<?= $page_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+		<? endif; ?>
 
-		<dl class="info">
-			<dt class="published_at">Date published</dt>
-			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($page["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($page["published_at"])) ?></dd>
-			<dt class="modified_at">Date modified</dt>
-			<dd class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", strtotime($page["modified_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($page["published_at"])) ?></dd>
-			<dt class="author">Author</dt>
-			<dd class="author" itemprop="author" itemprop="name"><?= $page["user_nickname"] ?></dd>
-			<dt class="publisher">Publisher</dt>
-			<dd class="publisher" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
-				<ul class="publisher_info">
-					<li class="name" itemprop="name">parentnode.dk</li>
-					<li class="logo" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-						<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
-						<span class="image_width" itemprop="width" content="720"></span>
-						<span class="image_height" itemprop="height" content="405"></span>
-					</li>
-				</ul>
-			</dd>
-			<dt class="image_info">Image</dt>
-			<dd class="image_info" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-				<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
-				<span class="image_width" itemprop="width" content="720"></span>
-				<span class="image_height" itemprop="height" content="405"></span>
-			</dd>
-		</dl>
+
+		<?= $HTML->articleTags($page_item, [
+			"context" => false
+		]) ?>
+
+
+		<h1 itemprop="headline"><?= $page_item["name"] ?></h1>
+
+
+		<?= $HTML->articleInfo($page_item, "/pages/milestones", [
+			"media" => $media, 
+			"sharing" => true
+		]) ?>
+
 
 		<div class="articlebody" itemprop="articleBody">
-			<?= $page["html"] ?>
+			<?= $page_item["html"] ?>
 
 			<div class="todolists">
 			<? if($todolists): ?>
@@ -116,5 +109,6 @@ $todotags_priority = array("General", "Backend interface");
 		</div>
 
 	</div>
+<? endif; ?>
 
 </div>

@@ -14,6 +14,15 @@ $this->pageTitle("It's just improvements");
 	<ul class="changes">
 		<li>Video auto conversion now supports output in mp4, webm, ogv, 3gp and mov.</li>
 		<li>Person model added to core itemtypes.</li>
+		<li>New Setup and Upgrade UI.</li>
+		<li>Shop model, 1st draft.</li>
+		<li>Membership model, 1st draft.</li>
+		<li>Subscription model, 1st draft.</li>
+		<li>Cache UI.</li>
+		<li>Global "duplicate item" function.</li>
+		<li>Stripe integration.</li>
+		<li>Added AutoComplete setting for inputs via Model.</li>
+		<li>And lot's of bug-fixes and minor enhancements.</li>
 	</ul>
 
 
