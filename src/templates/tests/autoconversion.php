@@ -75,7 +75,6 @@ class CurlRequest {
 			'last_url' => ''
 		);
 
-
 		if($error) {
 			$result['curl_error'] = $error;
 			return $result;
@@ -281,17 +280,16 @@ $curl->init($params);
 	</div>
 
 
-
 	<div class="tests">
 		<h3>Video: mp4 input</h3>
 
-		<? if(autoconvertVideo("mp4/256x144.mp4", array(90000, 110000), 256, 144, "h264")): ?>
+		<? if(autoconvertVideo("mp4/256x144.mp4", array(100000, 120000), 256, 144, "h264")): ?>
 			<div class="testpassed"><p>mp4 -> mp4 (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/mp4/256x144.mp4") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>mp4 -> mp4 (same proportion) - API error</p></div>
 		<? endif; ?>
 
-		<? if(autoconvertVideo("mp4/300x300.mp4", array(160000, 180000), 300, 300, "h264")): ?>
+		<? if(autoconvertVideo("mp4/300x300.mp4", array(170000, 190000), 300, 300, "h264")): ?>
 			<div class="testpassed"><p>mp4 -> mp4 (different proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/mp4/300x300.mp4") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>mp4 -> mp4 (different proportion) - API error</p></div>
@@ -320,7 +318,9 @@ $curl->init($params);
 		<? else: ?>
 			<div class="testfailed"><p>mp4 -> 3gp (same proportion) - API error</p></div>
 		<? endif; ?>
+
 	</div>
+
 
 	<div class="tests">
 		<h3>Video: mov input</h3>
@@ -429,7 +429,7 @@ $curl->init($params);
 			<div class="testfailed"><p>ogv -> mov (same proportion) - API error</p></div>
 		<? endif; ?>
 
-		<? if(autoconvertVideo("ogv/256x144.mp4", array(90000, 110000), 256, 144, "h264")): ?>
+		<? if(autoconvertVideo("ogv/256x144.mp4", array(100000, 120000), 256, 144, "h264")): ?>
 			<div class="testpassed"><p>ogv -> mp4 (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/ogv/256x144.mp4") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>ogv -> mp4 (same proportion) - API error</p></div>
@@ -469,7 +469,7 @@ $curl->init($params);
 			<div class="testfailed"><p>3gp -> mov (same proportion) - API error</p></div>
 		<? endif; ?>
 
-		<? if(autoconvertVideo("3gp/256x144.mp4", array(90000, 110000), 256, 144, "h264")): ?>
+		<? if(autoconvertVideo("3gp/256x144.mp4", array(100000, 120000), 256, 144, "h264")): ?>
 			<div class="testpassed"><p>3gp -> mp4 (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/3gp/256x144.mp4") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>3gp -> mp4 (same proportion) - API error</p></div>
@@ -551,10 +551,11 @@ $curl->init($params);
 		<? endif; ?>
 	</div>
 
+
 	<?
 	// cleanup
-	$fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
-	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
+//	$fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
+//	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
 	?>
 	
 </div>
