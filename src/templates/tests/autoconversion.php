@@ -554,8 +554,8 @@ $curl->init($params);
 
 	<?
 	// cleanup
-	$fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
-	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
+	// $fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
+	// $fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
 	?>
 	
 </div>
