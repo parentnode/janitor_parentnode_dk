@@ -445,7 +445,7 @@ $curl->init($params);
 	<div class="tests">
 		<h3>Video: 3gp input</h3>
 		
-		<? if(autoconvertVideo("3gp/256x144.3gp", array(340000, 360000), 352, 288, "s263")): ?>
+		<? if(autoconvertVideo("3gp/256x144.3gp", array(340000, 370000), 352, 288, "s263")): ?>
 			<div class="testpassed"><p>3gp -> 3gp (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/3gp/256x144.3gp") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>3gp -> 3gp (same proportion) - API error</p></div>
@@ -469,7 +469,7 @@ $curl->init($params);
 			<div class="testfailed"><p>3gp -> mov (same proportion) - API error</p></div>
 		<? endif; ?>
 
-		<? if(autoconvertVideo("3gp/256x144.mp4", array(100000, 120000), 256, 144, "h264")): ?>
+		<? if(autoconvertVideo("3gp/256x144.mp4", array(90000, 120000), 256, 144, "h264")): ?>
 			<div class="testpassed"><p>3gp -> mp4 (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/3gp/256x144.mp4") ?>)</p></div>
 		<? else: ?>
 			<div class="testfailed"><p>3gp -> mp4 (same proportion) - API error</p></div>
@@ -554,8 +554,8 @@ $curl->init($params);
 
 	<?
 	// cleanup
-	// $fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
-	// $fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
+	$fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
+	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
 	?>
 	
 </div>
