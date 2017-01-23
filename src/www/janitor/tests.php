@@ -38,7 +38,6 @@ if(is_array($action) && count($action)) {
 	// wkhtmlto - download pdf test
 	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 2 && $action[0] == "pdf" && $action[1] = "download") {
 
-		print "test";
 		$file = PRIVATE_FILE_PATH."/pdf-test.pdf";
 
 		include_once("classes/system/pdf.class.php");
