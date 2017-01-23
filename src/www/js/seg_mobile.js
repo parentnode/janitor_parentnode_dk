@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2017-01-17 10:40:34
+js-merged @ 2017-01-23 14:27:30
 */
 
 /*seg_mobile_include.js*/
@@ -10,15 +10,16 @@ js-merged @ 2017-01-17 10:40:34
 /*seg_mobile.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
-	u.version = "0.9.1";
+	u.version = "0.9.2";
 	u.bug = u.nodeId = u.exception = function() {};
-	u.stats = new function() {this.pageView = function(){};this.event = function(){};this.customVar = function(){};}
+	u.stats = new function() {this.pageView = function(){};this.event = function(){};}
 }
+u.bug_console_only = true;
 Util.debugURL = function(url) {
 	if(u.bug_force) {
 		return true;
 	}
-	return document.domain.match(/.local$/);
+	return document.domain.match(/(\.local|\.proxy)$/);
 }
 Util.nodeId = function(node, include_path) {
 	try {
@@ -504,9 +505,12 @@ Util.clickableElement = u.ce = function(node, _options) {
 		u.ac(node, "clickable");
 	}
 	if(typeof(u.e) != "undefined" && typeof(u.e.click) == "function") {
-		u.e.click(node);
+		u.e.click(node, _options);
 		if(node._click_type == "link") {
 			node.clicked = function(event) {
+				if(typeof(node.preClicked) == "function") {
+					node.preClicked();
+				}
 				if(event && (event.metaKey || event.ctrlKey)) {
 					window.open(this.url);
 				}
@@ -643,6 +647,15 @@ Util.hasFixedParent = u.hfp = function(node) {
 		node = node.parentNode;
 	}
 	return false;
+}
+Util.insertAfter = u.ia = function(after_node, insert_node) {
+	var next_node = u.ns(after_node);
+	if(next_node) {
+		after_node.parentNode.insertBefore(next_node, insert_node);
+	}
+	else {
+		after_node.parentNode.appendChild(insert_node);
+	}
 }
 Util.selectText = function(node) {
 	var selection = window.getSelection();
@@ -912,35 +925,46 @@ Util.Events = u.e = new function() {
 			this.moved(event);
 		}
 	}
-	this.hold = function(node) {
+	this.hold = function(node, _options) {
+		node.e_hold_options = _options ? _options : {};
+		node.e_hold_options.eventAction = u.stringOr(node.e_hold_options.eventAction, "Held");
 		node.e_hold = true;
 		u.e.addStartEvent(node, this._inputStart);
 	}
 	this._held = function(event) {
-		u.stats.event(this, "held");
+		this.e_hold_options.event = event;
+		u.stats.event(this, this.e_hold_options);
 		u.e.resetNestedEvents(this);
 		if(typeof(this.held) == "function") {
 			this.held(event);
 		}
 	}
-	this.click = this.tap = function(node) {
+	this.click = this.tap = function(node, _options) {
+		node.e_click_options = _options ? _options : {};
+		node.e_click_options.eventAction = u.stringOr(node.e_click_options.eventAction, "Clicked");
 		node.e_click = true;
 		u.e.addStartEvent(node, this._inputStart);
 	}
 	this._clicked = function(event) {
-		u.stats.event(this, "clicked");
+		if(this.e_click_options) {
+			this.e_click_options.event = event;
+			u.stats.event(this, this.e_click_options);
+		}
 		u.e.resetNestedEvents(this);
 		if(typeof(this.clicked) == "function") {
 			this.clicked(event);
 		}
 	}
-	this.dblclick = this.doubletap = function(node) {
+	this.dblclick = this.doubletap = function(node, _options) {
+		node.e_dblclick_options = _options ? _options : {};
+		node.e_dblclick_options.eventAction = u.stringOr(node.e_dblclick_options.eventAction, "DblClicked");
 		node.e_dblclick = true;
 		u.e.addStartEvent(node, this._inputStart);
 	}
 	this._dblclicked = function(event) {
 		if(u.t.valid(this.t_clicked) && event) {
-			u.stats.event(this, "dblclicked");
+			this.e_dblclick_options.event = event;
+			u.stats.event(this, this.e_dblclick_options);
 			u.e.resetNestedEvents(this);
 			if(typeof(this.dblclicked) == "function") {
 				this.dblclicked(event);
@@ -1036,7 +1060,6 @@ u.e.addWindowEvent = function(node, type, action) {
 }
 u.e.removeWindowEvent = function(node, type, id) {
 	u.e.removeEvent(window, type, window["_OnWindowEvent_callback_"+id]);
-	window["_OnWindowEvent_node_"+id]["_OnWindowEvent_callback_"+id] = null;
 	window["_OnWindowEvent_node_"+id] = null;
 	window["_OnWindowEvent_callback_"+id] = null;
 }
@@ -1342,19 +1365,22 @@ Util.request = function(node, url, _options) {
 	node[request_id].request_url = url;
 	node[request_id].request_method = "GET";
 	node[request_id].request_async = true;
-	node[request_id].request_params = "";
+	node[request_id].request_data = "";
 	node[request_id].request_headers = false;
 	node[request_id].callback_response = "response";
+	node[request_id].callback_error = "responseError";
 	node[request_id].jsonp_callback = "callback";
 	if(typeof(_options) == "object") {
 		var argument;
 		for(argument in _options) {
 			switch(argument) {
 				case "method"				: node[request_id].request_method		= _options[argument]; break;
-				case "params"				: node[request_id].request_params		= _options[argument]; break;
+				case "params"				: node[request_id].request_data			= _options[argument]; break;
+				case "data"					: node[request_id].request_data			= _options[argument]; break;
 				case "async"				: node[request_id].request_async		= _options[argument]; break;
 				case "headers"				: node[request_id].request_headers		= _options[argument]; break;
 				case "callback"				: node[request_id].callback_response	= _options[argument]; break;
+				case "error_callback"		: node[request_id].callback_error		= _options[argument]; break;
 				case "jsonp_callback"		: node[request_id].jsonp_callback		= _options[argument]; break;
 			}
 		}
@@ -1375,7 +1401,7 @@ Util.request = function(node, url, _options) {
 		}
 		try {
 			if(node[request_id].request_method.match(/GET/i)) {
-				var params = u.JSONtoParams(node[request_id].request_params);
+				var params = u.JSONtoParams(node[request_id].request_data);
 				node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
 				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
 				node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -1393,11 +1419,11 @@ Util.request = function(node, url, _options) {
 			}
 			else if(node[request_id].request_method.match(/POST|PUT|PATCH/i)) {
 				var params;
-				if(typeof(node[request_id].request_params) == "object" && !node[request_id].request_params.constructor.toString().match(/FormData/i)) {
-					params = JSON.stringify(node[request_id].request_params);
+				if(typeof(node[request_id].request_data) == "object" && node[request_id].request_data.constructor.toString().match(/function Object/i)) {
+					params = JSON.stringify(node[request_id].request_data);
 				}
 				else {
-					params = node[request_id].request_params;
+					params = node[request_id].request_data;
 				}
 				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
 				if(!params.constructor.toString().match(/FormData/i)) {
@@ -1437,7 +1463,7 @@ Util.request = function(node, url, _options) {
 			response_object.responseText = response;
 			u.validateResponse(response_object);
 		}
-		var params = u.JSONtoParams(node[request_id].request_params);
+		var params = u.JSONtoParams(node[request_id].request_data);
 		node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
 		node[request_id].request_url += (!node[request_id].request_url.match(/\?/g) ? "?" : "&") + node[request_id].jsonp_callback + "=document."+key+".responder";
 		u.ae(u.qs("head"), "script", ({"type":"text/javascript", "src":node[request_id].request_url}));
@@ -1530,13 +1556,22 @@ Util.validateResponse = function(response){
 		}
 	}
 	if(object) {
-		if(typeof(response.node[response.node[response.request_id].callback_response]) == "function") {
+		if(typeof(response.node[response.request_id].callback_response) == "function") {
+			response.node[response.request_id].callback_response(object, response.request_id);
+		}
+		else if(typeof(response.node[response.node[response.request_id].callback_response]) == "function") {
 			response.node[response.node[response.request_id].callback_response](object, response.request_id);
 		}
 	}
 	else {
-		if(typeof(response.node.responseError) == "function") {
-			response.node.responseError(response);
+		if(typeof(response.node[response.request_id].callback_error) == "function") {
+			response.node[response.request_id].callback_error(response, response.request_id);
+		}
+		else if(typeof(response.node[response.node[response.request_id].callback_error]) == "function") {
+			response.node[response.node[response.request_id].callback_error](response, response.request_id);
+		}
+		else if(typeof(response.node[response.request_id].callback_response) == "function") {
+			response.node[response.request_id].callback_response(response, response.request_id);
 		}
 		else if(typeof(response.node[response.node[response.request_id].callback_response]) == "function") {
 			response.node[response.node[response.request_id].callback_response](response, response.request_id);
@@ -1611,6 +1646,13 @@ Util.upperCaseFirst = u.ucfirst = function(string) {
 }
 Util.lowerCaseFirst = u.lcfirst = function(string) {
 	return string.replace(/^(.){1}/, function($1) {return $1.toLowerCase()});
+}
+Util.normalize = function(string) {
+	string = string.toLowerCase();
+	string = string.replace(/[^a-z0-9\_]/g, '-');
+	string = string.replace(/-+/g, '-');
+	string = string.replace(/^-|-$/g, '');
+	return string;
 }
 Util.browser = function(model, version) {
 	var current_version = false;
@@ -1697,16 +1739,6 @@ Util.system = function(os, version) {
 			current_version = navigator.userAgent.match(/(Windows NT )(\d+.\d)/i)[2];
 		}
 	}
-	else if(os.match(/\bios\b/i)) {
-		if(navigator.userAgent.match(/(OS )(\d+[._]{1}\d+[._\d]*)( like Mac OS X)/i)) {
-			current_version = navigator.userAgent.match(/(OS )(\d+[._]{1}\d+[._\d]*)( like Mac OS X)/i)[2].replace(/_/g, ".");
-		}
-	}
-	else if(os.match(/\bandroid\b/i)) {
-		if(navigator.userAgent.match(/(Android )(\d+.\d)/i)) {
-			current_version = navigator.userAgent.match(/(Android )(\d+.\d)/i)[2];
-		}
-	}
 	else if(os.match(/\bmac\b/i)) {
 		if(navigator.userAgent.match(/(Macintosh; Intel Mac OS X )(\d+[._]{1}\d)/i)) {
 			current_version = navigator.userAgent.match(/(Macintosh; Intel Mac OS X )(\d+[._]{1}\d)/i)[2].replace("_", ".");
@@ -1715,6 +1747,21 @@ Util.system = function(os, version) {
 	else if(os.match(/\blinux\b/i)) {
 		if(navigator.userAgent.match(/linux|x11/i) && !navigator.userAgent.match(/android/i)) {
 			current_version = true;
+		}
+	}
+	else if(os.match(/\bios\b/i)) {
+		if(navigator.userAgent.match(/(OS )(\d+[._]{1}\d+[._\d]*)( like Mac OS X)/i)) {
+			current_version = navigator.userAgent.match(/(OS )(\d+[._]{1}\d+[._\d]*)( like Mac OS X)/i)[2].replace(/_/g, ".");
+		}
+	}
+	else if(os.match(/\bandroid\b/i)) {
+		if(navigator.userAgent.match(/Android[ ._]?(\d+.\d)/i)) {
+			current_version = navigator.userAgent.match(/Android[ ._]?(\d+.\d)/i)[1];
+		}
+	}
+	else if(os.match(/\bwinphone\b/i)) {
+		if(navigator.userAgent.match(/Windows[ ._]?Phone[ ._]?(\d+.\d)/i)) {
+			current_version = navigator.userAgent.match(/Windows[ ._]?Phone[ ._]?(\d+.\d)/i)[1];
 		}
 	}
 	if(current_version) {
@@ -3225,6 +3272,7 @@ if(document.all && document.addEventListener == undefined) {
 			win_event[x] = window.event[x];
 		}
 		win_event.target = element;
+		win_event.currentTarget = element;
 		win_event.timeStamp = new Date().getTime();
 		if(element && eid && window.attachedEvents[eid] && window.attachedEvents[eid][window.event.type]) {
 			var i, attachedAction;
