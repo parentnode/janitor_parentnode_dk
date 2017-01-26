@@ -45,26 +45,27 @@ if(is_array($action) && count($action)) {
 
 		$PC->create(SITE_URL."/tests/pdf-template", $file);
 
-		exit();
-		// if(file_exists($file)) {
-		//
-		// 	header('Content-Description: File download');
-		// 	header('Content-Type: application/octet-stream');
-		// 	header("Content-Type: application/force-download");
-		// 	header('Content-Disposition: attachment; filename=' . "pdf-test.pdf");
-		// 	header('Expires: 0');
-		// 	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		// 	header('Pragma: public');
-		// 	header('Content-Length: ' . filesize($file));
-		// 	ob_clean();
-		// 	flush();
-		// 	readfile($file);
-		//
-		// 	// clean up
-		// 	unlink($file);
-		//
-		// 	exit();
-		// }
+//		exit();
+
+		if(file_exists($file)) {
+
+			header('Content-Description: File download');
+			header('Content-Type: application/octet-stream');
+			header("Content-Type: application/force-download");
+			header('Content-Disposition: attachment; filename=' . "pdf-test.pdf");
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($file));
+			ob_clean();
+			flush();
+			readfile($file);
+
+			// clean up
+			unlink($file);
+
+			exit();
+		}
 
 	}
 
