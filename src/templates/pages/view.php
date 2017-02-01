@@ -1,7 +1,6 @@
 <?php
-global $IC;
 global $action;
-global $itemtype;
+$IC = new Items();
 
 $sindex =  $action[0];
 
@@ -45,9 +44,6 @@ if($page_item) {
 			<?= $page_item["html"] ?>
 		</div>
 		<? endif; ?>
-
-
-		<?= $HTML->frontendComments($page_item, "/janitor/admin/page/addComment") ?>
 
 	</div>
 

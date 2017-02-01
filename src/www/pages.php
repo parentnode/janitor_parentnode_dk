@@ -16,20 +16,18 @@ $page->pageTitle("Every good library deserves content");
 
 if(is_array($action) && count($action)) {
 
-	if(count($action) == 1) {
+	if(preg_match("/^(getting-started|changelog|milestones)$/", $action[0])) {
 
-		if(file_exists(LOCAL_PATH."/templates/pages/".$action[0].".php")) {
-			$page->page(array(
-				"templates" => "pages/".$action[0].".php"
-			));
-		}
-		else {
-			$page->page(array(
-				"templates" => "pages/view.php"
-			));
-		}
-		exit();
+		$page->page(array(
+			"templates" => "pages/".$action[0].".php"
+		));
 	}
+	else {
+		$page->page(array(
+			"templates" => "pages/view.php"
+		));
+	}
+	exit();
 
 }
 

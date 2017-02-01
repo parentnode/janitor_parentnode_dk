@@ -1,21 +1,43 @@
+<?php
+global $action;
+$IC = new Items();
+
+
+$page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => array("user" => true, "tags" => true, "mediae" => true)));
+?>
 <div class="scene docsindex i:docsindex">
 
-	<h1>Documentation</h1>
+<? if($page_item && $page_item["status"]): 
+	$media = $IC->sliceMedia($page_item); ?>
+	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
-	<ul class="actions">
-		<li><a class="nofollow" href="#library_files" rel="nofollow">Goto files</a></li>
-	</ul>
+		<? if($media): ?>
+		<div class="image item_id:<?= $page_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+		<? endif; ?>
 
-	<p>
-		This documentation cover Core classes and APIs of Janitor. 
-		If you are new to Janitor, check out <a href="/getting-started">getting started</a>.
-	</p>
 
-	<p class="note">
-		We are currently in the process of updating the documentation. Until it is finished, we apoligize 
-		the incomplete online documentation. Check the
-		<a href="/pages/milestones">Milestones</a> for more information.
-	</p>
+		<?= $HTML->articleTags($page_item, [
+			"context" => false
+		]) ?>
+
+
+		<h1 itemprop="headline"><?= $page_item["name"] ?></h1>
+
+
+		<?= $HTML->articleInfo($page_item, "/docs", [
+			"media" => $media, 
+			"sharing" => true
+		]) ?>
+
+
+		<div class="articlebody" itemprop="articleBody">
+			<?= $page_item["html"] ?>
+		</div>
+
+
+	</div>
+<? endif; ?>
+
 
 	<div class="search"></div>
 

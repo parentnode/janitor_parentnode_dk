@@ -22,6 +22,7 @@ $this->pageTitle("It's just improvements");
 		<li>Global "duplicate item" function.</li>
 		<li>Stripe integration.</li>
 		<li>Added AutoComplete setting for inputs via Model.</li>
+		<li>Runs on MAMP.</li>
 		<li>And lot's of bug-fixes and minor enhancements.</li>
 	</ul>
 

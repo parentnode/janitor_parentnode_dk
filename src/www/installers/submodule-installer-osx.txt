@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 
 # bash <(curl -s http://test.janitor.parentnode.dk/installers/submodule-installer-osx)
@@ -84,7 +84,7 @@ if [ -e "/srv/sites/apache/apache.conf" ]; then
 	realpath=$( readlink /srv/sites )
 
 	# Project is in recommended folder (/srv/sites)
-	if [ $( echo "${working_directory}" | grep "${realpath}" ) ]; then
+	if [ $( echo "${working_directory}" | grep "/srv/sites" ) ] || [ $( echo "${working_directory}" | grep "${realpath}" ) ]; then
 
 		parentnode_env="Y"
 
@@ -219,24 +219,22 @@ if [ "${parentnode_env}" = "n" ]; then
 fi
 
 
-# TODO: Test on Apache 2.4
-# Add Directory directive to project Apache conf to ensure project can run in current location
-echo "<Directory ${working_directory}>" >> apache/httpd-vhosts.conf
-echo "	Options All" >> apache/httpd-vhosts.conf
-echo "	AllowOverride All" >> apache/httpd-vhosts.conf
-echo "	Order allow,deny" >> apache/httpd-vhosts.conf
-echo "	Allow from all" >> apache/httpd-vhosts.conf
-echo "</Directory>" >> apache/httpd-vhosts.conf
-
-
-
 
 # TODO: Test on Apache 2.4
 # Add actual VHOST configuration
 echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
 echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
 echo "	ServerName ${domain}" >> apache/httpd-vhosts.conf
-echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src\"" >> apache/httpd-vhosts.conf
+
+# Add Directory directive to project Apache conf to ensure project can run in current location
+echo "	<Directory ${working_directory}>" >> apache/httpd-vhosts.conf
+echo "		Options All MultiViews" >> apache/httpd-vhosts.conf
+echo "		AllowOverride All" >> apache/httpd-vhosts.conf
+echo "		Order allow,deny" >> apache/httpd-vhosts.conf
+echo "		Allow from all" >> apache/httpd-vhosts.conf
+echo "	</Directory>" >> apache/httpd-vhosts.conf
+
+echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src/www\"" >> apache/httpd-vhosts.conf
 echo "	SetEnv \"LOCAL_PATH\" \"${working_directory}/theme\"" >> apache/httpd-vhosts.conf
 echo "	SetEnv \"FRAMEWORK_PATH\" \"${working_directory}/submodules/janitor/src\"" >> apache/httpd-vhosts.conf
 echo "</VirtualHost>" >> apache/httpd-vhosts.conf
@@ -294,7 +292,15 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 		httpd_confs_length=${#httpd_confs[@]}
 		for (( i = 0; i < ${httpd_confs_length}; i++ )); do
-			echo "$((i + 1)): ${httpd_confs[$i]}"
+
+			if [ $( echo "${httpd_confs[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
+				echo "$((i + 1)): ${httpd_confs[$i]} (MacPorts)"
+			elif [ $( echo "${httpd_confs[$i]}" | grep -E "\/MAMP\/" ) ]; then
+				echo "$((i + 1)): ${httpd_confs[$i]} (MAMP)"
+			else
+				echo "$((i + 1)): ${httpd_confs[$i]}"
+			fi
+
 		done
 
 
@@ -471,7 +477,13 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 	apachectls_length=${#apachectls[@]}
 	for (( i = 0; i < ${apachectls_length}; i++ )); do
-		echo "$((i + 1)): ${apachectls[$i]}"
+		if [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
+			echo "$((i + 1)): ${apachectls[$i]} (MacPorts)"
+		elif [ $( echo "${apachectls[$i]}" | grep -E "\/MAMP\/" ) ]; then
+			echo "$((i + 1)): ${apachectls[$i]} (MAMP)"
+		else
+			echo "$((i + 1)): ${apachectls[$i]}"
+		fi
 	done
 
 	read -p "Select your active Apache controller [1-$apachectls_length]: " active_apache
@@ -504,7 +516,8 @@ fi
 
 
 echo 
-echo "Go to http://${domain}/janitor/admin/setup in your browser and continue the setup process."
+echo "Continue the setup at http://${domain}/janitor/admin/setup in your browser."
 echo
 
-exit 1
+open "http://${domain}/janitor/admin/setup"
+

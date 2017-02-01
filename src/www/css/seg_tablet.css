@@ -57,7 +57,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #page #notifications {position: fixed; z-index: 110; top: 0; width: 200px; left: 50%; margin-left: -100px; background: #333333; color: #ffffff;}
 #page #notifications div {padding: 10px 20px; color: #ffffff;}
 #page #notifications .error {background: #df0000;}
-body > div.hint {z-index: 100; position: absolute; top: 0; left: 0; padding: 3px 5px; background: #ffffff; color: #888888; border: 1px solid #888888; box-shadow: 1px 1px 2px #888888; border-radius: 5px; font-size: 12px; max-width: 400px;}
+body > div.hint {z-index: 100; position: absolute; top: 0; left: 0; padding: 3px 5px; background: #ffffff; color: #888888; border: 1px solid #888888; box-shadow: 0 1px 1px #888888; border-radius: 5px; font-size: 12px; max-width: 400px;}
 body > div.hint p {padding: 5px; color: #888888; font-size: 12px;}
 body > div.hint a {text-decoration: underline; display: inline-block; vertical-align: top; padding: 5px;}
 

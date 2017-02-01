@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2017-01-23 14:27:29
+js-merged @ 2017-02-01 20:23:15
 */
 
 /*seg_desktop_light_include.js*/
@@ -3703,6 +3703,11 @@ u.txt = {};
 u.txt["terms-headline"] = "We love <br />cookies and privacy";
 u.txt["terms-accept"] = "Accept";
 u.txt["terms-details"] = "Details";
+u.txt["share"] = "Share";
+u.txt["share-info-headline"] = "(How do I share?)";
+u.txt["share-info-txt"] = "We have not includered social media plugins on this site, because they are frequently abused to collect data about you. Also we don't want to promote some channels over others. Instead, just copy the link and share it wherever you find relevant.";
+u.txt["share-info-ok"] = "OK";
+
 
 /*u-googleanalytics.js*/
 if(u.ga_account) {
