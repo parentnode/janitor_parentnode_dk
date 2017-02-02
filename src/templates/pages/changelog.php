@@ -1,5 +1,5 @@
 <?php
-$this->bodyClass("gettingstarted");
+$this->bodyClass("docs");
 $this->pageTitle("It's just improvements");
 ?>
 <div class="scene changelog i:scene">

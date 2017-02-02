@@ -24,6 +24,7 @@ if(is_array($action) && count($action)) {
 	}
 	else {
 		$page->page(array(
+			"body_class" => "gettingstarted",
 			"templates" => "pages/view.php"
 		));
 	}
