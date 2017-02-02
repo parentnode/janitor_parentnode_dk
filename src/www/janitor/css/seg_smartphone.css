@@ -164,6 +164,7 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 12px;
 #login_overlay .field.error input {margin: 0; border: 3px solid #f8c9bb;}
 #login_overlay ul.actions {padding: 0;}
 #login_overlay ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 0 10px; vertical-align: top;}
+#login_overlay ul.actions li.forgot {padding: 5px 0 0 10px;}
 #login_overlay ul.actions input.button {width: auto; height: 26px; padding: 3px 12px;}
 @media all and (-webkit-min-device-pixel-ratio:0) {#login_overlay ul.actions input.button {padding-bottom: 5px;}}
 #login_overlay ul.actions input.button {background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px;}
