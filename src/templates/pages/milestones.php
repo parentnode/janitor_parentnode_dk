@@ -32,6 +32,10 @@ $todotags_priority = array("General", "Backend interface");
 
 		<h1 itemprop="headline"><?= $page_item["name"] ?></h1>
 
+		<? if($page_item["subheader"]): ?>
+		<h2 itemprop="alternativeHeadline"><?= $page_item["subheader"] ?></h2>
+		<? endif; ?>
+
 
 		<?= $HTML->articleInfo($page_item, "/pages/milestones", [
 			"media" => $media, 

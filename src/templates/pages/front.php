@@ -25,6 +25,10 @@ $page_item = $IC->getItem(array("tags" => "page:front", "extend" => array("user"
 
 		<h1 itemprop="headline"><?= $page_item["name"] ?></h1>
 
+		<? if($page_item["subheader"]): ?>
+		<h2 itemprop="alternativeHeadline"><?= $page_item["subheader"] ?></h2>
+		<? endif; ?>
+
 
 		<?= $HTML->articleInfo($page_item, "/getting-started", [
 			"media" => $media, 
