@@ -16,6 +16,8 @@
 		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
 		<?= $HTML->link("Form validation", "/janitor/tests/form-validation", array("wrapper" => "li.formvalidation")) ?>
 
+		<?= $HTML->link("Mail", "/janitor/tests/mail", array("wrapper" => "li.mail")) ?>
+
 
 
 		<?= $HTML->link("Security", "/janitor/tests/security", array("wrapper" => "li.security")) ?>

@@ -175,9 +175,9 @@ class TypeTests extends Itemtype {
 		global $page;
 		$IC = new Items();
 		
-		$page->mail(
-
-		);
+		mailer()->send([
+			"message" => "test unsubscribed"
+		]);
 	}
 
 	function subscriptionRenewed() {}
