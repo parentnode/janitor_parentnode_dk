@@ -2119,7 +2119,7 @@
 				</div>
 			</div>
 
-			<div class="function" id="Page::mail">
+			<!--div class="function" id="Page::mail">
 				<div class="header">
 					<h3>Page::mail</h3>
 				</div>
@@ -2203,7 +2203,7 @@
 					</div>
 
 				</div>
-			</div>
+			</div-->
 
 			<div class="function" id="Page::addLog">
 				<div class="header">
