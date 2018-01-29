@@ -289,7 +289,17 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 		httpd_confs_length=${#httpd_confs[@]}
 		for (( i = 0; i < ${httpd_confs_length}; i++ )); do
-			echo "$((i + 1)): ${httpd_confs[$i]}"
+
+			if [ $( echo "${httpd_confs[$i]}" | grep -E "^/opt/local/etc/apache2" ) ]; then
+				echo "$((i + 1)): ${httpd_confs[$i]} (MacPorts)"
+			elif [ $( echo "${httpd_confs[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
+				echo "$((i + 1)): ${httpd_confs[$i]} (Old MacPorts - you should update your system)"
+			elif [ $( echo "${httpd_confs[$i]}" | grep -E "\/MAMP\/" ) ]; then
+				echo "$((i + 1)): ${httpd_confs[$i]} (MAMP)"
+			else
+				echo "$((i + 1)): ${httpd_confs[$i]}"
+			fi
+
 		done
 
 
@@ -466,8 +476,10 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 	apachectls_length=${#apachectls[@]}
 	for (( i = 0; i < ${apachectls_length}; i++ )); do
-		if [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
+		if [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/sbin" ) ]; then
 			echo "$((i + 1)): ${apachectls[$i]} (MacPorts)"
+		elif [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
+			echo "$((i + 1)): ${apachectls[$i]} (Old MacPorts - you should update your system)"
 		elif [ $( echo "${apachectls[$i]}" | grep -E "\/MAMP\/") ]; then
 			echo "$((i + 1)): ${apachectls[$i]} (MAMP)"
 		else
