@@ -21,6 +21,7 @@ input, select, textarea {font-size: 14px; color: #333333;}
 input, textarea {outline: none;}
 a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
 em, strong {font-size: inherit; font-family: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
+sup {line-height: 1em; font-family: inherit; color: inherit;}
 h1 {padding: 0 70px 30px; font-size: 48px; line-height: 1.05em;
 	font-family: "PT Serif", Times, serif;
 }
@@ -63,11 +64,12 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 
 /*s-header.css*/
 #header {position: relative; height: 100px;}
-#header .logo {z-index: 10; position: absolute; top: 10px; left: 30px; font-size: 30px; padding: 10px; color: #888888; cursor: pointer; background-color: rgba(255,255,255, 0.8); border-radius: 5px;
+#header .logo {z-index: 50; position: absolute; top: 10px; left: 30px; font-size: 30px; padding: 10px 13px; color: #888888; cursor: pointer; 
+	background-color: rgba(255,255,255, 0.8); border-radius: 5px;
 	font-family: "PT Serif", Times, serif;
 }
 #header .logo {position: fixed;}
-#header .servicenavigation {position: absolute; top: 5px; right: 40px;}
+#header .servicenavigation {position: absolute; top: 5px; right: 43px;}
 #header .servicenavigation li {display: inline-block; vertical-align: top; color: #bbbbbb; padding: 3px 0;}
 #header .servicenavigation li.navigation {display: none;}
 #header .servicenavigation li:before {content: "\00a0\00a0|\00a0\00a0"; color: #bbbbbb;}
@@ -76,7 +78,9 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #header .servicenavigation li:first-child:before {content: "";}
 #header .servicenavigation li.github {margin: 0 0 0 10px; padding: 4px 12px; background: #8c9399; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ffffff;}
 #header .servicenavigation li.cart.used {color: #df0000;}
-#navigation {z-index: 10; position: fixed; right: 60px; top: 65px; background-color: rgba(255,255,255, 0.8); border-radius: 5px;}
+#navigation {z-index: 50; position: fixed; right: 33px; top: 65px; 
+	background-color: rgba(255,255,255, 0.8); border-radius: 5px;
+}
 #navigation ul {}
 #navigation ul li {display: inline-block; vertical-align: top; padding: 10px; font-size: 20px; color: #888888;
 	font-family: "PT Serif", Times, serif;
@@ -157,7 +161,7 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene div.image {position: relative; z-index: 1;}
 #content .scene div.image img {cursor: zoom-in; margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
 #content .scene div.image p {margin-top: -20px; padding: 0 70px 40px; font-size: 0;}
-#content .scene div.image p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none; cursor: default;}
+#content .scene div.image p a {font-style: italic; font-size: 13px; color: #cccccc; display: none; cursor: default; text-decoration: none;}
 #content .scene div.image.loaded p a {display: block;}
 #content .scene div.image.fullsize {}
 #content .scene div.image.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
@@ -165,7 +169,7 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene div.media {}
 #content .scene div.media img {cursor: zoom-in;margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
 #content .scene div.media p {margin-top: -20px; padding: 0 70px 30px; font-size: 0;}
-#content .scene div.media p a {font-style: italic; font-size: 13px; display: block; color: #cccccc; display: none;}
+#content .scene div.media p a {font-style: italic; font-size: 13px; color: #cccccc; display: none; cursor: default; text-decoration: none;}
 #content .scene div.media.loaded p a {display: block;}
 #content .scene div.media.fullsize {}
 #content .scene div.media.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
@@ -184,6 +188,9 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene div.article ul.tags {padding-bottom: 30px;}
 #content .scene div.article ul.tags li,
 #content .scene div.article ul.tags li a {color: #cccccc;}
+#content .scene div.article div.articlebody span.sup.reference {font-size: 10px; line-height: 1.1em; vertical-align: top; padding-left: 2px;}
+#content .scene div.article div.articlebody h3.reference {padding-top: 20px;}
+#content .scene div.article div.articlebody p.reference {font-style: italic;}
 #content .scene ul.articles {padding: 0;}
 #content .scene ul.articles li.article {padding: 20px 0 5px; border-top: 1px solid #dedede; position: relative;}
 #content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
@@ -303,7 +310,9 @@ body > div.pagination li.next a {padding-right: 0;}
 #content .scene span.var {color: #007633;}
 #content .scene span.value {color: #a65900; font-style: italic;}
 #content .scene span.file {color: #a62300;}
-#content .scene span.htmltag {text-transform: uppercase;}
+#content .scene span.htmltag {text-transform: uppercase; font-size: 0.7em;}
+#content .scene span.htmltag:before {content: "<"; line-height: 2.1em; vertical-align: top;}
+#content .scene span.htmltag:after {content: ">"; line-height: 2.1em; vertical-align: top;}
 #content .scene span.command {color: #4b5cd7;}
 #content .scene div.vcard.company {margin-top: 65px; border-top: 1px solid #dedede; padding: 0 70px 25px;}
 #content .scene div.vcard.company h2 {margin-top: -65px; padding: 0 0 60px;}
@@ -312,7 +321,7 @@ body > div.pagination li.next a {padding-right: 0;}
 #content .scene div.vcard dl.info {width: 230px; padding: 0 0 30px; display: inline-block; vertical-align: top;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
-#content .scene div.vcard dl.info dd {padding-bottom: 10px;}
+#content .scene div.vcard dl.info dd {padding-bottom: 10px; font-size: 12px; color: #cccccc;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
 #content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
@@ -445,7 +454,9 @@ div.field.error textarea {border: 3px solid #a62300;}
 }
 div.field.radiobuttons.error input,
 div.field.checkbox.error input,
-div.field.boolean.error input {margin: 1px 10px 0 3px; border: none;}
+div.field.boolean.error input {margin: 1px 10px 0 3px; border: none;
+	box-shadow: 0px 0px 0px 1px #df0000;
+}
 div.field.location.error input {margin: 2px; border: 1px solid #dcdcdc;}
 div.field.location.error input.error {margin: 0; border: 3px solid #a62300;}
 div.field.files.error {border-color: #a62300;}
@@ -455,15 +466,25 @@ ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 10px
 	-webkit-user-select: none;
 	user-select: none;
 }
-ul.actions input.button {width: auto; height: 28px; padding: 3px 9px; display: inline-block; vertical-align: top;}
+ul.actions input.button {width: auto; height: 30px; padding: 3px 9px; display: inline-block; vertical-align: top;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
-	ul.actions input.button {padding: 3px 12px 5px;}
+	ul.actions input.button {padding: 3px 12px 5px;
+		-webkit-appearance: none;
+	}
 }
 ul.actions a.button,
-#content ul.actions a.button {display: block; text-decoration: none; height: 16px; padding: 6px 12px 8px; text-decoration: none;}
+#content ul.actions a.button {display: block; text-decoration: none; height: 16px; padding: 7px 12px;}
 ul.actions input.button,
 ul.actions a.button,
 #content ul.actions a.button {font-size: 14px; background-color: #dedede; color: #333333; border: none; cursor: pointer; border-radius: 3px;}
+.submitting input.button,
+.submitting a.button,
+#content .submitting a.button {padding-left: 40px !important;
+	background-image: url(/img/gx_loader.gif);
+	background-position: 11px 5px;
+	background-repeat: no-repeat;
+	background-size: 17px auto;
+}
 ul.actions input.button.primary,
 ul.actions a.button.primary {background-color: #8c9399; color: #ffffff;}
 ul.actions input.button.secondary,
@@ -607,20 +628,33 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene ul.todos > li ul.actions.closed .open {display: inline-block;}
 #content .scene ul.wishlists {padding-left: 70px; padding-right: 70px;}
 #content .scene ul.wishes {padding-left: 70px; padding-right: 70px;}
-#content .scene ul.wishes > li .image,
-#content .scene ul.wishes > li .text {display: inline-block; vertical-align: top;}
-#content .scene ul.wishes > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 0px; cursor: default;}
-#content .scene ul.wishes > li h3 {padding: 0 25px 10px;}
-#content .scene ul.wishes > li div.description p {padding: 0 25px;}
-#content .scene ul.wishes dl.info {padding: 0 25px 20px;}
+#content .scene ul.wishes > li h3 {padding: 0 0 10px;}
+#content .scene ul.wishes > li div.description p {padding: 0px 0 10px;}
+#content .scene ul.wishes.images > li .image,
+#content .scene ul.wishes.images > li .text {display: inline-block; vertical-align: top;}
+#content .scene ul.wishes.images > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 0px; cursor: default;}
+#content .scene ul.wishes.images > li h3 {padding: 0 25px 10px;}
+#content .scene ul.wishes.images > li div.description p {padding: 0 25px 10px;}
+#content .scene ul.wishes > li div.description p.available,
+#content .scene ul.wishes > li div.description p.reserved {padding-top: 5px;}
+#content .scene ul.wishes > li div.description p.available span
+#content .scene ul.wishes > li div.description p.reserved span {font-style: italic;}
+#content .scene ul.wishes > li div.description p.available span {color: #bbbbbb;}
+#content .scene ul.wishes > li > ul.actions,
+#content .scene ul.wishes > li > .text > ul.actions {position: absolute; top: 20px; right: 0px; padding: 0;}
+#content .scene ul.wishes > li > ul.actions li,
+#content .scene ul.wishes > li > .text > ul.actions li {padding-right: 0;}
+#content .scene ul.wishes > li > ul.actions form div.field,
+#content .scene ul.wishes > li > .text > ul.actions form div.field {display: inline-block; vertical-align: top; padding: 0 10px;}
+#content .scene ul.wishes > li > ul.actions form div.field input,
+#content .scene ul.wishes > li > .text > ul.actions form div.field input {width: 200px; display: none;}
+#content .scene ul.wishes > li > ul.actions form input[type=submit],
+#content .scene ul.wishes > li > .text > ul.actions form input[type=submit] {display: inline-block; vertical-align: top; margin-top: 3px;}
+#content .scene ul.wishes dl.info {padding: 0 25px 10px;}
 #content .scene ul.wishes dl.info dt.price {display: inline-block; vertical-align: top; width: auto;}
 #content .scene ul.wishes dl.info dd.price {display: inline-block; vertical-align: top; width: auto;}
 #content .scene ul.wishes dl.info dt.link {display: none;}
 #content .scene ul.wishes dl.info dd.link {font-size: 13px; display: block; width: auto;}
-#content .scene ul.wishes > li ul.actions {padding: 0 25px;}
-#content .scene ul.wishes > li ul.actions.reserved .reserve {display: none;}
-#content .scene ul.wishes > li ul.actions .unreserve {display: none;}
-#content .scene ul.wishes > li ul.actions.reserved .unreserve {display: inline-block;}
 
 
 /*s-documentation.css*/
@@ -669,7 +703,7 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
 #content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
-#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 90px; stroke: #999999; stroke-width: 3px;}
+#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 110px; stroke: #999999; stroke-width: 3px;}
 #content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
 #content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
 #content .scene div.functions .function .body .uses .manipulator ul {padding-bottom: 0;}
@@ -687,9 +721,9 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 
 /*s-login_overlay.css*/
 #login_overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 10000;}
-#login_overlay .scene {margin: 100px auto 0; width: 304px; position: relative; padding: 50px; background: #ffffff;}
-#login_overlay .scene h1,
-#login_overlay .scene p {padding-left: 2px; padding-right: 2px;}
+#login_overlay form {margin: 100px auto 0; width: 304px; position: relative; padding: 50px; background: #ffffff;}
+#login_overlay h1,
+#login_overlay p {padding-left: 2px; padding-right: 2px;}
 #login_overlay div.field {padding: 0 0 15px;}
 #login_overlay div.field input {width: 286px;}
 #login_overlay div.field.required .indicator {left: 310px;}
@@ -697,7 +731,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #login_overlay ul.actions {padding: 0 2px;}
 #login_overlay p,
 #login_overlay li.forgot {display: none;}
-#login_overlay p.relogin {display: block;}
 
 
 /*s-hovers.css*/

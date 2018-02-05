@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2017-02-02 18:07:03
+js-merged @ 2018-02-05 10:47:53
 */
 
 /*seg_tablet_include.js*/
@@ -4450,6 +4450,9 @@ u.txt["share-info-txt"] = "We have not includered social media plugins on this s
 u.txt["share-info-ok"] = "OK";
 
 
+/*u-basics.js*/
+
+
 /*u-googleanalytics.js*/
 if(u.ga_account) {
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -6790,9 +6793,8 @@ Util.Objects["page"] = new function() {
 	this.init = function(page) {
 		window.page = page;
 		u.bug_force = true;
-		u.bug("This site is built using Manipulator, Janitor and Detector");
-		u.bug("Visit http://parentnode.dk for more information");
-		u.bug("Free lunch for new contributers ;-)");
+		u.bug("This site is built using the combined powers of body, mind and spirit. Well, and also Manipulator, Janitor and Detector");
+		u.bug("Visit https://parentnode.dk for more information");
 		u.bug_force = false;
 		page.style_tag = document.createElement("style");
 		page.style_tag.setAttribute("media", "all")
@@ -6805,13 +6807,6 @@ Util.Objects["page"] = new function() {
 		page.nN = u.ie(page.hN, page.nN);
 		page.fN = u.qs("#footer");
 		page.fN.service = u.qs("ul.servicenavigation", page.fN);
-		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
-		page.logo.url = '/';
-		page.logo.font_size = parseInt(u.gcs(page.logo, "font-size"));
-		page.logo.font_size_gap = page.logo.font_size-14;
-		page.logo.top_offset = u.absY(page.nN) + parseInt(u.gcs(page.nN, "padding-top"));
-		page.style_tag.sheet.insertRule("#header a.logo {}", 0);
-		page.logo.css_rule = page.style_tag.sheet.cssRules[0];
 		page.resized = function(event) {
 			page.browser_h = u.browserH();
 			page.browser_w = u.browserW();
@@ -6833,14 +6828,19 @@ Util.Objects["page"] = new function() {
 		}
 		page.scrolled = function(event) {
 			page.scrolled_y = u.scrollY();
-			if(page.scrolled_y < page.logo.top_offset) {
-				page.logo.is_reduced = false;
-				var reduce_font = (1-(page.logo.top_offset-page.scrolled_y)/page.logo.top_offset) * page.logo.font_size_gap;
-				page.logo.css_rule.style.setProperty("font-size", (page.logo.font_size-reduce_font)+"px", "important");
+			if(typeof(u.logoScroller) == "function") {
+				u.logoScroller();
 			}
-			else if(!page.logo.is_reduced) {
-				page.logo.is_reduced = true;
-				page.logo.css_rule.style.setProperty("font-size", (page.logo.font_size-page.logo.font_size_gap)+"px", "important");
+			else {
+				if(page.scrolled_y < page.logo.top_offset) {
+					page.logo.is_reduced = false;
+					var reduce_font = (1-(page.logo.top_offset-page.scrolled_y)/page.logo.top_offset) * page.logo.font_size_gap;
+					page.logo.css_rule.style.setProperty("font-size", (page.logo.font_size-reduce_font)+"px", "important");
+				}
+				else if(!page.logo.is_reduced) {
+					page.logo.is_reduced = true;
+					page.logo.css_rule.style.setProperty("font-size", (page.logo.font_size-page.logo.font_size_gap)+"px", "important");
+				}
 			}
 			if(page.nN.top_offset && page.scrolled_y < page.nN.top_offset) {
 				page.nN.is_reduced = false;
@@ -6865,12 +6865,10 @@ Util.Objects["page"] = new function() {
 				u.e.addEvent(window, "resize", page.resized);
 				u.e.addEvent(window, "scroll", page.scrolled);
 				u.notifier(this);
+				this.initHeader();
 				this.initNavigation();
+				this.initFooter();
 				this.resized();
-				u.a.transition(page.fN, "all 0.5s ease-in");
-				u.ass(page.fN, {
-					"opacity":1
-				})
 			}
 		}
 		page.acceptCookies = function() {
@@ -6897,12 +6895,21 @@ Util.Objects["page"] = new function() {
 				}
 			}
 		}
+		page.initHeader = function() {
+			page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
+			page.logo.url = '/';
+			page.logo.font_size = parseInt(u.gcs(page.logo, "font-size"));
+			page.logo.font_size_gap = page.logo.font_size-14;
+			page.logo.top_offset = u.absY(page.nN) + parseInt(u.gcs(page.nN, "padding-top"));
+			page.style_tag.sheet.insertRule("#header a.logo {}", 0);
+			page.logo.css_rule = page.style_tag.sheet.cssRules[0];
+		}
 		page.initNavigation = function() {
 			var i, node, nodes;
 			page.nN.list = u.qs("ul", page.nN);
 			if(page.nN.list) {
 				page.nN.list.nodes = u.qsa("li", page.nN.list);
-				if(page.nN.list.nodes.length) {
+				if(page.nN.list.nodes.length > 1) {
 					page.nN.font_size = parseInt(u.gcs(page.nN.list.nodes[1], "font-size"));
 					page.nN.font_size_gap = page.nN.font_size-14;
 					page.nN.top_offset = u.absY(page.nN) + parseInt(u.gcs(page.nN, "padding-top"));
@@ -6973,6 +6980,12 @@ Util.Objects["page"] = new function() {
 				var github = u.ae(page.hN.service, "li", {"html":'<a href="'+u.github_fork.url+'">'+u.github_fork.text+'</a>', "class":"github"});
 				u.ce(github, {"type":"link"});
 			}
+		}
+		page.initFooter = function() {
+			u.a.transition(page.fN, "all 0.5s ease-in");
+			u.ass(page.fN, {
+				"opacity":1
+			});
 		}
 		page.ready();
 	}

@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2017-02-02 18:07:02
+js-merged @ 2018-02-05 10:47:52
 */
 
 /*seg_smartphone_include.js*/
@@ -4450,6 +4450,9 @@ u.txt["share-info-txt"] = "We have not includered social media plugins on this s
 u.txt["share-info-ok"] = "OK";
 
 
+/*u-basics.js*/
+
+
 /*u-googleanalytics.js*/
 if(u.ga_account) {
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -6181,16 +6184,16 @@ u.notifier = function(node) {
 		var output;
 		if(typeof(response) == "object" && response.isJSON) {
 			var message = response.cms_message;
-			var cms_status = response.cms_status;
+			var cms_status = typeof(response.cms_status) != "undefined" ? response.cms_status : "";
 			if(typeof(message) == "object") {
 				for(type in message) {
 					if(typeof(message[type]) == "string") {
-						output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message[type]});
+						output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":message[type]});
 					}
 					else if(typeof(message[type]) == "object" && message[type].length) {
 						var node, i;
 						for(i = 0; _message = message[type][i]; i++) {
-							output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":_message});
+							output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":_message});
 						}
 					}
 				}
@@ -6203,9 +6206,11 @@ u.notifier = function(node) {
 			}
 		}
 		else if(typeof(response) == "object" && response.isHTML) {
-			var login = u.qs(".scene.login", response);
+			var login = u.qs(".scene.login form", response);
 			var messages = u.qsa(".scene div.messages p", response);
 			if(login && !u.qs("#login_overlay")) {
+				// 
+				// 
 				this.autosave_disabled = true;
 				if(page.t_autosave) {
 					u.t.resetTimer(page.t_autosave);
@@ -6214,14 +6219,12 @@ u.notifier = function(node) {
 				overlay.node = this;
 				u.ae(overlay, login);
 				u.as(document.body, "overflow", "hidden");
-				var form = u.qs("form", overlay);
-				var relogin = u.ae(login, "p", {"class":"relogin", "html":(u.txt["relogin"] ? u.txt["relogin"] : "Your session expired")});
-				login.insertBefore(relogin, form);
-				form.overlay = overlay;
-				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
-				u.f.init(form);
-				form.fields["username"].focus();
-				form.submitted = function() {
+				var relogin = u.ie(login, "h1", {"class":"relogin", "html":(u.txt["relogin"] ? u.txt["relogin"] : "Your session expired")});
+				login.overlay = overlay;
+				u.ae(login, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
+				u.f.init(login);
+				login.fields["username"].focus();
+				login.submitted = function() {
 					this.response = function(response) {
 						if(response.isJSON && response.cms_status == "success") {
 							var csrf_token = response.cms_object["csrf-token"];
@@ -6573,9 +6576,8 @@ Util.Objects["page"] = new function() {
 	this.init = function(page) {
 		window.page = page;
 		u.bug_force = true;
-		u.bug("This site is built using Manipulator, Janitor and Detector");
-		u.bug("Visit http://parentnode.dk for more information");
-		u.bug("Free lunch for new contributers ;-)");
+		u.bug("This site is built using the combined powers of body, mind and spirit. Well, and also Manipulator, Janitor and Detector");
+		u.bug("Visit https://parentnode.dk for more information");
 		u.bug_force = false;
 		page.hN = u.qs("#header");
 		page.hN.service = u.qs(".servicenavigation", page.hN);
@@ -6627,23 +6629,27 @@ Util.Objects["page"] = new function() {
 		}
 		page.acceptCookies = function() {
 			if(u.terms_version && !u.getCookie(u.terms_version)) {
-				var terms = u.ie(page.cN, "div", {"class":"terms_notification"});
-				u.ae(terms, "h3", {"html":"We love <br />cookies and privacy"});
-				var bn_accept = u.ae(terms, "a", {"class":"accept", "html":"Accept"});
-				bn_accept.terms = terms;
-				u.ce(bn_accept);
-				bn_accept.clicked = function() {
-					this.terms.parentNode.removeChild(this.terms);
-					u.saveCookie(u.terms_version, true, {"expiry":new Date(new Date().getTime()+(1000*60*60*24*365)).toGMTString()});
+				var terms_link = u.qs("li.terms a");
+				if(terms_link && (terms_link.href || terms_link.parentNode.url)) {
+					var terms_url = terms_link.href || terms_link.parentNode.url;
+					var terms = u.ie(page.cN, "div", {"class":"terms_notification"});
+					u.ae(terms, "h3", {"html":u.stringOr(u.txt["terms-headline"], "We love <br />cookies and privacy")});
+					var bn_accept = u.ae(terms, "a", {"class":"accept", "html":u.stringOr(u.txt["terms-accept"], "Accept")});
+					bn_accept.terms = terms;
+					u.ce(bn_accept);
+					bn_accept.clicked = function() {
+						this.terms.parentNode.removeChild(this.terms);
+						u.saveCookie(u.terms_version, true, {"path":"/", "expires":false});
+					}
+					if(!location.href.match(terms_url)) {
+						var bn_details = u.ae(terms, "a", {"class":"details", "html":u.stringOr(u.txt["terms-details"], "Details"), "href":terms_url});
+						u.ce(bn_details, {"type":"link"});
+					}
+					u.a.transition(terms, "all 0.5s ease-in");
+					u.ass(terms, {
+						"opacity": 1
+					});
 				}
-				if(!location.href.match(/\/terms/)) {
-					var bn_details = u.ae(terms, "a", {"class":"details", "html":"Details", "href":"/terms"});
-					u.ce(bn_details, {"type":"link"});
-				}
-				u.a.transition(terms, "all 0.5s ease-in");
-				u.ass(terms, {
-					"opacity": 1
-				});
 			}
 		}
 		page.initNavigation = function() {
