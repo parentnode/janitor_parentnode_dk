@@ -813,9 +813,10 @@ body {}
 #content .scene a,
 #content .scene ul.geo.active li.location {color: #04859d;}
 #content .scene hr {border-color: #ffb773;}
-#content ul.actions input.button.primary,
+ul.actions input.button.primary,
+ul.actions a.button.primary,
 #content ul.actions a.button.primary,
-#header ul.servicenavigation li.github {background-color: #04859d;}
+#header ul.servicenavigation li.github {background-color: #04859d; color: #ffffff;}
 #content .scene div.categories ul.tags li.selected a,
 #content .scene div.categories ul.tags li.selected:before {color: #ff7c00;}
 #content .scene div.comments.open h2 {color: #04859d;}
@@ -835,7 +836,8 @@ body {}
 
 
 /*s-pages-hovers.css*/
-#content ul.actions input.button.primary:hover,
+ul.actions input.button.primary:hover,
+ul.actions a.button.primary:hover,
 #content ul.actions a.button.primary:hover,
 #header ul.servicenavigation li.github:hover {background-color: #ff7c00;}
 #content .scene .article ul.tags a:hover {color: #04859d;}
