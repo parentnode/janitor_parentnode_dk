@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="<?= $this->language() ?>">
 <head>
-	<!-- (c) & (p) think.dk 2002-2016 -->
+	<!-- (c) & (p) think.dk 2002-2018 -->
 	<!-- For detailed copyright license, see /terms -->
-	<!-- If you want to use or contribute to this code, visit http://parentnode.dk -->
+	<!-- If you want to use or contribute to this code, visit https://parentnode.dk -->
 	<title><?= $this->pageTitle() ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="keywords" content="PHP content distribution framework frontend HTML JavaScript CSS" />
