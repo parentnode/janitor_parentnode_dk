@@ -12,6 +12,7 @@
 *.mov	binary
 *.pdf	binary
 *.ico	binary
+*.swf	binary
 
 # FONTS
 *.eot	binary
