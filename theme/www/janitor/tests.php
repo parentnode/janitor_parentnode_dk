@@ -21,27 +21,12 @@ $page->pageTitle("Every good function deserves a test");
 if(is_array($action) && count($action)) {
 
 
-	// enable forwarding to Tests Class on all posts
-	if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 1) {
-
-		# /tests/#sindex#
-		# Tests should use Janitor interface to validate CSS and JS in output functions like HTML
-		$page->page(array(
-			"type" => "janitor",
-			"templates" => "tests/".$action[0].".php"
-		));
-		exit();
-	}
-
-
-	// Custom test responses
-
 	// wkhtmlto - download pdf test
-	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 2 && $action[0] == "pdf" && $action[1] = "download") {
+	if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) == 2 && $action[0] == "pdf" && $action[1] = "download") {
 
 		$file = PRIVATE_FILE_PATH."/pdf-test.pdf";
 
-		include_once("classes/system/pdf.class.php");
+		include_once("classes/helpers/pdf.class.php");
 		$PC = new PDF();
 
 		$PC->create(SITE_URL."/tests/pdf-template", $file);
@@ -69,6 +54,36 @@ if(is_array($action) && count($action)) {
 		}
 
 	}
+	// enable forwarding to Tests Class on all posts
+	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) >= 1) {
+
+		if(count($action) == 1) {
+
+			# /tests/#sindex#
+			# Tests should use Janitor interface to validate CSS and JS in output functions like HTML
+			$page->page(array(
+				"type" => "janitor",
+				"templates" => "tests/".$action[0].".php"
+			));
+			exit();
+
+		}
+		else if(count($action) == 2) {
+
+			# /tests/#sindex#
+			# Tests should use Janitor interface to validate CSS and JS in output functions like HTML
+			$page->page(array(
+				"type" => "janitor",
+				"templates" => "tests/".$action[0]."/".$action[1].".php"
+			));
+			exit();
+		}
+	}
+
+
+	// Custom test responses
+
+
 
 
 	// Class interface

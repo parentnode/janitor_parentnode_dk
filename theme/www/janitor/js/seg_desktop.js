@@ -4927,6 +4927,429 @@ u.svgIcons = function(icon, node) {
 }
 
 
+/*u-dom.js*/
+Util.querySelector = u.qs = function(query, scope) {
+	scope = scope ? scope : document;
+	return scope.querySelector(query);
+}
+Util.querySelectorAll = u.qsa = function(query, scope) {
+	try {
+		scope = scope ? scope : document;
+		return scope.querySelectorAll(query);
+	}
+	catch(exception) {
+		u.exception("u.qsa", arguments, exception);
+	}
+	return [];
+}
+Util.getElement = u.ge = function(identifier, scope) {
+	var node, i, regexp;
+	if(document.getElementById(identifier)) {
+		return document.getElementById(identifier);
+	}
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			return node;
+		}
+	}
+	return scope.getElementsByTagName(identifier).length ? scope.getElementsByTagName(identifier)[0] : false;
+}
+Util.getElements = u.ges = function(identifier, scope) {
+	var node, i, regexp;
+	var nodes = new Array();
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			nodes.push(node);
+		}
+	}
+	return nodes.length ? nodes : scope.getElementsByTagName(identifier);
+}
+Util.parentNode = u.pn = function(node, _options) {
+	var exclude = "";
+	var include = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "include"      : include       = _options[_argument]; break;
+				case "exclude"      : exclude       = _options[_argument]; break;
+			}
+		}
+	}
+	var exclude_nodes = exclude ? u.qsa(exclude) : [];
+	var include_nodes = include ? u.qsa(include) : [];
+	node = node.parentNode;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || (exclude && (u.inNodeList(node, exclude_nodes))) || (include && (!u.inNodeList(node, include_nodes))))) {
+		node = node.parentNode;
+	}
+	return node;
+}
+Util.previousSibling = u.ps = function(node, _options) {
+	var exclude = "";
+	var include = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "include"      : include       = _options[_argument]; break;
+				case "exclude"      : exclude       = _options[_argument]; break;
+			}
+		}
+	}
+	var exclude_nodes = exclude ? u.qsa(exclude, node.parentNode) : [];
+	var include_nodes = include ? u.qsa(include, node.parentNode) : [];
+	node = node.previousSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || (exclude && (u.inNodeList(node, exclude_nodes))) || (include && (!u.inNodeList(node, include_nodes))))) {
+		node = node.previousSibling;
+	}
+	return node;
+}
+Util.nextSibling = u.ns = function(node, _options) {
+	var exclude = "";
+	var include = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "include"      : include       = _options[_argument]; break;
+				case "exclude"      : exclude       = _options[_argument]; break;
+			}
+		}
+	}
+	var exclude_nodes = exclude ? u.qsa(exclude, node.parentNode) : [];
+	var include_nodes = include ? u.qsa(include, node.parentNode) : [];
+	node = node.nextSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || (exclude && (u.inNodeList(node, exclude_nodes))) || (include && (!u.inNodeList(node, include_nodes))))) {
+		node = node.nextSibling;
+	}
+	return node;
+}
+Util.childNodes = u.cn = function(node, _options) {
+	var exclude = "";
+	var include = "";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "include"      : include       = _options[_argument]; break;
+				case "exclude"      : exclude       = _options[_argument]; break;
+			}
+		}
+	}
+	var exclude_nodes = exclude ? u.qsa(exclude, node) : [];
+	var include_nodes = include ? u.qsa(include, node) : [];
+	var i, child;
+	var children = new Array();
+	for(i = 0; child = node.childNodes[i]; i++) {
+		if(child && child.nodeType != 3 && child.nodeType != 8 && (!exclude || (!u.inNodeList(child, exclude_nodes))) && (!include || (u.inNodeList(child, include_nodes)))) {
+			children.push(child);
+		}
+	}
+	return children;
+}
+Util.appendElement = u.ae = function(_parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = _parent.appendChild(node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.exception("u.ae", arguments, exception);
+	}
+	return false;
+}
+Util.insertElement = u.ie = function(_parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = _parent.insertBefore(node, _parent.firstChild);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.exception("u.ie", arguments, exception);
+	}
+	return false;
+}
+Util.wrapElement = u.we = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = node.parentNode.insertBefore(document.createElement(node_type), node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		wrapper_node.appendChild(node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.exception("u.we", arguments, exception);
+	}
+	return false;
+}
+Util.wrapContent = u.wc = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = document.createElement(node_type);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		while(node.childNodes.length) {
+			wrapper_node.appendChild(node.childNodes[0]);
+		}
+		node.appendChild(wrapper_node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.exception("u.wc", arguments, exception);
+	}
+	return false;
+}
+Util.textContent = u.text = function(node) {
+	try {
+		return node.textContent;
+	}
+	catch(exception) {
+		u.exception("u.text", arguments, exception);
+	}
+	return "";
+}
+Util.clickableElement = u.ce = function(node, _options) {
+	node._use_link = "a";
+	node._click_type = "manual";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "use"			: node._use_link		= _options[_argument]; break;
+				case "type"			: node._click_type		= _options[_argument]; break;
+			}
+		}
+	}
+	var a = (node.nodeName.toLowerCase() == "a" ? node : u.qs(node._use_link, node));
+	if(a) {
+		u.ac(node, "link");
+		if(a.getAttribute("href") !== null) {
+			node.url = a.href;
+			a.removeAttribute("href");
+			node._a = a;
+		}
+	}
+	else {
+		u.ac(node, "clickable");
+	}
+	if(typeof(u.e) != "undefined" && typeof(u.e.click) == "function") {
+		u.e.click(node, _options);
+		if(node._click_type == "link") {
+			node.clicked = function(event) {
+				if(typeof(node.preClicked) == "function") {
+					node.preClicked();
+				}
+				if(event && (event.metaKey || event.ctrlKey)) {
+					window.open(this.url);
+				}
+				else {
+					if(typeof(u.h) != "undefined" && u.h.is_listening) {
+						u.h.navigate(this.url, this);
+					}
+					else {
+						location.href = this.url;
+					}
+				}
+			}
+		}
+	}
+	return node;
+}
+Util.classVar = u.cv = function(node, var_name) {
+	try {
+		var regexp = new RegExp("(\^| )" + var_name + ":[?=\\w/\\#~:.,?+=?&%@!\\-]*");
+		var match = node.className.match(regexp);
+		if(match) {
+			return match[0].replace(var_name + ":", "").trim();
+		}
+	}
+	catch(exception) {
+		u.exception("u.cv", arguments, exception);
+	}
+	return false;
+}
+Util.setClass = u.sc = function(node, classname) {
+	try {
+		var old_class = node.className;
+		node.className = classname;
+		node.offsetTop;
+		return old_class;
+	}
+	catch(exception) {
+		u.exception("u.sc", arguments, exception);
+	}
+	return false;
+}
+Util.hasClass = u.hc = function(node, classname) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)(" + classname + ")(\\s|$)");
+			if(regexp.test(node.className)) {
+				return true;
+			}
+		}
+	}
+	catch(exception) {
+		u.exception("u.hc", arguments, exception);
+	}
+	return false;
+}
+Util.addClass = u.ac = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$)");
+			if(!regexp.test(node.className)) {
+				node.className += node.className ? " " + classname : classname;
+				dom_update === false ? false : node.offsetTop;
+			}
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.exception("u.ac", arguments, exception);
+	}
+	return false;
+}
+Util.removeClass = u.rc = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(\\b)" + classname + "(\\s|$)", "g");
+			node.className = node.className.replace(regexp, " ").trim().replace(/[\s]{2}/g, " ");
+			dom_update === false ? false : node.offsetTop;
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.exception("u.rc", arguments, exception);
+	}
+	return false;
+}
+Util.toggleClass = u.tc = function(node, classname, _classname, dom_update) {
+	try {
+		var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$|\:)");
+		if(regexp.test(node.className)) {
+			u.rc(node, classname, false);
+			if(_classname) {
+				u.ac(node, _classname, false);
+			}
+		}
+		else {
+			u.ac(node, classname, false);
+			if(_classname) {
+				u.rc(node, _classname, false);
+			}
+		}
+		dom_update === false ? false : node.offsetTop;
+		return node.className;
+	}
+	catch(exception) {
+		u.exception("u.tc", arguments, exception);
+	}
+	return false;
+}
+Util.applyStyle = u.as = function(node, property, value, dom_update) {
+	node.style[u.vendorProperty(property)] = value;
+	dom_update === false ? false : node.offsetTop;
+}
+Util.applyStyles = u.ass = function(node, styles, dom_update) {
+	if(styles) {
+		var style;
+		for(style in styles) {
+			node.style[u.vendorProperty(style)] = styles[style];
+		}
+	}
+	dom_update === false ? false : node.offsetTop;
+}
+Util.getComputedStyle = u.gcs = function(node, property) {
+	node.offsetHeight;
+	property = (u.vendorProperty(property).replace(/([A-Z]{1})/g, "-$1")).toLowerCase().replace(/^(webkit|ms)/, "-$1");
+	if(window.getComputedStyle) {
+		return window.getComputedStyle(node, null).getPropertyValue(property);
+	}
+	return false;
+}
+Util.hasFixedParent = u.hfp = function(node) {
+	while(node.nodeName.toLowerCase() != "body") {
+		if(u.gcs(node.parentNode, "position").match("fixed")) {
+			return true;
+		}
+		node = node.parentNode;
+	}
+	return false;
+}
+Util.insertAfter = u.ia = function(after_node, insert_node) {
+	var next_node = u.ns(after_node);
+	if(next_node) {
+		after_node.parentNode.insertBefore(next_node, insert_node);
+	}
+	else {
+		after_node.parentNode.appendChild(insert_node);
+	}
+}
+Util.selectText = function(node) {
+	var selection = window.getSelection();
+	var range = document.createRange();
+	range.selectNodeContents(node);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
+Util.inNodeList = function(node, list) {
+	var i, list_node;
+	for(i = 0; list_node = list[i]; i++) {
+		if(list_node === node) {
+			return true;
+		}
+	}
+	return false;
+}
+u.contains = Util.nodeWithin = u.nw = function(node, scope) {
+	if(scope != node) {
+		if(scope.contains(node)) {
+			return true
+		}
+	}
+	return false;
+}
+u.containsOrIs = function(node, scope) {
+	if(scope == node || u.contains(node, scope)) {
+		return true
+	}
+	return false;
+}
+
 /*u-request.js*/
 Util.createRequestObject = function() {
 	return new XMLHttpRequest();
@@ -7580,17 +8003,23 @@ Util.Objects["oneButtonForm"] = new function() {
 		if(!node.childNodes.length) {
 			var csrf_token = node.getAttribute("data-csrf-token");
 			var form_action = node.getAttribute("data-form-action");
+			var form_target = node.getAttribute("data-form-target");
 			var button_value = node.getAttribute("data-button-value");
 			var button_name = node.getAttribute("data-button-name");
 			var button_class = node.getAttribute("data-button-class");
 			var inputs = node.getAttribute("data-inputs");
 			if(csrf_token && form_action && button_value) {
-				node.form = u.f.addForm(node, {"action":form_action, "class":"confirm_action_form"});
+				var form_options = {"action":form_action, "class":"confirm_action_form"};
+				if(form_target) {
+					form_options["target"] = form_target;
+				}
+				node.form = u.f.addForm(node, form_options);
 				node.form.node = node;
 				u.ae(node.form, "input", {"type":"hidden","name":"csrf-token", "value":csrf_token});
 				if(inputs) {
-					for(input_name in inputs)
-					u.ae(node.form, "input", {"type":"hidden","name":input_name, "value":inputs[input_name]});
+					for(input_name in inputs) {
+						u.ae(node.form, "input", {"type":"hidden","name":input_name, "value":inputs[input_name]});
+					}
 				}
 				u.f.addAction(node.form, {"value":button_value, "class":"button" + (button_class ? " "+button_class : ""), "name":u.stringOr(button_name, "save")});
 			}
@@ -7608,13 +8037,14 @@ Util.Objects["oneButtonForm"] = new function() {
 			node.form.success_function = node.getAttribute("data-success-function");
 			node.form.success_location = node.getAttribute("data-success-location");
 			node.form.dom_submit = node.getAttribute("data-dom-submit");
+			node.form._download = node.getAttribute("data-download");
 			node.form.restore = function(event) {
 				u.t.resetTimer(this.t_confirm);
 				this.confirm_submit_button.value = this.confirm_submit_button.org_value;
 				u.rc(this.confirm_submit_button, "confirm");
 			}
 			node.form.submitted = function() {
-				u.bug("submitted")
+				u.bug("submitted");
 				if(!u.hc(this.confirm_submit_button, "confirm") && this.confirm_submit_button.confirm_value) {
 					u.ac(this.confirm_submit_button, "confirm");
 					this.confirm_submit_button.value = this.confirm_submit_button.confirm_value;
@@ -7622,10 +8052,15 @@ Util.Objects["oneButtonForm"] = new function() {
 				}
 				else {
 					u.t.resetTimer(this.t_confirm);
+					if(typeof(this.node.submitted) == "function") {
+						u.bug("oneButtonForm");
+						this.node.submitted();
+					}
 					this.response = function(response) {
 						u.rc(this, "submitting");
 						u.rc(this.confirm_submit_button, "disabled");
 						page.notify(response);
+						this.restore();
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
 								this.confirm_submit_button.value = this.confirm_submit_button.org_value;
@@ -7633,18 +8068,20 @@ Util.Objects["oneButtonForm"] = new function() {
 							}
 							else {
 								if(this.success_location) {
-									u.bug("location:" + this.success_location)
+									u.bug("location:" + this.success_location);
 									u.ass(this.confirm_submit_button, {
 										"display": "none"
 									});
 									location.href = this.success_location;
 								}
 								else if(this.success_function) {
+									u.bug("function:" + this.success_function);
 									if(typeof(this.node[this.success_function]) == "function") {
 										this.node[this.success_function](response);
 									}
 								}
 								else if(typeof(this.node.confirmed) == "function") {
+									u.bug("confirmed");
 									this.node.confirmed(response);
 								}
 								else {
@@ -7652,16 +8089,26 @@ Util.Objects["oneButtonForm"] = new function() {
 								}
 							}
 						}
-						this.restore();
+						else {
+							if(typeof(this.node.confirmedError) == "function") {
+								u.bug("confirmedError");
+								this.node.confirmedError(response);
+							}
+						}
 					}
 					u.ac(this.confirm_submit_button, "disabled");
 					u.ac(this, "submitting");
 					this.confirm_submit_button.value = u.stringOr(this.confirm_submit_button.wait_value, "Wait");
 					if(this.dom_submit) {
+						u.bug("should submit:" + this._download);
+						if(this._download) {
+							this.response({"cms_status":"success"});
+							u.bug("wait for download");
+						}
 						this.DOMsubmit();
 					}
 					else {
-						u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
+						u.request(this, this.action, {"method":"post", "data":u.f.getParams(this), "responseType":"text"});
 					}
 				}
 			}
@@ -7793,12 +8240,14 @@ u.notifier = function(node) {
 
 /*beta-u-notifier.js*/
 u.notifier = function(node) {
+	u.bug_force = true;
+	u.bug("enable notifier");
 	var notifications = u.qs("div.notifications", node);
 	if(!notifications) {
 		node.notifications = u.ae(node, "div", {"id":"notifications"});
 	}
 	node.notifications.hide_delay = 4500;
-	node.notifications.hide = function() {
+	node.notifications.hide = function(node) {
 		u.a.transition(this, "all 0.5s ease-in-out");
 		u.a.translate(this, 0, -this.offsetHeight);
 	}
@@ -7812,25 +8261,25 @@ u.notifier = function(node) {
 				}
 			}
 		}
-		var output;
-		if(typeof(response) == "object" && response.isJSON) {
+		var output = [];
+		if(typeof(response) == "object") {
 			var message = response.cms_message;
 			var cms_status = typeof(response.cms_status) != "undefined" ? response.cms_status : "";
 			if(typeof(message) == "object") {
 				for(type in message) {
 					if(typeof(message[type]) == "string") {
-						output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":message[type]});
+						output.push(u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":message[type]}));
 					}
 					else if(typeof(message[type]) == "object" && message[type].length) {
 						var node, i;
 						for(i = 0; _message = message[type][i]; i++) {
-							output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":_message});
+							output.push(u.ae(this.notifications, "div", {"class":class_name+" "+cms_status+" "+type, "html":_message}));
 						}
 					}
 				}
 			}
 			else if(typeof(message) == "string") {
-				output = u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message});
+				output.push(u.ae(this.notifications, "div", {"class":class_name+" "+cms_status, "html":message}));
 			}
 			if(typeof(this.notifications.show) == "function") {
 				this.notifications.show();
@@ -7904,11 +8353,11 @@ u.notifier = function(node) {
 			}
 			else if(messages) {
 				for(i = 0; message = messages[i]; i++) {
-					output = u.ae(this.notifications, "div", {"class":message.className, "html":message.innerHTML});
+					output.push(u.ae(this.notifications, "div", {"class":message.className, "html":message.innerHTML}));
 				}
 			}
 		}
-		u.t.setTimer(this.notifications, this.notifications.hide, this.notifications.hide_delay);
+		this.t_notifier = u.t.setTimer(this.notifications, this.notifications.hide, this.notifications.hide_delay, output);
 	}
 }
 
@@ -8485,7 +8934,7 @@ Util.Objects["newSystemMessage"] = new function() {
 				u.rc(this, "submitting");
 				if(response.cms_status == "success") {
 					var div_receipt = u.ae(this.div, "div", {class:"receipt"});
-					u.ae(div_receipt, "p", {html:"Mail was successfully sent to:"});
+					u.ae(div_receipt, "p", {html:"Mail(s) was successfully sent to:"});
 					var ul_receipt = u.ae(div_receipt, "ul", {class:"receipt"});
 					var i;
 					for(i = 0; i < response.cms_object.length; i++) {
@@ -8506,10 +8955,34 @@ Util.Objects["sendMessage"] = new function() {
 		u.f.init(form);
 		form.div_message_form = u.qs("div.item.message form");
 		form.submitted = function(iN) {
-			if(this.fields["recipients"].val() || this.fields["maillist_id"].val()) {
+			if(this.fields["recipients"].val() || this.fields["maillist_id"].val() || this.fields["user_id"].val()) {
 				this.div_message_form.submit();
+				u.ac(this, "submitting");
 				this.response = function(response) {
+					u.rc(this, "submitting");
 					page.notify(response);
+					if(response.cms_status == "success") {
+						u.ass(this, {
+							display:"none",
+						});
+						this.div_receipt = u.ae(this.div, "div", {class:"receipt"});
+						u.ae(this.div_receipt, "p", {html:"Mail(s) was successfully sent to:"});
+						var ul_receipt = u.ae(this.div_receipt, "ul", {class:"receipt"});
+						var i;
+						for(i = 0; i < response.cms_object.length; i++) {
+							u.ae(ul_receipt, "li", {html:response.cms_object[i]})
+						}
+						var ul_actions = u.ae(this.div_receipt, "ul", {class:"actions"});
+						var action = u.f.addAction(ul_actions, {name:"send_another", value:"Send another", type:"button", class:"button"});
+						action._form = this
+						u.ce(action);
+						action.clicked = function() {
+							this._form.div_receipt.parentNode.removeChild(this._form.div_receipt);
+							u.ass(this._form, {
+								display: "block",
+							});
+						}
+					}
 				}
 				u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this, {"send_as":"formdata"})});
 			}
