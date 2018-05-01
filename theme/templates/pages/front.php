@@ -14,8 +14,6 @@ $page_item = $IC->getItem(array("tags" => "page:front", "extend" => array("user"
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 
-		test23
-
 		<? if($media): ?>
 		<div class="image item_id:<?= $page_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 		<? endif; ?>
