@@ -4,7 +4,7 @@
 		The Zipper class simplifies file compression with Zip.
 		This class can be included using:
 	</p>
-	<code>@include_once("classes/system/zipper.class.php");</code>
+	<code>@include_once("classes/helpers/zipper.class.php");</code>
 
 	<div class="section functions">
 		<div class="header">
