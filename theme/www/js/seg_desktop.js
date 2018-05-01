@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2018-02-12 18:13:54
+js-merged @ 2018-05-01 22:09:32
 */
 
 /*seg_desktop_include.js*/
@@ -4505,6 +4505,76 @@ u.txt["share-info-ok"] = "OK";
 
 
 /*u-basics.js*/
+u.smartphoneSwitch = new function() {
+	this.state = 0;
+	this.init = function(node) {
+		this.callback_node = node;
+		this.event_id = u.e.addWindowEvent(this, "resize", this.resized);
+		this.resized();
+	}
+	this.resized = function() {
+		if(u.browserW() < 500 && !this.state) {
+			this.switchOn();
+		}
+		else if(u.browserW() > 500 && this.state) {
+			this.switchOff();
+		}
+	}
+	this.switchOn = function() {
+		if(!this.panel) {
+			this.state = true;
+			this.panel = u.ae(document.body, "div", {"id":"smartphone_switch"});
+			u.ass(this.panel, {
+				opacity: 0
+			});
+			u.ae(this.panel, "h1", {html:u.stringOr(u.txt["smartphone-switch-headline"], "Hello curious")});
+			if(u.txt["smartphone-switch-text"].length) {
+				for(i = 0; i < u.txt["smartphone-switch-text"].length; i++) {
+					u.ae(this.panel, "p", {html:u.txt["smartphone-switch-text"][i]});
+				}
+			}
+			var ul_actions = u.ae(this.panel, "ul", {class:"actions"});
+			var li; 
+			li = u.ae(ul_actions, "li", {class:"hide"});
+			var bn_hide = u.ae(li, "a", {class:"hide button", html:u.txt["smartphone-switch-bn-hide"]});
+			li = u.ae(ul_actions, "li", {class:"switch"});
+			var bn_switch = u.ae(li, "a", {class:"switch button primary", html:u.txt["smartphone-switch-bn-switch"]});
+			u.e.click(bn_switch);
+			bn_switch.clicked = function() {
+				u.saveCookie("smartphoneSwitch", "on");
+				location.href = location.href + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
+			}
+			u.e.click(bn_hide);
+			bn_hide.clicked = function() {
+				u.e.removeWindowEvent(u.smartphoneSwitch, "resize", u.smartphoneSwitch.event_id);
+				u.smartphoneSwitch.switchOff();
+			}
+			u.a.transition(this.panel, "all 0.5s ease-in-out");
+			u.ass(this.panel, {
+				opacity: 1
+			});
+			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOn) == "function") {
+				this.callback_node.smartphoneSwitchedOn();
+			}
+		}
+	}
+	this.switchOff = function() {
+		if(this.panel) {
+			this.state = false;
+			this.panel.transitioned = function() {
+				this.parentNode.removeChild(this);
+				delete u.smartphoneSwitch.panel;
+			}
+			u.a.transition(this.panel, "all 0.5s ease-in-out");
+			u.ass(this.panel, {
+				opacity: 0
+			});
+			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOff) == "function") {
+				this.callback_node.smartphoneSwitchedOff();
+			}
+		}
+	}
+}
 
 
 /*u-googleanalytics.js*/
@@ -4572,6 +4642,169 @@ if(u.ga_account) {
 			return u.cutString(u.text(node).trim(), 20) + "(<"+node.nodeName+">)";
 		}
 	}
+}
+
+
+/*u-cookie.js*/
+Util.saveCookie = function(name, value, _options) {
+	var expires = true;
+	var path = false;
+	var force = false;
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "expires"	: expires	= _options[_argument]; break;
+				case "path"		: path		= _options[_argument]; break;
+				case "force"	: force		= _options[_argument]; break;
+			}
+		}
+	}
+	if(!force && typeof(window.localStorage) == "object" && typeof(window.sessionStorage) == "object") {
+		if(expires === true) {
+			window.sessionStorage.setItem(name, value);
+		}
+		else {
+			window.localStorage.setItem(name, value);
+		}
+		return;
+	}
+	if(expires === false) {
+		expires = ";expires=Mon, 04-Apr-2020 05:00:00 GMT";
+	}
+	else if(typeof(expires) === "string") {
+		expires = ";expires="+expires;
+	}
+	else {
+		expires = "";
+	}
+	if(typeof(path) === "string") {
+		path = ";path="+path;
+	}
+	else {
+		path = "";
+	}
+	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + path + expires;
+}
+Util.getCookie = function(name) {
+	var matches;
+	if(typeof(window.sessionStorage) == "object" && window.sessionStorage.getItem(name)) {
+		return window.sessionStorage.getItem(name)
+	}
+	else if(typeof(window.localStorage) == "object" && window.localStorage.getItem(name)) {
+		return window.localStorage.getItem(name)
+	}
+	return (matches = document.cookie.match(encodeURIComponent(name) + "=([^;]+)")) ? decodeURIComponent(matches[1]) : false;
+}
+Util.deleteCookie = function(name, _options) {
+	var path = false;
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "path"	: path	= _options[_argument]; break;
+			}
+		}
+	}
+	if(typeof(window.sessionStorage) == "object") {
+		window.sessionStorage.removeItem(name);
+	}
+	if(typeof(window.localStorage) == "object") {
+		window.localStorage.removeItem(name);
+	}
+	if(typeof(path) === "string") {
+		path = ";path="+path;
+	}
+	else {
+		path = "";
+	}
+	document.cookie = encodeURIComponent(name) + "=" + path + ";expires=Thu, 01-Jan-70 00:00:01 GMT";
+}
+Util.saveNodeCookie = function(node, name, value, _options) {
+	var ref = u.cookieReference(node, _options);
+	var mem = JSON.parse(u.getCookie("man_mem"));
+	if(!mem) {
+		mem = {};
+	}
+	if(!mem[ref]) {
+		mem[ref] = {};
+	}
+	mem[ref][name] = (value !== false && value !== undefined) ? value : "";
+	u.saveCookie("man_mem", JSON.stringify(mem), {"path":"/"});
+}
+Util.getNodeCookie = function(node, name, _options) {
+	var ref = u.cookieReference(node, _options);
+	var mem = JSON.parse(u.getCookie("man_mem"));
+	if(mem && mem[ref]) {
+		if(name) {
+			return mem[ref][name] ? mem[ref][name] : "";
+		}
+		else {
+			return mem[ref];
+		}
+	}
+	return false;
+}
+Util.deleteNodeCookie = function(node, name, _options) {
+	var ref = u.cookieReference(node, _options);
+	var mem = JSON.parse(u.getCookie("man_mem"));
+	if(mem && mem[ref]) {
+		if(name) {
+			delete mem[ref][name];
+		}
+		else {
+			delete mem[ref];
+		}
+	}
+	u.saveCookie("man_mem", JSON.stringify(mem), {"path":"/"});
+}
+Util.cookieReference = function(node, _options) {
+	var ref;
+	var ignore_classnames = false;
+	var ignore_classvars = false;
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "ignore_classnames"	: ignore_classnames	= _options[_argument]; break;
+				case "ignore_classvars" 	: ignore_classvars	= _options[_argument]; break;
+			}
+		}
+	}
+	if(node.id) {
+		ref = node.nodeName + "#" + node.id;
+	}
+	else {
+		var node_identifier = "";
+		if(node.name) {
+			node_identifier = node.nodeName + "["+node.name+"]";
+		}
+		else if(node.className) {
+			var classname = node.className;
+			if(ignore_classnames) {
+				var regex = new RegExp("(^| )("+ignore_classnames.split(",").join("|")+")($| )", "g");
+				classname = classname.replace(regex, " ").replace(/[ ]{2,4}/, " ");
+			}
+			if(ignore_classvars) {
+				classname = classname.replace(/(^| )[a-zA-Z_]+\:[\?\=\w\/\\#~\:\.\,\+\&\%\@\!\-]+(^| )/g, " ").replace(/[ ]{2,4}/g, " ");
+			}
+			node_identifier = node.nodeName+"."+classname.trim().replace(/ /g, ".");
+		}
+		else {
+			node_identifier = node.nodeName
+		}
+		var id_node = node;
+		while(!id_node.id) {
+			id_node = id_node.parentNode;
+		}
+		if(id_node.id) {
+			ref = id_node.nodeName + "#" + id_node.id + " " + node_identifier;
+		}
+		else {
+			ref = node_identifier;
+		}
+	}
+	return ref;
 }
 
 
@@ -5307,7 +5540,7 @@ Util.Form = u.f = new function() {
 		}
 	}
 	this.validate = function(iN) {
-		if(!iN._form._validation || !iN._form.field) {
+		if(!iN._form._validation || !iN.field) {
 			return true;
 		}
 		var min, max, pattern;
@@ -5962,17 +6195,23 @@ Util.Objects["oneButtonForm"] = new function() {
 		if(!node.childNodes.length) {
 			var csrf_token = node.getAttribute("data-csrf-token");
 			var form_action = node.getAttribute("data-form-action");
+			var form_target = node.getAttribute("data-form-target");
 			var button_value = node.getAttribute("data-button-value");
 			var button_name = node.getAttribute("data-button-name");
 			var button_class = node.getAttribute("data-button-class");
 			var inputs = node.getAttribute("data-inputs");
 			if(csrf_token && form_action && button_value) {
-				node.form = u.f.addForm(node, {"action":form_action, "class":"confirm_action_form"});
+				var form_options = {"action":form_action, "class":"confirm_action_form"};
+				if(form_target) {
+					form_options["target"] = form_target;
+				}
+				node.form = u.f.addForm(node, form_options);
 				node.form.node = node;
 				u.ae(node.form, "input", {"type":"hidden","name":"csrf-token", "value":csrf_token});
 				if(inputs) {
-					for(input_name in inputs)
-					u.ae(node.form, "input", {"type":"hidden","name":input_name, "value":inputs[input_name]});
+					for(input_name in inputs) {
+						u.ae(node.form, "input", {"type":"hidden","name":input_name, "value":inputs[input_name]});
+					}
 				}
 				u.f.addAction(node.form, {"value":button_value, "class":"button" + (button_class ? " "+button_class : ""), "name":u.stringOr(button_name, "save")});
 			}
@@ -5990,13 +6229,14 @@ Util.Objects["oneButtonForm"] = new function() {
 			node.form.success_function = node.getAttribute("data-success-function");
 			node.form.success_location = node.getAttribute("data-success-location");
 			node.form.dom_submit = node.getAttribute("data-dom-submit");
+			node.form._download = node.getAttribute("data-download");
 			node.form.restore = function(event) {
 				u.t.resetTimer(this.t_confirm);
 				this.confirm_submit_button.value = this.confirm_submit_button.org_value;
 				u.rc(this.confirm_submit_button, "confirm");
 			}
 			node.form.submitted = function() {
-				u.bug("submitted")
+				u.bug("submitted");
 				if(!u.hc(this.confirm_submit_button, "confirm") && this.confirm_submit_button.confirm_value) {
 					u.ac(this.confirm_submit_button, "confirm");
 					this.confirm_submit_button.value = this.confirm_submit_button.confirm_value;
@@ -6004,10 +6244,17 @@ Util.Objects["oneButtonForm"] = new function() {
 				}
 				else {
 					u.t.resetTimer(this.t_confirm);
+					if(typeof(this.node.submitted) == "function") {
+						u.bug("oneButtonForm");
+						this.node.submitted();
+					}
 					this.response = function(response) {
+						console.log("RESPONSE");
+						console.log(response);
 						u.rc(this, "submitting");
 						u.rc(this.confirm_submit_button, "disabled");
 						page.notify(response);
+						this.restore();
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
 								this.confirm_submit_button.value = this.confirm_submit_button.org_value;
@@ -6015,18 +6262,20 @@ Util.Objects["oneButtonForm"] = new function() {
 							}
 							else {
 								if(this.success_location) {
-									u.bug("location:" + this.success_location)
+									u.bug("location:" + this.success_location);
 									u.ass(this.confirm_submit_button, {
 										"display": "none"
 									});
 									location.href = this.success_location;
 								}
 								else if(this.success_function) {
+									u.bug("function:" + this.success_function);
 									if(typeof(this.node[this.success_function]) == "function") {
 										this.node[this.success_function](response);
 									}
 								}
 								else if(typeof(this.node.confirmed) == "function") {
+									u.bug("confirmed");
 									this.node.confirmed(response);
 								}
 								else {
@@ -6034,16 +6283,26 @@ Util.Objects["oneButtonForm"] = new function() {
 								}
 							}
 						}
-						this.restore();
+						else {
+							if(typeof(this.node.confirmedError) == "function") {
+								u.bug("confirmedError");
+								this.node.confirmedError(response);
+							}
+						}
 					}
 					u.ac(this.confirm_submit_button, "disabled");
 					u.ac(this, "submitting");
 					this.confirm_submit_button.value = u.stringOr(this.confirm_submit_button.wait_value, "Wait");
 					if(this.dom_submit) {
+						u.bug("should submit:" + this._download);
+						if(this._download) {
+							this.response({"cms_status":"success"});
+							u.bug("wait for download");
+						}
 						this.DOMsubmit();
 					}
 					else {
-						u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
+						u.request(this, this.action, {"method":"post", "data":u.f.getParams(this), "responseType":"text"});
 					}
 				}
 			}
@@ -8394,7 +8653,12 @@ Util.Objects["page"] = new function() {
 				this.is_ready = true;
 				u.e.addEvent(window, "resize", page.resized);
 				u.e.addEvent(window, "scroll", page.scrolled);
-				u.notifier(this);
+				if(typeof(u.notifier) == "function") {
+					u.notifier(this);
+				}
+				if(typeof(u.smartphoneSwitch) == "object") {
+					u.smartphoneSwitch.init(this);
+				}
 				this.initHeader();
 				this.initNavigation();
 				this.initFooter();
