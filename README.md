@@ -18,7 +18,7 @@ janitor.parentnode.dk is licensed as follows:
 https://github.com/parentnode/janitor_parentnode_dk/blob/master/LICENSE-CPAL.md
 
 ##Content:
-http://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/
 
 
 # Contributing to Janitor
