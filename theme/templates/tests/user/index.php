@@ -3,20 +3,22 @@
 include_once("classes/system/upgrade.class.php");
 $UpgradeClass = new Upgrade();
 
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
-
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'DKK', 'Kroner (Denmark)', 'DKK', 'after', 2, ',', '.'", "id = 'DKK'");
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'EUR', 'Euro (Denmark)', '€', 'before', 2, ',', '.'", "id = 'EUR'");
-
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DK', 'Danmark', '45', '#### ####', 'DA', 'DKK'", "id = 'DK'");
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DE', 'Deutchland', '49', '#### ####', 'DE', 'EUR'", "id = 'DE'");
-
-$UpgradeClass->checkDefaultValues(UT_SUBSCRIPTION_METHODS, "999, 'Month', 'monthly', DEFAULT", "id = 999");
-$UpgradeClass->checkDefaultValues(UT_SUBSCRIPTION_METHODS, "998, 'Week', 'weekly', DEFAULT", "id = 998");
-
-$UpgradeClass->checkDefaultValues(UT_VATRATES, "999, 'No VAT', 0, 'DK'", "id = 999");
-$UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998");
+// $UpgradeClass->checkDefaultValues(UT_LANGUAGES);
+// // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
+// // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
+//
+// $UpgradeClass->checkDefaultValues(UT_CURRENCIES);
+// // $UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'DKK', 'Kroner (Denmark)', 'DKK', 'after', 2, ',', '.'", "id = 'DKK'");
+// // $UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'EUR', 'Euro (Denmark)', '€', 'before', 2, ',', '.'", "id = 'EUR'");
+//
+// $UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DK', 'Danmark', '45', '#### ####', 'DA', 'DKK'", "id = 'DK'");
+// $UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DE', 'Deutchland', '49', '#### ####', 'DE', 'EUR'", "id = 'DE'");
+//
+// $UpgradeClass->checkDefaultValues(UT_SUBSCRIPTION_METHODS, "999, 'Month', 'monthly', DEFAULT", "id = 999");
+// $UpgradeClass->checkDefaultValues(UT_SUBSCRIPTION_METHODS, "998, 'Week', 'weekly', DEFAULT", "id = 998");
+//
+// $UpgradeClass->checkDefaultValues(UT_VATRATES, "999, 'No VAT', 0, 'DK'", "id = 999");
+// $UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998");
 
 
 $IC = new Items();
