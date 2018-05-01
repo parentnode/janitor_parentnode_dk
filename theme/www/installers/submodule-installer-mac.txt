@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
 
-# bash <(curl -s http://test.janitor.parentnode.dk/installers/submodule-installer-osx)
-# bash <(curl -s http://janitor.local/installers/submodule-installer-osx)
+# bash <(curl -s http://test.janitor.parentnode.dk/installers/submodule-installer-mac)
+# bash <(curl -s http://janitor.local/installers/submodule-installer-mac)
 
 
 # Define output colors
@@ -152,12 +152,21 @@ echo
 mkdir submodules
 
 # TODO: Update links to latest release (after release of 0.7.7)
+janitor_branch=$(curl -s -L https://api.github.com/repos/parentnode/janitor/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
 git submodule add https://github.com/parentnode/janitor submodules/janitor
-git submodule add https://github.com/parentnode/js-merger submodules/js-merger
-git submodule add https://github.com/parentnode/css-merger submodules/css-merger
+cd submodules/janitor && git checkout -b "$janitor_branch" && cd ../..
 
-git commit -m 'Added Janitor submodules'
-git push
+jsmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/js-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/js-merger submodules/js-merger
+cd submodules/js-merger && git checkout -b "$jsmerger_branch" && cd ../..
+
+cssmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/css-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/css-merger submodules/css-merger
+cd submodules/css-merger && git checkout -b "$cssmerger_branch" && cd ../..
+
+# Let user do this
+# git commit -m 'Added Janitor submodules'
+# git push
 
 
 echo
@@ -220,7 +229,6 @@ fi
 
 
 
-# TODO: Test on Apache 2.4
 # Add actual VHOST configuration
 echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
 echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
@@ -232,6 +240,7 @@ echo "		Options All MultiViews" >> apache/httpd-vhosts.conf
 echo "		AllowOverride All" >> apache/httpd-vhosts.conf
 echo "		Order allow,deny" >> apache/httpd-vhosts.conf
 echo "		Allow from all" >> apache/httpd-vhosts.conf
+echo "		Require all granted" >> apache/httpd-vhosts.conf
 echo "	</Directory>" >> apache/httpd-vhosts.conf
 
 echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src/www\"" >> apache/httpd-vhosts.conf
@@ -250,7 +259,7 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 
 	# Check hosts configuration
-	hosts_entry_exists=$( grep -E "${domain}$" "/etc/hosts" )
+	hosts_entry_exists=$( grep -E "( |\t)${domain}$" "/etc/hosts" )
 	if [ -z "${hosts_entry_exists}" ]; then
 
 		echo

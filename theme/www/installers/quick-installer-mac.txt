@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
 
-# bash <(curl -s http://test.janitor.parentnode.dk/installers/quick-installer-osx)
-# bash <(curl -s http://janitor.local/installers/quick-installer-osx)
+# bash <(curl -s http://test.janitor.parentnode.dk/installers/quick-installer-mac)
+# bash <(curl -s http://janitor.local/installers/quick-installer-mac)
 
 
 
@@ -140,21 +140,33 @@ echo
 
 mkdir -p core
 
-# TODO: Update links to latest release (after release of 0.7.7)
-wget https://github.com/parentnode/janitor/archive/master.tar.gz -O janitor.tar.gz
-tar -xzf janitor.tar.gz
+
+# Get latest release from GitHub
+janitor_current=$(curl -s -L https://api.github.com/repos/parentnode/janitor/releases/latest | egrep -o 'repos/parentnode/janitor/tarball/([0-9v\.]+){1}')
+wget "https://api.github.com/$janitor_current" -O janitor.tar.gz
+# Get folder name
+janitor_folder=$(tar -tvzf janitor.tar.gz | head -1 | egrep -o 'parentnode-janitor[a-z0-9\-]+')
+tar -vxzf janitor.tar.gz
 rm janitor.tar.gz
-mv janitor-master core/janitor
+mv "$janitor_folder" core/janitor
 
-wget https://github.com/parentnode/js-merger/archive/master.tar.gz -O js-merger.tar.gz
-tar -xzf js-merger.tar.gz
+# Get latest release from GitHub
+jsmerger_current=$(curl -s -L https://api.github.com/repos/parentnode/js-merger/releases/latest | egrep -o 'repos/parentnode/js-merger/tarball/([0-9v\.]+){1}')
+wget "https://api.github.com/$jsmerger_current" -O js-merger.tar.gz
+# Get folder name
+jsmerger_folder=$(tar -tvzf js-merger.tar.gz | head -1 | egrep -o 'parentnode-js-merger[a-z0-9\-]+')
+tar -vxzf js-merger.tar.gz
 rm js-merger.tar.gz
-mv js-merger-master core/js-merger
+mv "$jsmerger_folder" core/js-merger
 
-wget https://github.com/parentnode/css-merger/archive/master.tar.gz -O css-merger.tar.gz
-tar -xzf css-merger.tar.gz
+# Get latest release from GitHub
+cssmerger_current=$(curl -s -L https://api.github.com/repos/parentnode/css-merger/releases/latest | egrep -o 'repos/parentnode/css-merger/tarball/([0-9v\.]+){1}')
+wget "https://api.github.com/$cssmerger_current" -O css-merger.tar.gz
+# Get folder name
+cssmerger_folder=$(tar -tvzf css-merger.tar.gz | head -1 | egrep -o 'parentnode-css-merger[a-z0-9\-]+')
+tar -vxzf css-merger.tar.gz
 rm css-merger.tar.gz
-mv css-merger-master core/css-merger
+mv "$cssmerger_folder" core/css-merger
 
 
 
@@ -217,7 +229,6 @@ if [ "${parentnode_env}" = "n" ]; then
 fi
 
 
-# TODO: Test on Apache 2.4
 # Add actual VHOST configuration
 echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
 echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
@@ -229,6 +240,7 @@ echo "		Options All MultiViews" >> apache/httpd-vhosts.conf
 echo "		AllowOverride All" >> apache/httpd-vhosts.conf
 echo "		Order allow,deny" >> apache/httpd-vhosts.conf
 echo "		Allow from all" >> apache/httpd-vhosts.conf
+echo "		Require all granted" >> apache/httpd-vhosts.conf
 echo "	</Directory>" >> apache/httpd-vhosts.conf
 
 echo "	Alias \"/janitor/admin\" \"${working_directory}/core/janitor/src/www\"" >> apache/httpd-vhosts.conf
@@ -247,7 +259,7 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 
 	# Check hosts configuration
-	hosts_entry_exists=$( grep -E "${domain}$" "/etc/hosts" )
+	hosts_entry_exists=$( grep -E "( |\t)${domain}$" "/etc/hosts" )
 	if [ -z "${hosts_entry_exists}" ]; then
 
 		echo
@@ -480,7 +492,7 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 			echo "$((i + 1)): ${apachectls[$i]} (MacPorts)"
 		elif [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
 			echo "$((i + 1)): ${apachectls[$i]} (Old MacPorts - you should update your system)"
-		elif [ $( echo "${apachectls[$i]}" | grep -E "\/MAMP\/") ]; then
+		elif [ $( echo "${apachectls[$i]}" | grep -E "\/MAMP\/" ) ]; then
 			echo "$((i + 1)): ${apachectls[$i]} (MAMP)"
 		else
 			echo "$((i + 1)): ${apachectls[$i]}"
