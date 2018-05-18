@@ -233,6 +233,7 @@ fi
 echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
 echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
 echo "	ServerName ${domain}" >> apache/httpd-vhosts.conf
+echo "	AddType application/x-httpd-php .php" >> apache/httpd-vhosts.conf
 
 # Add Directory directive to project Apache conf to ensure project can run in current location
 echo "	<Directory ${working_directory}>" >> apache/httpd-vhosts.conf
