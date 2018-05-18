@@ -2,7 +2,7 @@
 
 
 # bash <(curl -s http://test.janitor.parentnode.dk/installers/submodule-installer-mac)
-# bash <(curl -s http://janitor.local/installers/submodule-installer-mac)
+# bash <(curl -s http://janitor.local/installers/submodule-installer-windows)
 
 
 # Define output colors
@@ -297,13 +297,13 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 		IFS_backup=$IFS
 		IFS=$'\n'
-		httpd_confs=($( sudo find /mnt/c/srv/installed_packages/apache24/Apache24/conf -name 'httpd.conf' ! -wholename '*/original/httpd.conf' ! -wholename '*/rsync.macports.org/*' ))
+		httpd_confs=($( sudo find /mnt/c/srv/installed-packages/apache24/Apache24/conf -name 'httpd.conf' ! -wholename '*/original/httpd.conf' ! -wholename '*/rsync.macports.org/*' ))
 		IFS=$IFS_backup
 
 		httpd_confs_length=${#httpd_confs[@]}
 		for (( i = 0; i < ${httpd_confs_length}; i++ )); do
 
-			if [ $( echo "${httpd_confs[$i]}" | grep -E "^/mnt/c/srv/installed_packages/apache24/Apache24/conf" ) ]; then
+			if [ $( echo "${httpd_confs[$i]}" | grep -E "^/mnt/c/srv/installed-packages/apache24/Apache24/conf" ) ]; then
 				echo "$((i + 1)): ${httpd_confs[$i]} (parentnode)"
 			fi
 
@@ -312,6 +312,9 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 		# Let user select httpd.conf
 		read -p "Select your active httpd.conf [1-${httpd_confs_length}]: " active_httpd_conf
+
+		echo "${active_httpd_conf}"
+		echo "${httpd_confs_length}"
 
 
 		# Is response within allowed range
@@ -340,78 +343,78 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 
 
-		# Check if virtual hosts are enabled in Apache conf
-		vhosts_include="no"
-		vhosts_path="no"
-
-
-		# Find all vhost includes (both active and commented out)
-		IFS_backup=$IFS
-		IFS=$'\n'
-		vhosts_includes=($( grep -E "Include .+\/httpd-vhosts\.conf" "${httpd_file}" ))
-		IFS=$IFS_backup
-
-		vhosts_includes_length=${#vhosts_includes[@]}
-		# Abort if there is no vhosts include in httpd.conf
-		if [ ${vhosts_includes_length} -eq 0 ]; then
-
-			echo "${RED}"
-			echo "Keep the rubberduck away from fire."
-			echo "(Could not find default vhost include)"
-			echo "${NC}"
-
-			exit 1
-
-		fi
-
-		# Look for active vhosts include
-		for (( i = 0; i < ${vhosts_includes_length}; i++ )); do
-
-			# Found valid include
-			active_vhost_include=$( echo "${vhosts_includes[$i]}" | grep -E "^Include" )
-			# Is it active
-			if [ ! -z "${active_vhost_include}" ]; then
-				vhosts_include=${vhosts_includes[$i]}
-				vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
-				break
-			fi
-
-		done
-
-		# No active vhost include found
-		if [ "${vhosts_include}" = "no" ]; then
-
-			echo
-			echo "Activating virtual hosts"
-		
-			# Remove "#" from include string
-			vhosts_include=$( echo "${vhosts_includes[0]}" | sed "s/^#I/I/" )
-
-			# Replace vhost string in httpd.conf
-			sudo sed -i -e "s%${vhosts_includes[0]}%${vhosts_include}%" "${httpd_file}"
-
-			# get clean vhosts file
-			vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
-
-			# this is probably the default vhosts - so it should be cleaned up (commenting out dummy examples)
-			if [ -e "${vhosts_path}" ]; then
-				sudo sed -i -e "s/^\([< ]\)/#\1/" "${vhosts_path}"
-			fi
-
-		fi
-
-
-		# Did we find valid default vhosts file
-		if [ ! -e "${vhosts_path}" ]; then
-
-			echo "${RED}"
-			echo "Yikes! I thought I knew everything. I was wrong."
-			echo "(Could not find default vhost include)"
-			echo "${NC}"
-
-			exit 1
-
-		fi
+#		# Check if virtual hosts are enabled in Apache conf
+#		vhosts_include="no"
+#		vhosts_path="no"
+#
+#
+#		# Find all vhost includes (both active and commented out)
+#		IFS_backup=$IFS
+#		IFS=$'\n'
+#		vhosts_includes=($( grep -E "Include .+\/httpd-vhosts\.conf" "${httpd_file}" ))
+#		IFS=$IFS_backup
+#
+#		vhosts_includes_length=${#vhosts_includes[@]}
+#		# Abort if there is no vhosts include in httpd.conf
+#		if [ ${vhosts_includes_length} -eq 0 ]; then
+#
+#			echo "${RED}"
+#			echo "Keep the rubberduck away from fire."
+#			echo "(Could not find default vhost include)"
+#			echo "${NC}"
+#
+#			exit 1
+#
+#		fi
+#
+#		# Look for active vhosts include
+#		for (( i = 0; i < ${vhosts_includes_length}; i++ )); do
+#
+#			# Found valid include
+#			active_vhost_include=$( echo "${vhosts_includes[$i]}" | grep -E "^Include" )
+#			# Is it active
+#			if [ ! -z "${active_vhost_include}" ]; then
+#				vhosts_include=${vhosts_includes[$i]}
+#				vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
+#				break
+#			fi
+#
+#		done
+#
+#		# No active vhost include found
+#		if [ "${vhosts_include}" = "no" ]; then
+#
+#			echo
+#			echo "Activating virtual hosts"
+#		
+#			# Remove "#" from include string
+#			vhosts_include=$( echo "${vhosts_includes[0]}" | sed "s/^#I/I/" )
+#
+#			# Replace vhost string in httpd.conf
+#			sudo sed -i -e "s%${vhosts_includes[0]}%${vhosts_include}%" "${httpd_file}"
+#
+#			# get clean vhosts file
+#			vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
+#
+#			# this is probably the default vhosts - so it should be cleaned up (commenting out dummy examples)
+#			if [ -e "${vhosts_path}" ]; then
+#				sudo sed -i -e "s/^\([< ]\)/#\1/" "${vhosts_path}"
+#			fi
+#
+#		fi
+#
+#
+#		# Did we find valid default vhosts file
+#		if [ ! -e "${vhosts_path}" ]; then
+#
+#			echo "${RED}"
+#			echo "Yikes! I thought I knew everything. I was wrong."
+#			echo "(Could not find default vhost include)"
+#			echo "${NC}"
+#
+#			exit 1
+#
+#		fi
 
 
 		# Everything is good
@@ -437,19 +440,19 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 
 		# Add local apache/*.conf to apache httpd-vhosts.conf (if it is not there already)
-		local_apache_include_exists=$( grep "Include /srv/sites/apache/\*.conf" "${vhosts_path}" )
-		if [ -z "${local_apache_include_exists}" ]; then
-
-			sudo chmod 777 "${vhosts_path}"
-
-			# Include global apache.conf for all apache installations
-			echo "" >> "${vhosts_path}"
-			echo "Include /srv/sites/apache/*.conf" >> "${vhosts_path}"
-
-			sudo chmod 644 "${vhosts_path}"
-
-		fi
-
+#		local_apache_include_exists=$( grep "Include /srv/sites/apache/\*.conf" "${vhosts_path}" )
+#		if [ -z "${local_apache_include_exists}" ]; then
+#
+#			sudo chmod 777 "${vhosts_path}"
+#
+#			# Include global apache.conf for all apache installations
+#			echo "" >> "${vhosts_path}"
+#			echo "Include /srv/sites/apache/*.conf" >> "${vhosts_path}"
+#
+#			sudo chmod 644 "${vhosts_path}"
+#
+#		fi
+#
 
 	fi
 	# End of non-parentnode setup
