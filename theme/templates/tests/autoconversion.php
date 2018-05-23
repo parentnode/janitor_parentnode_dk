@@ -60,7 +60,7 @@ class CurlRequest {
 
 	}
 
-	public function exec($url) {
+	public function exec($url, $debug = false) {
 
 		@curl_setopt($this->ch, CURLOPT_URL, $url);
 
@@ -78,6 +78,10 @@ class CurlRequest {
 		if($error) {
 			$result['curl_error'] = $error;
 			return $result;
+		}
+
+		if($debug) {
+			print_r($result);
 		}
 
 		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
@@ -103,7 +107,7 @@ function autoconvertImage($url, $filesize, $width, $height, $format) {
 	global $curl;
 	global $imageClass;
 
-	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
+	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url), true) {
 
 		$info = $imageClass->info(PUBLIC_FILE_PATH."/autoconversion-test/".$url);
 		if(
