@@ -4,7 +4,7 @@ global $model;
 
 
 include_once("classes/helpers/video.class.php");
-include_once("classes/system/audio.class.php");
+include_once("classes/helpers/audio.class.php");
 include_once("classes/helpers/image.class.php");
 
 global $videoClass;
