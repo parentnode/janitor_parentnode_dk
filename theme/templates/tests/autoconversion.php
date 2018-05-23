@@ -107,7 +107,7 @@ function autoconvertImage($url, $filesize, $width, $height, $format) {
 	global $curl;
 	global $imageClass;
 
-	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url), true) {
+	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
 
 		$info = $imageClass->info(PUBLIC_FILE_PATH."/autoconversion-test/".$url);
 		if(
