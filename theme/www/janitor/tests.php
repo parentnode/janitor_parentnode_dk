@@ -31,8 +31,6 @@ if(is_array($action) && count($action)) {
 
 		$PC->create(SITE_URL."/tests/pdf-template", $file);
 
-		exit();
-
 		if(file_exists($file)) {
 
 			header('Content-Description: File download');
