@@ -80,15 +80,15 @@ class CurlRequest {
 			return $result;
 		}
 
-		if($debug) {
-			print_r($result);
-		}
-
 		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
 		$result['header'] = substr($response, 0, $header_size);
 		$result['body'] = substr($response, $header_size);
 		$result['http_code'] = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 		$result['last_url'] = curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL);
+
+		if($debug) {
+			print_r($result);
+		}
 
 		if($result["http_code"] == 200 && $result['last_url'] == $url) {
 			return true;
@@ -107,7 +107,7 @@ function autoconvertImage($url, $filesize, $width, $height, $format) {
 	global $curl;
 	global $imageClass;
 
-	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
+	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url, true) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
 
 		$info = $imageClass->info(PUBLIC_FILE_PATH."/autoconversion-test/".$url);
 		if(
@@ -207,7 +207,7 @@ $curl->init($params);
 		<? else: ?>
 			<div class="testfailed"><p>png -> png (different proportion) - API error</p></div>
 		<? endif; ?>
-
+<? /* 
 		<? if(autoconvertImage("png/256x144.png", array(55000, 65000), 256, 144, "png")): ?>
 			<div class="testpassed"><p>png -> png (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/png/256x144.png") ?>)</p></div>
 		<? else: ?>
@@ -553,8 +553,8 @@ $curl->init($params);
 		<? else: ?>
 			<div class="testfailed"><p>ogg -> ogg (same bitrate) - API error</p></div>
 		<? endif; ?>
+*/ ?>
 	</div>
-
 
 	<?
 	// cleanup
