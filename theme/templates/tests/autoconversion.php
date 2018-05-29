@@ -1,4 +1,7 @@
 <?
+// Processing images, videos and audios might take more then default execution time
+set_time_limit(0);
+
 global $IC;
 global $model;
 
@@ -19,6 +22,9 @@ $imageClass = new Image();
 $fs = new FileSystem();
 $fs->copy(LOCAL_PATH."/templates/tests/autoconversion-media", PRIVATE_FILE_PATH."/autoconversion-test");
 
+// Auto conversion test dows not work on windows.
+// - Apache crashes when trying to make Imagick object from image just created (possibly the file is locked)
+$os = preg_match("/Darwin/i", PHP_OS) ? "mac" : (preg_match("/win/i", PHP_OS) ? "win" : "unix");
 
 class CurlRequest {
 
@@ -107,7 +113,7 @@ function autoconvertImage($url, $filesize, $width, $height, $format) {
 	global $curl;
 	global $imageClass;
 
-	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url, true) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
+	if($curl->exec(SITE_URL."/images/autoconversion-test/".$url) && file_exists(PUBLIC_FILE_PATH."/autoconversion-test/".$url)) {
 
 		$info = $imageClass->info(PUBLIC_FILE_PATH."/autoconversion-test/".$url);
 		if(
@@ -194,6 +200,8 @@ $curl->init($params);
 <div class="scene i:scene tests defaultEdit">
 	<h1>Autoconversion</h1>	
 
+<? if($os != "win"): ?>
+
 	<h2>Media conversion test using the Autoconversion API</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
@@ -207,7 +215,7 @@ $curl->init($params);
 		<? else: ?>
 			<div class="testfailed"><p>png -> png (different proportion) - API error</p></div>
 		<? endif; ?>
-<? /* 
+
 		<? if(autoconvertImage("png/256x144.png", array(55000, 65000), 256, 144, "png")): ?>
 			<div class="testpassed"><p>png -> png (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/png/256x144.png") ?>)</p></div>
 		<? else: ?>
@@ -283,6 +291,9 @@ $curl->init($params);
 		<? endif; ?>
 	</div>
 
+<? else: ?>
+	<p>Image auto conversion test does not work on Windows. (Causes Apache to crash on current windows parentNode stack)</p>
+<? endif; ?>
 
 	<div class="tests">
 		<h3>Video: mp4 input</h3>
@@ -553,7 +564,6 @@ $curl->init($params);
 		<? else: ?>
 			<div class="testfailed"><p>ogg -> ogg (same bitrate) - API error</p></div>
 		<? endif; ?>
-*/ ?>
 	</div>
 
 	<?
@@ -561,5 +571,6 @@ $curl->init($params);
 	$fs->removeDirRecursively(PRIVATE_FILE_PATH."/autoconversion-test");
 	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/autoconversion-test");
 	?>
-	
+
+
 </div>
