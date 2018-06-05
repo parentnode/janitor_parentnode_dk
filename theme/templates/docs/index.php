@@ -53,7 +53,7 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-page">Page</a></h3>
 				<p>Core request and response structure</p>
 			</li>
-			<!--li>
+			<li>
 				<h3><a href="/docs/class-items">Items</a></h3>
 				<p>Querying items and item data</p>
 			</li>
@@ -61,19 +61,19 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
 				<p>Creating and manipulating itemtypes</p>
 			</li>
-			<li>
+			<!--li>
 				<h3><a href="/docs/class-superuser">Superusers</a></h3>
 				<p>Getting, creating and manipulating users</p>
 			</li>
 			<li>
 				<h3><a href="/docs/class-user">Users</a></h3>
 				<p>Plain user creation and manipulation</p>
-			</li>
+			</li-->
 			<li>
 				<h3><a href="/docs/class-html">HTML</a></h3>
 				<p>HTML class</p>
 			</li>
-			<li>
+			<!--li>
 				<h3><a href="/docs/class-image">Image</a></h3>
 				<p>Image class</p>
 			</li>
@@ -92,6 +92,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 			<li>
 				<h3><a href="/docs/class-session">Session</a></h3>
 				<p>Session helper class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-message">Message</a></h3>
+				<p>Message helper class</p>
 			</li>
 			<li>
 				<h3><a href="/docs/class-zipper">Zipper</a></h3>

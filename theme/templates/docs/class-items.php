@@ -96,6 +96,7 @@ $item = $IC->getItem(array("sindex" => "item_name"));</code>
 				</div>
 			</div>
 
+
 			<div class="function" id="Item::getIdFromSindex">
 				<div class="header">
 					<h3>Item::getIdFromSindex</h3>
@@ -280,6 +281,7 @@ $item = $IC->getItem(array("sindex" => "item_name"));</code>
 				</div>
 			</div>
 
+
 			<div class="function" id="Item::getCompleteItem">
 				<div class="header">
 					<h3>Item::getCompleteItem</h3>
@@ -361,6 +363,7 @@ $item = $IC->getCompleteItem(array("sindex" => "item_name"));</code>
 
 				</div>
 			</div>
+
 		
 			<div class="function" id="Item::extendItem">
 				<div class="header">
@@ -680,7 +683,10 @@ $next = $IC->getNext(1, array("items" => $items));</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Can receive items array to use for finding previous item(s) or receive query syntax to perform getItems request on it own</p>
+						<p>
+							Can receive items array to use for finding previous item(s) or receive query syntax to perform 
+							getItems request on its own.
+						</p>
 					</div>
 
 					<div class="parameters">

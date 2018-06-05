@@ -27,7 +27,7 @@ function checkFiles($files, $expected) {
 
 <div class="scene i:scene tests defaultEdit">
 	<h1>FileSystem</h1>	
-	<h2>Testing filesystem read/write functions</h2>
+	<h2>Testing filesystem read/write methods</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
