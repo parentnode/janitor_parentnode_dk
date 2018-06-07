@@ -10,6 +10,100 @@
 		</div>
 		<div class="body">
 
+
+			<div class="function" id="Item::getUserClass">
+					<div class="header">
+						<h3>Item::getUserClass</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+		
+
 			<div class="function" id="Item::getItem">
 				<div class="header">
 					<h3>Item::getItem</h3>
@@ -189,6 +283,7 @@ $item = $IC->getItem(array("sindex" => "item_name"));</code>
 				</div>
 			</div>
 
+
 			<div class="function" id="Item::getSimpleType">
 				<div class="header">
 					<h3>Item::getSimpleType</h3>
@@ -281,90 +376,99 @@ $item = $IC->getItem(array("sindex" => "item_name"));</code>
 				</div>
 			</div>
 
-
-			<div class="function" id="Item::getCompleteItem">
-				<div class="header">
-					<h3>Item::getCompleteItem</h3>
-				</div>
-				<div class="body">
-					<div class="definition">
-						<h4>Definition</h4>
-						<dl class="definition">
-							<dt class="name">Name</dt>
-							<dd class="name">getCompleteItem</dd>
-							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">Array </span> = 
-								Item::getCompleteItem(
-									<span class="type">Array</span> <span class="var">$_options</span>
-								);
-							</dd>
-						</dl>
+			<div class="function" id="Item::getRelatedItems">
+					<div class="header">
+						<h3>Item::getRelatedItems</h3>
 					</div>
-
-					<div class="description">
-						<h4>Description</h4>
-						<p>Get complete data of item</p>
-					</div>
-
-					<div class="parameters">
-						<h4>Parameters</h4>
-
-						<dl class="parameters">
-							<dt><span class="var">$_options</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">Array</span> Array of options
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">id</span></dt>
-										<dd>id of item to fetch</dd>
-										<dt><span class="value">sindex</span></dt>
-										<dd>sindex of item to fetch</dd>
-									</dl>
-								</div>
-							</dd>
-						</dl>
-					</div>
-
-					<div class="return">
-						<h4>Returns</h4>
-						<p><span class="type">Array</span> Array of item or false if no item.</p>
-					</div>
-
-					<div class="examples">
-						<h4>Examples</h4>
-						
-						<div class="example"><code>$IC = new Item();
-$item = $IC->getCompleteItem(array("id" => 6));</code>
-
-						<div class="example"><code>$IC = new Item();
-$item = $IC->getCompleteItem(array("sindex" => "item_name"));</code>
-
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
 						</div>
-					</div>
-
-					<div class="uses">
-						<h4>Uses</h4>
-
-						<div class="janitor">
-							<!-- list janitor functions used by function -->
-							<h5>Janitor</h5>
-							<ul>
-								<li>?</li>
-							</ul>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
 						</div>
-
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
 					</div>
-
-				</div>
 			</div>
 
-		
+
 			<div class="function" id="Item::extendItem">
 				<div class="header">
 					<h3>Item::extendItem</h3>
@@ -463,6 +567,97 @@ $item = $IC->extendItem($item);</code>
 			</div>
 
 
+			<div class="function" id="Item::extendItems">
+					<div class="header">
+						<h3>Item::extendItems</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
 
 
 			<div class="function" id="Item::getItems">
@@ -661,6 +856,7 @@ $next = $IC->getNext(1, array("items" => $items));</code>
 				</div>
 			</div>
 
+
 			<div class="function" id="Item::getPrev">
 				<div class="header">
 					<h3>Item::getPrev</h3>
@@ -766,6 +962,379 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 				</div>
 			</div>
 
+
+			<div class="function" id="Item::paginate">
+					<div class="header">
+						<h3>Item::paginate</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+
+
+			<div class="function" id="Item::getMediae">
+					<div class="header">
+						<h3>Item::getMediae</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+
+
+			<div class="function" id="Item::sliceMedia">
+					<div class="header">
+						<h3>Item::sliceMedia</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+
+
+			<div class="function" id="Item::getOwners">
+					<div class="header">
+						<h3>Item::getOwners</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+
+
 			<div class="function" id="Item::getTags">
 				<div class="header">
 					<h3>Item::getTags</h3>
@@ -861,6 +1430,99 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 			</div>
 
 
+			<div class="function" id="Item::getComments">
+					<div class="header">
+						<h3>Item::getComments</h3>
+					</div>
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
+						</div>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
+						</div>
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
+					</div>
+			</div>
+
+
 			<div class="function" id="Item::getPrices">
 				<div class="header">
 					<h3>Item::getPrices</h3>
@@ -941,97 +1603,99 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 				</div>
 			</div>
 
-			<div class="function" id="Item::getComments">
-				<div class="header">
-					<h3>Item::getComments</h3>
-				</div>
-				<div class="body">
-					<div class="definition">
-						<h4>Definition</h4>
-						<dl class="definition">
-							<dt class="name">Name</dt>
-							<dd class="name">_functionname_</dd>
-							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">_functionshorthand_</dd>
-							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								_functionname_(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
-								);
-							</dd>
-						</dl>
+
+			<div class="function" id="Item::getSubscriptionMethod">
+					<div class="header">
+						<h3>Item::getSubscriptionMethod</h3>
 					</div>
-
-					<div class="description">
-						<h4>Description</h4>
-						<p>_description_</p>
-					</div>
-
-					<div class="parameters">
-						<h4>Parameters</h4>
-
-						<dl class="parameters">
-							<dt><span class="var">_var_</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-								<!-- optional details -->
-								<div class="details">
-									<!-- write parameter details -->
-									<h5>Options</h5>
-									<dl class="options">
-										<!-- specific options -->
-										<dt><span class="value">_value_</span></dt>
-										<dd>_description_</dd>
-									</dl>
-								</div>
-							</dd>
-							<dt><span class="var">identifier</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">_type_</span> _summary_
-								</div>
-							</dd>
-						</dl>
-					</div>
-
-					<div class="return">
-						<h4>Returns</h4>
-						<p><span class="type">_type_</span> _returnsummary_</p>
-					</div>
-
-					<div class="examples">
-						<h4>Examples</h4>
-
-						<div class="example">
+					<div class="body">
+						<div class="definition">
+							<h4>Definition</h4>
+							<dl class="definition">
+								<dt class="name">Name</dt>
+								<dd class="name">_functionname_</dd>
+								<dt class="shorthand">Shorthand</dt>
+								<dd class="shorthand">_functionshorthand_</dd>
+								<dt class="syntax">Syntax</dt>
+								<dd class="syntax"><span class="type">_returntype_</span> = 
+									_functionname_(
+										<span class="type">String</span> <span class="var">format</span> 
+										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+									);
+								</dd>
+							</dl>
 						</div>
-					</div>
-
-					<div class="uses">
-						<h4>Uses</h4>
-
-						<div class="php">
-							<!-- list php functions used by function -->
-							<h5>PHP</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
+	
+						<div class="description">
+							<h4>Description</h4>
+							<p>_description_</p>
 						</div>
-
-						<div class="janitor">
-							<!-- list janitor functions used by function -->
-							<h5>Janitor</h5>
-							<ul>
-								<li>_function_</li>
-							</ul>
+	
+						<div class="parameters">
+							<h4>Parameters</h4>
+	
+							<dl class="parameters">
+								<dt><span class="var">_var_</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+									<!-- optional details -->
+									<div class="details">
+										<!-- write parameter details -->
+										<h5>Options</h5>
+										<dl class="options">
+											<!-- specific options -->
+											<dt><span class="value">_value_</span></dt>
+											<dd>_description_</dd>
+										</dl>
+									</div>
+								</dd>
+								<dt><span class="var">identifier</span></dt>
+								<dd>
+									<div class="summary">
+										<span class="type">_type_</span> _summary_
+									</div>
+								</dd>
+							</dl>
 						</div>
-
+	
+						<div class="return">
+							<h4>Returns</h4>
+							<p><span class="type">_type_</span> _returnsummary_</p>
+						</div>
+	
+						<div class="examples">
+							<h4>Examples</h4>
+	
+							<div class="example">
+							</div>
+						</div>
+	
+						<div class="uses">
+							<h4>Uses</h4>
+	
+							<div class="php">
+								<!-- list php functions used by function -->
+								<h5>PHP</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+							<div class="janitor">
+								<!-- list janitor functions used by function -->
+								<h5>Janitor</h5>
+								<ul>
+									<li>_function_</li>
+								</ul>
+							</div>
+	
+						</div>
+	
 					</div>
-
-				</div>
 			</div>
+
 
 		</div>
 	</div>
