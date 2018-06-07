@@ -699,18 +699,33 @@ $item = $IC->extendItem($item);</code>
 									<h5>Options</h5>
 									<dl class="options">
 										<!-- specific options -->
-										<dt><span class="value">order</span></dt>
-										<dd>Any Sql to order</dd>
+										<dt><span class="value">itemtype</span></dt>
+										<dd>Returns post based on an itemtype</dd>
 										<dt><span class="value">status</span></dt>
 										<dd>Returns items with a status of 1 or 0</dd>
 										<dt><span class="value">tags</span></dt>
 										<dd>Returns all items with specific tag</dd>
 										<dt><span class="value">sindex</span></dt>
 										<dd>Returns items with specific sindex</dd>
-										<dt><span class="value">itemtype</span></dt>
-										<dd>Returns post based on an itemtype</dd>
+
+										<dt><span class="value">where</span></dt>
+										<dd>Add additional WHERE sql statement to query</dd>
+
+										<dt><span class="value">order</span></dt>
+										<dd>Any Sql to order</dd>
 										<dt><span class="value">limit</span></dt>
 										<dd>The amount of items to return</dd>
+
+										<dt><span class="value">no_readstate</span></dt>
+										<dd>Returns items that current user has not marked at read</dd>
+										<dt><span class="value">user_id</span></dt>
+										<dd>Returns items with given user_id</dd>
+
+										<dt><span class="value">exclude</span></dt>
+										<dd>Excludes item id's seperated via semi-colons(;) from query</dd>
+
+										<dt><span class="value">extend</span></dt>
+										<dd>Extend items with itemtype info before returning</dd>
 									</dl>
 								</div>
 							</dd>
