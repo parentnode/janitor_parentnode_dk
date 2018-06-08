@@ -125,7 +125,8 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get item data from items db</p>
+						<p>getItem() fetches the data of a single Item from the "items" table in the database. It fetches the first Item that matches the criteria defined by the <span class="var">$_options</span> parameter.</p>
+						<p>It is also possible to extend the fetched Item with more information from the database.</p>
 					</div>
 
 					<div class="parameters">
@@ -135,7 +136,7 @@
 							<dt><span class="var">$_options</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">Array</span> Array of options
+									<span class="type">Array</span> Associative array containing search criteria and the option to extend the fetched Item.
 								</div>
 								<!-- optional details -->
 								<div class="details">
@@ -144,13 +145,15 @@
 									<dl class="options">
 										<!-- specific options -->
 										<dt><span class="value">id</span></dt>
-										<dd>id of item to fetch</dd>
+										<dd>id of Item to fetch</dd>
 										<dt><span class="value">sindex</span></dt>
-										<dd>sindex of item to fetch</dd>
+										<dd>sindex of Item to fetch</dd>
 										<dt><span class="value">tags</span></dt>
-										<dd>Match item by tag</dd>
+										<dd>Match Item by one or more tags. Separate multiple tags with semicolon. Tag(s) can be combined with an itemtype.</dd>
 										<dt><span class="value">itemtype</span></dt>
-										<dd>Match item by itemtype</dd>
+										<dd>Match Item by itemtype. Can only be used in combination with one or more tags.</dd>
+										<dt><span class="value">extend</span></dt>
+										<dd>If set, Janitor's Items::extendItem() function is called on the Item. See <a href="#Item::extendItem">documentation for extendItem()</a>.</dd>
 									</dl>
 								</div>
 							</dd>
@@ -159,19 +162,103 @@
 
 					<div class="return">
 						<h4>Returns</h4>
-						<p><span class="type">Array</span> Array of items or false if no items.</p>
+						<p><span class="type">Array</span> Array of item properties or false if no Item is found.</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$item = $IC->getItem(array("id" => 13));</code>
-							<p>Get a single Item based on the id 13.</p>
+						<div class="example">
+							<h5>Ex. 1a: Get Item with unique identifier</h5>
+							<code>$IC = new Items();
+$item = $IC->getItem(array("id" => 13));</code>
+							<p>Get a single Item based on the id 13. Return value:</p>
+							<code>Array
+(
+    [id] => 13
+    [sindex] => my-post
+    [status] => 1
+    [itemtype] => post
+    [user_id] => 2
+    [created_at] => 2018-06-06 18:51:55
+    [modified_at] => 2018-06-06 18:52:30
+    [published_at] => 2018-06-06 18:51:55
+)</code>
 						</div>
-						<div class="example"><code>$IC = new Item();
-$item = $IC->getItem(array("sindex" => "item_name"));</code>
-							<p>Get a single Item based on the sindex "item_name".</p>
+						<div class="example">
+							<h5>Ex. 1b: Get Item with unique identifier</h5>
+							<code>$IC = new Items();
+$item = $IC->getItem(array("sindex" => "my-post"));</code>
+							<p>Get a single Item based on the sindex "my-post". Return value:</p>
+							<code>Array
+(
+    [id] => 13
+    [sindex] => my-post
+    [status] => 1
+    [itemtype] => post
+    [user_id] => 2
+    [created_at] => 2018-06-06 18:51:55
+    [modified_at] => 2018-06-06 18:52:30
+    [published_at] => 2018-06-06 18:51:55
+)</code>
 						</div>
+						<div class="example">
+							<h5>Ex. 2a: Get Item via filtering</h5>
+							<code>$IC = new Items();
+$item = $IC->getItem(array("tags" => "subject:cats;genre:thriller"));</code>
+							<p>Get a single Item based on the tags "subject:cats" and "genre:thriller". Return value:</p>
+							<code>Array
+(
+    [id] => 10
+    [sindex] => my-thriller-about-cats
+    [status] => 1
+    [itemtype] => post
+    [user_id] => 2
+    [created_at] => 2018-06-07 13:45:12
+    [modified_at] => 2018-06-07 13:52:30
+    [published_at] => 2018-06-07 13:45:12
+)</code>
+						</div>
+						<div class="example">
+							<h5>Ex. 2b: Get Item via filtering</h5>
+							<code>$IC = new Items();
+$item = $IC->getItem(array("tags" => "subject:cats", "itemtype" => "gallery"));</code>
+							<p>Get a single Item based on the tag "subject:cats" and the itemtype "gallery". Return value:</p>					
+							<code>Array
+(
+    [id] => 9
+    [sindex] => my-cats-gallery
+    [status] => 1
+    [itemtype] => post
+    [user_id] => 2
+    [created_at] => 2018-06-07 13:15:23
+    [modified_at] => 2018-06-07 13:32:35
+    [published_at] => 2018-06-07 13:15:23
+)</code>
+						</div>
+						<div class="example">
+						<h5>Ex. 3: Get Item and extend it</h5>
+						<code>$IC = new Items();
+$item = $IC->getItem(array("id" => 13, "extend" => true));</code>
+							<p>Get a single Item based on the id 13 and extend it with its itemtype info (which is default for the extendItem() function). Return value:</p>
+							<code>Array
+(
+    [id] => 13
+    [sindex] => my-post
+    [status] => 1
+    [itemtype] => post
+    [user_id] => 2
+    [created_at] => 2018-06-06 18:51:55
+    [modified_at] => 2018-06-06 18:52:30
+    [published_at] => 2018-06-06 18:51:55
+    [item_id] => 13
+    [name] => My post
+    [classname] => my_custom_CSS_class
+    [description] => A short description of my post
+    [html] => &lt;p&gtThe content of my post&lt;/p&gt
+)</code>
+						</div>
+
 					</div>
 
 					<div class="uses">
