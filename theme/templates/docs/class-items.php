@@ -768,7 +768,7 @@ $item = $IC->extendItem($item);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get all matching items</p>
+						<p>Get all matching items, and put them into an array.</p>
 					</div>
 
 					<div class="parameters">
@@ -812,7 +812,7 @@ $item = $IC->extendItem($item);</code>
 										<dd>Excludes item id's seperated via semi-colons(;) from query</dd>
 
 										<dt><span class="value">extend</span></dt>
-										<dd>Extend items with itemtype info before returning</dd>
+										<dd>Extend items with itemtype info before returning by using janitor function "Item::extendItem".<a href="#Item::extendItem"> Documentation for extendItem()</a></dd>
 									</dl>
 								</div>
 							</dd>
@@ -835,6 +835,11 @@ $items = $IC->getItems(array("itemtype" => "post", "status" => 1, "order" => "cr
 						<div class="example"><code>$IC = new Item();
 $items = $IC->getItems(array("tags" => "javascript", "limit" => 99));</code>
 							<p>Get all items with tag javascript, but don't get more than 99st.</p>
+						</div>
+
+						<div class="example"><code>$IC = new Item();
+$items = $IC->getItems(["itemtype" => "people", "where" => "name = peter", "extend" => ["tags" => "true"]]);</code>
+							<p>Get all items with itemtype "people", where table row "name" has the value "peter" and extend those items with specific itemtype definitions (in this case for "people") and tags.</p>
 						</div>
 
 					</div>
