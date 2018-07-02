@@ -13,7 +13,6 @@ theme/library/debug
 
 .DS_Store
 .vscode
-.git_credentials
 
 src/config/connect_*.php
 theme/config/connect_*.php
