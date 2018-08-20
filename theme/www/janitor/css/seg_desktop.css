@@ -1033,8 +1033,8 @@ body.invoice #content div.scene .all_items ul.items li span.amount {float: right
 #content .wishList ul.items > li dl {display: block; padding: 5px 30px;}
 #content .wishList ul.items > li dl dt.reserved {display: none;}
 #content .wishList ul.items > li dl dd.reserved {font-size: 14px;}
-#content .tests.front ul.tests {padding: 20px 0;}
-#content .tests.front ul.tests li {display: block; padding: 10px 30px; font-size: 16px;}
+#content .tests.front ul.tests {padding: 0 0 40px;}
+#content .tests.front ul.tests li {display: block; padding: 5px 30px; font-size: 16px;}
 #content .scene.tests div.tests {padding: 30px 30px 0;}
 #content .scene.tests div.tests+h2 {padding-top: 30px;}
 #content .scene.tests h2+div.tests {padding: 0px 30px;}

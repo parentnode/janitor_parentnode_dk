@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2018-05-01 22:09:33
+js-merged @ 2018-08-20 11:12:55
 */
 
 /*seg_tablet_include.js*/
@@ -4488,7 +4488,7 @@ u.smartphoneSwitch = new function() {
 			u.e.click(bn_switch);
 			bn_switch.clicked = function() {
 				u.saveCookie("smartphoneSwitch", "on");
-				location.href = location.href + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
+				location.href = location.href.replace(/[&]segment\=desktop|segment\=desktop[&]?/, "") + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
 			}
 			u.e.click(bn_hide);
 			bn_hide.clicked = function() {

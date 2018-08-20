@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2018-05-01 22:09:32
+js-merged @ 2018-08-20 11:12:54
 */
 
 /*seg_desktop_include.js*/
@@ -4542,7 +4542,7 @@ u.smartphoneSwitch = new function() {
 			u.e.click(bn_switch);
 			bn_switch.clicked = function() {
 				u.saveCookie("smartphoneSwitch", "on");
-				location.href = location.href + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
+				location.href = location.href.replace(/[&]segment\=desktop|segment\=desktop[&]?/, "") + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
 			}
 			u.e.click(bn_hide);
 			bn_hide.clicked = function() {
@@ -5543,7 +5543,7 @@ Util.Form = u.f = new function() {
 		if(!iN._form._validation || !iN.field) {
 			return true;
 		}
-		var min, max, pattern;
+		var min, max, pattern, compare_to;
 		var validated = false;
 		if(!u.hc(iN.field, "required") && iN.val() === "") {
 			this.fieldCorrect(iN);
@@ -5567,10 +5567,12 @@ Util.Form = u.f = new function() {
 				min = min ? min : 8;
 				max = max ? max : 20;
 				pattern = iN.getAttribute("pattern");
+				compare_to = iN.getAttribute("data-compare-to");
 				if(
 					iN.val().length >= min && 
 					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
+					(!pattern || iN.val().match("^"+pattern+"$")) &&
+					(!compare_to || iN.val() == iN._form.fields[compare_to].val())
 				) {
 					this.fieldCorrect(iN);
 				}
@@ -6249,8 +6251,6 @@ Util.Objects["oneButtonForm"] = new function() {
 						this.node.submitted();
 					}
 					this.response = function(response) {
-						console.log("RESPONSE");
-						console.log(response);
 						u.rc(this, "submitting");
 						u.rc(this.confirm_submit_button, "disabled");
 						page.notify(response);
@@ -6302,7 +6302,7 @@ Util.Objects["oneButtonForm"] = new function() {
 						this.DOMsubmit();
 					}
 					else {
-						u.request(this, this.action, {"method":"post", "data":u.f.getParams(this), "responseType":"text"});
+						u.request(this, this.action, {"method":"post", "data":u.f.getParams(this)});
 					}
 				}
 			}

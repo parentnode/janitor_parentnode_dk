@@ -69,8 +69,9 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #page #notifications div {padding: 10px 20px; color: #ffffff;}
 #page #notifications .error {background: #df0000;}
 #desktop_switch {z-index: 11000; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); text-align: center;
+	box-sizing: border-box;
+	padding: 20px 20px; font-size: 20px;
 }
-#desktop_switch {padding: 40px 20px; font-size: 36px;}
 
 
 /*s-header.css*/
