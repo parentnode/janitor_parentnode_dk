@@ -212,24 +212,6 @@ fi
 # Create clean httpd-vhosts.conf
 touch apache/httpd-vhosts.conf
 
-
-
-# If user is not running standard parentnode env, additional configuration is required
-
-# Not using the parentnode environment or project is not in recommended path
-# For MAMP etc. support
-if [ "${parentnode_env}" = "n" ]; then
-
-
-	echo
-	# Ask user: Include in core apache and hosts configuration?
-	read -p "Include project in Apache and hosts-file configuration (Y/n): " hosts_and_apache
-
-
-fi
-
-
-
 # Add actual VHOST configuration
 echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
 echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
@@ -257,271 +239,79 @@ echo "</VirtualHost>" >> apache/httpd-vhosts.conf
 
 
 # Set up hosts and Apache
-if [ "${hosts_and_apache}" = "Y" ]; then
 
+# Check hosts configuration
+hosts_entry_exists=$( grep -E "( |\t)${domain}$" "/mnt/c/Windows/System32/drivers/etc/hosts" )
+if [ -z "${hosts_entry_exists}" ]; then
 
-	# Check hosts configuration
-	hosts_entry_exists=$( grep -E "( |\t)${domain}$" "/mnt/c/Windows/System32/drivers/etc/hosts" )
-	if [ -z "${hosts_entry_exists}" ]; then
+	echo
+	echo "Updating /Windows/System32/drivers/etc/hosts"
 
-		echo
-		echo "Updating /Windows/System32/drivers/etc/hosts"
+	sudo chmod 777 /mnt/c/Windows/System32/drivers/etc/hosts
 
-		sudo chmod 777 /mnt/c/Windows/System32/drivers/etc/hosts
-
-		echo "" >> /mnt/c/Windows/System32/drivers/etc/hosts
-		echo "" >> /mnt/c/Windows/System32/drivers/etc/hosts
-		echo "127.0.0.1	${domain}" >> /mnt/c/Windows/System32/drivers/etc/hosts
+	echo "" >> /mnt/c/Windows/System32/drivers/etc/hosts
+	echo "" >> /mnt/c/Windows/System32/drivers/etc/hosts
+	echo "127.0.0.1	${domain}" >> /mnt/c/Windows/System32/drivers/etc/hosts
 #		echo "fe80::1%lo0	${domain}" >> /mnt/c/Windows/System32/drivers/etc/hosts
 #		echo "::1			${domain}" >> /mnt/c/Windows/System32/drivers/etc/hosts
 
-		sudo chmod 644 /mnt/c/Windows/System32/drivers/etc/hosts
+	sudo chmod 644 /mnt/c/Windows/System32/drivers/etc/hosts
 
 
-	# Hosts entry already exists for current domain
-	else
-
-		echo
-		echo "Skipping hosts (domain exists)"
-
-	fi
-
-
-
-	# Not parentnode environment - set up parentnode locations to mimic full environment
-	if [ "${parentnode_env}" = "n" ]; then
-
-
-		echo
-		echo "Looking for possible httpd.conf's ..."
-		echo
-
-		IFS_backup=$IFS
-		IFS=$'\n'
-		httpd_confs=($( sudo find /mnt/c/srv/installed-packages/apache24/conf -name 'httpd.conf' ! -wholename '*/original/httpd.conf' ! -wholename '*/rsync.macports.org/*' ))
-		IFS=$IFS_backup
-
-		httpd_confs_length=${#httpd_confs[@]}
-		for (( i = 0; i < ${httpd_confs_length}; i++ )); do
-
-			if [ $( echo "${httpd_confs[$i]}" | grep -E "^/srv/installed-packages/apache24/conf" ) ]; then
-				echo "$((i + 1)): ${httpd_confs[$i]} (parentnode)"
-			fi
-
-		done
-
-
-		# Let user select httpd.conf
-		read -p "Select your active httpd.conf [1-${httpd_confs_length}]: " active_httpd_conf
-
-		echo "${active_httpd_conf}"
-		echo "${httpd_confs_length}"
-
-
-		# Is response within allowed range
-		if [ ${active_httpd_conf} -gt 0 ] && [ ${active_httpd_conf} -le ${httpd_confs_length} ]; then
-			httpd_file="${httpd_confs[$(( active_httpd_conf - 1 ))]}"
-		else
-
-			echo "${RED}"
-			echo "I will do anything for love but I can't do that!"
-			echo "(Bad input)"
-			echo "${NC}"
-
-			exit 1
-
-		fi
-
-
-
-		echo
-		echo "Extending ${httpd_file}"
-
-
-
-		# Find server root
-		server_root=$( grep -E "^ServerRoot " "${httpd_file}" | sed -e "s%\ServerRoot %%;s%\"%%g" )
-
-
-
-#		# Check if virtual hosts are enabled in Apache conf
-#		vhosts_include="no"
-#		vhosts_path="no"
-#
-#
-#		# Find all vhost includes (both active and commented out)
-#		IFS_backup=$IFS
-#		IFS=$'\n'
-#		vhosts_includes=($( grep -E "Include .+\/httpd-vhosts\.conf" "${httpd_file}" ))
-#		IFS=$IFS_backup
-#
-#		vhosts_includes_length=${#vhosts_includes[@]}
-#		# Abort if there is no vhosts include in httpd.conf
-#		if [ ${vhosts_includes_length} -eq 0 ]; then
-#
-#			echo "${RED}"
-#			echo "Keep the rubberduck away from fire."
-#			echo "(Could not find default vhost include)"
-#			echo "${NC}"
-#
-#			exit 1
-#
-#		fi
-#
-#		# Look for active vhosts include
-#		for (( i = 0; i < ${vhosts_includes_length}; i++ )); do
-#
-#			# Found valid include
-#			active_vhost_include=$( echo "${vhosts_includes[$i]}" | grep -E "^Include" )
-#			# Is it active
-#			if [ ! -z "${active_vhost_include}" ]; then
-#				vhosts_include=${vhosts_includes[$i]}
-#				vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
-#				break
-#			fi
-#
-#		done
-#
-#		# No active vhost include found
-#		if [ "${vhosts_include}" = "no" ]; then
-#
-#			echo
-#			echo "Activating virtual hosts"
-#		
-#			# Remove "#" from include string
-#			vhosts_include=$( echo "${vhosts_includes[0]}" | sed "s/^#I/I/" )
-#
-#			# Replace vhost string in httpd.conf
-#			sudo sed -i -e "s%${vhosts_includes[0]}%${vhosts_include}%" "${httpd_file}"
-#
-#			# get clean vhosts file
-#			vhosts_path=$( echo "${vhosts_include}" | sed -e "s%Include %${server_root}/%" )
-#
-#			# this is probably the default vhosts - so it should be cleaned up (commenting out dummy examples)
-#			if [ -e "${vhosts_path}" ]; then
-#				sudo sed -i -e "s/^\([< ]\)/#\1/" "${vhosts_path}"
-#			fi
-#
-#		fi
-#
-#
-#		# Did we find valid default vhosts file
-#		if [ ! -e "${vhosts_path}" ]; then
-#
-#			echo "${RED}"
-#			echo "Yikes! I thought I knew everything. I was wrong."
-#			echo "(Could not find default vhost include)"
-#			echo "${NC}"
-#
-#			exit 1
-#
-#		fi
-
-
-		# Everything is good
-
-
-		echo
-		echo "Creating parentNode locations"
-
-		# Add paths and /srv/sites link
-		sudo mkdir -p /mnt/c/srv &>/dev/null
-
-		if [ ! -d "/mnt/c/srv/sites" ]; then
-			mkdir -p /mnt/c/srv/sites/apache
-		fi
-
-
-		echo
-		echo "Adding /srv/sites/apache/apache.conf for including virtual hosts"
-
-		# Create global apache include
-		touch /mnt/c/srv/sites/apache/apache.conf
-
-
-
-		# Add local apache/*.conf to apache httpd-vhosts.conf (if it is not there already)
-#		local_apache_include_exists=$( grep "Include /srv/sites/apache/\*.conf" "${vhosts_path}" )
-#		if [ -z "${local_apache_include_exists}" ]; then
-#
-#			sudo chmod 777 "${vhosts_path}"
-#
-#			# Include global apache.conf for all apache installations
-#			echo "" >> "${vhosts_path}"
-#			echo "Include /srv/sites/apache/*.conf" >> "${vhosts_path}"
-#
-#			sudo chmod 644 "${vhosts_path}"
-#
-#		fi
-#
-
-	fi
-	# End of non-parentnode setup
-
-
-	# Add project apache conf to global apache conf (if it is not there already)
-	apache_include_exists=$( grep "Include ${working_directory}/apache/httpd-vhosts.conf" "/mnt/c/srv/sites/apache/apache.conf" )
-	if [ -z "${apache_include_exists}" ]; then
-
-		echo "" >> /mnt/c/srv/sites/apache/apache.conf
-		echo "" >> /mnt/c/srv/sites/apache/apache.conf
-		echo "Include \"${working_directory}/apache/httpd-vhosts.conf\"" >> /mnt/c/srv/sites/apache/apache.conf
-
-	fi
-
-
-
-
-	# RESTART
-	
-
-
-	# echo
-	# echo "Looking for possible apachectl's ..."
-	# echo
-	#
-	# IFS_backup=$IFS
-	# IFS=$'\n'
-	# apachectls=( $( sudo find /usr /opt /Users/${install_user}/Applications -name 'apachectl' ) )
-	# IFS=$IFS_backup
-	#
-	# apachectls_length=${#apachectls[@]}
-	# for (( i = 0; i < ${apachectls_length}; i++ )); do
-	# 	if [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/sbin" ) ]; then
-	# 		echo "$((i + 1)): ${apachectls[$i]} (MacPorts)"
-	# 	elif [ $( echo "${apachectls[$i]}" | grep -E "^/opt/local/apache2" ) ]; then
-	# 		echo "$((i + 1)): ${apachectls[$i]} (Old MacPorts - you should update your system)"
-	# 	elif [ $( echo "${apachectls[$i]}" | grep -E "\/MAMP\/" ) ]; then
-	# 		echo "$((i + 1)): ${apachectls[$i]} (MAMP)"
-	# 	else
-	# 		echo "$((i + 1)): ${apachectls[$i]}"
-	# 	fi
-	# done
-	#
-	# read -p "Select your active Apache controller [1-$apachectls_length]: " active_apache
-	#
-	# apache_ctl="${apachectls[$(( active_apache - 1 ))]}";
-	#
-	# echo
-	# echo "Restating "
-
-	# restart selected apache
-	/mnt/c/srv/installed-packages/apache24/bin/httpd.exe -k restart
-
-	echo
-	echo "Your installation is done!"
-
-
-# Don't set up hosts and Apache
+# Hosts entry already exists for current domain
 else
 
-
 	echo
-	echo "Your installation is done!"
-	echo "(but remember to include your project in the hosts-file and Apache conf – and then restart Apache)"
-
+	echo "Skipping hosts (domain exists)"
 
 fi
+
+
+
+
+
+# Find server root
+server_root=$( grep -E "^ServerRoot " "${httpd_file}" | sed -e "s%\ServerRoot %%;s%\"%%g" )
+
+# Everything is good
+
+
+echo
+echo "Creating parentNode locations"
+
+# Add paths and /srv/sites link
+sudo mkdir -p /mnt/c/srv &>/dev/null
+
+if [ ! -d "/mnt/c/srv/sites" ]; then
+	mkdir -p /mnt/c/srv/sites/apache
+fi
+
+
+echo
+echo "Adding /srv/sites/apache/apache.conf for including virtual hosts"
+
+# Create global apache include
+touch /mnt/c/srv/sites/apache/apache.conf
+
+
+# Add project apache conf to global apache conf (if it is not there already)
+apache_include_exists=$( grep "Include ${working_directory}/apache/httpd-vhosts.conf" "/mnt/c/srv/sites/apache/apache.conf" )
+if [ -z "${apache_include_exists}" ]; then
+
+	echo "" >> /mnt/c/srv/sites/apache/apache.conf
+	echo "" >> /mnt/c/srv/sites/apache/apache.conf
+	echo "Include \"${working_directory}/apache/httpd-vhosts.conf\"" >> /mnt/c/srv/sites/apache/apache.conf
+
+fi
+
+# RESTART
+
+/mnt/c/srv/installed-packages/apache24/bin/httpd.exe -k restart
+
+echo
+echo "Your installation is done!"
+
+
 
 echo "Restarting Apache"
 /mnt/c/srv/installed-packages/apache24/bin/httpd.exe -k restart
