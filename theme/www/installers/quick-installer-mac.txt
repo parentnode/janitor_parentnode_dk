@@ -467,7 +467,7 @@ if [ "${hosts_and_apache}" = "Y" ]; then
 
 		echo "" >> /srv/sites/apache/apache.conf
 		echo "" >> /srv/sites/apache/apache.conf
-		echo "Include ${working_directory}/apache/httpd-vhosts.conf" >> /srv/sites/apache/apache.conf
+		echo "Include \"${working_directory}/apache/httpd-vhosts.conf\"" >> /srv/sites/apache/apache.conf
 
 	fi
 
