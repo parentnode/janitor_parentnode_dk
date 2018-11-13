@@ -1,1 +1,1 @@
-document.write('<script type="text/javascript" src="http://parentnode.local/js/global/seg_seo_include.js"></script>');
+document.write('<script type="text/javascript" src="assets/parentnode-skin-default/js/seg_seo.js"></script>');

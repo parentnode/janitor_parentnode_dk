@@ -1,9 +1,42 @@
+/*
+asset-builder @ 2018-11-13 15:47:27
+*/
 
 /*seg_desktop_include.css*/
 
-/*seg_desktop_include.css*/
-
-/*s-page.css*/
+/*seg_desktop.css*/
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/opensans-regular-webfont.woff') format('woff'),
+		 url('fonts/opensans-regular-webfont.ttf') format('truetype'),
+		 url("fonts/opensans-regular-webfont.svg#OpenSansRegular") format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/opensans-bold-webfont.woff') format('woff'),
+		 url('fonts/opensans-bold-webfont.ttf') format('truetype'),
+		 url('fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/opensans-italic-webfont.woff') format('woff'),
+		 url('fonts/opensans-italic-webfont.ttf') format('truetype'),
+		 url('fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'PT Serif';
+	src: url('fonts/pt_serif-regular-webfont.woff') format('woff'),
+		 url('fonts/pt_serif-regular-webfont.ttf') format('truetype'),
+		 url('fonts/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 * {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;
 	-webkit-text-size-adjust: none;
 	-webkit-font-smoothing: antialiased;
@@ -66,9 +99,6 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #smartphone_switch p {padding: 0 20px 20px; width: 250px;}
 #smartphone_switch ul {padding: 30px 20px 20px;}
 #smartphone_switch li.switch {float: right;}
-
-
-/*s-header.css*/
 #header {position: relative; height: 100px;}
 #header .logo {z-index: 50; position: absolute; top: 10px; left: 30px; font-size: 30px; padding: 10px 13px; color: #888888; cursor: pointer; 
 	background-color: rgba(255,255,255, 0.8); border-radius: 5px;
@@ -92,13 +122,8 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 	font-family: "PT Serif", Times, serif;
 }
 #navigation ul li.front {display: none;}
-
-
-/*s-footer.css*/
 #footer {text-align: center; border-top: 1px solid #888888; opacity: 0;}
 #footer p {padding: 10px; cursor: pointer; font-size: 13px;}
-
-/*s-content.css*/
 #content {position: relative;}
 #content .scene {position: relative; padding: 50px 0 75px;}
 #content .scene .link {cursor: pointer;}
@@ -336,24 +361,20 @@ body > div.pagination li.next a {padding-right: 0;}
 }
 #content .scene .usedby ul {padding-bottom: 0;}
 #content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
-#content .scene .usedby ul li.metro {background-image: url(/img/logos/metro.png); background-size: 70px auto;}
-#content .scene .usedby ul li.soulland {background-image: url(/img/logos/soulland.png); background-size: 70px auto;}
-#content .scene .usedby ul li.cphpix {background-image: url(/img/logos/cphpix.png);}
-#content .scene .usedby ul li.tuborg {background-image: url(/img/logos/tuborg.png);}
-#content .scene .usedby ul li.distortion {background-image: url(/img/logos/distortion.png);}
-#content .scene .usedby ul li.landskabsarkitekter {background-image: url(/img/logos/landskabsarkitekter.png);}
-#content .scene .usedby ul li.urbangreen {background-image: url(/img/logos/urbangreen.png);}
-#content .scene .usedby ul li.oeo {background-image: url(/img/logos/oeo.png);}
-#content .scene .usedby ul li.torvehallerne {background-image: url(/img/logos/torvehallerne.png);}
-#content .scene .usedby ul li.peoplegroup {background-image: url(/img/logos/peoplegroup.png);}
-#content .scene .usedby ul li.lsb {background-image: url(/img/logos/lsb.png);}
-#content .scene .usedby ul li.punkt1 {background-image: url(/img/logos/punkt1.png);}
+#content .scene .usedby ul li.metro {background-image: url(../img/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(../img/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(../img/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(../img/tuborg.png);} #content .scene .usedby ul li.distortion {background-image: url(../img/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../img/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(http://parentnode.dk/img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(../img/oeo.png);}
+#content .scene .usedby ul li.torvehallerne {background-image: url(../img/torvehallerne.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(../img/peoplegroup.png);}
+#content .scene .usedby ul li.lsb {background-image: url(../img/lsb.png);}
+#content .scene .usedby ul li.punkt1 {background-image: url(../img/punkt1.png);}
 #content .scene.login form {padding-bottom: 20px;}
 #content .scene form li.forgot {padding-top: 5px;}
 #content .scene div.messages > p.error {color: #df0000;}
-
-
-/*s-form.css*/
 form {
 }
 fieldset {border: none; display: block;}	
@@ -367,7 +388,7 @@ div.field select {width: 381px; height: 33px; color: #333333; padding: 5px 3px 2
 div.field select option {padding: 5px 3px 2px 6px;}
 @media all and (-webkit-min-device-pixel-ratio:0) {
 	div.field select {width: 380px; height: 31px; padding: 2px 3px 2px 7px;
-		background: #ffffff url(/janitor/admin/img/bg_icons.png) no-repeat 360px -977px;
+		background: #ffffff url(../img/bg_icons.png) no-repeat 360px -977px;
 		-webkit-appearance: none;
 	}
 }
@@ -401,7 +422,7 @@ div.field.files {border: 3px dashed #dedede; display: block; width: 378px; borde
 div.field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;}
 div.field.files label {color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
 div.field.files.loading label {display: none;}
-div.field.files.loading {background: transparent url(/janitor/admin/img/gx_loader.gif) no-repeat center center;}
+div.field.files.loading {background: transparent url(../img/gx_loader.gif) no-repeat center center;}
 div.field.location {}
 div.field.location div.location {padding-bottom: 2px;}
 div.field.location div.latitude {padding-right: 2px;}
@@ -410,7 +431,7 @@ div.field.location div.longitude {display: inline-block; vertical-align: top;}
 div.field.location div.latitude input,
 div.field.location div.longitude input {width: 173px;}
 div.field.location.geolocation div.geolocation {width: 30px; height: 30px; display: inline-block; vertical-align: top; cursor: pointer;
-	background: transparent url(/janitor/admin/img/gx_geolocation.png) no-repeat 5px 8px;
+	background: transparent url(../img/gx_geolocation.png) no-repeat 5px 8px;
 }
 div.field.location.geolocation div.latitude input,
 div.field.location.geolocation div.longitude input {width: 158px;}
@@ -440,7 +461,7 @@ div.field textarea.default,
 div.field .pseudolabel {color: #aaaaaa;}
 div.field .indicator {position: absolute; top: 4px; left: 455px; width: 25px; height: 25px;}
 div.field.required .indicator {
-	background: transparent url(/janitor/admin/img/bg_icons.png) no-repeat 0 -292px;
+	background: transparent url(../img/bg_icons.png) no-repeat 0 -292px;
 }
 div.field.text.required .indicator {background-position: 0 -296px;}
 div.field.radiobuttons .indicator,
@@ -488,7 +509,7 @@ ul.actions a.button,
 .submitting input.button,
 .submitting a.button,
 #content .submitting a.button {padding-left: 40px !important;
-	background-image: url(/img/gx_loader.gif);
+	background-image: url(../img/gx_loader.gif);
 	background-position: 11px 5px;
 	background-repeat: no-repeat;
 	background-size: 17px auto;
@@ -540,7 +561,7 @@ div.field.html .editor div.tag {margin: 0 0 1px; padding: 0 0 0 30px; background
 div.field.html .editor div.dragged {z-index: 15;}
 div.field.html .editor div.tag .drag {display: none; position: absolute; top: 0px; left: -20px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: move;}
 div.field.html .editor div.tag .remove {display: none; position: absolute; top: 0px; right: -10px; border-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: pointer;
-	background: #dedede url(/janitor/admin/img/bg_icons.png) no-repeat 8px -42px;
+	background: #dedede url(../img/bg_icons.png) no-repeat 8px -42px;
 }
 div.field.html .editor div.tag ul.type {display: block; z-index: 5; position: absolute; width: 30px; top: 0px; left: 0px; padding: 0;}
 div.field.html .editor div.tag ul.type li {display: none; text-transform: uppercase; padding: 9px 4px; text-align: center; font-size: 11px; cursor: default;}
@@ -615,9 +636,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 	div.field.html .editor div.tag.media input {font-size: 130px;}
 	div.field.html .editor div.tag.file input {font-size: 130px;}
 }
-
-
-/*s-itemtypes.css*/
 #content .scene .articlebody {position: relative; z-index: 1;}
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
@@ -663,9 +681,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene ul.wishes dl.info dd.price {display: inline-block; vertical-align: top; width: auto;}
 #content .scene ul.wishes dl.info dt.link {display: none;}
 #content .scene ul.wishes dl.info dd.link {font-size: 13px; display: block; width: auto;}
-
-
-/*s-documentation.css*/
 #content .scene.docsindex {}
 #content .scene.docsindex h1+ul.actions {display: none;}
 #content .scene.docsindex .notes {display: none;}
@@ -677,7 +692,7 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {font-size: 13px; color: #999999; padding: 0;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(/img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading {background: transparent url(../img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
@@ -725,9 +740,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.segmentsupport .header svg {position: absolute; top: 10px; right: 50px; stroke: #999999; stroke-width: 3px;}
 #content .scene div.segmentsupport .body {}
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
-
-
-/*s-login_overlay.css*/
 #login_overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 10000;}
 #login_overlay form {margin: 100px auto 0; width: 304px; position: relative; padding: 50px; background: #ffffff;}
 #login_overlay h1,
@@ -739,9 +751,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #login_overlay ul.actions {padding: 0 2px;}
 #login_overlay p,
 #login_overlay li.forgot {display: none;}
-
-
-/*s-hovers.css*/
 #header .logo:hover,
 #navigation ul li:hover {text-decoration: none;}
 #content .scene a:hover {text-decoration: underline;}
@@ -766,41 +775,6 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene ul.geo.active li.location:hover {text-decoration: underline;}
 #content .scene div.image p a:hover {text-decoration: none;}
 
-
-
-/*s-fonts.css*/
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-bold-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-bold-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
-	font-weight: bold;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-italic-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-italic-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
-	font-weight: normal;
-	font-style: italic;
-}
-@font-face {
-	font-family: 'PT Serif';
-	src: url('/css/fonts/pt_serif-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/pt_serif-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
 /*s-pages.css*/
 #content .scene ul.info {display: none;}

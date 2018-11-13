@@ -1,6 +1,5 @@
-@import url(http://parentnode.local/css/global/seg_desktop_include.css);
-@import url(/css/lib/s-fonts.css);
+@import url(../../assets/parentnode-skin-default/css/seg_desktop.css);
 
-@import url(/css/lib/desktop/s-pages.css);
-@import url(/css/lib/desktop/s-colorscheme.css);
-@import url(/css/lib/desktop/s-pages-hovers.css);
+@import url(desktop/s-pages.css);
+@import url(desktop/s-colorscheme.css);
+@import url(desktop/s-pages-hovers.css);
