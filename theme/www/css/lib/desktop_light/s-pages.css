@@ -1,0 +1,14 @@
+#content .scene ul.info {display: none;}
+
+
+/* POST ARTICLE */
+#content div.post div.article ul.info {display: block;}
+
+
+/* LOGIN */
+#content div.login form {display: none;}
+
+
+/* MiLESTONES */
+#content .scene.milestones div.todolists ul.todolists {list-style: none; margin: 0;}
+#content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}

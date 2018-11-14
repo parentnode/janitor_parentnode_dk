@@ -1,0 +1,10 @@
+/* HOVERS ARE SEPARATED FOR DESKTOP SEGMENT BECAUSE THE CSS IS REUSED FOR TABLET */
+ul.actions input.button.primary:hover,
+ul.actions a.button.primary:hover,
+#content ul.actions a.button.primary:hover,
+#header ul.servicenavigation li.github:hover {background-color: #ff7c00;}
+
+#content .scene .article ul.tags a:hover {color: #04859d;}
+#content .scene div.comments h2:hover {color: #04859d;}
+#content .scene div.comments h2:hover svg.arrow line {stroke: #04859d;}
+

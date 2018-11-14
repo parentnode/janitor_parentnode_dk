@@ -1,0 +1,323 @@
+#!/bin/bash -e
+
+
+# bash <(curl -s http://test.janitor.parentnode.dk/installers/submodule-installer-mac)
+# bash <(curl -s http://janitor.local/installers/submodule-installer-linux)
+
+
+# Define output colors
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+NC=`tput sgr0`
+
+sites
+# Variables (to optimize installation)
+working_directory=$PWD
+parentnode_env="n"
+install_user=$( who am i | awk '{print $1}' )
+
+
+
+# Turn off any existing color syntax
+echo "${NC}"
+
+echo
+echo "             Janitor - Submodule installer"
+echo
+echo "--------------------------------------------------------"
+echo
+
+echo $working_directory
+
+# Request sudo action before continuing
+sudo ls &>/dev/null
+
+
+echo
+echo "Checking prerequisites ..."
+echo
+
+
+# Check if janitor is already available in current location
+if [ -d "core" ] || [ -d "submodules/janitor" ]; then
+
+
+	echo "Prerequisites: ${RED}ERROR${NC}"
+	echo
+	echo "Take it easy with the sauce or you'll drown the chicken!"
+	echo "(It looks like you already have Janitor installed.)"
+	echo
+
+	exit 1
+
+
+# Check if PWD is the root of a git respository
+elif [ ! -d ".git" ]; then
+
+
+	echo "Prerequisites: ${RED}ERROR${NC}"
+	echo
+	echo "Donkeys are not horses and surprisingly they dislike the comparison!"
+	echo "(${working_directory} is not a Git repository.)"
+	echo
+
+	exit 1
+
+
+# Everything is ok, continue installation
+else 
+
+
+	echo "Prerequisites: ${GREEN}OK${NC}"
+	echo
+	echo
+
+
+fi
+
+
+
+# Check if user is using the parentnode environment already
+# This allows for a simpler installation
+
+if [ -f "/srv/sites/apache/apache.conf" ]; then
+	# Check if PWD is in parentnode working dir path (/srv/sites)
+	realpath=$( readlink /srv/sites )
+
+	# Project is in recommended folder (/srv/sites)
+	if [ $( echo "${working_directory}" | grep "/srv/sites" ) ] || [ $( echo "${working_directory}" | grep "${realpath}" ) ]; then
+
+		parentnode_env="Y"
+
+		# Update WD
+		working_directory=$( echo "${working_directory}" | sed "${realpath}#/srv/sites" )
+		# Automatically include hosts and Apache inclusion
+		hosts_and_apache="Y"
+
+	fi
+fi
+
+
+
+
+# Confirm install location
+read -p "Install Janitor in ${working_directory} (Y/n): " install_current_path
+# Declined install
+if [ "${install_current_path}" != "Y" ]; then
+
+
+	echo
+	echo "Ok, you changed your mind. That's your business."
+	echo
+
+	exit 1
+
+
+fi
+
+
+
+# Ask for local domain
+read -p "Local domain for this installation: " domain
+# No domain
+if [ "${domain}" = "" ]; then
+
+
+	echo "${RED}"
+	echo "Argh, I really wish you hadn't said that."
+	echo "(Installation cannot be completed without a domain.)"
+	echo "${NC}"
+
+	exit 1
+
+
+fi
+
+# READY TO INSTALL
+
+echo
+echo
+
+
+# Clone all relevant respositories
+echo
+echo "                   Cloning Janitor"
+echo
+echo "--------------------------------------------------------"
+echo
+
+if [ ! -d $working_directory/submodule ]; then
+mkdir submodules
+else echo "you allready have a submodule folder"
+fi
+
+# TODO: Update links to latest release (after release of 0.7.7)
+janitor_branch=$(curl -s -L https://api.github.com/repos/parentnode/janitor/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/janitor.git submodules/janitor
+cd submodules/janitor && git checkout -b "$janitor_branch" && cd ../..
+
+jsmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/js-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
+cd submodules/js-merger && git checkout -b "$jsmerger_branch" && cd ../..
+
+cssmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/css-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/css-merger.git submodules/css-merger
+cd submodules/css-merger && git checkout -b "$cssmerger_branch" && cd ../..
+
+# Let user do this
+# git commit -m 'Added Janitor submodules'
+# git push
+
+
+echo
+echo
+
+
+# Prepare installation for browser setup
+echo
+echo "        Setting up initial Apache configuration"
+echo
+echo "--------------------------------------------------------"
+echo
+
+
+
+# Adding dummy index if theme does not exist
+# Will be updated by janitor setup script
+if [ ! -d "theme/www" ]; then
+
+	mkdir -p theme/www
+	touch theme/www/index.php
+
+	echo "<?php header('Location: /janitor/admin/setup'); ?>" >> theme/www/index.php
+
+fi
+
+
+
+# PROJECT APACHE CONFIGURATION
+
+
+echo
+echo "Creating apache.conf for project"
+
+
+# Adding apache configuration for project
+mkdir apache &>/dev/null
+# Remove any existing apache.conf
+if [ -f "apache/apache.conf" ]; then
+	rm apache/apache.conf
+fi
+# Create clean apache.conf
+touch apache/apache.conf
+
+
+
+
+# Add actual VHOST configuration
+echo "<VirtualHost *:80>" >> apache/apache.conf
+echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/apache.conf
+echo "	ServerName ${domain}" >> apache/apache.conf
+echo "	AddType application/x-httpd-php .php" >> apache/apache.conf
+
+# Add Directory directive to project Apache conf to ensure project can run in current location
+echo "	<Directory \"${working_directory}\">" >> apache/apache.conf
+echo "		Options All MultiViews" >> apache/apache.conf
+echo "		AllowOverride All" >> apache/apache.conf
+echo "		Order allow,deny" >> apache/apache.conf
+echo "		Allow from all" >> apache/apache.conf
+echo "		Require all granted" >> apache/apache.conf
+echo "	</Directory>" >> apache/apache.conf
+
+echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src/www\"" >> apache/apache.conf
+echo "	SetEnv \"LOCAL_PATH\" \"${working_directory}/theme\"" >> apache/apache.conf
+echo "	SetEnv \"FRAMEWORK_PATH\" \"${working_directory}/submodules/janitor/src\"" >> apache/apache.conf
+echo "</VirtualHost>" >> apache/apache.conf
+
+
+
+
+# HOSTS AND GLOBAL APACHE SETTINGS
+
+# Check hosts configuration
+hosts_entry_exists=$( grep -E "( |\t)${domain}$" "/etc/hosts" )
+if [ -z "${hosts_entry_exists}" ]; then
+
+	echo
+	echo "Updating /etc/hosts"
+
+	sudo chmod 777 /etc/hosts
+
+	echo "" >> /etc/hosts
+	echo "" >> /etc/hosts
+	echo "127.0.0.1	${domain}" >> /etc/hosts
+#		echo "fe80::1%lo0	${domain}" >> /etc/hosts
+#		echo "::1			${domain}" >> /etc/hosts
+
+	sudo chmod 644 /etc/hosts
+
+
+# Hosts entry already exists for current domain
+else
+
+	echo
+	echo "Skipping hosts (domain exists)"
+
+fi
+
+
+
+	
+
+
+
+# Find server root
+server_root=$( grep -E "^ServerRoot " "${httpd_file}" | sed -e "s%\ServerRoot %%;s%\"%%g" )
+
+
+# Everything is good
+
+
+echo
+echo "Creating parentNode locations"
+
+# Add paths and /srv/sites link
+sudo mkdir -p /srv &>/dev/null
+
+if [ ! -d "/srv/sites" ]; then
+	mkdir -p /srv/sites/apache
+fi
+
+
+echo
+echo "Adding /srv/sites/apache/apache.conf for including virtual hosts"
+
+# Create global apache include
+touch /srv/sites/apache/apache.conf
+
+# Add project apache conf to global apache conf (if it is not there already)
+apache_include_exists=$( grep "Include ${working_directory}/apache/apache.conf" "/srv/sites/apache/apache.conf" )
+if [ -z "${apache_include_exists}" ]; then
+
+	echo "" >> /srv/sites/apache/apache.conf
+	echo "" >> /srv/sites/apache/apache.conf
+	echo "Include \"${working_directory}/apache/apache.conf\"" >> /srv/sites/apache/apache.conf
+
+fi
+
+sudo service apache2 restart
+
+
+
+echo
+echo "Your installation is done!"
+echo "(but remember to include your project in the hosts-file and Apache conf – and then restart Apache)"
+
+echo "Restarting Apache"
+sudo service apache2 restart
+echo 
+echo "Continue the setup at http://${domain}/janitor/admin/setup in your browser."
+echo
+
+xdg-open "http://${domain}/janitor/admin/setup"
+

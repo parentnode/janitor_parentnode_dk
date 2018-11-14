@@ -1,0 +1,20 @@
+#content .scene ul.info {display: none;}
+
+/* POST ARTICLE */
+#content .scene.post div.article ul.info {display: block;}
+
+
+/* CHANGELOG */
+#content .scene.changelog ul.changes {list-style-position: outside; margin-left: 15px; width: 485px; list-style-type: disc;}
+#content .scene.changelog ul.changes li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+
+
+/* MILESTONES */
+#content .scene.milestones div.todolists ul.todolists {list-style: none; padding-left: 0; padding-right: 0; margin: 0;}
+#content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
+
+
+/* FOLDER LAYOUT */
+#content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
+#content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+

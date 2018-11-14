@@ -1,0 +1,52 @@
+/*
+#04859d - PRIMARY LIGHT
+#ff7c00 - PRIMARY DARK
+#ffb773 - BORDER
+*/
+
+* {color: #ff7c00;}
+
+body {}
+
+#header .logo {color: #04859d;}
+#header .servicenavigation li.navigation div {background: #04859d;}
+#header .servicenavigation li.navigation.open div {background: #ff7c00;}
+#navigation ul li {color: #04859d;}
+
+#content .scene a,
+#content .scene ul.geo.active li.location {color: #04859d;}
+#content .scene hr {border-color: #ffb773;}
+
+#content ul.actions input.button.primary,
+#content ul.actions a.button.primary {background-color: #04859d;}
+#content ul.actions input.button.primary:active,
+#content ul.actions a.button.primary:active {background-color: #ff7c00;}
+#content .scene div.article ul.tags li a:active,
+#content .scene ul.articles li.article ul.tags li a:active {color: #04859d;}
+
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #04859d;}
+
+#content .scene h3,
+#content .scene h4,
+#content .scene h5,
+#content .scene h6,
+#content .scene p,
+#content .scene li,
+#content .scene dd {color: #777777;}
+
+#footer {border-color: #ffb773;}
+#footer a {color: #04859d;}
+
+.terms_notification .accept,
+.terms_notification .details {color: #04859d;}
+.terms_notification {border-color: #ff7c00;}
+
+
+/* LOCAL */
+
+.front #header .logo,
+.segments #navigation ul li.segments,
+.about #navigation ul li.about,
+.apis #navigation ul li.apis,
+.pricing #navigation ul li.pricing {color: #ff7c00;}

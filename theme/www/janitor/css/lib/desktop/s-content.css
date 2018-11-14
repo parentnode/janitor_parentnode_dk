@@ -1,0 +1,49 @@
+
+/* WISHLIST */
+#content .wishList ul.items > li dl {display: block; padding: 5px 30px;}
+#content .wishList ul.items > li dl dt.reserved {display: none;}
+#content .wishList ul.items > li dl dd.reserved {font-size: 14px;}
+
+
+/* WISH */
+
+
+/* LOG */
+
+
+/* TESTS */
+/*#content .tests.front h1 {border-bottom: 1px solid #bbbbbb; padding-bottom: 74px}*/
+#content .tests.front ul.tests {padding: 0 0 40px;}
+#content .tests.front ul.tests li {display: block; padding: 5px 30px; font-size: 16px;}
+
+#content .scene.tests div.tests {padding: 30px 30px 0;}
+#content .scene.tests div.tests+h2 {padding-top: 30px;}
+#content .scene.tests h2+div.tests {padding: 0px 30px;}
+
+#content .scene.tests div.tests form {margin-left: -30px; margin-right: -30px;}
+
+#content .scene.tests div.tests h3 {padding-left: 0; padding-right: 0;}
+#content .scene.tests div.tests p {padding: 0px 0px 10px;}
+
+
+#content .scene.tests div.tests div.testpassed {background: green;}
+#content .scene.tests div.tests div.testfailed {background: red;}
+
+#content .scene.tests div.tests div.testpassed,
+#content .scene.tests div.tests div.testfailed {margin: 0 0 3px; padding: 1px 5px 3px;}
+
+#content .scene.tests div.tests div.testpassed,
+#content .scene.tests div.tests div.testfailed,
+#content .scene.tests div.tests div.testpassed *,
+#content .scene.tests div.tests div.testfailed * {color: white; font-size: 13px; line-height: 16px;}
+
+#content .scene.tests div.tests div.testpassed *,
+#content .scene.tests div.tests div.testfailed * {padding: 0; margin: 0;}
+
+
+/* NAVIGATION */
+body.tests #navigation .test a,
+body.wish #navigation .wish a,
+body.wishlist #navigation .wishlist a,
+body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
+
