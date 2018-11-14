@@ -1,7 +1,0 @@
-#content ul.actions input.button.primary:active,
-#content ul.actions a.button.primary:active,
-#header ul.servicenavigation li.github:active {background-color: #ff7c00;}
-
-#content .scene .article ul.tags a:active {color: #ff7c00;}
-#content .scene div.comments h2:active {color: #ff7c00;}
-#content .scene div.comments h2:active svg.arrow line {stroke: #ff7c00;}
