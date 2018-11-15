@@ -19,34 +19,7 @@
 	<link rel="apple-touch-icon" href="https://parentnode.dk/touchicon.png" />
 	<link rel="icon" href="https://parentnode.dk/favicon.png" />
 
-	<script type="text/javascript" src="https://detector-v4.dearapi.com/js-include/?site=parentnode-skin&dev=0"></script>
-
-	<!-- Hard-coded segment includes -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_desktop_light_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_desktop_light_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_desktop_light.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_desktop_light.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_mobile_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_mobile_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_mobile.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_mobile.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_seo_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_seo_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_seo.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_seo.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_smartphone_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_smartphone_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_smartphone.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_smartphone.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_tablet_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_tablet_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_tablet.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_tablet.js"></script> -->
-
+	<script type="text/javascript" src="https://detector-v4.dearapi.com/js-include"></script>
 </head>
 
 <body class="story">
@@ -908,20 +881,22 @@ player.load("/media/audio/audio_1.mp3");</code>
 	
 	<script type="text/javascript">
 
-		// Standard form initializer
-		u.o.standardForm = new function() {
-			this.init = function(form) {
-				u.f.init(form);
+		if (typeof(u) == "object") {
+			// Standard form initializer
+			u.o.standardForm = new function() {
+				this.init = function(form) {
+					u.f.init(form);
 
-				// while testing form - scroll to form onload
-				// u.scrollTo(window, {"node":form});
+					// while testing form - scroll to form onload
+					// u.scrollTo(window, {"node":form});
+				}
 			}
 		}
-
+		
 	</script>
 
 	<form action="/template/#/1" method="post" class="labelstyle:inject i:standardForm" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="csrf-token" value="245a30b2-9028-4b06-943c-b1a049cf3f20" />
+		<input type="hidden" name="csrf-token" value="245a30b2-9028-4b06-943c-b1a049cf3f20" />
 
 		<h2>Form elements</h2>
 		<p>
@@ -1035,13 +1010,26 @@ player.load("/media/audio/audio_1.mp3");</code>
 
 	</form>
 
+	<div class="usedby">
+		<h2>Selected clients</h2>
+		<ul>
+			<li class="distortion" title="Distortion">Distortion</li>
+			<li class="lsb" title="Lån & Spar Bank">Lån &amp; Spar Bank</li>
+			<li class="torvehallerne" title="Torvehallerne">Torvehallerne</li>
+			<li class="punkt1" title="Punkt1">Punkt1</li>
+			<li class="metro" title="Copenhagen Metro">Copenhagen Metro</li>
+		</ul>
+	</div>
+
 </div>
 
 	</div>
 
 	<div id="navigation">
 		<ul class="navigation">
-								<li class="front"><a href="/">Frontpage</a></li>						<li class="blog"><a href="/blog">Posts</a></li>							</ul>
+			<li class="front"><a href="/">Frontpage</a></li>
+			<li class="blog"><a href="/blog">Posts</a></li>
+		</ul>
 	</div>
 
 	<div id="footer">
