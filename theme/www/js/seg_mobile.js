@@ -1,9 +1,7 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-js-merged @ 2018-08-20 11:20:52
+asset-builder @ 2018-11-15 14:19:43
 */
-
-/*seg_mobile_include.js*/
 
 /*seg_mobile_include.js*/
 
@@ -14,6 +12,9 @@ if(!u || !Util) {
 	u.bug = u.nodeId = u.exception = function() {};
 	u.stats = new function() {this.pageView = function(){};this.event = function(){};}
 }
+function fun(v) {return (typeof(v) === "function")}
+function obj(v) {return (typeof(v) === "object")}
+function str(v) {return (typeof(v) === "string")}
 u.bug_console_only = true;
 Util.debugURL = function(url) {
 	if(u.bug_force) {
@@ -22,6 +23,8 @@ Util.debugURL = function(url) {
 	return document.domain.match(/(\.local|\.proxy)$/);
 }
 Util.nodeId = function(node, include_path) {
+	console.log("Util.nodeId IS DEPRECATED. Use commas in u.bug in stead.");
+	console.log(arguments.callee.caller);
 	try {
 		if(!include_path) {
 			return node.id ? node.nodeName+"#"+node.id : (node.className ? node.nodeName+"."+node.className : (node.name ? node.nodeName + "["+node.name+"]" : node.nodeName));
@@ -42,27 +45,24 @@ Util.nodeId = function(node, include_path) {
 }
 Util.exception = function(name, _arguments, _exception) {
 	u.bug("Exception in: " + name + " (" + _exception + ")");
+	console.error(_exception);
 	u.bug("Invoked with arguments:");
-	u.xInObject(_arguments);
-	u.bug("Called from:");
-	if(_arguments.callee.caller.name) {
-		u.bug("arguments.callee.caller.name:" + _arguments.callee.caller.name)
-	}
-	else {
-		u.bug("arguments.callee.caller:" + _arguments.callee.caller.toString().substring(0, 250));
-	}
+	console.log(_arguments);
 }
-Util.bug = function(message, corner, color) {
+Util.bug = function() {
 	if(u.debugURL()) {
 		if(!u.bug_console_only) {
+			var i, message;
+			if(obj(console)) {
+				for(i = 0; i < arguments.length; i++) {
+					if(arguments[i] || typeof(arguments[i]) == "undefined") {
+						console.log(arguments[i]);
+					}
+				}
+			}
 			var option, options = new Array([0, "auto", "auto", 0], [0, 0, "auto", "auto"], ["auto", 0, 0, "auto"], ["auto", "auto", 0, 0]);
-			if(isNaN(corner)) {
-				color = corner;
-				corner = 0;
-			}
-			if(typeof(color) != "string") {
-				color = "black";
-			}
+			var corner = u.bug_corner ? u.bug_corner : 0;
+			var color = u.bug_color ? u.bug_color : "black";
 			option = options[corner];
 			if(!document.getElementById("debug_id_"+corner)) {
 				var d_target = u.ae(document.body, "div", {"class":"debug_"+corner, "id":"debug_id_"+corner});
@@ -74,21 +74,34 @@ Util.bug = function(message, corner, color) {
 				d_target.style.left = option[3];
 				d_target.style.backgroundColor = u.bug_bg ? u.bug_bg : "#ffffff";
 				d_target.style.color = "#000000";
+				d_target.style.fontSize = "11px";
+				d_target.style.lineHeight = "11px";
 				d_target.style.textAlign = "left";
 				if(d_target.style.maxWidth) {
 					d_target.style.maxWidth = u.bug_max_width ? u.bug_max_width+"px" : "auto";
 				}
-				d_target.style.padding = "3px";
+				d_target.style.padding = "2px 3px";
 			}
-			if(typeof(message) != "string") {
-				message = message.toString();
+			for(i = 0; i < arguments.length; i++) {
+				if(arguments[i] === undefined) {
+					message = "undefined";
+				}
+				else if(!str(arguments[i]) && fun(arguments[i].toString)) {
+					message = arguments[i].toString();
+				}
+				else {
+					message = arguments[i];
+				}
+				var debug_div = document.getElementById("debug_id_"+corner);
+				message = message ? message.replace(/\>/g, "&gt;").replace(/\</g, "&lt;").replace(/&lt;br&gt;/g, "<br>") : "Util.bug with no message?";
+				u.ae(debug_div, "div", {"style":"color: " + color, "html": message});
 			}
-			var debug_div = document.getElementById("debug_id_"+corner);
-			message = message ? message.replace(/\>/g, "&gt;").replace(/\</g, "&lt;").replace(/&lt;br&gt;/g, "<br>") : "Util.bug with no message?";
-			u.ae(debug_div, "div", {"style":"color: " + color, "html": message});
 		}
-		if(typeof(console) == "object") {
-			console.log(message);
+		else if(obj(console)) {
+			var i;
+			for(i = 0; i < arguments.length; i++) {
+				console.log(arguments[i]);
+			}
 		}
 	}
 }
@@ -96,7 +109,7 @@ Util.xInObject = function(object, _options) {
 	if(u.debugURL()) {
 		var return_string = false;
 		var explore_objects = false;
-		if(typeof(_options) == "object") {
+		if(obj(_options)) {
 			var _argument;
 			for(_argument in _options) {
 				switch(_argument) {
@@ -107,14 +120,14 @@ Util.xInObject = function(object, _options) {
 		}
 		var x, s = "--- start object ---\n";
 		for(x in object) {
-			if(explore_objects && object[x] && typeof(object[x]) == "object" && typeof(object[x].nodeName) != "string") {
+			if(explore_objects && object[x] && obj(object[x]) && !str(object[x].nodeName)) {
 				s += x + "=" + object[x]+" => \n";
 				s += u.xInObject(object[x], true);
 			}
-			else if(object[x] && typeof(object[x]) == "object" && typeof(object[x].nodeName) == "string") {
+			else if(object[x] && obj(object[x]) && str(object[x].nodeName)) {
 				s += x + "=" + object[x]+" -> " + u.nodeId(object[x], 1) + "\n";
 			}
-			else if(object[x] && typeof(object[x]) == "function") {
+			else if(object[x] && fun(object[x])) {
 				s += x + "=function\n";
 			}
 			else {
@@ -133,25 +146,36 @@ Util.xInObject = function(object, _options) {
 Util.saveCookie = function(name, value, _options) {
 	var expires = true;
 	var path = false;
-	if(typeof(_options) == "object") {
+	var force = false;
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
 				case "expires"	: expires	= _options[_argument]; break;
 				case "path"		: path		= _options[_argument]; break;
+				case "force"	: force		= _options[_argument]; break;
 			}
 		}
+	}
+	if(!force && obj(window.localStorage) && obj(window.sessionStorage)) {
+		if(expires === true) {
+			window.sessionStorage.setItem(name, value);
+		}
+		else {
+			window.localStorage.setItem(name, value);
+		}
+		return;
 	}
 	if(expires === false) {
 		expires = ";expires=Mon, 04-Apr-2020 05:00:00 GMT";
 	}
-	else if(typeof(expires) === "string") {
+	else if(str(expires)) {
 		expires = ";expires="+expires;
 	}
 	else {
 		expires = "";
 	}
-	if(typeof(path) === "string") {
+	if(str(path)) {
 		path = ";path="+path;
 	}
 	else {
@@ -161,11 +185,17 @@ Util.saveCookie = function(name, value, _options) {
 }
 Util.getCookie = function(name) {
 	var matches;
+	if(obj(window.sessionStorage) && window.sessionStorage.getItem(name)) {
+		return window.sessionStorage.getItem(name)
+	}
+	else if(obj(window.localStorage) && window.localStorage.getItem(name)) {
+		return window.localStorage.getItem(name)
+	}
 	return (matches = document.cookie.match(encodeURIComponent(name) + "=([^;]+)")) ? decodeURIComponent(matches[1]) : false;
 }
 Util.deleteCookie = function(name, _options) {
 	var path = false;
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -173,7 +203,13 @@ Util.deleteCookie = function(name, _options) {
 			}
 		}
 	}
-	if(typeof(path) === "string") {
+	if(obj(window.sessionStorage)) {
+		window.sessionStorage.removeItem(name);
+	}
+	if(obj(window.localStorage)) {
+		window.localStorage.removeItem(name);
+	}
+	if(str(path)) {
 		path = ";path="+path;
 	}
 	else {
@@ -223,7 +259,7 @@ Util.cookieReference = function(node, _options) {
 	var ref;
 	var ignore_classnames = false;
 	var ignore_classvars = false;
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -288,7 +324,8 @@ Util.getElement = u.ge = function(identifier, scope) {
 	}
 	scope = scope ? scope : document;
 	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
-	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+	for(i = 0; i < scope.getElementsByTagName("*").length; i++) {
+		node = scope.getElementsByTagName("*")[i];
 		if(regexp.test(node.className)) {
 			return node;
 		}
@@ -300,7 +337,8 @@ Util.getElements = u.ges = function(identifier, scope) {
 	var nodes = new Array();
 	scope = scope ? scope : document;
 	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
-	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+	for(i = 0; i < scope.getElementsByTagName("*").length; i++) {
+		node = scope.getElementsByTagName("*")[i];
 		if(regexp.test(node.className)) {
 			nodes.push(node);
 		}
@@ -310,7 +348,7 @@ Util.getElements = u.ges = function(identifier, scope) {
 Util.parentNode = u.pn = function(node, _options) {
 	var exclude = "";
 	var include = "";
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -330,7 +368,7 @@ Util.parentNode = u.pn = function(node, _options) {
 Util.previousSibling = u.ps = function(node, _options) {
 	var exclude = "";
 	var include = "";
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -350,7 +388,7 @@ Util.previousSibling = u.ps = function(node, _options) {
 Util.nextSibling = u.ns = function(node, _options) {
 	var exclude = "";
 	var include = "";
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -370,7 +408,7 @@ Util.nextSibling = u.ns = function(node, _options) {
 Util.childNodes = u.cn = function(node, _options) {
 	var exclude = "";
 	var include = "";
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -383,7 +421,8 @@ Util.childNodes = u.cn = function(node, _options) {
 	var include_nodes = include ? u.qsa(include, node) : [];
 	var i, child;
 	var children = new Array();
-	for(i = 0; child = node.childNodes[i]; i++) {
+	for(i = 0; i < node.childNodes.length; i++) {
+		child = node.childNodes[i]
 		if(child && child.nodeType != 3 && child.nodeType != 8 && (!exclude || (!u.inNodeList(child, exclude_nodes))) && (!include || (u.inNodeList(child, include_nodes)))) {
 			children.push(child);
 		}
@@ -392,7 +431,7 @@ Util.childNodes = u.cn = function(node, _options) {
 }
 Util.appendElement = u.ae = function(_parent, node_type, attributes) {
 	try {
-		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 		node = _parent.appendChild(node);
 		if(attributes) {
 			var attribute;
@@ -414,7 +453,7 @@ Util.appendElement = u.ae = function(_parent, node_type, attributes) {
 }
 Util.insertElement = u.ie = function(_parent, node_type, attributes) {
 	try {
-		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 		node = _parent.insertBefore(node, _parent.firstChild);
 		if(attributes) {
 			var attribute;
@@ -483,7 +522,7 @@ Util.textContent = u.text = function(node) {
 Util.clickableElement = u.ce = function(node, _options) {
 	node._use_link = "a";
 	node._click_type = "manual";
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -504,18 +543,18 @@ Util.clickableElement = u.ce = function(node, _options) {
 	else {
 		u.ac(node, "clickable");
 	}
-	if(typeof(u.e) != "undefined" && typeof(u.e.click) == "function") {
+	if(obj(u.e) && fun(u.e.click)) {
 		u.e.click(node, _options);
 		if(node._click_type == "link") {
 			node.clicked = function(event) {
-				if(typeof(node.preClicked) == "function") {
+				if(fun(node.preClicked)) {
 					node.preClicked();
 				}
 				if(event && (event.metaKey || event.ctrlKey)) {
 					window.open(this.url);
 				}
 				else {
-					if(typeof(u.h) != "undefined" && u.h.is_listening) {
+					if(obj(u.h) && u.h.is_listening) {
 						u.h.navigate(this.url, this);
 					}
 					else {
@@ -529,9 +568,10 @@ Util.clickableElement = u.ce = function(node, _options) {
 }
 Util.classVar = u.cv = function(node, var_name) {
 	try {
-		var regexp = new RegExp(var_name + ":[?=\\w/\\#~:.,?+=?&%@!\\-]*");
-		if(node.className.match(regexp)) {
-			return node.className.match(regexp)[0].replace(var_name + ":", "");
+		var regexp = new RegExp("(\^| )" + var_name + ":[?=\\w/\\#~:.,?+=?&%@!\\-]*");
+		var match = node.className.match(regexp);
+		if(match) {
+			return match[0].replace(var_name + ":", "").trim();
 		}
 	}
 	catch(exception) {
@@ -568,10 +608,16 @@ Util.hasClass = u.hc = function(node, classname) {
 Util.addClass = u.ac = function(node, classname, dom_update) {
 	try {
 		if(classname) {
-			var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$)");
-			if(!regexp.test(node.className)) {
-				node.className += node.className ? " " + classname : classname;
+			if(node.classList){
+				node.classList.add(classname);
 				dom_update === false ? false : node.offsetTop;
+			}
+			else {
+				var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$)");
+				if(!regexp.test(node.className)) {
+					node.className += node.className ? " " + classname : classname;
+					dom_update === false ? false : node.offsetTop;
+				}
 			}
 			return node.className;
 		}
@@ -584,10 +630,15 @@ Util.addClass = u.ac = function(node, classname, dom_update) {
 Util.removeClass = u.rc = function(node, classname, dom_update) {
 	try {
 		if(classname) {
-			var regexp = new RegExp("(\\b)" + classname + "(\\s|$)", "g");
-			node.className = node.className.replace(regexp, " ").trim().replace(/[\s]{2}/g, " ");
-			dom_update === false ? false : node.offsetTop;
-			return node.className;
+			if(node.classList.contains(classname)) {
+				node.classList.remove(classname);
+			}
+			else {
+				var regexp = new RegExp("(\\b)" + classname + "(\\s|$)", "g");
+				node.className = node.className.replace(regexp, " ").trim().replace(/[\s]{2}/g, " ");
+				dom_update === false ? false : node.offsetTop;
+				return node.className;
+			}
 		}
 	}
 	catch(exception) {
@@ -597,21 +648,37 @@ Util.removeClass = u.rc = function(node, classname, dom_update) {
 }
 Util.toggleClass = u.tc = function(node, classname, _classname, dom_update) {
 	try {
-		var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$|\:)");
-		if(regexp.test(node.className)) {
-			u.rc(node, classname, false);
-			if(_classname) {
-				u.ac(node, _classname, false);
+		if(node.classList) {
+			if(node.classList.contains(classname)) {
+				node.classList.remove(classname);
+				if(_classname) {
+					node.classList.add(_classname);
+				}
+			}
+			else {
+				node.classList.add(classname);
+				if(_classname) {
+					node.classList.remove(_classname);
+				}
 			}
 		}
 		else {
-			u.ac(node, classname, false);
-			if(_classname) {
-				u.rc(node, _classname, false);
+			var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$|\:)");
+			if(regexp.test(node.className)) {
+				u.rc(node, classname, false);
+				if(_classname) {
+					u.ac(node, _classname, false);
+				}
 			}
+			else {
+				u.ac(node, classname, false);
+				if(_classname) {
+					u.rc(node, _classname, false);
+				}
+			}
+			dom_update === false ? false : node.offsetTop;
+			return node.className;
 		}
-		dom_update === false ? false : node.offsetTop;
-		return node.className;
 	}
 	catch(exception) {
 		u.exception("u.tc", arguments, exception);
@@ -666,31 +733,32 @@ Util.selectText = function(node) {
 }
 Util.inNodeList = function(node, list) {
 	var i, list_node;
-	for(i = 0; list_node = list[i]; i++) {
+	for(i = 0; i < list.length; i++) {
+		list_node = list[i]
 		if(list_node === node) {
 			return true;
 		}
 	}
 	return false;
 }
-Util.nodeWithin = u.nw = function(node, scope) {
-	var node_key = u.randomString(8);
-	var scope_key = u.randomString(8);
-	u.ac(node, node_key);
-	u.ac(scope, scope_key);
-	if(u.qs("."+scope_key+" ."+node_key)) {
-		u.rc(node, node_key);
-		u.rc(scope, scope_key);
-		return true;
+u.contains = Util.nodeWithin = u.nw = function(node, scope) {
+	if(scope != node) {
+		if(scope.contains(node)) {
+			return true
+		}
 	}
-	u.rc(node, node_key);
-	u.rc(scope, scope_key);
+	return false;
+}
+u.containsOrIs = function(node, scope) {
+	if(scope == node || u.contains(node, scope)) {
+		return true
+	}
 	return false;
 }
 Util.Events = u.e = new function() {
 	this.event_pref = typeof(document.ontouchmove) == "undefined" || (navigator.maxTouchPoints > 1 && navigator.userAgent.match(/Windows/i)) ? "mouse" : "touch";
 	if(navigator.maxTouchPoints > 1) {
-		if(typeof(document.ontouchmove) == "undefined" && typeof(document.onmousemove) == "undefined") {
+		if((typeof(document.ontouchmove) == "undefined" && typeof(document.onmousemove) == "undefined") || (document.ontouchmove === null && document.onmousemove === null)) {
 			this.event_support = "multi";
 		}
 	}
@@ -843,7 +911,7 @@ Util.Events = u.e = new function() {
 	}
 	this.resetEvents = function(node) {
 		this.resetClickEvents(node);
-		if(typeof(this.resetDragEvents) == "function") {
+		if(fun(this.resetDragEvents)) {
 			this.resetDragEvents(node);
 		}
 	}
@@ -863,7 +931,6 @@ Util.Events = u.e = new function() {
 		this.move_timestamp = event.timeStamp;
 		this.move_last_x = 0;
 		this.move_last_y = 0;
-		this._moves_cancel = 0;
 		this.swiped = false;
 		if(this.e_click || this.e_dblclick || this.e_hold) {
 			if(event.type.match(/mouse/)) {
@@ -890,31 +957,27 @@ Util.Events = u.e = new function() {
 		}
 		if(this.e_drag || this.e_swipe) {
 			u.e.addMoveEvent(this, u.e._pick);
-			u.e.addEndEvent(this, u.e._drop);
 		}
 		if(this.e_scroll) {
 			u.e.addMoveEvent(this, u.e._scrollStart);
 			u.e.addEndEvent(this, u.e._scrollEnd);
 		}
-		if(typeof(this.inputStarted) == "function") {
+		if(fun(this.inputStarted)) {
 			this.inputStarted(event);
 		}
 	}
 	this._cancelClick = function(event) {
 		var offset_x = u.eventX(event) - this.start_event_x;
 		var offset_y = u.eventY(event) - this.start_event_y;
-		if(event.type.match(/mouseout/) || this._moves_cancel > 1 || (event.type.match(/move/) && (Math.abs(offset_x) > 15 || Math.abs(offset_y) > 15))) {
+		if(event.type.match(/mouseout/) || (event.type.match(/move/) && (Math.abs(offset_x) > 15 || Math.abs(offset_y) > 15))) {
 			u.e.resetClickEvents(this);
-			if(typeof(this.clickCancelled) == "function") {
+			if(fun(this.clickCancelled)) {
 				this.clickCancelled(event);
 			}
 		}
-		else if(event.type.match(/move/)) {
-			this._moves_cancel++;
-		}
 	}
 	this._move = function(event) {
-		if(typeof(this.moved) == "function") {
+		if(fun(this.moved)) {
 			this.current_x = u.eventX(event) - this.start_event_x;
 			this.current_y = u.eventY(event) - this.start_event_y;
 			this.current_xps = Math.round(((this.current_x - this.move_last_x) / (event.timeStamp - this.move_timestamp)) * 1000);
@@ -935,7 +998,7 @@ Util.Events = u.e = new function() {
 		this.e_hold_options.event = event;
 		u.stats.event(this, this.e_hold_options);
 		u.e.resetNestedEvents(this);
-		if(typeof(this.held) == "function") {
+		if(fun(this.held)) {
 			this.held(event);
 		}
 	}
@@ -951,7 +1014,7 @@ Util.Events = u.e = new function() {
 			u.stats.event(this, this.e_click_options);
 		}
 		u.e.resetNestedEvents(this);
-		if(typeof(this.clicked) == "function") {
+		if(fun(this.clicked)) {
 			this.clicked(event);
 		}
 	}
@@ -966,7 +1029,7 @@ Util.Events = u.e = new function() {
 			this.e_dblclick_options.event = event;
 			u.stats.event(this, this.e_dblclick_options);
 			u.e.resetNestedEvents(this);
-			if(typeof(this.dblclicked) == "function") {
+			if(fun(this.dblclicked)) {
 				this.dblclicked(event);
 			}
 			return;
@@ -986,14 +1049,16 @@ Util.Events = u.e = new function() {
 	}
 	this.hover = function(node, _options) {
 		node._hover_out_delay = 100;
+		node._hover_over_delay = 0;
 		node._callback_out = "out";
 		node._callback_over = "over";
-		if(typeof(_options) == "object") {
+		if(obj(_options)) {
 			var argument;
 			for(argument in _options) {
 				switch(argument) {
 					case "over"				: node._callback_over		= _options[argument]; break;
 					case "out"				: node._callback_out		= _options[argument]; break;
+					case "delay_over"		: node._hover_over_delay	= _options[argument]; break;
 					case "delay"			: node._hover_out_delay		= _options[argument]; break;
 				}
 			}
@@ -1004,17 +1069,34 @@ Util.Events = u.e = new function() {
 	}
 	this._over = function(event) {
 		u.t.resetTimer(this.t_out);
-		if(typeof(this[this._callback_over]) == "function" && !this.is_hovered) {
-			this[this._callback_over](event);
+		if(!this._hover_over_delay) {
+			u.e.__over.call(this, event);
 		}
-		this.is_hovered = true;
+		else if(!u.t.valid(this.t_over)) {
+			this.t_over = u.t.setTimer(this, u.e.__over, this._hover_over_delay, event);
+		}
+	}
+	this.__over = function(event) {
+		u.t.resetTimer(this.t_out);
+		if(!this.is_hovered) {
+			this.is_hovered = true;
+			u.e.removeOverEvent(this, u.e._over);
+			u.e.addOverEvent(this, u.e.__over);
+			if(fun(this[this._callback_over])) {
+				this[this._callback_over](event);
+			}
+		}
 	}
 	this._out = function(event) {
+		u.t.resetTimer(this.t_over);
+		u.t.resetTimer(this.t_out);
 		this.t_out = u.t.setTimer(this, u.e.__out, this._hover_out_delay, event);
 	}
 	this.__out = function(event) {
 		this.is_hovered = false;
-		if(typeof(this[this._callback_out]) == "function") {
+		u.e.removeOverEvent(this, u.e.__over);
+		u.e.addOverEvent(this, u.e._over);
+		if(fun(this[this._callback_out])) {
 			this[this._callback_out](event);
 		}
 	}
@@ -1049,11 +1131,11 @@ u.e.addOnloadEvent = function(action) {
 u.e.addWindowEvent = function(node, type, action) {
 	var id = u.randomString();
 	window["_OnWindowEvent_node_"+ id] = node;
-	if(typeof(action) == "function") {
+	if(fun(action)) {
 		eval('window["_OnWindowEvent_callback_' + id + '"] = function(event) {window["_OnWindowEvent_node_'+ id + '"]._OnWindowEvent_callback_'+id+' = '+action+'; window["_OnWindowEvent_node_'+ id + '"]._OnWindowEvent_callback_'+id+'(event);};');
 	} 
 	else {
-		eval('window["_OnWindowEvent_callback_' + id + '"] = function(event) {if(typeof(window["_OnWindowEvent_node_'+ id + '"]["'+action+'"]) == "function") {window["_OnWindowEvent_node_'+id+'"]["'+action+'"](event);}};');
+		eval('window["_OnWindowEvent_callback_' + id + '"] = function(event) {if(fun(window["_OnWindowEvent_node_'+ id + '"]["'+action+'"])) {window["_OnWindowEvent_node_'+id+'"]["'+action+'"](event);}};');
 	}
 	u.e.addEvent(window, type, window["_OnWindowEvent_callback_" + id]);
 	return id;
@@ -1066,11 +1148,11 @@ u.e.removeWindowEvent = function(node, type, id) {
 u.e.addWindowStartEvent = function(node, action) {
 	var id = u.randomString();
 	window["_Onstart_node_"+ id] = node;
-	if(typeof(action) == "function") {
+	if(fun(action)) {
 		eval('window["_Onstart_callback_' + id + '"] = function(event) {window["_Onstart_node_'+ id + '"]._Onstart_callback_'+id+' = '+action+'; window["_Onstart_node_'+ id + '"]._Onstart_callback_'+id+'(event);};');
 	} 
 	else {
-		eval('window["_Onstart_callback_' + id + '"] = function(event) {if(typeof(window["_Onstart_node_'+ id + '"]["'+action+'"]) == "function") {window["_Onstart_node_'+id+'"]["'+action+'"](event);}};');
+		eval('window["_Onstart_callback_' + id + '"] = function(event) {if(fun(window["_Onstart_node_'+ id + '"]["'+action+'"])) {window["_Onstart_node_'+id+'"]["'+action+'"](event);}};');
 	}
 	u.e.addStartEvent(window, window["_Onstart_callback_" + id]);
 	return id;
@@ -1084,11 +1166,11 @@ u.e.removeWindowStartEvent = function(node, id) {
 u.e.addWindowMoveEvent = function(node, action) {
 	var id = u.randomString();
 	window["_Onmove_node_"+ id] = node;
-	if(typeof(action) == "function") {
+	if(fun(action)) {
 		eval('window["_Onmove_callback_' + id + '"] = function(event) {window["_Onmove_node_'+ id + '"]._Onmove_callback_'+id+' = '+action+'; window["_Onmove_node_'+ id + '"]._Onmove_callback_'+id+'(event);};');
 	} 
 	else {
-		eval('window["_Onmove_callback_' + id + '"] = function(event) {if(typeof(window["_Onmove_node_'+ id + '"]["'+action+'"]) == "function") {window["_Onmove_node_'+id+'"]["'+action+'"](event);}};');
+		eval('window["_Onmove_callback_' + id + '"] = function(event) {if(fun(window["_Onmove_node_'+ id + '"]["'+action+'"])) {window["_Onmove_node_'+id+'"]["'+action+'"](event);}};');
 	}
 	u.e.addMoveEvent(window, window["_Onmove_callback_" + id]);
 	return id;
@@ -1102,11 +1184,11 @@ u.e.removeWindowMoveEvent = function(node, id) {
 u.e.addWindowEndEvent = function(node, action) {
 	var id = u.randomString();
 	window["_Onend_node_"+ id] = node;
-	if(typeof(action) == "function") {
+	if(fun(action)) {
 		eval('window["_Onend_callback_' + id + '"] = function(event) {window["_Onend_node_'+ id + '"]._Onend_callback_'+id+' = '+action+'; window["_Onend_node_'+ id + '"]._Onend_callback_'+id+'(event);};');
 	} 
 	else {
-		eval('window["_Onend_callback_' + id + '"] = function(event) {if(typeof(window["_Onend_node_'+ id + '"]["'+action+'"]) == "function") {window["_Onend_node_'+id+'"]["'+action+'"](event);}};');
+		eval('window["_Onend_callback_' + id + '"] = function(event) {if(fun(window["_Onend_node_'+ id + '"]["'+action+'"])) {window["_Onend_node_'+id+'"]["'+action+'"](event);}};');
 	}
 	u.e.addEndEvent(window, window["_Onend_callback_" + id]);
 	return id;
@@ -1116,42 +1198,6 @@ u.e.removeWindowEndEvent = function(node, id) {
 	window["_Onend_node_"+ id]["_Onend_callback_"+id] = null;
 	window["_Onend_node_"+ id] = null;
 	window["_Onend_callback_"+ id] = null;
-}
-u.e.addWindowResizeEvent = function(node, action) {
-	var id = u.randomString();
-	window["_Onresize_node_"+ id] = node;
-	if(typeof(action) == "function") {
-		eval('window["_Onresize_callback_' + id + '"] = function(event) {window["_Onresize_node_'+ id + '"]._Onresize_callback_'+id+' = '+action+'; window["_Onresize_node_'+ id + '"]._Onresize_callback_'+id+'(event);};');
-	} 
-	else {
-		eval('window["_Onresize_callback_' + id + '"] = function(event) {if(typeof(window["_Onresize_node_'+ id + '"]["'+action+'"]) == "function") {window["_Onresize_node_'+id+'"]["'+action+'"](event);}};');
-	}
-	u.e.addEvent(window, "resize", window["_Onresize_callback_" + id]);
-	return id;
-}
-u.e.removeWindowResizeEvent = function(node, id) {
-	u.e.removeEvent(window, "resize", window["_Onresize_callback_"+id]);
-	window["_Onresize_node_"+id]["_Onresize_callback_"+id] = null;
-	window["_Onresize_node_"+id] = null;
-	window["_Onresize_callback_"+id] = null;
-}
-u.e.addWindowScrollEvent = function(node, action) {
-	var id = u.randomString();
-	window["_Onscroll_node_"+ id] = node;
-	if(typeof(action) == "function") {
-		eval('window["_Onscroll_callback_' + id + '"] = function(event) {window["_Onscroll_node_'+ id + '"]._Onscroll_callback_'+id+' = '+action+'; window["_Onscroll_node_'+ id + '"]._Onscroll_callback_'+id+'(event);};');
-	} 
-	else {
-		eval('window["_Onscroll_callback_' + id + '"] = function(event) {if(typeof(window["_Onscroll_node_'+ id + '"]["'+action+'"]) == "function") {window["_Onscroll_node_'+id+'"]["'+action+'"](event);}};');
-	}
-	u.e.addEvent(window, "scroll", window["_Onscroll_callback_" + id]);
-	return id;
-}
-u.e.removeWindowScrollEvent = function(node, id) {
-	u.e.removeEvent(window, "scroll", window["_Onscroll_callback_"+id]);
-	window["_Onscroll_node_"+id]["_Onscroll_callback_"+id] = null;
-	window["_Onscroll_node_"+id] = null;
-	window["_Onscroll_callback_"+id] = null;
 }
 Util.absoluteX = u.absX = function(node) {
 	if(node.offsetParent) {
@@ -1212,10 +1258,11 @@ Util.init = function(scope) {
 	var i, node, nodes, object;
 	scope = scope && scope.nodeName ? scope : document;
 	nodes = u.ges("i\:([_a-zA-Z0-9])+", scope);
-	for(i = 0; node = nodes[i]; i++) {
+	for(i = 0; i < nodes.length; i++) {
+		node = nodes[i];
 		while((object = u.cv(node, "i"))) {
 			u.rc(node, "i:"+object);
-			if(object && typeof(u.o[object]) == "object") {
+			if(object && obj(u.o[object])) {
 				u.o[object].init(node);
 			}
 		}
@@ -1239,7 +1286,7 @@ u.preloader = function(node, files, _options) {
 	var callback_preloader_loading = "loading";
 	var callback_preloader_waiting = "waiting";
 	node._callback_min_delay = 0;
-	if(typeof(_options) == "object") {
+	if(obj(_options)) {
 		var _argument;
 		for(_argument in _options) {
 			switch(_argument) {
@@ -1253,11 +1300,11 @@ u.preloader = function(node, files, _options) {
 	if(!u._preloader_queue) {
 		u._preloader_queue = document.createElement("div");
 		u._preloader_processes = 0;
-		if(u.e && u.e.event_pref == "touch") {
+		if(u.e && u.e.event_support == "touch") {
 			u._preloader_max_processes = 1;
 		}
 		else {
-			u._preloader_max_processes = 4;
+			u._preloader_max_processes = 2;
 		}
 	}
 	if(node && files) {
@@ -1270,14 +1317,15 @@ u.preloader = function(node, files, _options) {
 		new_queue._files = files;
 		new_queue.nodes = new Array();
 		new_queue._start_time = new Date().getTime();
-		for(i = 0; file = files[i]; i++) {
+		for(i = 0; i < files.length; i++) {
+			file = files[i];
 			entry = u.ae(new_queue, "li", {"class":"waiting"});
 			entry.i = i;
 			entry._queue = new_queue
 			entry._file = file;
 		}
 		u.ac(node, "waiting");
-		if(typeof(node[new_queue._callback_waiting]) == "function") {
+		if(fun(node[new_queue._callback_waiting])) {
 			node[new_queue._callback_waiting](new_queue.nodes);
 		}
 	}
@@ -1292,29 +1340,56 @@ u._queueLoader = function() {
 				if(u.hc(next._queue._node, "waiting")) {
 					u.rc(next._queue._node, "waiting");
 					u.ac(next._queue._node, "loading");
-					if(typeof(next._queue._node[next._queue._callback_loading]) == "function") {
+					if(fun(next._queue._node[next._queue._callback_loading])) {
 						next._queue._node[next._queue._callback_loading](next._queue.nodes);
 					}
 				}
 				u._preloader_processes++;
 				u.rc(next, "waiting");
 				u.ac(next, "loading");
-				next.loaded = function(event) {
-					this.image = event.target;
-					this._image = this.image;
-					this._queue.nodes[this.i] = this;
-					u.rc(this, "loading");
-					u.ac(this, "loaded");
-					u._preloader_processes--;
-					if(!u.qs("li.waiting,li.loading", this._queue)) {
-						u.rc(this._queue._node, "loading");
-						if(typeof(this._queue._node[this._queue._callback_loaded]) == "function") {
-							this._queue._node[this._queue._callback_loaded](this._queue.nodes);
+				if(next._file.match(/png|jpg|gif|svg/)) {
+					next.loaded = function(event) {
+						this.image = event.target;
+						this._image = this.image;
+						this._queue.nodes[this.i] = this;
+						u.rc(this, "loading");
+						u.ac(this, "loaded");
+						u._preloader_processes--;
+						if(!u.qs("li.waiting,li.loading", this._queue)) {
+							u.rc(this._queue._node, "loading");
+							if(fun(this._queue._node[this._queue._callback_loaded])) {
+								this._queue._node[this._queue._callback_loaded](this._queue.nodes);
+							}
 						}
+						u._queueLoader();
 					}
-					u._queueLoader();
+					u.loadImage(next, next._file);
 				}
-				u.loadImage(next, next._file);
+				else if(next._file.match(/mp3|aac|wav|ogg/)) {
+					next.loaded = function(event) {
+						console.log(event);
+						this._queue.nodes[this.i] = this;
+						u.rc(this, "loading");
+						u.ac(this, "loaded");
+						u._preloader_processes--;
+						if(!u.qs("li.waiting,li.loading", this._queue)) {
+							u.rc(this._queue._node, "loading");
+							if(fun(this._queue._node[this._queue._callback_loaded])) {
+								this._queue._node[this._queue._callback_loaded](this._queue.nodes);
+							}
+						}
+						u._queueLoader();
+					}
+					if(fun(u.audioPlayer)) {
+						next.audioPlayer = u.audioPlayer();
+						next.load(next._file);
+					}
+					else {
+						u.bug("You need u.audioPlayer to preload MP3s");
+					}
+				}
+				else {
+				}
 			}
 			else {
 				break
@@ -1332,23 +1407,23 @@ u.loadImage = function(node, src) {
 }
 u._imageLoaded = function(event) {
 	u.rc(this.node, "loading");
-	if(typeof(this.node.loaded) == "function") {
+	if(fun(this.node.loaded)) {
 		this.node.loaded(event);
 	}
 }
 u._imageLoadError = function(event) {
 	u.rc(this.node, "loading");
 	u.ac(this.node, "error");
-	if(typeof(this.node.loaded) == "function" && typeof(this.node.failed) != "function") {
+	if(fun(this.node.loaded) && typeof(this.node.failed) != "function") {
 		this.node.loaded(event);
 	}
-	else if(typeof(this.node.failed) == "function") {
+	else if(fun(this.node.failed)) {
 		this.node.failed(event);
 	}
 }
 u._imageLoadProgress = function(event) {
 	u.bug("progress")
-	if(typeof(this.node.progress) == "function") {
+	if(fun(this.node.progress)) {
 		this.node.progress(event);
 	}
 }
@@ -1367,21 +1442,27 @@ Util.request = function(node, url, _options) {
 	node[request_id].request_async = true;
 	node[request_id].request_data = "";
 	node[request_id].request_headers = false;
+	node[request_id].request_credentials = false;
+	node[request_id].response_type = false;
 	node[request_id].callback_response = "response";
 	node[request_id].callback_error = "responseError";
 	node[request_id].jsonp_callback = "callback";
-	if(typeof(_options) == "object") {
+	node[request_id].request_timeout = false;
+	if(obj(_options)) {
 		var argument;
 		for(argument in _options) {
 			switch(argument) {
-				case "method"				: node[request_id].request_method		= _options[argument]; break;
-				case "params"				: node[request_id].request_data			= _options[argument]; break;
-				case "data"					: node[request_id].request_data			= _options[argument]; break;
-				case "async"				: node[request_id].request_async		= _options[argument]; break;
-				case "headers"				: node[request_id].request_headers		= _options[argument]; break;
-				case "callback"				: node[request_id].callback_response	= _options[argument]; break;
-				case "error_callback"		: node[request_id].callback_error		= _options[argument]; break;
-				case "jsonp_callback"		: node[request_id].jsonp_callback		= _options[argument]; break;
+				case "method"				: node[request_id].request_method			= _options[argument]; break;
+				case "params"				: node[request_id].request_data				= _options[argument]; break;
+				case "data"					: node[request_id].request_data				= _options[argument]; break;
+				case "async"				: node[request_id].request_async			= _options[argument]; break;
+				case "headers"				: node[request_id].request_headers			= _options[argument]; break;
+				case "credentials"			: node[request_id].request_credentials		= _options[argument]; break;
+				case "responseType"			: node[request_id].response_type			= _options[argument]; break;
+				case "callback"				: node[request_id].callback_response		= _options[argument]; break;
+				case "error_callback"		: node[request_id].callback_error			= _options[argument]; break;
+				case "jsonp_callback"		: node[request_id].jsonp_callback			= _options[argument]; break;
+				case "timeout"				: node[request_id].request_timeout			= _options[argument]; break;
 			}
 		}
 	}
@@ -1389,13 +1470,16 @@ Util.request = function(node, url, _options) {
 		node[request_id].HTTPRequest = this.createRequestObject();
 		node[request_id].HTTPRequest.node = node;
 		node[request_id].HTTPRequest.request_id = request_id;
+		if(node[request_id].response_type) {
+			node[request_id].HTTPRequest.responseType = node[request_id].response_type;
+		}
 		if(node[request_id].request_async) {
 			node[request_id].HTTPRequest.statechanged = function() {
 				if(this.readyState == 4 || this.IEreadyState) {
 					u.validateResponse(this);
 				}
 			}
-			if(typeof(node[request_id].HTTPRequest.addEventListener) == "function") {
+			if(fun(node[request_id].HTTPRequest.addEventListener)) {
 				u.e.addEvent(node[request_id].HTTPRequest, "readystatechange", node[request_id].HTTPRequest.statechanged);
 			}
 		}
@@ -1404,12 +1488,16 @@ Util.request = function(node, url, _options) {
 				var params = u.JSONtoParams(node[request_id].request_data);
 				node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
 				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
-				node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-				var csfr_field = u.qs('meta[name="csrf-token"]');
-				if(csfr_field && csfr_field.content) {
-					node[request_id].HTTPRequest.setRequestHeader("X-CSRF-Token", csfr_field.content);
+				if(node[request_id].request_timeout) {
+					node[request_id].HTTPRequest.timeout = node[request_id].request_timeout;
 				}
-				if(typeof(node[request_id].request_headers) == "object") {
+				if(node[request_id].request_credentials) {
+					node[request_id].HTTPRequest.withCredentials = true;
+				}
+				if(typeof(node[request_id].request_headers) != "object" || (!node[request_id].request_headers["Content-Type"] && !node[request_id].request_headers["content-type"])) {
+					node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				}
+				if(obj(node[request_id].request_headers)) {
 					var header;
 					for(header in node[request_id].request_headers) {
 						node[request_id].HTTPRequest.setRequestHeader(header, node[request_id].request_headers[header]);
@@ -1419,21 +1507,23 @@ Util.request = function(node, url, _options) {
 			}
 			else if(node[request_id].request_method.match(/POST|PUT|PATCH/i)) {
 				var params;
-				if(typeof(node[request_id].request_data) == "object" && node[request_id].request_data.constructor.toString().match(/function Object/i)) {
+				if(obj(node[request_id].request_data) && node[request_id].request_data.constructor.toString().match(/function Object/i)) {
 					params = JSON.stringify(node[request_id].request_data);
 				}
 				else {
 					params = node[request_id].request_data;
 				}
 				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
-				if(!params.constructor.toString().match(/FormData/i)) {
+				if(node[request_id].request_timeout) {
+					node[request_id].HTTPRequest.timeout = node[request_id].request_timeout;
+				}
+				if(node[request_id].request_credentials) {
+					node[request_id].HTTPRequest.withCredentials = true;
+				}
+				if(!params.constructor.toString().match(/FormData/i) && (typeof(node[request_id].request_headers) != "object" || (!node[request_id].request_headers["Content-Type"] && !node[request_id].request_headers["content-type"]))) {
 					node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 				}
-				var csfr_field = u.qs('meta[name="csrf-token"]');
-				if(csfr_field && csfr_field.content) {
-					node[request_id].HTTPRequest.setRequestHeader("X-CSRF-Token", csfr_field.content);
-				}
-				if(typeof(node[request_id].request_headers) == "object") {
+				if(obj(node[request_id].request_headers)) {
 					var header;
 					for(header in node[request_id].request_headers) {
 						node[request_id].HTTPRequest.setRequestHeader(header, node[request_id].request_headers[header]);
@@ -1452,8 +1542,18 @@ Util.request = function(node, url, _options) {
 		}
 	}
 	else if(node[request_id].request_method.match(/SCRIPT/i)) {
+		if(node[request_id].request_timeout) {
+			node[request_id].timedOut = function(requestee) {
+				this.status = 0;
+				delete this.timedOut;
+				delete this.t_timeout;
+				Util.validateResponse({node: requestee.node, request_id: requestee.request_id});
+			}
+			node[request_id].t_timeout = u.t.setTimer(node[request_id], "timedOut", node[request_id].request_timeout, {node: node, request_id: request_id});
+		}
 		var key = u.randomString();
 		document[key] = new Object();
+		document[key].key = key;
 		document[key].node = node;
 		document[key].request_id = request_id;
 		document[key].responder = function(response) {
@@ -1461,17 +1561,23 @@ Util.request = function(node, url, _options) {
 			response_object.node = this.node;
 			response_object.request_id = this.request_id;
 			response_object.responseText = response;
+			u.t.resetTimer(this.node[this.request_id].t_timeout);
+			delete this.node[this.request_id].timedOut;
+			delete this.node[this.request_id].t_timeout;
+			u.qs("head").removeChild(this.node[this.request_id].script_tag);
+			delete this.node[this.request_id].script_tag;
+			delete document[this.key];
 			u.validateResponse(response_object);
 		}
 		var params = u.JSONtoParams(node[request_id].request_data);
 		node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
 		node[request_id].request_url += (!node[request_id].request_url.match(/\?/g) ? "?" : "&") + node[request_id].jsonp_callback + "=document."+key+".responder";
-		u.ae(u.qs("head"), "script", ({"type":"text/javascript", "src":node[request_id].request_url}));
+		node[request_id].script_tag = u.ae(u.qs("head"), "script", ({"type":"text/javascript", "src":node[request_id].request_url}));
 	}
 	return request_id;
 }
 Util.JSONtoParams = function(json) {
-	if(typeof(json) == "object") {
+	if(obj(json)) {
 		var params = "", param;
 		for(param in json) {
 			params += (params ? "&" : "") + param + "=" + json[param];
@@ -1484,40 +1590,9 @@ Util.JSONtoParams = function(json) {
 	}
 	return json;
 }
-Util.isStringJSON = function(string) {
-	if(string.trim().substr(0, 1).match(/[\{\[]/i) && string.trim().substr(-1, 1).match(/[\}\]]/i)) {
-		try {
-			var test = JSON.parse(string);
-			if(typeof(test) == "object") {
-				test.isJSON = true;
-				return test;
-			}
-		}
-		catch(exception) {}
-	}
-	return false;
-}
-Util.isStringHTML = function(string) {
-	if(string.trim().substr(0, 1).match(/[\<]/i) && string.trim().substr(-1, 1).match(/[\>]/i)) {
-		try {
-			var test = document.createElement("div");
-			test.innerHTML = string;
-			if(test.childNodes.length) {
-				var body_class = string.match(/<body class="([a-z0-9A-Z_: ]+)"/);
-				test.body_class = body_class ? body_class[1] : "";
-				var head_title = string.match(/<title>([^$]+)<\/title>/);
-				test.head_title = head_title ? head_title[1] : "";
-				test.isHTML = true;
-				return test;
-			}
-		}
-		catch(exception) {}
-	}
-	return false;
-}
 Util.evaluateResponseText = function(responseText) {
 	var object;
-	if(typeof(responseText) == "object") {
+	if(obj(responseText)) {
 		responseText.isJSON = true;
 		return responseText;
 	}
@@ -1540,41 +1615,59 @@ Util.evaluateResponseText = function(responseText) {
 		return responseText;
 	}
 }
-Util.validateResponse = function(response){
+Util.validateResponse = function(HTTPRequest){
 	var object = false;
-	if(response) {
+	if(HTTPRequest) {
+		var node = HTTPRequest.node;
+		var request_id = HTTPRequest.request_id;
+		var request = node[request_id];
+		delete request.HTTPRequest;
+		if(request.finished) {
+			return;
+		}
+		request.finished = true;
 		try {
-			if(response.status && !response.status.toString().match(/403|404|500/)) {
-				object = u.evaluateResponseText(response.responseText);
+			request.status = HTTPRequest.status;
+			if(HTTPRequest.status && !HTTPRequest.status.toString().match(/[45][\d]{2}/)) {
+				if(HTTPRequest.responseType && HTTPRequest.response) {
+					object = HTTPRequest.response;
+				}
+				else if(HTTPRequest.responseText) {
+					object = u.evaluateResponseText(HTTPRequest.responseText);
+				}
 			}
-			else if(response.responseText) {
-				object = u.evaluateResponseText(response.responseText);
+			else if(HTTPRequest.responseText && typeof(HTTPRequest.status) == "undefined") {
+				object = u.evaluateResponseText(HTTPRequest.responseText);
 			}
 		}
 		catch(exception) {
-			response.exception = exception;
-		}
-	}
-	if(object) {
-		if(typeof(response.node[response.request_id].callback_response) == "function") {
-			response.node[response.request_id].callback_response(object, response.request_id);
-		}
-		else if(typeof(response.node[response.node[response.request_id].callback_response]) == "function") {
-			response.node[response.node[response.request_id].callback_response](object, response.request_id);
+			request.exception = exception;
 		}
 	}
 	else {
-		if(typeof(response.node[response.request_id].callback_error) == "function") {
-			response.node[response.request_id].callback_error(response, response.request_id);
+		console.log("Lost track of this request. There is no way of routing it back to requestee.")
+		return;
+	}
+	if(object !== false) {
+		if(fun(request.callback_response)) {
+			request.callback_response(object, request_id);
 		}
-		else if(typeof(response.node[response.node[response.request_id].callback_error]) == "function") {
-			response.node[response.node[response.request_id].callback_error](response, response.request_id);
+		else if(fun(node[request.callback_response])) {
+			node[request.callback_response](object, request_id);
 		}
-		else if(typeof(response.node[response.request_id].callback_response) == "function") {
-			response.node[response.request_id].callback_response(response, response.request_id);
+	}
+	else {
+		if(fun(request.callback_error)) {
+			request.callback_error({error:true,status:request.status}, request_id);
 		}
-		else if(typeof(response.node[response.node[response.request_id].callback_response]) == "function") {
-			response.node[response.node[response.request_id].callback_response](response, response.request_id);
+		else if(fun(node[request.callback_error])) {
+			node[request.callback_error]({error:true,status:request.status}, request_id);
+		}
+		else if(fun(request.callback_response)) {
+			request.callback_response({error:true,status:request.status}, request_id);
+		}
+		else if(fun(node[request.callback_response])) {
+			node[request.callback_response]({error:true,status:request.status}, request_id);
 		}
 	}
 }
@@ -1588,7 +1681,8 @@ Util.cutString = function(string, length) {
 	}
 	matches = string.match(/\&[\w\d]+\;/g);
 	if(matches) {
-		for(i = 0; match = matches[i]; i++){
+		for(i = 0; i < matches.length; i++){
+			match = matches[i];
 			if(string.indexOf(match) < length){
 				length += match.length-1;
 			}
@@ -1654,6 +1748,45 @@ Util.normalize = function(string) {
 	string = string.replace(/^-|-$/g, '');
 	return string;
 }
+Util.pluralize = function(count, singular, plural) {
+	if(count != 1) {
+		return count + " " + plural;
+	}
+	return count + " " + singular;
+}
+Util.isStringJSON = function(string) {
+	if(string.trim().substr(0, 1).match(/[\{\[]/i) && string.trim().substr(-1, 1).match(/[\}\]]/i)) {
+		try {
+			var test = JSON.parse(string);
+			if(obj(test)) {
+				test.isJSON = true;
+				return test;
+			}
+		}
+		catch(exception) {
+			console.log(exception)
+		}
+	}
+	return false;
+}
+Util.isStringHTML = function(string) {
+	if(string.trim().substr(0, 1).match(/[\<]/i) && string.trim().substr(-1, 1).match(/[\>]/i)) {
+		try {
+			var test = document.createElement("div");
+			test.innerHTML = string;
+			if(test.childNodes.length) {
+				var body_class = string.match(/<body class="([a-z0-9A-Z_: ]+)"/);
+				test.body_class = body_class ? body_class[1] : "";
+				var head_title = string.match(/<title>([^$]+)<\/title>/);
+				test.head_title = head_title ? head_title[1] : "";
+				test.isHTML = true;
+				return test;
+			}
+		}
+		catch(exception) {}
+	}
+	return false;
+}
 Util.browser = function(model, version) {
 	var current_version = false;
 	if(model.match(/\bedge\b/i)) {
@@ -1685,7 +1818,8 @@ Util.browser = function(model, version) {
 		}
 	}
 	if(model.match(/\bsafari\b/i)) {
-		if(!window.chrome && document.body.style.webkitTransform != undefined && !u.browser("ie,edge")) {
+		u.bug(navigator.userAgent);
+		if(!window.chrome && navigator.userAgent.match(/WebKit[^$]+Version\/(\d+)(.\d)/i) && !u.browser("ie,edge")) {
 			current_version = navigator.userAgent.match(/Version\/(\d+)(.\d)/i)[1];
 		}
 	}
@@ -1720,7 +1854,8 @@ Util.segment = function(segment) {
 	if(!u.current_segment) {
 		var scripts = document.getElementsByTagName("script");
 		var script, i, src;
-		for(i = 0; script = scripts[i]; i++) {
+		for(i = 0; i < scripts.length; i++) {
+			script = scripts[i];
 			seg_src = script.src.match(/\/seg_([a-z_]+)/);
 			if(seg_src) {
 				u.current_segment = seg_src[1];
@@ -1813,11 +1948,12 @@ Util.vendor_prefix = false;
 Util.vendorPrefix = function() {
 	if(Util.vendor_prefix === false) {
 		Util.vendor_prefix = "";
-		if(document.documentElement && typeof(window.getComputedStyle) == "function") {
+		if(document.documentElement && fun(window.getComputedStyle)) {
 			var styles = window.getComputedStyle(document.documentElement, "");
 			if(styles.length) {
 				var i, style, match;
-				for(i = 0; style = styles[i]; i++) {
+				for(i = 0; i < styles.length; i++) {
+					style = styles[i];
 					match = style.match(/^-(moz|webkit|ms)-/);
 					if(match) {
 						Util.vendor_prefix = match[1];
@@ -1863,12 +1999,12 @@ Util.Timer = u.t = new function() {
 		var timer = this._timers[id];
 		this._timers[id] = false;
 		var node = timer._n;
-		if(typeof(timer._a) == "function") {
+		if(fun(timer._a)) {
 			node._timer_action = timer._a;
 			node._timer_action(timer._p);
 			node._timer_action = null;
 		}
-		else if(typeof(node[timer._a]) == "function") {
+		else if(fun(node[timer._a])) {
 			node[timer._a](timer._p);
 		}
 	}
@@ -1886,12 +2022,12 @@ Util.Timer = u.t = new function() {
 	}
 	this._executeInterval = function(id) {
 		var node = this._timers[id]._n;
-		if(typeof(this._timers[id]._a) == "function") {
+		if(fun(this._timers[id]._a)) {
 			node._interval_action = this._timers[id]._a;
 			node._interval_action(this._timers[id]._p);
 			node._interval_action = null;
 		}
-		else if(typeof(node[this._timers[id]._a]) == "function") {
+		else if(fun(node[this._timers[id]._a])) {
 			node[this._timers[id]._a](this._timers[id]._p);
 		}
 	}
@@ -1969,7 +2105,7 @@ if(!Object.keys) {
 if(false && document.documentMode <= 10) {
 	Util.appendElement = u.ae = function(_parent, node_type, attributes) {
 		try {
-			var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+			var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 			if(attributes) {
 				var attribute;
 				for(attribute in attributes) {
@@ -1995,7 +2131,7 @@ if(false && document.documentMode <= 10) {
 	}
 	Util.insertElement = u.ie = function(_parent, node_type, attributes) {
 		try {
-			var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+			var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 			if(attributes) {
 				var attribute;
 				for(attribute in attributes) {
@@ -2045,7 +2181,7 @@ if(typeof(document.defaultView) == "undefined") {
 if(document.all && document.addEventListener == undefined) {
 	Util.appendElement = u.ae = function(_parent, node_type, attributes) {
 		try {
-			var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+			var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 			if(attributes) {
 				var attribute;
 				for(attribute in attributes) {
@@ -2074,12 +2210,14 @@ if(document.all && document.addEventListener == undefined) {
 						var nodes, matches, n, i;
 						matches = u.getMatches(attributes["html"], new RegExp("src\=\"([^\"]+)\"", "ig") );
 						nodes = u.qsa("[src]", node);
-						for(i = 0; n = nodes[i]; i++) {
+						for(i = 0; i < nodes.length; i++) {
+							n = nodes[i];
 							n.src = matches[i];
 						}
 						matches = u.getMatches(attributes["html"], new RegExp("href\=\"([^\"]+)\"", "ig") );
 						nodes = u.qsa("[href]", node);
-						for(i = 0; n = nodes[i]; i++) {
+						for(i = 0; i < nodes; i++) {
+							n = nodes[i];
 							n.href = matches[i];
 						}
 					}
@@ -2093,7 +2231,7 @@ if(document.all && document.addEventListener == undefined) {
 	}
 	Util.insertElement = u.ie = function(_parent, node_type, attributes) {
 		try {
-			var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+			var node = (obj(node_type)) ? node_type : document.createElement(node_type);
 			if(attributes) {
 				var attribute;
 				for(attribute in attributes) {
@@ -2122,12 +2260,14 @@ if(document.all && document.addEventListener == undefined) {
 						var nodes, matches, n, i;
 						matches = u.getMatches(attributes["html"], new RegExp("src\=\"([^\"]+)\"", "ig") );
 						nodes = u.qsa("[src]", node);
-						for(i = 0; n = nodes[i]; i++) {
+						for(i = 0; i < nodes.length; i++) {
+							n = nodes[i];
 							n.src = matches[i];
 						}
 						matches = u.getMatches(attributes["html"], new RegExp("href\=\"([^\"]+)\"", "ig") );
 						nodes = u.qsa("[href]", node);
-						for(i = 0; n = nodes[i]; i++) {
+						for(i = 0; i < nodes.length; i++) {
+							n = nodes[i];
 							n.href = matches[i];
 						}
 					}
@@ -2199,6 +2339,24 @@ if(typeof(document.textContent) == "undefined") {
 			return node.innerHTML.replace(/\<[^\>]*\>/g, "");
 		}
 	}
+}
+u.contains = Util.nodeWithin = u.nw = function(node, scope) {
+	if(scope != node) {
+		if(fun(scope.contains)) {
+			if(scope.contains(node)) {
+				return true
+			}
+		}
+		else {
+			while(node != null) {
+				if(node == scope) {
+					return true;
+				}
+				node = node.parentNode;
+			}
+		}
+	}
+	return false;
 }
 if(document.querySelector == undefined) {
 	(function(){
@@ -2499,7 +2657,7 @@ if(document.querySelector == undefined) {
 		},
 		relative: {
 			"+": function(checkSet, part){
-				var isPartStr = typeof part === "string",
+				var isPartStr = str(part),
 					isTag = isPartStr && !rNonWord.test( part ),
 					isPartStrNotTag = isPartStr && !isTag;
 				if ( isTag ) {
@@ -2519,7 +2677,7 @@ if(document.querySelector == undefined) {
 			},
 			">": function( checkSet, part ) {
 				var elem,
-					isPartStr = typeof part === "string",
+					isPartStr = str(part),
 					i = 0,
 					l = checkSet.length;
 				if ( isPartStr && !rNonWord.test( part ) ) {
@@ -2549,7 +2707,7 @@ if(document.querySelector == undefined) {
 				var nodeCheck,
 					doneName = done++,
 					checkFn = dirCheck;
-				if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				if ( str(part) && !rNonWord.test( part ) ) {
 					part = part.toLowerCase();
 					nodeCheck = part;
 					checkFn = dirNodeCheck;
@@ -2560,7 +2718,7 @@ if(document.querySelector == undefined) {
 				var nodeCheck,
 					doneName = done++,
 					checkFn = dirCheck;
-				if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				if ( str(part) && !rNonWord.test( part ) ) {
 					part = part.toLowerCase();
 					nodeCheck = part;
 					checkFn = dirNodeCheck;
@@ -3276,7 +3434,8 @@ if(document.all && document.addEventListener == undefined) {
 		win_event.timeStamp = new Date().getTime();
 		if(element && eid && window.attachedEvents[eid] && window.attachedEvents[eid][window.event.type]) {
 			var i, attachedAction;
-			for(i = 0; attachedAction = window.attachedEvents[eid][window.event.type][i]; i++) {
+			for(i = 0; i < window.attachedEvents[eid][window.event.type].length; i++) {
+				attachedAction = window.attachedEvents[eid][window.event.type][i];
 				element.ie_event_action = attachedAction;
 				element.ie_event_action(win_event);
 			}
@@ -3292,7 +3451,7 @@ if(document.all && document.addEventListener == undefined) {
 		}
 	}
 	u.e.addEvent = function(node, type, action) {
-		if(typeof(node) == "object" && typeof(node.childNodes) == "undefined") {
+		if(obj(node) && typeof(node.childNodes) == "undefined") {
 			node["on"+ type] = action;
 			return;
 		}
@@ -3321,7 +3480,7 @@ if(document.all && document.addEventListener == undefined) {
 		}
 	}
 	u.e.removeEvent = function(node, type, action) {
-		if(typeof(node) == "object" && typeof(node.childNodes) == "undefined") {
+		if(obj(node) && typeof(node.childNodes) == "undefined") {
 			node["on"+ type] = null;
 			return;
 		}
@@ -3601,7 +3760,7 @@ if(document.all || (new Image().onerror) === undefined) {
 			var event = new Object();
 			event.target = this;
 			u.rc(this.node, "loading");
-			if(typeof(this.node.loaded) == "function") {
+			if(fun(this.node.loaded)) {
 				this.node.loaded(event);
 			}
 		}
@@ -3639,7 +3798,7 @@ if(typeof(window.XMLHttpRequest) == "undefined" || function(){return (typeof(win
 					catch(exception) {
 						wrapper.IEreadyState = true;
 					}
-					if(typeof(wrapper.statechanged) == "function") {
+					if(fun(wrapper.statechanged)) {
 						wrapper.statechanged();
 						wrapper.parentNode.removeChild(wrapper);
 					}
@@ -3655,7 +3814,7 @@ if(typeof(window.XMLHttpRequest) == "undefined" || function(){return (typeof(win
 					this.xmlhttp.open(method, url, async);
 				}
 				catch(exception) {
-					if(typeof(wrapper.statechanged) == "function") {
+					if(fun(wrapper.statechanged)) {
 						this.status = 400;
 						this.IEreadyState = true;
 						this.statechanged();
@@ -3691,6 +3850,76 @@ if(String.prototype.substr == undefined || "ABC".substr(-1,1) == "A") {
 		return this.substring(start_index, length);
 	};
 }
+u.smartphoneSwitch = new function() {
+	this.state = 0;
+	this.init = function(node) {
+		this.callback_node = node;
+		this.event_id = u.e.addWindowEvent(this, "resize", this.resized);
+		this.resized();
+	}
+	this.resized = function() {
+		if(u.browserW() < 500 && !this.state) {
+			this.switchOn();
+		}
+		else if(u.browserW() > 500 && this.state) {
+			this.switchOff();
+		}
+	}
+	this.switchOn = function() {
+		if(!this.panel) {
+			this.state = true;
+			this.panel = u.ae(document.body, "div", {"id":"smartphone_switch"});
+			u.ass(this.panel, {
+				opacity: 0
+			});
+			u.ae(this.panel, "h1", {html:u.stringOr(u.txt["smartphone-switch-headline"], "Hello curious")});
+			if(u.txt["smartphone-switch-text"].length) {
+				for(i = 0; i < u.txt["smartphone-switch-text"].length; i++) {
+					u.ae(this.panel, "p", {html:u.txt["smartphone-switch-text"][i]});
+				}
+			}
+			var ul_actions = u.ae(this.panel, "ul", {class:"actions"});
+			var li; 
+			li = u.ae(ul_actions, "li", {class:"hide"});
+			var bn_hide = u.ae(li, "a", {class:"hide button", html:u.txt["smartphone-switch-bn-hide"]});
+			li = u.ae(ul_actions, "li", {class:"switch"});
+			var bn_switch = u.ae(li, "a", {class:"switch button primary", html:u.txt["smartphone-switch-bn-switch"]});
+			u.e.click(bn_switch);
+			bn_switch.clicked = function() {
+				u.saveCookie("smartphoneSwitch", "on");
+				location.href = location.href.replace(/[&]segment\=desktop|segment\=desktop[&]?/, "") + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
+			}
+			u.e.click(bn_hide);
+			bn_hide.clicked = function() {
+				u.e.removeWindowEvent(u.smartphoneSwitch, "resize", u.smartphoneSwitch.event_id);
+				u.smartphoneSwitch.switchOff();
+			}
+			u.a.transition(this.panel, "all 0.5s ease-in-out");
+			u.ass(this.panel, {
+				opacity: 1
+			});
+			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOn) == "function") {
+				this.callback_node.smartphoneSwitchedOn();
+			}
+		}
+	}
+	this.switchOff = function() {
+		if(this.panel) {
+			this.state = false;
+			this.panel.transitioned = function() {
+				this.parentNode.removeChild(this);
+				delete u.smartphoneSwitch.panel;
+			}
+			u.a.transition(this.panel, "all 0.5s ease-in-out");
+			u.ass(this.panel, {
+				opacity: 0
+			});
+			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOff) == "function") {
+				this.callback_node.smartphoneSwitchedOff();
+			}
+		}
+	}
+}
 
 
 /*u-settings.js*/
@@ -3715,73 +3944,4 @@ u.txt["smartphone-switch-text"] = [
 ];
 u.txt["smartphone-switch-bn-hide"] = "Hide";
 u.txt["smartphone-switch-bn-switch"] = "Go to Smartphone version";
-
-
-/*u-googleanalytics.js*/
-if(u.ga_account) {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.defer=true;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', u.ga_account, u.ga_domain);
-    ga('send', 'pageview');
-	u.stats = new function() {
-		this.pageView = function(url) {
-			ga('send', 'pageview', url);
-		}
-		this.event = function(node, _options) {
-			var event = false;
-			var eventCategory = "Uncategorized";
-			var eventAction = null;
-			var eventLabel = null;
-			var eventValue = null;
-			var nonInteraction = false;
-			var hitCallback = null;
-			if(typeof(_options) == "object") {
-				var _argument;
-				for(_argument in _options) {
-					switch(_argument) {
-						case "event"				: event					= _options[_argument]; break;
-						case "eventCategory"		: eventCategory			= _options[_argument]; break;
-						case "eventAction"			: eventAction			= _options[_argument]; break;
-						case "eventLabel"			: eventLabel			= _options[_argument]; break;
-						case "eventValue"			: eventValue			= _options[_argument]; break;
-						case "nonInteraction"		: nonInteraction		= _options[_argument]; break;
-						case "hitCallback"			: hitCallback			= _options[_argument]; break;
-					}
-				}
-			}
-			if(!eventAction && event && event.type) {
-				eventAction = event.type;
-			}
-			else if(!eventAction) {
-				eventAction = "Unknown";
-			}
-			if(!eventLabel && event && event.currentTarget && event.currentTarget.url) {
-				eventLabel = event.currentTarget.url;
-			}
-			else if(!eventLabel) {
-				eventLabel = this.nodeSnippet(node);
-			}
-			ga('send', 'event', {
-				"eventCategory": eventCategory, 
-				"eventAction": eventAction,
-				"eventLabel": eventLabel,
-				"eventValue": eventValue,
-				"nonInteraction": nonInteraction,
-				"hitCallback": hitCallback
-			});
-		}
-		// 	
-		// 	//       slot,		
-		// 	//       name,		
-		// 	//       value,	
-		// 	//       scope		
-		// 	
-		this.nodeSnippet = function(node) {
-			return u.cutString(u.text(node).trim(), 20) + "(<"+node.nodeName+">)";
-		}
-	}
-}
-
 

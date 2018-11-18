@@ -1,9 +1,50 @@
+/*
+asset-builder @ 2018-11-15 14:19:44
+*/
 
 /*seg_desktop_light_include.css*/
 
-/*seg_desktop_light_include.css*/
-
-/*s-page.css*/
+/*seg_desktop_light.css*/
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-regular-webfont.eot');
+	src: url('fonts/open_sans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-regular-webfont.ttf') format('truetype'),
+		 url('fonts/open_sans/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-bold-webfont.eot');
+	src: url('fonts/open_sans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-bold-webfont.ttf') format('truetype'),
+		 url('fonts/open_sans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-italic-webfont.eot');
+	src: url('fonts/open_sans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-italic-webfont.ttf') format('truetype'),
+		 url('fonts/open_sans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'PT Serif';
+	src: url('fonts/pt_serif/pt_serif-regular-webfont.eot');
+	src: url('fonts/pt_serif/pt_serif-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.ttf') format('truetype'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 * {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;}
 html {min-height: 100%;}
 body {background: #ffffff; margin: 0;}
@@ -48,9 +89,6 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 .terms_notification h3 {padding: 0 0 15px; font-size: 14px; color: #ffffff;}
 .terms_notification .accept,
 .terms_notification .details {text-decoration: underline; padding: 0; font-size: 13px; line-height: 18px; display: inline; vertical-align: bottom; padding: 0 15px 0 0; color: #ffffff;}
-
-
-/*s-header.css*/
 #header {position: relative; height: 100px;}
 #header .logo {font-size: 30px; padding: 20px 50px 20px; color: #888888; cursor: pointer; display: block; width: 200px;
 	font-family: "PT Serif", Times, serif;
@@ -70,13 +108,8 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 }
 #navigation ul li a:hover {text-decoration: underline;}
 #navigation ul li.front {display: none;}
-
-
-/*s-footer.css*/
 #footer {text-align: center; border-top: 1px solid #888888; margin: 0 50px;}
 #footer p {padding: 10px; cursor: pointer;}
-
-/*s-content.css*/
 #content {position: relative; width: 640px; margin: 0 auto;}
 #content .scene {position: relative; padding: 50px 0 70px;}
 #content .scene .link {cursor: pointer;}
@@ -118,7 +151,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.items {padding-bottom: 0;}
 #content .scene ul li.item {display: block; padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #dedede;}
 #content .scene dl {padding: 0 70px 15px; overflow: hidden; width: 500px;}
-#content .scene dt {padding: 0 0 5px 0; color: #999999;} 
+#content .scene dt {padding: 0 0 5px 0; color: #999999;}
 #content .scene dd {padding: 0 0 12px;}
 #content .scene dt span {text-transform: none;}
 #content .scene dl dl {padding: 0 0 10px 30px; width: 470px;}
@@ -215,22 +248,20 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 }
 #content .scene .usedby ul {padding-bottom: 0;}
 #content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
-#content .scene .usedby ul li.metro {background-image: url(/img/logos/metro.png); background-size: 70px auto;}
-#content .scene .usedby ul li.soulland {background-image: url(/img/logos/soulland.png); background-size: 70px auto;}
-#content .scene .usedby ul li.cphpix {background-image: url(/img/logos/cphpix.png);}
-#content .scene .usedby ul li.tuborg {background-image: url(/img/logos/tuborg.png);}
-#content .scene .usedby ul li.distortion {background-image: url(/img/logos/distortion.png);}
-#content .scene .usedby ul li.landskabsarkitekter {background-image: url(/img/logos/landskabsarkitekter.png);}
-#content .scene .usedby ul li.urbangreen {background-image: url(/img/logos/urbangreen.png);}
-#content .scene .usedby ul li.oeo {background-image: url(/img/logos/oeo.png);}
-#content .scene .usedby ul li.peoplegroup {background-image: url(/img/logos/peoplegroup.png);}
-#content .scene .usedby ul li.lsb {background-image: url(/img/logos/lsb.png);}
-#content .scene .usedby ul li.punkt1 {background-image: url(/img/logos/punkt1.png);}
+#content .scene .usedby ul li.metro {background-image: url(../img/logos/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(../img/logos/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(../img/logos/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(../img/logos/tuborg.png);}
+#content .scene .usedby ul li.distortion {background-image: url(../img/logos/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../img/logos/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(../img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(../img/logos/oeo.png);}
+#content .scene .usedby ul li.torvehallerne {background-image: url(../img/logos/torvehallerne.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(../img/logos/peoplegroup.png);}
+#content .scene .usedby ul li.lsb {background-image: url(../img/logos/lsb.png);}
+#content .scene .usedby ul li.punkt1 {background-image: url(../img/logos/punkt1.png);}
 #content .scene.login form {padding-bottom: 20px;}
 #content .scene div.messages > p.error {color: #df0000;}
-
-
-/*s-form.css*/
 form {}
 fieldset {border: none; display: block;}
 div.field {padding: 0 70px 15px; position: relative; font-size: 0;}
@@ -305,9 +336,6 @@ div.field div.error {border: 1px solid #a62300; color: #a62300; background: #ffd
 div.field.error div.error {display: block;}
 div.field div.hint {z-index: 9; border: 1px solid #007633; color: #007633; background: #d0f4e0;}
 div.field.focus div.hint {display: block;}
-
-
-/*s-itemtypes.css*/
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
 #content .scene .articlebody ul {list-style-type: disc;}
@@ -321,9 +349,6 @@ div.field.focus div.hint {display: block;}
 #content .scene ul.wishes dl.info dt {display: none;}
 #content .scene ul.wishes dl.info dd {padding-left: 0;}
 #content .scene ul.wishes > li ul.actions {display: none;}
-
-
-/*s-documentation.css*/
 #content .scene.docsindex {}
 #content .scene.docsindex ul.actions {display: none;}
 #content .scene.docsindex .notes {display: none;}
@@ -335,7 +360,7 @@ div.field.focus div.hint {display: block;}
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {font-size: 13px; color: #999999; padding: 0;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(/img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading {background: transparent url(../img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function:hover {background: #ededed;}
@@ -376,50 +401,6 @@ div.field.focus div.hint {display: block;}
 #content .scene div.segmentsupport {padding-top: 15px;}
 #content .scene div.segmentsupport .header {cursor: pointer;}
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
-
-
-
-/*s-fonts-desktop_light.css*/
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-regular-webfont.eot');
-	src: url('/css/fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-bold-webfont.eot');
-	src: url('/css/fonts/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-bold-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-bold-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
-	font-weight: bold;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-italic-webfont.eot');
-	src: url('/css/fonts/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-italic-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-italic-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
-	font-weight: normal;
-	font-style: italic;
-}
-@font-face {
-	font-family: 'PT Serif';
-	src: url('/css/fonts/pt_serif-regular-webfont.eot');
-	src: url('/css/fonts/pt_serif-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/pt_serif-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/pt_serif-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
 
 /*s-pages.css*/

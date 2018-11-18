@@ -1,9 +1,42 @@
+/*
+asset-builder @ 2018-11-15 14:19:44
+*/
 
 /*seg_mobile_include.css*/
 
-/*seg_mobile_include.css*/
-
-/*s-page.css*/
+/*seg_mobile.css*/
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-regular-webfont.ttf') format('truetype'),
+		 url("fonts/open_sans/opensans-regular-webfont.svg#OpenSansRegular") format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-bold-webfont.ttf') format('truetype'),
+		 url('fonts/open_sans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'OpenSans';
+	src: url('fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
+		 url('fonts/open_sans/opensans-italic-webfont.ttf') format('truetype'),
+		 url('fonts/open_sans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'PT Serif';
+	src: url('fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.ttf') format('truetype'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 * {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;}
 html {}
 body {background: #ffffff; margin: 0;}
@@ -43,9 +76,6 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 .c133 {width: 34%;}
 .c100 {width: 25%;}
 #page {position: relative;}
-
-
-/*s-header.css*/
 #header {padding: 10px;}
 #header .logo {font-size: 30px; padding: 10px 20px; color: #888888; cursor: pointer; display: inline-block;
 	font-family: "PT Serif", Times, serif;
@@ -61,15 +91,9 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #navigation ul li {padding: 10px; font-size: 18px; color: #888888; display: block; text-align: center;
 	font-family: "PT Serif", Times, serif;
 }
-
-
-/*s-footer.css*/
 #footer {text-align: center; border-top: 1px solid #888888; margin: 0;}
 #footer p {padding: 10px;}
 #footer .servicenavigation {display: none;}
-
-
-/*s-content.css*/
 #content {position: relative;}
 #content .scene {position: relative; padding: 20px 0 30px;}
 #content .scene .link {cursor: pointer;}
@@ -168,9 +192,6 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
 #content .scene .usedby {display: none;}
-
-
-/*s-form.css*/
 #content form {}
 #content fieldset {border: none; display: block;}
 #content .field {padding: 0 8px 10px; position: relative; font-size: 0;}
@@ -204,7 +225,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .field select.default,
 #content .field textarea.default {color: #aaaaaa;}
 #content .field.required .indicator {position: absolute; top: 4px; left: 435px; width: 25px; height: 25px; 
-	background: transparent url(/janitor/admin/img/bg_icons.png) no-repeat 0 -292px;
+	background: transparent url(../img/bg_icons.png) no-repeat 0 -292px;
 }
 #content .field.text.required .indicator {background-position: 0 -296px;}
 #content .field.correct .indicator {background-position: 2px -320px;}
@@ -243,9 +264,6 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .field.error div.error {display: block;}
 #content .field div.hint {z-index: 9; border: 1px solid #007633; color: #007633; background: #d0f4e0;}
 #content .field.focus div.hint {display: block;}
-
-
-/*s-itemtypes.css*/
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px;}
 #content .scene .articlebody ul {list-style-type: disc;}
@@ -259,9 +277,6 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.wishes dl.info dt {display: none;}
 #content .scene ul.wishes dl.info dd {padding-left: 0;}
 #content .scene ul.wishes > li ul.actions {display: none;}
-
-
-/*s-documentation.css*/
 #content .scene.docsindex {}
 #content .scene.docsindex .notes {display: none;}
 #content .scene.docsindex .tests {display: none;}
@@ -272,7 +287,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {display: none;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(/img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading {background: transparent url(../img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
@@ -308,50 +323,6 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.includefiles {}
 #content .scene div.segmentsupport {padding-top: 15px;}
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
-
-
-
-/*s-fonts-desktop_light.css*/
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-regular-webfont.eot');
-	src: url('/css/fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-bold-webfont.eot');
-	src: url('/css/fonts/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-bold-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-bold-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
-	font-weight: bold;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OpenSans';
-	src: url('/css/fonts/opensans-italic-webfont.eot');
-	src: url('/css/fonts/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/opensans-italic-webfont.woff') format('woff'),
-		 url('/css/fonts/opensans-italic-webfont.ttf') format('truetype'),
-		 url('/css/fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
-	font-weight: normal;
-	font-style: italic;
-}
-@font-face {
-	font-family: 'PT Serif';
-	src: url('/css/fonts/pt_serif-regular-webfont.eot');
-	src: url('/css/fonts/pt_serif-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('/css/fonts/pt_serif-regular-webfont.woff') format('woff'),
-		 url('/css/fonts/pt_serif-regular-webfont.ttf') format('truetype'),
-		 url('/css/fonts/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
 
 /*s-pages.css*/
