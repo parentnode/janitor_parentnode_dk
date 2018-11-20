@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="EN">
 <head>
-	<!-- (c) & (p) think.dk 2002-2018 -->
-	<!-- For detailed copyright license, see /terms -->
+	<!-- (c) & (p) think.dk, parentnode.dk 2002-2018 -->
 	<!-- If you want to use or contribute to this code, visit https://parentnode.dk -->
 	<title>Getting lost without losing my way</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -19,39 +18,7 @@
 	<link rel="apple-touch-icon" href="https://parentnode.dk/touchicon.png" />
 	<link rel="icon" href="https://parentnode.dk/favicon.png" />
 
-	<script type="text/javascript" src="https://detector-v4.dearapi.com/js-include/?site=parentnode-skin&dev=0"></script>
-
-	<!-- Hard-coded segment includes -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_desktop_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_desktop_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_desktop.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_desktop.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_desktop_light_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_desktop_light_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_desktop_light.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_desktop_light.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_mobile_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_mobile_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_mobile.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_mobile.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_seo_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_seo_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_seo.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_seo.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_smartphone_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_smartphone_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_smartphone.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_smartphone.js"></script> -->
-
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/lib/seg_tablet_include.css" /> -->
-	<!-- <script type="text/javascript" src="js/lib/seg_tablet_include.js"></script> -->
-	<!-- <link type="text/css" rel="stylesheet" media="all" href="css/seg_tablet.css" /> -->
-	<!-- <script type="text/javascript" src="js/seg_tablet.js"></script> -->
-
+	<script type="text/javascript" src="https://detector-v4.dearapi.com/js-include"></script>
 </head>
 
 <body class="story">
@@ -913,16 +880,18 @@ player.load("/media/audio/audio_1.mp3");</code>
 	
 	<script type="text/javascript">
 
-		// Standard form initializer
-		u.o.standardForm = new function() {
-			this.init = function(form) {
-				u.f.init(form);
+		if (typeof(u) == "object") {
+			// Standard form initializer
+			u.o.standardForm = new function() {
+				this.init = function(form) {
+					u.f.init(form);
 
-				// while testing form - scroll to form onload
-				// u.scrollTo(window, {"node":form});
+					// while testing form - scroll to form onload
+					// u.scrollTo(window, {"node":form});
+				}
 			}
 		}
-
+		
 	</script>
 
 	<form action="/template/#/1" method="post" class="labelstyle:inject i:standardForm" enctype="application/x-www-form-urlencoded">
@@ -1040,6 +1009,10 @@ player.load("/media/audio/audio_1.mp3");</code>
 
 	</form>
 
+
+	<hr />
+
+
 	<div class="usedby">
 		<h2>Selected clients</h2>
 		<ul>
@@ -1050,6 +1023,7 @@ player.load("/media/audio/audio_1.mp3");</code>
 			<li class="metro" title="Copenhagen Metro">Copenhagen Metro</li>
 		</ul>
 	</div>
+
 
 </div>
 
@@ -1067,7 +1041,7 @@ player.load("/media/audio/audio_1.mp3");</code>
 			<li class="terms"><a href="/terms">Terms</a></li>
 		</ul>
 
-		<p><a href="http://think.dk">&lt;aliens&gt;we are all&lt;/aliens&gt;</a></p>
+		<p><a href="https://parentnode.dk">&lt;aliens&gt;we are all&lt;/aliens&gt;</a></p>
 	</div>
 
 </div>
