@@ -1,4 +1,4 @@
-<div class="scene docpage i:docpage">
+<div class="scene docpage i:docpage i:scene">
 	<h1>Page</h1>
 	<p>
 		The Page class is the core controller and template toolset. This class is automatically instatiated and 

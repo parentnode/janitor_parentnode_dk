@@ -1,4 +1,4 @@
-<div class="scene docpage i:docpage">
+<div class="scene docpage i:docpage i:scene">
 	<h1>Items</h1>
 	<p>
 		What does items class do

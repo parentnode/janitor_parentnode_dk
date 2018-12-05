@@ -1,4 +1,4 @@
-<div class="scene docpage i:docpage">
+<div class="scene docpage i:docpage i:scene">
 	<h1>Session</h1>
 	<p>
 		Internal Session helper class providing a simple get/set/reset interface to the Janitor Session storage.
