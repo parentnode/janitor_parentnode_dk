@@ -5,11 +5,7 @@
 @import url(desktop/s-footer.css);
 
 @import url(desktop/s-content.css);
-@import url(desktop/s-form.css);
-
-@import url(desktop/s-itemtypes.css);
-@import url(desktop/s-documentation.css);
-@import url(desktop/s-login_overlay.css);
+@import url(desktop/s-article.css);
 
 @import url(desktop/s-hovers.css);
 
