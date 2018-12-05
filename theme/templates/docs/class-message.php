@@ -1,4 +1,4 @@
-<div class="scene docpage i:docpage i:scene">
+<div class="scene docpage i:docpage">
 	<h1>Message</h1>
 
 	<div class="section functions">

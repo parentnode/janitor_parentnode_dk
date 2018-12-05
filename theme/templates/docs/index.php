@@ -5,7 +5,7 @@ $IC = new Items();
 
 $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => array("user" => true, "tags" => true, "mediae" => true)));
 ?>
-<div class="scene docsindex i:docsindex i:scene">
+<div class="scene docsindex i:docsindex">
 
 <? if($page_item && $page_item["status"]): 
 	$media = $IC->sliceMedia($page_item); ?>

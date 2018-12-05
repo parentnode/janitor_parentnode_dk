@@ -1,4 +1,4 @@
-<div class="scene docpage i:docpage i:scene">
+<div class="scene docpage i:docpage">
 	<h1>FileSystem</h1>
 	<p>
 		The FileSystem class provides general file system helper functions.
