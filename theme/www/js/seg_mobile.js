@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2018-11-20 14:17:49
+asset-builder @ 2018-12-05 16:02:43
 */
 
 /*seg_mobile_include.js*/
@@ -3920,22 +3920,112 @@ u.smartphoneSwitch = new function() {
 		}
 	}
 }
-
-
-/*u-settings.js*/
-u.site_name = "Janitor";
-u.terms_version = "terms_v1";
-u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
-u.ga_account = 'UA-49739795-1';
-u.ga_domain = 'janitor.parentnode.dk';
+u.showScene = function(scene) {
+	var i, node;
+	var nodes = u.cn(scene);
+	if(nodes.length) {
+		var article = u.qs("div.article", scene);
+		if(nodes[0] == article) {
+			var article_nodes = u.cn(article);
+			nodes.shift();
+			for(x in nodes) {
+				article_nodes.push(nodes[x]);
+			}
+			nodes = article_nodes;
+		}
+		var headline = u.qs("h1,h2", scene);
+		for(i = 0; node = nodes[i]; i++) {
+			u.ass(node, {
+				"opacity":0,
+			});
+		}
+		u.ass(scene, {
+			"opacity":1,
+		});
+		u._stepA1.call(headline);
+		for(i = 0; node = nodes[i]; i++) {
+			u.a.transition(node, "all 0.2s ease-in "+((i*100)+200)+"ms");
+			u.ass(node, {
+				"opacity":1,
+				"transform":"translate(0, 0)"
+			});
+		}
+	}
+	else {
+		u.ass(scene, {
+			"opacity":1,
+		});
+	}
+}
+u._stepA1 = function() {
+	this.innerHTML = this.innerHTML.replace(/[ ]?<br[ \/]?>[ ]?/, " <br /> ");
+	this.innerHTML = '<span class="word">'+this.innerHTML.split(" ").join('</span> <span class="word">')+'</span>'; 
+	var word_spans = u.qsa("span.word", this);
+	var i, span;
+	for(i = 0; span = word_spans[i]; i++) {
+		if(span.innerHTML.match(/<br[ \/]?>/)) {
+			span.parentNode.replaceChild(document.createElement("br"), span);
+		}
+		else {
+			span.innerHTML = "<span>"+span.innerHTML.split("").join("</span><span>")+"</span>";
+		}
+	}
+	this.spans = u.qsa("span:not(.word)", this);
+	if(this.spans) {
+		var i, span;
+		for(i = 0; span = this.spans[i]; i++) {
+			span.innerHTML = span.innerHTML.replace(/ /, "&nbsp;");
+			u.ass(span, {
+				"transformOrigin": "0 100% 0",
+				"transform":"translate(0, 40px)",
+				"opacity":0
+			});
+		}
+		u.ass(this, {
+			"opacity":1
+		});
+		for(i = 0; span = this.spans[i]; i++) {
+			u.a.transition(span, "all 0.2s ease-in-out "+(15*u.random(0, 15))+"ms");
+			u.ass(span, {
+				"transform":"translate(0, 0)",
+				"opacity":1
+			});
+			span.transitioned = function(event) {
+				u.ass(this, {
+					"transform":"none"
+				});
+			}
+		}
+	}
+}
+u._stepA2 = function() {
+	if(this.spans) {
+		var i, span;
+		for(i = 0; span = this.spans[i]; i++) {
+			u.a.transition(span, "all 0.2s ease-in-out "+(15*u.random(0, 15))+"ms");
+			u.ass(span, {
+				"transform":"translate(0, -40px)",
+				"opacity":0
+			});
+		}
+	}
+}
 u.txt = {};
+u.txt["share"] = "Share this page";
+u.txt["share-info-headline"] = "(How do I share?)";
+u.txt["share-info-txt"] = "We have not included social media plugins on this site, because they are frequently abused to collect data about you. Also we don't want to promote some channels over others. Instead, just copy the link and share it wherever you find relevant.";
+u.txt["share-info-ok"] = "OK";
+u.txt["readmore"] = "Read more.";
+u.txt["readstate-not_read"] = "Click to mark as read";
+u.txt["readstate-read"] = "Read";
+u.txt["add_comment"] = "Add comment";
+u.txt["comment"] = "Comment";
+u.txt["cancel"] = "Cancel";
+u.txt["login_to_comment"] = '<a href="/login">Login</a> or <a href="/signup">Sign up</a> to add comments.';
+u.txt["relogin"] = "Your session timed out - please login to continue.";
 u.txt["terms-headline"] = "We love <br />cookies and privacy";
 u.txt["terms-accept"] = "Accept";
 u.txt["terms-details"] = "Details";
-u.txt["share"] = "Share";
-u.txt["share-info-headline"] = "(How do I share?)";
-u.txt["share-info-txt"] = "We have not includered social media plugins on this site, because they are frequently abused to collect data about you. Also we don't want to promote some channels over others. Instead, just copy the link and share it wherever you find relevant.";
-u.txt["share-info-ok"] = "OK";
 u.txt["smartphone-switch-headline"] = "Hello curious";
 u.txt["smartphone-switch-text"] = [
 	"If you are looking for a mobile version of this site, using an actual mobile phone is a better starting point.",
@@ -3944,4 +4034,39 @@ u.txt["smartphone-switch-text"] = [
 ];
 u.txt["smartphone-switch-bn-hide"] = "Hide";
 u.txt["smartphone-switch-bn-switch"] = "Go to Smartphone version";
+
+
+/*u-settings.js*/
+u.txt = {};
+u.txt["share"] = "Share this page";
+u.txt["share-info-headline"] = "(How do I share?)";
+u.txt["share-info-txt"] = "We have not included social media plugins on this site, because they are frequently abused to collect data about you. Also we don't want to promote some channels over others. Instead, just copy the link and share it wherever you find relevant.";
+u.txt["share-info-ok"] = "OK";
+u.txt["readmore"] = "Read more.";
+u.txt["readstate-not_read"] = "Click to mark as read";
+u.txt["readstate-read"] = "Read";
+u.txt["add_comment"] = "Add comment";
+u.txt["comment"] = "Comment";
+u.txt["cancel"] = "Cancel";
+u.txt["login_to_comment"] = '<a href="/login">Login</a> or <a href="/signup">Sign up</a> to add comments.';
+u.txt["relogin"] = "Your session timed out - please login to continue.";
+u.txt["terms-headline"] = "We love <br />cookies and privacy";
+u.txt["terms-accept"] = "Accept";
+u.txt["terms-details"] = "Details";
+u.txt["smartphone-switch-headline"] = "Hello curious";
+u.txt["smartphone-switch-text"] = [
+	"If you are looking for a mobile version of this site, using an actual mobile phone is a better starting point.",
+	"We care about our endusers and <em>one-size fits one device</em>, the parentNode way, provides an optimized user experience with a smaller footprint, because it doesn't come with all sizes included.",
+	"But, since it is our mission to accommodate users, feel free to switch to the Smartphone segment and see if it serves your purpose better for the moment. We'll make sure to leave you with an option to return back to the Desktop segment.",
+];
+u.txt["smartphone-switch-bn-hide"] = "Hide";
+u.txt["smartphone-switch-bn-switch"] = "Go to Smartphone version";
+
+
+/*u-settings.js*/
+u.site_name = "Janitor";
+u.terms_version = "terms_v1";
+u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
+u.ga_account = 'UA-49739795-1';
+u.ga_domain = 'janitor.parentnode.dk';
 

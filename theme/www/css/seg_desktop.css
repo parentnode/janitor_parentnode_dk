@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2018-11-20 14:17:49
+asset-builder @ 2018-12-05 16:02:43
 */
 
 /*seg_desktop_include.css*/
@@ -7,7 +7,8 @@ asset-builder @ 2018-11-20 14:17:49
 /*seg_desktop.css*/
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
+	src: url('fonts/open_sans/opensans-regular-webfont.woff2') format('woff2'),
+		 url('fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
 		 url('fonts/open_sans/opensans-regular-webfont.ttf') format('truetype'),
 		 url("fonts/open_sans/opensans-regular-webfont.svg#OpenSansRegular") format('svg');
 	font-weight: normal;
@@ -15,7 +16,8 @@ asset-builder @ 2018-11-20 14:17:49
 }
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
+	src: url('fonts/open_sans/opensans-bold-webfont.woff2') format('woff2'),
+		 url('fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
 		 url('fonts/open_sans/opensans-bold-webfont.ttf') format('truetype'),
 		 url('fonts/open_sans/opensans-bold-webfont.svg#open_sansbold') format('svg');
 	font-weight: bold;
@@ -23,7 +25,8 @@ asset-builder @ 2018-11-20 14:17:49
 }
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
+	src: url('fonts/open_sans/opensans-italic-webfont.woff2') format('woff2'),
+		 url('fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
 		 url('fonts/open_sans/opensans-italic-webfont.ttf') format('truetype'),
 		 url('fonts/open_sans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
 	font-weight: normal;
@@ -31,7 +34,8 @@ asset-builder @ 2018-11-20 14:17:49
 }
 @font-face {
 	font-family: 'PT Serif';
-	src: url('fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
+	src: url('fonts/pt_serif/pt_serif-regular-webfont.woff2') format('woff2'),
+		 url('fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
 		 url('fonts/pt_serif/pt_serif-regular-webfont.ttf') format('truetype'),
 		 url('fonts/pt_serif/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
 	font-weight: normal;
@@ -65,12 +69,12 @@ h3 {padding: 0 70px 10px; font-size: 20px; line-height: 1.25em;}
 h4 {padding: 0 70px 5px; font-size: 14px; line-height: 1em; font-weight: bold;}
 h5 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
 h6 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
-p {padding: 0 70px 20px; font-size: 14px; line-height: 1.38em;} 
+p {padding: 0 70px 20px; font-size: 14px; line-height: 1.38em;}
 ul,
 ol {font-size: 0;}
 li {font-size: 13px; line-height: 1.25em;}
-dl {font-size: 0;} 
-dt, 
+dl {font-size: 0;}
+dt,
 dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 .c {clear: both; font-size: 0;}
 .c400, .c300, .c266, .c200, .c150, .c133, .c100, .c75, .c50 {display: inline-block; min-height: 10px; vertical-align: top;}
@@ -94,7 +98,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 body > div.hint {z-index: 100; position: absolute; top: 0; left: 0; padding: 3px 5px; background: #ffffff; color: #888888; border: 1px solid #888888; box-shadow: 0 1px 1px #888888; border-radius: 5px; font-size: 12px; max-width: 400px;}
 body > div.hint p {padding: 5px; color: #888888; font-size: 12px;}
 body > div.hint a {text-decoration: underline; display: inline-block; vertical-align: top; padding: 5px;}
-#smartphone_switch {z-index: 11000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); text-align: left; opacity: 0;}
+#smartphone_switch {z-index: 11000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); text-align: left; opacity: 0;}
 #smartphone_switch h1 {padding: 40px 20px; font-size: 36px; width: 300px;}
 #smartphone_switch p {padding: 0 20px 20px; width: 250px;}
 #smartphone_switch ul {padding: 30px 20px 20px;}
@@ -125,7 +129,8 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #footer {text-align: center; border-top: 1px solid #888888; opacity: 0;}
 #footer p {padding: 10px; cursor: pointer; font-size: 13px;}
 #content {position: relative;}
-#content .scene {position: relative; padding: 50px 0 75px;}
+#content .scene {opacity: 0; position: relative; padding: 50px 0 75px;}
+#content .scene h1 span {display: inline-block;}
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #888888;}
 #content .scene h1,
@@ -183,12 +188,6 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene ul.info li.modified_at,
 #content .scene ul.info li.latitude,
 #content .scene ul.info li.longitude {display: none;}
-#content .scene ul.info > li.place {font-size: 0;}
-#content .scene ul.geo.active li.location {cursor: pointer;}
-#content .scene ul.info ul.geo {padding: 0; display: inline-block; vertical-align: top; width: auto;}
-#content .scene div.geomap {position: relative; z-index: 1; height: 300px; width: 600px; margin-bottom: 20px;}
-#content .scene div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 50px 30px; width: 540px; border-radius: 5px; }
-#content .scene li div.geomap {}
 #content .scene div.image {position: relative; z-index: 1;}
 #content .scene div.image img {cursor: zoom-in; margin: 0 50px 30px; width: 540px; border-radius: 5px; overflow: hidden;}
 #content .scene div.image p {margin-top: -20px; padding: 0 70px 40px; font-size: 0;}
@@ -204,7 +203,6 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene div.media.loaded p a {display: block;}
 #content .scene div.media.fullsize {}
 #content .scene div.media.fullsize img {cursor: zoom-out; width: 100%; margin: 0 0 30px; border-radius: 0;}
-#content .scene .pagination {display: none;}
 #content .scene div.categories {padding-bottom: 5px; display: inline-block; vertical-align: top; width: 250px;}
 #content .scene div.categories ul {padding-right: 0;}
 #content .scene div.categories ul.tags li {font-size: 14px; padding-bottom: 5px; display: block;}
@@ -214,91 +212,11 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene div.categories ul.tags li.selected a {color: #000000;  display: inline-block; vertical-align: top; }
 #content .scene div.categories ul.actions {padding-bottom: 0;}
 #content .scene div.categories ul.actions li {padding-bottom: 0; font-size: 15px; display: block;}
-#content .scene div.article {position: relative; padding-bottom: 30px;}
-#content .scene div.article h1 svg.checkmark {cursor: pointer;}
-#content .scene div.article ul.tags {padding-bottom: 30px;}
-#content .scene div.article ul.tags li,
-#content .scene div.article ul.tags li a {color: #cccccc;}
-#content .scene div.article div.articlebody span.sup.reference {font-size: 10px; line-height: 1.1em; vertical-align: top; padding-left: 2px;}
-#content .scene div.article div.articlebody h3.reference {padding-top: 20px;}
-#content .scene div.article div.articlebody p.reference {font-style: italic;}
-#content .scene ul.articles {padding: 0;}
-#content .scene ul.articles li.article {padding: 20px 0 5px; border-top: 1px solid #dedede; position: relative;}
-#content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
-#content .scene ul.articles li.article ul.tags li,
-#content .scene ul.articles li.article ul.tags li a {color: #cccccc;}
-#content .scene ul.articles li.article h3 {font-size: 22px; line-height: 1em; padding-bottom: 10px;
-	font-family: "PT Serif", Times, serif;
-}
-#content .scene ul.articles li.article ul.actions {margin-top: -10px;}
-#content .scene ul.articles li.article ul.actions li {padding-bottom: 0;}
-#content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 45px;}
-#content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
 #content .scene div.related {padding-top: 10px; position: relative; z-index: 1;}
 #content .scene div.related h2 {padding-bottom: 15px;}
 #content .scene div.related h2 a {font-size: 12px; display: inline-block; vertical-align: middle;
 	font-family: "OpenSans";
 }
-#content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px; overflow: hidden;}
-#content .scene div.sharing p {z-index: 2; padding: 0; position: absolute; top: 25px; left: 120px; display: none; font-size: 11px; color: #999999;}
-#content .scene div.sharing h3 {z-index: 2; position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
-#content .scene div.sharing h3 span {display: inline-block; vertical-align: top; margin: 9px 0 0 7px; font-size: 11px; line-height: 11px;}
-#content .scene div.sharing.hover {z-index: 2; overflow: visible;}
-#content .scene div.sharing.hover h3,
-#content .scene div.sharing.hover p {display: block;}
-#content .scene div.sharing svg {z-index: 0; margin-left: 70px; position: absolute; width: 500px; height: 300px; top: -130px;}
-#content .scene div.sharing svg rect {cursor: pointer;}
-#content .scene div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
-#content .scene div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
-#content .scene div.sharing svg line.primary {stroke: #666666;}
-#content .scene div.sharing svg line {stroke: #cccccc; stroke-width: 1px;}
-#content .scene div.sharing svg rect.primary {fill: #ff0000;}
-#content .scene svg.checkmark {position: absolute; top: 0; left: 0;}
-#content .scene h1 svg.checkmark {top: 13px; left: 35px; transform: scale(1.5);}
-#content .scene h2 svg.checkmark {top: 8px; left: 40px; transform: scale(1.2);}
-#content .scene h3 svg.checkmark {top: 3px; left: 45px;}
-#content .scene svg.checkmark line {stroke: #dedede; stroke-width: 3px;}
-#content .scene svg.checkmark.read line {stroke: #666666;}
-#content .scene div.comments {padding-bottom: 15px; position: relative; z-index: 1;}
-#content .scene div.articlebody + div.comments {padding-top: 20px;}
-#content .scene div.comments h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
-#content .scene div.comments h2 svg.arrow {position: absolute; top: 3px; left: 45px;}
-#content .scene div.comments h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
-#content .scene div.comments > p,
-#content .scene div.comments ul.comments,
-#content .scene div.comments ul.actions {display: none;}
-#content .scene div.comments.open h2 {color: #888888;}
-#content .scene div.comments.open > p,
-#content .scene div.comments.open ul.comments,
-#content .scene div.comments.open ul.actions {display: block;}
-#content .scene div.comments > p {color: #999999; font-size: 13px; padding-bottom: 25px;}
-#content .scene div.comments ul.comments {padding: 0; margin: 0;}
-#content .scene div.comments ul.comments > li {padding-bottom: 10px; padding-left: 0;}
-#content .scene div.comments ul.comments > li ul.info {padding-bottom: 0; margin: 0; list-style: none; display: block;}
-#content .scene div.comments ul.comments > li ul.info li {display: inline-block; vertical-align: top; color: #cccccc; font-size: 12px; padding-bottom: 0; padding-left: 0;}
-#content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
-#content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
-#content .scene div.comments .field {padding-bottom: 10px;}
-#content .scene div.qnas {padding-bottom: 15px; position: relative; z-index: 1;}
-#content .scene div.articlebody + div.qnas {padding-top: 20px;}
-#content .scene div.qnas h2 {font-size: 16px; padding-bottom: 25px; position: relative; color: #dedede; cursor: pointer;}
-#content .scene div.qnas h2 svg.arrow {position: absolute; top: 3px; left: 45px;}
-#content .scene div.qnas h2 svg.arrow line {stroke: #dedede; stroke-width: 3px;}
-#content .scene div.qnas > p,
-#content .scene div.qnas ul.qnas,
-#content .scene div.qnas ul.actions {display: none;}
-#content .scene div.qnas.open h2 {color: #00c90d;}
-#content .scene div.qnas.open > p,
-#content .scene div.qnas.open ul.qnas,
-#content .scene div.qnas.open ul.actions {display: block;}
-#content .scene div.qnas > p {color: #999999; font-size: 13px; padding-bottom: 25px;}
-#content .scene div.qnas ul.qnas {padding: 0; margin: 0;}
-#content .scene div.qnas ul.qnas > li {padding-bottom: 15px; padding-left: 0;}
-#content .scene div.qnas ul.qnas > li ul.info {padding-bottom: 0; margin: 0; list-style: none; display: block;}
-#content .scene div.qnas ul.qnas > li ul.info li {display: inline-block; vertical-align: top; color: #cccccc; font-size: 12px; padding-bottom: 0; padding-left: 0;}
-#content .scene div.qnas ul.qnas > li ul.info li.user:after {content: ",\00a0";}
-#content .scene div.qnas ul.qnas > li p.question {padding-bottom: 10px; font-size: 13px;}
-#content .scene div.qnas .field {padding-bottom: 10px;}
 #content .scene ul.offer,
 #content .scene .articlebody ul.offer {font-size: 0; padding: 0; margin: 0; list-style: none;}
 #content .scene ul.offer li.name,
@@ -309,18 +227,6 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene ul.offer li.description {padding-top: 4px; display: block;}
 #content .scene ul.offer li.description ul {list-style: disc;}
 #content .scene ul.offer li.description ul li {display: list-item; padding: 0 0 3px; font-size: 13px;}
-body > div.pagination li.next > svg.arrow {position: absolute; top: 14px; right: 2px;}
-body > div.pagination li.next > svg.arrow line {stroke: #26962d; stroke-width: 3px;}
-body > div.pagination li.previous > svg.arrow {position: absolute; top: 14px; left: 8px;}
-body > div.pagination li.previous > svg.arrow line {stroke: #26962d; stroke-width: 3px;}
-body > div.pagination li.previous,
-body > div.pagination li.next {z-index: 100; position: fixed; top: 50%; margin-top: -20px; height: 40px; width: 0; overflow: hidden; border: 1px solid #26962d; cursor: pointer; background: #ffffff;}
-body > div.pagination li.previous {left: 0; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-left: none; padding-left: 30px;}
-body > div.pagination li.next {right: 0; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-right: none; padding-right: 30px;}
-body > div.pagination li.previous a,
-body > div.pagination li.next a {font-size: 16px; line-height: 16px; display: inline-block; vertical-align: top; padding: 11px 12px 13px; white-space: nowrap; opacity: 0;}
-body > div.pagination li.previous a {padding-left: 0;}
-body > div.pagination li.next a {padding-right: 0;}
 #content .scene code {padding: 10px 20px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; overflow: auto; white-space: pre; border-radius: 5px;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -355,27 +261,69 @@ body > div.pagination li.next a {padding-right: 0;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px; font-size: 12px; color: #cccccc;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
-#content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
-#content .scene .usedby h2 {display: none; text-align: center; padding-bottom: 5px; font-size: 11px; width: auto; color: #bbbbbb; text-transform: uppercase;
-	font-family: "OpenSans", Verdana, Arial, sans-serif;
-}
-#content .scene .usedby ul {padding-bottom: 0;}
-#content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
-#content .scene .usedby ul li.metro {background-image: url(../img/logos/metro.png); background-size: 70px auto;}
-#content .scene .usedby ul li.soulland {background-image: url(../img/logos/soulland.png); background-size: 70px auto;}
-#content .scene .usedby ul li.cphpix {background-image: url(../img/logos/cphpix.png);}
-#content .scene .usedby ul li.tuborg {background-image: url(../img/logos/tuborg.png);}
-#content .scene .usedby ul li.distortion {background-image: url(../img/logos/distortion.png);}
-#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../img/logos/landskabsarkitekter.png);}
-#content .scene .usedby ul li.urbangreen {background-image: url(../img/logos/urbangreen.png);}
-#content .scene .usedby ul li.oeo {background-image: url(../img/logos/oeo.png);}
-#content .scene .usedby ul li.torvehallerne {background-image: url(../img/logos/torvehallerne.png);}
-#content .scene .usedby ul li.peoplegroup {background-image: url(../img/logos/peoplegroup.png);}
-#content .scene .usedby ul li.lsb {background-image: url(../img/logos/lsb.png);}
-#content .scene .usedby ul li.punkt1 {background-image: url(../img/logos/punkt1.png);}
 #content .scene.login form {padding-bottom: 20px;}
 #content .scene form li.forgot {padding-top: 5px;}
 #content .scene div.messages > p.error {color: #df0000;}
+#content .scene div.article {position: relative; padding-bottom: 30px;}
+#content .scene div.article h1 svg.checkmark {cursor: pointer;}
+#content .scene div.article ul.tags {padding-bottom: 30px;}
+#content .scene div.article ul.tags li,
+#content .scene div.article ul.tags li a {color: #cccccc;}
+#content .scene .articlebody {position: relative; z-index: 1;}
+#content .scene .articlebody ul,
+#content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
+#content .scene .articlebody ul {list-style-type: disc;}
+#content .scene .articlebody ol {list-style-type: decimal;}
+#content .scene .articlebody li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+#content .scene .articlebody ul.actions {list-style: none; margin: 0;}
+#content .scene .articlebody ul.actions li {padding-left: 0;}
+#content .scene div.article div.articlebody span.sup.reference {font-size: 10px; line-height: 1.1em; vertical-align: top; padding-left: 2px;}
+#content .scene div.article div.articlebody h3.reference {padding-top: 20px;}
+#content .scene div.article div.articlebody p.reference {font-style: italic;}
+#content .scene ul.articles {padding: 0;}
+#content .scene ul.articles li.article {padding: 20px 0 5px; border-top: 1px solid #dedede; position: relative;}
+#content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
+#content .scene ul.articles li.article ul.tags li,
+#content .scene ul.articles li.article ul.tags li a {color: #cccccc;}
+#content .scene ul.articles li.article h3 {font-size: 22px; line-height: 1em; padding-bottom: 10px;
+	font-family: "PT Serif", Times, serif;
+}
+#content .scene ul.articles li.article ul.actions {margin-top: -10px;}
+#content .scene ul.articles li.article ul.actions li {padding-bottom: 0;}
+#content .scene ul.articles li.article > svg.checkmark {position: absolute; top: 14px; left: 45px;}
+#content .scene ul.articles li.article > svg.checkmark line {stroke: #666666; stroke-width: 3px;}
+#content .scene .article ul.info > li.place {font-size: 0;}
+#content .scene .article ul.geo.active li.location {cursor: pointer;}
+#content .scene .article ul.info ul.geo {padding: 0; display: inline-block; vertical-align: top; width: auto;}
+#content .scene .article div.geomap {position: relative; z-index: 1; height: 300px; width: 600px; margin-bottom: 20px;}
+#content .scene .article div.geomap iframe {display: block; width: 100%; height: 100%; border: 1px solid #666666; background-color: #ffffff; margin: 0 50px 30px; width: 540px; border-radius: 5px; }
+#content .scene .article li div.geomap {}
+#header .logo:hover,
+#navigation ul li:hover {text-decoration: none;}
+#content .scene a:hover {text-decoration: underline;}
+.terms_notification .accept:hover,
+.terms_notification .details:hover {text-decoration: underline;}
+ul.actions input.button:hover,
+ul.actions a.button:hover,
+#content ul.actions a.button:hover {background-color: #bebebe;}
+ul.actions input.button.primary:hover,
+ul.actions a.button.primary:hover {background-color: #313942;}
+ul.actions input.button.secondary:hover,
+ul.actions a.button.secondary:hover {background-color: #313942;}
+div.field.html ul.options li:hover {background-color: #64ad8e;}
+div.field.html .editor div.tag:hover .drag {display: block;}
+div.field.html .editor div.tag:hover .remove {display: block;}
+body #selection_options ul.actions input.button:hover,
+body #selection_options ul.actions a.button:hover {background-color: #313942;}
+#content .scene.docsindex .search .results .function:hover {background: #ededed;}
+#content .scene div.readstate:hover p {color: #000000;}
+#content .scene div.comments h2:hover {color: #888888;}
+#content .scene div.comments h2:hover svg.arrow line {stroke: #888888;}
+#content .scene ul.geo.active li.location:hover {text-decoration: underline;}
+#content .scene div.image p a:hover {text-decoration: none;}
+
+
+/*s-form.css*/
 form {
 }
 fieldset {border: none; display: block;}
@@ -637,51 +585,47 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 	div.field.html .editor div.tag.media input {font-size: 130px;}
 	div.field.html .editor div.tag.file input {font-size: 130px;}
 }
-#content .scene .articlebody {position: relative; z-index: 1;}
-#content .scene .articlebody ul,
-#content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
-#content .scene .articlebody ul {list-style-type: disc;}
-#content .scene .articlebody ol {list-style-type: decimal;}
-#content .scene .articlebody li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
-#content .scene .articlebody ul.actions {list-style: none; margin: 0;}
-#content .scene .articlebody ul.actions li {padding-left: 0;}
-#content .scene ul.todos dl.info {padding-bottom: 10px;}
-#content .scene ul.todos dl.info dd:after {content: ",\00a0";}
-#content .scene ul.todos dl.info dd:last-child:after {content: "";}
-#content .scene ul.todos > li ul.actions {}
-#content .scene ul.todos > li ul.actions li {padding: 0;}
-#content .scene ul.todos > li ul.actions.closed .close {display: none;}
-#content .scene ul.todos > li ul.actions .open {display: none;}
-#content .scene ul.todos > li ul.actions.closed .open {display: inline-block;}
-#content .scene ul.wishlists {padding-left: 70px; padding-right: 70px;}
-#content .scene ul.wishes {padding-left: 70px; padding-right: 70px;}
-#content .scene ul.wishes > li h3 {padding: 0 0 10px;}
-#content .scene ul.wishes > li div.description p {padding: 0px 0 10px;}
-#content .scene ul.wishes.images > li .image,
-#content .scene ul.wishes.images > li .text {display: inline-block; vertical-align: top;}
-#content .scene ul.wishes.images > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 0px; cursor: default;}
-#content .scene ul.wishes.images > li h3 {padding: 0 25px 10px;}
-#content .scene ul.wishes.images > li div.description p {padding: 0 25px 10px;}
-#content .scene ul.wishes > li div.description p.available,
-#content .scene ul.wishes > li div.description p.reserved {padding-top: 5px;}
-#content .scene ul.wishes > li div.description p.available span
-#content .scene ul.wishes > li div.description p.reserved span {font-style: italic;}
-#content .scene ul.wishes > li div.description p.available span {color: #bbbbbb;}
-#content .scene ul.wishes > li > ul.actions,
-#content .scene ul.wishes > li > .text > ul.actions {position: absolute; top: 20px; right: 0px; padding: 0;}
-#content .scene ul.wishes > li > ul.actions li,
-#content .scene ul.wishes > li > .text > ul.actions li {padding-right: 0;}
-#content .scene ul.wishes > li > ul.actions form div.field,
-#content .scene ul.wishes > li > .text > ul.actions form div.field {display: inline-block; vertical-align: top; padding: 0 10px;}
-#content .scene ul.wishes > li > ul.actions form div.field input,
-#content .scene ul.wishes > li > .text > ul.actions form div.field input {width: 200px; display: none;}
-#content .scene ul.wishes > li > ul.actions form input[type=submit],
-#content .scene ul.wishes > li > .text > ul.actions form input[type=submit] {display: inline-block; vertical-align: top; margin-top: 3px;}
-#content .scene ul.wishes dl.info {padding: 0 25px 10px;}
-#content .scene ul.wishes dl.info dt.price {display: inline-block; vertical-align: top; width: auto;}
-#content .scene ul.wishes dl.info dd.price {display: inline-block; vertical-align: top; width: auto;}
-#content .scene ul.wishes dl.info dt.link {display: none;}
-#content .scene ul.wishes dl.info dd.link {font-size: 13px; display: block; width: auto;}
+
+
+/*s-sharing.css*/
+#content .scene div.sharing {padding: 0 0 20px; position: relative; height: 40px; overflow: hidden;}
+#content .scene div.sharing p {z-index: 2; padding: 0; position: absolute; top: 25px; left: 120px; display: none; font-size: 11px; color: #999999;}
+#content .scene div.sharing h3 {z-index: 2; position: absolute; top: 0px; left: 120px; padding: 0; display: none;}
+#content .scene div.sharing h3 span {display: inline-block; vertical-align: top; margin: 9px 0 0 7px; font-size: 11px; line-height: 11px;}
+#content .scene div.sharing.hover {z-index: 2; overflow: visible;}
+#content .scene div.sharing.hover h3,
+#content .scene div.sharing.hover p {display: block;}
+#content .scene div.sharing svg {z-index: 0; margin-left: 70px; position: absolute; width: 500px; height: 300px; top: -130px;}
+#content .scene div.sharing svg rect {cursor: pointer;}
+#content .scene div.sharing svg circle.primary {stroke: #666666; fill: #ffffff;}
+#content .scene div.sharing svg circle {fill: #ededed; stroke: #999999; stroke-width: 1px;}
+#content .scene div.sharing svg line.primary {stroke: #666666;}
+#content .scene div.sharing svg line {stroke: #cccccc; stroke-width: 1px;}
+#content .scene div.sharing svg rect.primary {fill: #ff0000;}
+
+
+/*s-used_by.css*/
+#content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
+#content .scene .usedby h2 {display: none; text-align: center; padding-bottom: 5px; font-size: 11px; width: auto; color: #bbbbbb; text-transform: uppercase;
+	font-family: "OpenSans", Verdana, Arial, sans-serif;
+}
+#content .scene .usedby ul {padding-bottom: 0;}
+#content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
+#content .scene .usedby ul li.metro {background-image: url(../img/logos/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(../img/logos/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(../img/logos/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(../img/logos/tuborg.png);}
+#content .scene .usedby ul li.distortion {background-image: url(../img/logos/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../img/logos/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(../img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(../img/logos/oeo.png);}
+#content .scene .usedby ul li.torvehallerne {background-image: url(../img/logos/torvehallerne.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(../img/logos/peoplegroup.png);}
+#content .scene .usedby ul li.lsb {background-image: url(../img/logos/lsb.png);}
+#content .scene .usedby ul li.punkt1 {background-image: url(../img/logos/punkt1.png);}
+
+
+/*s-documentation.css*/
 #content .scene.docsindex {}
 #content .scene.docsindex h1+ul.actions {display: none;}
 #content .scene.docsindex .notes {display: none;}
@@ -741,40 +685,6 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.segmentsupport .header svg {position: absolute; top: 10px; right: 50px; stroke: #999999; stroke-width: 3px;}
 #content .scene div.segmentsupport .body {}
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
-#login_overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 10000;}
-#login_overlay form {margin: 100px auto 0; width: 304px; position: relative; padding: 50px; background: #ffffff;}
-#login_overlay h1,
-#login_overlay p {padding-left: 2px; padding-right: 2px;}
-#login_overlay div.field {padding: 0 0 15px;}
-#login_overlay div.field input {width: 286px;}
-#login_overlay div.field.required .indicator {left: 310px;}
-#login_overlay div.field div.help {left: 330px;}
-#login_overlay ul.actions {padding: 0 2px;}
-#login_overlay p,
-#login_overlay li.forgot {display: none;}
-#header .logo:hover,
-#navigation ul li:hover {text-decoration: none;}
-#content .scene a:hover {text-decoration: underline;}
-.terms_notification .accept:hover,
-.terms_notification .details:hover {text-decoration: underline;}
-ul.actions input.button:hover,
-ul.actions a.button:hover,
-#content ul.actions a.button:hover {background-color: #bebebe;}
-ul.actions input.button.primary:hover,
-ul.actions a.button.primary:hover {background-color: #313942;}
-ul.actions input.button.secondary:hover,
-ul.actions a.button.secondary:hover {background-color: #313942;}
-div.field.html ul.options li:hover {background-color: #64ad8e;}
-div.field.html .editor div.tag:hover .drag {display: block;}
-div.field.html .editor div.tag:hover .remove {display: block;}
-body #selection_options ul.actions input.button:hover,
-body #selection_options ul.actions a.button:hover {background-color: #313942;}
-#content .scene.docsindex .search .results .function:hover {background: #ededed;}
-#content .scene div.readstate:hover p {color: #000000;}
-#content .scene div.comments h2:hover {color: #888888;}
-#content .scene div.comments h2:hover svg.arrow line {stroke: #888888;}
-#content .scene ul.geo.active li.location:hover {text-decoration: underline;}
-#content .scene div.image p a:hover {text-decoration: none;}
 
 
 /*s-pages.css*/
