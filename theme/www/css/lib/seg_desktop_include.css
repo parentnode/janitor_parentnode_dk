@@ -1,5 +1,10 @@
+/* Skin */
 @import url(../../assets/parentnode-skin-default/css/seg_desktop.css);
 
+@import url(../../assets/parentnode-skin-default/css/lib/desktop/s-form.css);
+
+
+/* Project */
 @import url(desktop/s-pages.css);
 @import url(desktop/s-colorscheme.css);
 @import url(desktop/s-pages-hovers.css);
