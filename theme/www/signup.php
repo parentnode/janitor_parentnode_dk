@@ -73,7 +73,7 @@ if(is_array($action) && count($action)) {
 		if(isset($user["user_id"])) {
 
 			// redirect to leave POST state
-			header("Location: receipt");
+			header("Location: verify");
 			exit();
 
 		}
@@ -88,6 +88,7 @@ if(is_array($action) && count($action)) {
 		}
 
 	}
+
 	// post username, maillist_id and verification_token
 	else if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
 
@@ -123,6 +124,48 @@ if(is_array($action) && count($action)) {
 		));
 		exit();
 
+	}
+
+	// signup/skipped
+	else if($action[0] == "skip") {
+
+		$page->page([
+			"templates" => "signup/verify_skip.php"
+		]);
+		exit();
+
+	}
+
+	// signup/verify
+	else if($action[0] == "verify") {
+
+		$page->page([
+			"templates" => "signup/verify.php"
+		]);
+		exit();
+
+	}
+
+	// signup/verifyCode
+	else if($action[0] == "verifyCode" && $page->validateCsrfToken()) {
+		// print_r($_SESSION);
+		// print_r($_POST);
+		// print($model->getUser()["email"]);
+		// print(session()->value("user_nickname"));
+
+		if(getPost("verify_code")) {
+			$email = session()->value("signup_email");
+			$code = getPost("verify_code");
+
+			header("Location: confirm/email/$email/$code");
+			exit();
+		}
+		else {
+			$email = session()->value("signup_email");
+			print("No code given <br> Signup email: $email");
+			exit();
+		}
+		
 	}
 
 }
