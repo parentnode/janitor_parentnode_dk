@@ -2182,7 +2182,7 @@
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$page->mail(array(
+							<code>mailer()->send(array(
 	"subject" => "Hello world",
 	"message" => "What do you want to say!",
 	"recipients" => info@parentnode.dk
