@@ -45,17 +45,25 @@ if(is_array($action) && count($action)) {
 
 	}
 	// signup/confirm
-	else if($action[0] == "confirm" && count($action) == 1 && $page->validateCsrfToken()) {
+	else if($action[0] == "confirm" && $page->validateCsrfToken()) {
+
+		// Verify and enable user
+		$result = $model->confirmUser($action);
+
+		// user has already been verified
+		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
+			message()->addMessage("You've already been verified!", array("type" => "error"));
+		}
 
 		// code is valid
-		if($model->confirmUser($action)) {
+		else if($result) {
 			header("Location: /signup/confirm/receipt");
 			exit();
 		}
 
 		// code is not valid
 		else {
-			message()->addMessage("Incorrect verification code, try again.", array("type" => "error"));
+			message()->addMessage("Incorrect verification code, try again!", array("type" => "error"));
 			$page->page(array(
 				"templates" => "signup/verify.php"
 			));
@@ -63,28 +71,32 @@ if(is_array($action) && count($action)) {
 		}
 
 	}
-	
 	// /signup/confirm/email|mobile/#email|mobile#/#verification_code#
-	else if($action[0] == "confirm" && count($action) == 4) {
+	else if($action[0] == "confirm" && count($action) == 3) {
 
-		session()->value("signup_type", $action[1]);
-		session()->value("signup_username", $action[2]);
+		// session()->value("signup_type", $action[1]);
+		// session()->value("signup_username", $action[2]);
 
-		if($model->confirmUser($action)) {
+		// Confirm user returns either true, false or an object
+		$result = $model->confirmUser($action);
 
-			// redirect to leave POST state
+		// user han already been verified
+		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
+			message()->addMessage("You've already been verified!", array("type" => "error"));
+		}
+
+		// code is valid
+		else if($result) {
 			header("Location: /signup/confirm/receipt");
 			exit();
-
 		}
-		else {
 
+		// code is not valid
+		else {
 			// redirect to leave POST state
 			header("Location: /signup/confirm/error");
 			exit();
-
 		}
-		exit();
 	}
 	else if($action[0] == "confirm" && $action[1] == "receipt") {
 
