@@ -14,6 +14,7 @@ $model = new User();
 $page->bodyClass("signup");
 $page->pageTitle("Signup");
 
+
 // Account creation and verification flow
 if(is_array($action) && count($action)) {
 
@@ -159,7 +160,7 @@ if(is_array($action) && count($action)) {
 
 
 
-// Unsubsrive flow
+// TODO: Find out what to do and where to put unsubscribe
 if(is_array($action) && count($action)) {
 
 	// post username, maillist_id and verification_token
@@ -200,9 +201,6 @@ if(is_array($action) && count($action)) {
 	}
 
 }
-
-
-
 
 
 
