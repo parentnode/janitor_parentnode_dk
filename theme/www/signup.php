@@ -52,7 +52,11 @@ if(is_array($action) && count($action)) {
 
 		// user has already been verified
 		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
-			message()->addMessage("You've already been verified!", array("type" => "error"));
+			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
+			$page->page(array(
+				"templates" => "pages/login.php"
+			));
+			exit();
 		}
 
 		// code is valid
@@ -82,7 +86,11 @@ if(is_array($action) && count($action)) {
 
 		// user han already been verified
 		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
-			message()->addMessage("You've already been verified!", array("type" => "error"));
+			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
+			$page->page(array(
+				"templates" => "pages/login.php"
+			));
+			exit();
 		}
 
 		// code is valid
