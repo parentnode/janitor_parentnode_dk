@@ -26,11 +26,9 @@ if($action) {
 
 		// successful creation
 		if(isset($user["user_id"])) {
-
 			// redirect to leave POST state
 			header("Location: verify");
 			exit();
-
 		}
 
 		// user exists
@@ -66,80 +64,79 @@ if($action) {
 
 
 	// signup/confirm
-	else if($action[0] == "confirm" && $page->validateCsrfToken()) {
+	else if($action[0] == "confirm") {
 
-		// Verify and enable user
-		$result = $model->confirmUser($action);
+		if (count($action) == 1 && $page->validateCsrfToken()) {
+			// Verify and enable user
+			$result = $model->confirmUser($action);
 
-		// user has already been verified
-		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
-			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
-			header("Location: /login");
-			exit();
+			// user has already been verified
+			if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
+				message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
+				header("Location: /login");
+				exit();
+			}
+
+			// code is valid
+			else if($result) {
+				header("Location: /signup/confirm/receipt");
+				exit();
+			}
+
+			// code is not valid
+			else {
+				message()->addMessage("Incorrect verification code, try again!", array("type" => "error"));
+				header("Location: verify");
+				exit();
+			}
 		}
 
-		// code is valid
-		else if($result) {
-			header("Location: /signup/confirm/receipt");
-			exit();
+
+		// /signup/confirm/email|mobile/#email|mobile#/#verification_code#
+		else if(count($action) == 3) {
+			// session()->value("signup_type", $action[1]);
+			// session()->value("signup_username", $action[2]);
+
+			// Confirm user returns either true, false or an object
+			$result = $model->confirmUser($action);
+
+			// user han already been verified
+			if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
+				message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
+				header("Location: /login");
+				exit();
+			}
+
+			// code is valid
+			else if($result) {
+				header("Location: /signup/confirm/receipt");
+				exit();
+			}
+
+			// code is not valid
+			else {
+				// redirect to leave POST state
+				header("Location: /signup/confirm/error");
+				exit();
+			}
 		}
 
-		// code is not valid
-		else {
-			message()->addMessage("Incorrect verification code, try again!", array("type" => "error"));
-			header("Location: verify");
+
+		else if($action[1] == "receipt") {
+
+			$page->page(array(
+				"templates" => "signup/confirmed.php"
+			));
 			exit();
 		}
-
+		else if($action[1] == "error") {
+	
+			$page->page(array(
+				"templates" => "signup/confirmation_failed.php"
+			));
+			exit();
+		}
 	}
-
-
-	// /signup/confirm/email|mobile/#email|mobile#/#verification_code#
-	else if($action[0] == "confirm" && count($action) == 3) {
-
-		// session()->value("signup_type", $action[1]);
-		// session()->value("signup_username", $action[2]);
-
-		// Confirm user returns either true, false or an object
-		$result = $model->confirmUser($action);
-
-		// user han already been verified
-		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
-			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
-			header("Location: /login");
-			exit();
-		}
-
-		// code is valid
-		else if($result) {
-			header("Location: /signup/confirm/receipt");
-			exit();
-		}
-
-		// code is not valid
-		else {
-			// redirect to leave POST state
-			header("Location: /signup/confirm/error");
-			exit();
-		}
-	}
-
-
-	else if($action[0] == "confirm" && $action[1] == "receipt") {
-
-		$page->page(array(
-			"templates" => "signup/confirmed.php"
-		));
-		exit();
-	}
-	else if($action[0] == "confirm" && $action[1] == "error") {
-
-		$page->page(array(
-			"templates" => "signup/confirmation_failed.php"
-		));
-		exit();
-	}
-
 
 	// /signup/receipt
 	else if($action[0] == "receipt") {
@@ -155,7 +152,7 @@ if($action) {
 
 
 // TODO: Find out what to do and where to put unsubscribe
-if(is_array($action) && count($action)) {
+if($action) {
 
 	// post username, maillist_id and verification_token
 	if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
