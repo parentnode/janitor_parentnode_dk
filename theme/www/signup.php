@@ -16,7 +16,7 @@ $page->pageTitle("Signup");
 
 
 // Account creation and verification flow
-if(is_array($action) && count($action)) {
+if($action) {
 
 	// /signup/save
 	if($action[0] == "save" && $page->validateCsrfToken()) {
@@ -74,9 +74,7 @@ if(is_array($action) && count($action)) {
 		// user has already been verified
 		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
 			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
-			$page->page(array(
-				"templates" => "pages/login.php"
-			));
+			header("Location: /login");
 			exit();
 		}
 
@@ -89,9 +87,7 @@ if(is_array($action) && count($action)) {
 		// code is not valid
 		else {
 			message()->addMessage("Incorrect verification code, try again!", array("type" => "error"));
-			$page->page(array(
-				"templates" => "signup/verify.php"
-			));
+			header("Location: verify");
 			exit();
 		}
 
@@ -110,9 +106,7 @@ if(is_array($action) && count($action)) {
 		// user han already been verified
 		if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
 			message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
-			$page->page(array(
-				"templates" => "pages/login.php"
-			));
+			header("Location: /login");
 			exit();
 		}
 
