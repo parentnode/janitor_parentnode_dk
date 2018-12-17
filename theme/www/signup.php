@@ -100,7 +100,7 @@ if($action) {
 			// Confirm user returns either true, false or an object
 			$result = $model->confirmUser($action);
 
-			// user han already been verified
+			// user has already been verified
 			if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
 				message()->addMessage("You're already verified! Try logging in.", array("type" => "error"));
 				header("Location: /login");
