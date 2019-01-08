@@ -2,6 +2,7 @@
 @import url(../../assets/parentnode-skin-default/css/seg_desktop_light.css);
 
 @import url(../../assets/parentnode-skin-default/css/lib/desktop_light/s-form.css);
+@import url(../../assets/parentnode-skin-default/css/lib/desktop_light/s-used_by.css);
 @import url(../../assets/parentnode-skin-default/css/lib/desktop_light/s-documentation.css);
 /* Project */
 @import url(desktop_light/s-pages.css);
