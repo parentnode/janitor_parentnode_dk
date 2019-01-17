@@ -157,13 +157,17 @@ janitor_branch=$(curl -s -L https://api.github.com/repos/parentnode/janitor/rele
 git submodule add https://github.com/parentnode/janitor.git submodules/janitor
 cd submodules/janitor && git checkout -b "$janitor_branch" && cd ../..
 
-jsmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/js-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
-git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
-cd submodules/js-merger && git checkout -b "$jsmerger_branch" && cd ../..
+assetbuilder_branch=$(curl -s -L https://api.github.com/repos/parentnode/asset-builder/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+git submodule add https://github.com/parentnode/asset-builder.git submodules/asset-builder
+cd submodules/asset-builder && git checkout -b "$assetbuilder_branch" && cd ../..
 
-cssmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/css-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
-git submodule add https://github.com/parentnode/css-merger.git submodules/css-merger
-cd submodules/css-merger && git checkout -b "$cssmerger_branch" && cd ../..
+# jsmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/js-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+# git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
+# cd submodules/js-merger && git checkout -b "$jsmerger_branch" && cd ../..
+#
+# cssmerger_branch=$(curl -s -L https://api.github.com/repos/parentnode/css-merger/releases/latest | egrep -o 'tag_name": "([0-9v\.]+){1}' | sed s/tag_name\":\ \"//)
+# git submodule add https://github.com/parentnode/css-merger.git submodules/css-merger
+# cd submodules/css-merger && git checkout -b "$cssmerger_branch" && cd ../..
 
 # Let user do this
 # git commit -m 'Added Janitor submodules'
