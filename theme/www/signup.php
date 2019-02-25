@@ -67,8 +67,12 @@ if($action) {
 	else if($action[0] == "confirm") {
 
 		if (count($action) == 1 && $page->validateCsrfToken()) {
+			
+			$username = session()->value("signup_email");
+			$verification_code = getPost("verification_code");
+			
 			// Verify and enable user
-			$result = $model->confirmUser($action);
+			$result = $model->confirmUsername($username, $verification_code);
 
 			// user has already been verified
 			if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
@@ -97,8 +101,11 @@ if($action) {
 			// session()->value("signup_type", $action[1]);
 			// session()->value("signup_username", $action[2]);
 
+			$username = $action[1];
+			$verification_code = $action[2];
+
 			// Confirm user returns either true, false or an object
-			$result = $model->confirmUser($action);
+			$result = $model->confirmUsername($username, $verification_code);
 
 			// user has already been verified
 			if($result && isset($result["status"]) && $result["status"] == "USER_VERIFIED") {
