@@ -12,7 +12,7 @@
 		<?= $HTML->link("Cache", "/janitor/tests/class.cache", array("wrapper" => "li.cache")) ?>
 		<?= $HTML->link("PDF", "/janitor/tests/class.pdf", array("wrapper" => "li.pdf")) ?>
 
-		<?= $HTML->link("User", "/janitor/tests/class.user", array("wrapper" => "li.user")) ?>
+		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
 
 		<?= $HTML->link("Mail", "/janitor/tests/mail", array("wrapper" => "li.mail")) ?>

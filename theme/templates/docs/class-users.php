@@ -1,6 +1,6 @@
 <div class="scene docpage i:docpage">
-	<h1>_docsname_</h1>
-	<p>_Short (or long) explanation_</p>
+	<h1>The User Class</h1>
+	<p>Short (or long) explanation</p>
 
 	<div class="section functions">
 		<div class="header">

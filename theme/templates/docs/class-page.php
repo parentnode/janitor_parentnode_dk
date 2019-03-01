@@ -1,7 +1,7 @@
 <div class="scene docpage i:docpage">
 	<h1>Page</h1>
 	<p>
-		The Page class is the core controller and template toolset. This class is automatically instatiated and 
+		The Page class is the core controller and template toolset. This class is automatically instantiated and 
 		available in $page, after the init file has been included in your controller. It provides all the base
 		functionality needed to process a request and output your page and templates.
 	</p>
