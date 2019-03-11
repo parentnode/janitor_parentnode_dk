@@ -409,45 +409,6 @@ $UC = new User();
 
 	</div>
 
-	<div class="tests">
-		<h3>User::isVerified</h3>
-
-		<?
-		// verified user (current user)
-
-		if(
-			$UC->isVerified()
-		): ?>
-		<div class="testpassed"><p>User::isVerified, verified user - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>User::isVerified, verified user - error</p></div>
-		<? endif;?>
-		
-		<?
-		// unverified user
-		$user_id = session()->value("user_id");
-
-		// un-verify current user
-		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 0 WHERE user_id = $user_id";
-		$query->sql($sql); 
-
-		if(
-			$UC->isVerified() == false
-		): ?>
-		<div class="testpassed"><p>User::isVerified, unverified user - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>User::isVerified, unverified user - error</p></div>
-		<? endif;
-
-
-		// re-verify current user
-		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $user_id";
-		$query->sql($sql); 
-				
-		?>
-
-	</div>
-
 </div>
 <?
 

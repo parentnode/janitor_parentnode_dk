@@ -155,16 +155,6 @@ if($action) {
 		exit();
 	}
 
-	// /signup/verification_test
-	else if($action[0] == "verification_test") {
-
-		$page->page([
-			"templates" => "tests/verification_test.php"
-		]);
-		exit();
-
-	}	
-
 }
 
 
