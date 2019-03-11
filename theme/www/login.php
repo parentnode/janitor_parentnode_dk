@@ -49,6 +49,14 @@ if(is_array($action) && count($action)) {
 			exit();
 		}
 	}
+	// login/login_test
+	else if(count($action) == 1 && $action[0] == "login_test") {
+
+		$page->page(array(
+			"templates" => "tests/login_test.php"
+		));
+		exit();
+	}
 }
 
 // plain login
@@ -57,4 +65,3 @@ $page->page(array(
 ));
 
 ?>
-ˇ

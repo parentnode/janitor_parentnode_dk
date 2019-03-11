@@ -30,6 +30,183 @@ cache()->reset("vatrates");
 	</ul>
 
 	<div class="tests">
+		<h3>Page::logIn</h3>
+		<?
+
+		?>
+		
+		<?
+		// ADD VALUES
+		// create test user, no password, not activated, and also create reference user
+		$query = new Query();
+		
+		// add test user
+		$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 0, '2019-01-01 00:00:00')";
+		if($query->sql($sql)) {
+			$test_user_id = $query->lastInsertId();
+
+			$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'login@test.com', 'email', 0, '12345678')";
+			$query->sql($sql);
+			$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id'";
+			// print ($sql); 
+
+			if($query->sql($sql)) {
+				$test_username = $query->result(0)["username"];
+				$test_verification_code = $query->result(0)["verification_code"];
+				
+				// add reference user
+				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'reference user', 0, '2019-02-02 01:01:01')";
+				if($query->sql($sql)) {
+					$ref_user_id = $query->lastInsertId();
+					
+					$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'ref@test.com', 'email', 0, '87654321')";
+					$query->sql($sql);
+					$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$ref_user_id'";
+					if($query->sql($sql)) {
+						$ref_username = $query->result(0)["username"];
+						$ref_verification_code = $query->result(0)["verification_code"];
+					}
+				}
+			}
+		}
+
+		?>
+
+		<?
+		// wrong username/password
+
+		$_POST["username"] = "i_dont_exist@test.com";
+		$_POST["password"] = "i_dont_exist";
+		if(!$this->logIn()): ?>
+		
+		<div class="testpassed"><p>Page::logIn wrong username/password - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn wrong username/password - error</p></div>
+		<? endif; 
+		unset($_POST);
+		?>
+
+		<?
+		// correct username, no password, not activated
+
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "i_dont_exist";
+		$result = $this->logIn(); 
+		// print_r ($result); exit;
+		
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn correct username, no password, not activated - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn correct username, no password, not activated - error</p></div>
+		<? endif; 
+		unset($_POST);
+		?>
+
+		<?
+		// correct username, no password, activated
+		
+		// activate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
+		$query->sql($sql); 
+
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "i_dont_exist";
+		$result = $this->logIn(); 
+		// print_r ($result); exit;
+
+		if($result["status"] == "NO_PASSWORD" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn correct username, no password, activated - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn correct username, no password, activated - error</p></div>
+		<? endif; 
+		unset($_POST);
+
+		?>
+
+		<?
+		// correct username/password, not activated
+		
+		// deactivate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
+		$query->sql($sql); 
+		
+		// create hashed password
+		$hashed_password = password_hash('test_password', PASSWORD_DEFAULT);
+		$sql = "INSERT INTO ".SITE_DB.".user_passwords (user_id, password) VALUES($test_user_id, '$hashed_password')";
+		$query->sql($sql);
+
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "test_password";
+		$result = $this->logIn(); 
+		// print_r ($result); exit;
+		
+		
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn correct username/password, not activated - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn correct username/password, not activated - error</p></div>
+		<? endif; 
+		unset($_POST);
+		?>
+
+		<?
+		// correct username/password, activated
+		
+		// activate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
+		$query->sql($sql); 
+
+		// attempt to login with curl request that, if successful, forwards to login_test page  
+		include_once("classes/helpers/curl.class.php");
+		$curl = new CurlRequest;
+		$params = [
+			"method" => "POST",
+			"post_fields" => "username=login@test.com&password=test_password&login_forward=/login/login_test",
+			"cookiejar" => "-"
+		];
+		
+		$curl->init($params);
+		$url = SITE_URL."/login?login=true";
+		$result = $curl->exec($url);
+
+		// prepare to parse login_test page in order to get the user_id
+		include_once("classes/helpers/dom.class.php");
+		$DC = new DOM();
+		$dom_result = $DC->createDOM($result["body"]);
+
+		$requested_user_id_node = $DC->getElement($dom_result, "span class='user_id'");
+		$requested_user_id = $requested_user_id_node->textContent;
+
+
+		// run test condition
+		if($requested_user_id == $test_user_id && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn correct username/password, activated - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn correct username/password, activated - error</p></div>
+		<? endif;?>
+
+		<?
+		// CLEAN UP
+		// delete test user
+		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
+		if($query->sql($sql)) {
+			// delete ref user
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $ref_user_id";
+			if($query->sql($sql)) {
+
+			}	
+			
+		}
+		// should there be an error message if something goes wrong here?
+		?>
+
+	</div>
+
+	<div class="tests">
 		<h3>Page::language</h3>
 		<? if($this->language() == DEFAULT_LANGUAGE_ISO): ?>
 		<div class="testpassed"><p>Page::language (GET DEFAULT) - correct</p></div>
@@ -302,5 +479,6 @@ cache()->reset("vatrates");
 		<? endif; ?>
 
 	</div>
+
 
 </div>
