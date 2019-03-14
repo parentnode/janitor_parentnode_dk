@@ -65,7 +65,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">_type_</span> _returnsummary_</p>
 					</div>
 
@@ -77,7 +77,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<!-- list php functions used by function -->

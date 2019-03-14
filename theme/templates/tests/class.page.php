@@ -1,4 +1,6 @@
 <?
+global $model;
+
 // ensure correct default values are available for test
 include_once("classes/system/upgrade.class.php");
 $UpgradeClass = new Upgrade();
@@ -37,14 +39,15 @@ cache()->reset("vatrates");
 		
 		<?
 		// ADD VALUES
-		// create test user, no password, not activated, and also create reference user
+		// create test user, no password, activated, and also create reference user
 		$query = new Query();
 		
 		// add test user
-		$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 0, '2019-01-01 00:00:00')";
+		$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
 		if($query->sql($sql)) {
 			$test_user_id = $query->lastInsertId();
 
+			// add non-verified username (email) for test user
 			$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'login@test.com', 'email', 0, '12345678')";
 			$query->sql($sql);
 			$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id'";
@@ -55,10 +58,11 @@ cache()->reset("vatrates");
 				$test_verification_code = $query->result(0)["verification_code"];
 				
 				// add reference user
-				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'reference user', 0, '2019-02-02 01:01:01')";
+				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'reference user', 1, '2019-02-02 01:01:01')";
 				if($query->sql($sql)) {
 					$ref_user_id = $query->lastInsertId();
 					
+					// add non-verified username (email) for ref user
 					$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'ref@test.com', 'email', 0, '87654321')";
 					$query->sql($sql);
 					$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$ref_user_id'";
@@ -73,21 +77,46 @@ cache()->reset("vatrates");
 		?>
 
 		<?
-		// wrong username/password
+		// wrong username/password, activated	
 
 		$_POST["username"] = "i_dont_exist@test.com";
 		$_POST["password"] = "i_dont_exist";
 		if(!$this->logIn()): ?>
 		
-		<div class="testpassed"><p>Page::logIn wrong username/password - correct</p></div>
+		<div class="testpassed"><p>Page::logIn (wrong username/password - should return false) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Page::logIn wrong username/password - error</p></div>
+		<div class="testfailed"><p>Page::logIn (wrong username/password - should return false) - error</p></div>
+		<? endif; 
+		unset($_POST);
+	
+		?>
+
+		<?
+		// no password, not activated, not verified
+
+		// deactivate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
+		$query->sql($sql);
+
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "i_dont_exist";
+		$result = $this->logIn(); 
+		
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn (no password, not activated, not verified - should return NOT_VERIFIED) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn (no password, not activated, not verified - should return NOT_VERIFIED) - error</p></div>
 		<? endif; 
 		unset($_POST);
 		?>
 
 		<?
-		// correct username, no password, not activated
+		// no password, activated, not verified
+
+		// activate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
+		$query->sql($sql);
 
 		$_POST["username"] = "login@test.com";
 		$_POST["password"] = "i_dont_exist";
@@ -96,69 +125,162 @@ cache()->reset("vatrates");
 		
 		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
 
-		<div class="testpassed"><p>Page::logIn correct username, no password, not activated - correct</p></div>
+		<div class="testpassed"><p>Page::logIn (no password, activated, not verified - should return NOT_VERIFIED) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Page::logIn correct username, no password, not activated - error</p></div>
+		<div class="testfailed"><p>Page::logIn (no password, activated, not verified - should return NOT_VERIFIED) - error</p></div>
 		<? endif; 
 		unset($_POST);
 		?>
-
+	
 		<?
-		// correct username, no password, activated
-		
+		// no password, activated, verified
+
 		// activate user
 		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
-		$query->sql($sql); 
+		$query->sql($sql);
+		// verify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
+		$query->sql($sql); 		
 
 		$_POST["username"] = "login@test.com";
 		$_POST["password"] = "i_dont_exist";
 		$result = $this->logIn(); 
 		// print_r ($result); exit;
-
+		
 		if($result["status"] == "NO_PASSWORD" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
 
-		<div class="testpassed"><p>Page::logIn correct username, no password, activated - correct</p></div>
+		<div class="testpassed"><p>Page::logIn (no password, activated, verified - should return NO_PASSWORD) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Page::logIn correct username, no password, activated - error</p></div>
+		<div class="testfailed"><p>Page::logIn (no password, activated, verified - should return NO_PASSWORD) - error</p></div>
 		<? endif; 
 		unset($_POST);
-
-		?>
+		?>		
 
 		<?
-		// correct username/password, not activated
+		// no password, not activated, verified
 		
 		// deactivate user
 		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
+		$query->sql($sql);
+		// verify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
 		$query->sql($sql); 
+
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "i_dont_exist";
+		$result = $this->logIn(); 
+		
+		if($result == false && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn (no password, not activated, verified - should return false) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn (no password, not activated, verified - should return false) - error</p></div>
+		<? endif; 
+		unset($_POST);
+	
+		?>
+
+		<?
+		// correct username/password, not activated, verified
 		
 		// create hashed password
 		$hashed_password = password_hash('test_password', PASSWORD_DEFAULT);
 		$sql = "INSERT INTO ".SITE_DB.".user_passwords (user_id, password) VALUES($test_user_id, '$hashed_password')";
 		$query->sql($sql);
+		
+		// deactivate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
+		$query->sql($sql);
+		// verify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
+		$query->sql($sql); 
+		
+		$_POST["username"] = "login@test.com";
+		$_POST["password"] = "test_password";
+		
+		$result = $this->logIn();
+		if($result == false && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		
+		<div class="testpassed"><p>Page::logIn (correct username/password, not activated - should return false) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn (correct username/password, not activated - should return false) - error</p></div>
+		<? endif; 
+		unset($_POST);
+		
+		
+		?>
+
+		<?
+		// correct username/password, activated, not verified
+		
+		// activate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
+		$query->sql($sql);
+
+		// unverify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 0 WHERE user_id = $test_user_id";
+		$query->sql($sql); 	
 
 		$_POST["username"] = "login@test.com";
 		$_POST["password"] = "test_password";
 		$result = $this->logIn(); 
-		// print_r ($result); exit;
 		
 		
 		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
 
-		<div class="testpassed"><p>Page::logIn correct username/password, not activated - correct</p></div>
+		<div class="testpassed"><p>Page::logIn (correct username/password, activated, not verified - should return NOT_VERIFIED) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Page::logIn correct username/password, not activated - error</p></div>
+		<div class="testfailed"><p>Page::logIn (correct username/password, activated, not verified - should return NOT_VERIFIED) - error</p></div>
 		<? endif; 
 		unset($_POST);
+		// exit;
 		?>
 
 		<?
-		// correct username/password, activated
-		
+		// correct username/password, activated, verified, ajax login
+
 		// activate user
 		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
 		$query->sql($sql); 
 
+		// verify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
+		$query->sql($sql); 		
+		
+		// attempt to login with curl request that, if successful, returns new CSRF token
+		include_once("classes/helpers/curl.class.php");
+		$curl = new CurlRequest;
+		$params = [
+			"method" => "POST",
+			"post_fields" => "username=login@test.com&password=test_password&login_forward=/login/login_test&ajaxlogin=true",
+			"cookiejar" => "-"
+		];
+		
+		$curl->init($params);
+		$url = SITE_URL."/login?login=true";
+		$result = $curl->exec($url);
+
+		preg_match("/cms_status\":\"success/", $result["body"], $ajaxlogin_match);
+
+		// run test condition
+		if($ajaxlogin_match && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+
+		<div class="testpassed"><p>Page::logIn (correct username/password, activated, verified, ajax login - should return CSRF token) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Page::logIn (correct username/password, activated, verified, ajax login - should return CSRF token) - error</p></div>
+		<? endif;?>
+
+		<?
+		// correct username/password, activated, verified, normal login
+
+		// activate user
+		$sql = "UPDATE ".SITE_DB.".users SET status = 1 WHERE id = $test_user_id";
+		$query->sql($sql); 
+
+		// verify username
+		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
+		$query->sql($sql); 		
+		
 		// attempt to login with curl request that, if successful, forwards to login_test page  
 		include_once("classes/helpers/curl.class.php");
 		$curl = new CurlRequest;
@@ -184,9 +306,9 @@ cache()->reset("vatrates");
 		// run test condition
 		if($requested_user_id == $test_user_id && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
 
-		<div class="testpassed"><p>Page::logIn correct username/password, activated - correct</p></div>
+		<div class="testpassed"><p>Page::logIn (correct username/password, activated, verified) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Page::logIn correct username/password, activated - error</p></div>
+		<div class="testfailed"><p>Page::logIn (correct username/password, activated, verified) - error</p></div>
 		<? endif;?>
 
 		<?
