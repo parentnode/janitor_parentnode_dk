@@ -69,7 +69,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String</span> The OG Meta tags with title, description, url and image.</p>
 					</div>
 
@@ -79,7 +79,7 @@
 					</div>
 					
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -142,7 +142,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $value is passed, it returns the current page title.</p>
 					</div>
 
@@ -152,7 +152,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -214,7 +214,7 @@
 
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $value is passed, it returns the page description.</p>
 					</div>
 
@@ -225,7 +225,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -287,7 +287,7 @@
 
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $value is passed, it returns the page image.</p>
 					</div>
 
@@ -298,7 +298,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -357,7 +357,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $value is passed, it returns the body class.</p>
 					</div>
 
@@ -371,7 +371,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -431,7 +431,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $value is passed, it returns the div#content class.</p>
 					</div>
 
@@ -445,7 +445,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -503,7 +503,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> if no $files are passed, it returns the includes string.</p>
 					</div>
 
@@ -517,7 +517,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -600,7 +600,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p>
 							<span class="type">String|rendered PHP</span> If buffer is <span class="value">false</span>, the template will be included
 							and rendered using a PHP include(). If buffer is <span class="value">true</span>, the include will be buffered for printing
@@ -615,7 +615,7 @@
 					</div>
 					
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -698,7 +698,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p>
 							<span class="type">Void</span> The header, template(s) and footer will be included
 							and rendered using a PHP include().
@@ -712,7 +712,7 @@
 					</div>
 					
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -785,7 +785,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p>
 							<span class="type">String|rendered PHP</span> If buffer is <span class="value">false</span>, the header will be included
 							and rendered using a PHP include(). If buffer is <span class="value">true</span>, the include will be buffered for printing
@@ -800,7 +800,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -867,7 +867,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p>
 							<span class="type">String|rendered PHP</span> If buffer is <span class="value">false</span>, the footer will be included
 							and rendered using a PHP include(). If buffer is <span class="value">true</span>, the include will be buffered for printing
@@ -882,7 +882,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -935,7 +935,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String | void</span> The language ISO code of the session</p>
 					</div>
 
@@ -954,7 +954,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1008,7 +1008,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available languages or specified language details</p>
 					</div>
 
@@ -1043,7 +1043,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1098,7 +1098,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String | void</span> The country ISO code of the session</p>
 					</div>
 
@@ -1117,7 +1117,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1171,7 +1171,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available countries or specified country details</p>
 					</div>
 
@@ -1218,7 +1218,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1273,7 +1273,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String | void</span> The currency ISO code of the session</p>
 					</div>
 
@@ -1292,7 +1292,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1346,7 +1346,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available currencies or specified currency details</p>
 					</div>
 
@@ -1396,7 +1396,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1452,7 +1452,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available vatrates or specified vatrate details</p>
 					</div>
 
@@ -1493,7 +1493,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1549,7 +1549,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available subscription methods or specified subscription method details</p>
 					</div>
 
@@ -1590,7 +1590,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1646,7 +1646,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> nested Array of available payment methods or specified payment method details</p>
 					</div>
 
@@ -1672,7 +1672,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1729,7 +1729,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String|void</span> It the $value parameter is omitted, the segment string is returned (desktop, dekstop_ie, dekstop_light, mobile_light, mobile, mobile_touch, tablet, tv)</p>
 					</div>
 
@@ -1740,7 +1740,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1794,7 +1794,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array|Boolean</span> The navigation structure in nested array or <span class="value">false</span>.</p>
 					</div>
 
@@ -1805,7 +1805,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1862,7 +1862,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> True if current user has access to path, false if not</p>
 					</div>
 
@@ -1873,7 +1873,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1929,7 +1929,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">String</span> The path is returned if current user has access to path, empty string if not</p>
 					</div>
 
@@ -1940,7 +1940,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -1983,7 +1983,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> containing current url fragments, excluding controller path</p>
 					</div>
 
@@ -1994,12 +1994,82 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
 							<ul>
 								<li>Nothing</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="Page::logIn">
+				<div class="header">
+					<h3>Page::logIn</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">logIn</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Void|False|Array</span> = 
+								Page::logIn();
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Log in with username and password from $_POST.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<p>No parameters</p>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">Void</span> if login is successful – that is, if credentials are correct, username is verified, and user is activated (<span class="value">status = 1</span>). The user is redirected to the URL specified in <span class="value">$forward_url</span>, which is fetched from either $_POST, $_GET, or session.</p>
+						<p><span class="type">Void</span> if ajaxlogin is successful – that is, if credentials are correct, username is verified, user is activated, and <span class="value">"ajaxlogin" => true</span> is posted along with username and password. The function outputs a json-encoded CMS object that contains an updated CSRF token.</p>
+						<p><span class="type">Array</span> with the value <span class="value">"status"=>"NOT_VERIFIED"</span> if the posted username exists but is unverified. This happens whether or not the user has a password. It happens whether or not the user is activated.
+						<p><span class="type">Array</span> with the value <span class="value">"status"=>"NO_PASSWORD"</span> if login is performed by a user with the following characteristics: 1) User is activated; 2) Username is verified; 3) User does not have a password. </p>
+						<p><span class="type">False</span> if login is performed by a user with the following characteristics: 1) User is deactivated; 2) username is verified.</p>
+						<p><span class="type">False</span> if the user tries to log in with wrong username and/or wrong password.</p>
+
+
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<p>No example</p>
+					</div>
+
+					<div class="uses">
+						<h4>Dependencies</h4>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>getPost()</li>
+								<li>getVar()</li>
+								<li>stringOr()</li>
+								<li>mailer()</li>
+								<li>message()</li>
+								<li>Page::addLog</li>
+								<li>Page::validatePath</li>
+								<li>Query</li>
+								<li>Upgrade</li>
+								<li>Session</li>
 							</ul>
 						</div>
 
@@ -2037,7 +2107,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Void</span></p>
 					</div>
 
@@ -2048,7 +2118,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -2092,7 +2162,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Void</span></p>
 					</div>
 
@@ -2103,7 +2173,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -2174,7 +2244,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> true on success, false on error</p>
 					</div>
 
@@ -2191,7 +2261,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -2250,7 +2320,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Void</span></p>
 					</div>
 
@@ -2263,7 +2333,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>
@@ -2326,7 +2396,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Void</span></p>
 					</div>
 
@@ -2337,7 +2407,7 @@
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<h5>Janitor</h5>

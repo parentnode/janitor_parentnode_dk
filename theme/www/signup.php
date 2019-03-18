@@ -136,6 +136,7 @@ if($action) {
 			));
 			exit();
 		}
+		
 		else if($action[1] == "error") {
 	
 			$page->page(array(

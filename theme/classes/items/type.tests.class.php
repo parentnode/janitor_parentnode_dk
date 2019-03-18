@@ -166,12 +166,12 @@ class TypeTests extends Itemtype {
 	// CUSTOM SUBSCRIBE/UNSUBSCRIBE
 
 
-	function subscribed($user_id, $item_id) {
+	function subscribed($subscription) {
 		
 	}
 
 	// Do I really want this to work for all users
-	function unsubscribed($user_id, $item_id) {
+	function unsubscribed($subscription) {
 		global $page;
 		$IC = new Items();
 		

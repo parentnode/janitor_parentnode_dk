@@ -313,6 +313,102 @@ $UC = new User();
 		<? endif; ?>
 	</div>
 
+	<div class="tests">
+		<h3>User::confirmUsername</h3>
+
+		<?
+		// ADD VALUES
+		$query = new Query();
+
+		// add test user
+		$sql = "INSERT INTO ".SITE_DB.".users (created_at) VALUES('2019-01-01 00:00:00')";
+		if($query->sql($sql)) {
+			$test_user_id = $query->lastInsertId();
+
+			$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'test@test.com', 'email', 0, '12345678')";
+			$query->sql($sql);
+			$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id'";
+			// print ($sql); 
+
+			if($query->sql($sql)) {
+				$test_username = $query->result(0)["username"];
+				$test_verification_code = $query->result(0)["verification_code"];
+				
+				// add reference user
+				$sql = "INSERT INTO ".SITE_DB.".users (created_at) VALUES('2019-02-02 01:01:01')";
+				if($query->sql($sql)) {
+					$ref_user_id = $query->lastInsertId();
+					
+					$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'ref@test.com', 'email', 0, '87654321')";
+					$query->sql($sql);
+					$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$ref_user_id'";
+					if($query->sql($sql)) {
+						$ref_username = $query->result(0)["username"];
+						$ref_verification_code = $query->result(0)["verification_code"];
+					}
+				}
+			}
+		}
+
+		?>
+		
+		<?
+		// unverified user with wrong code
+		$test_result_wrong_code = $UC->confirmUsername($test_username, "00000000");
+		
+		if(
+			$test_result_wrong_code == false && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"
+		): ?>
+		<div class="testpassed"><p>User::confirmUsername, wrong verification code - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>User::confirmUsername, wrong verification code - error</p></div>
+		<? endif; 
+		?>		
+		
+		<?
+		// unverified user with correct code
+
+		$test_result_correct_code = $UC->confirmUsername($test_username, $test_verification_code);
+		
+		if($test_result_correct_code && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		<div class="testpassed"><p>User::confirmUsername, correct verification code - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>User::confirmUsername, correct verification code - error</p></div>
+		<? endif; 
+		?>
+
+		<?
+		// already verified user 
+		
+		$test_result_already_verified = $UC->confirmUsername($test_username, $test_verification_code);
+		
+		if(
+			$test_result_already_verified == ["status"=>"USER_VERIFIED"] && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"
+		): ?>
+		<div class="testpassed"><p>User::confirmUsername, already verified user - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>User::confirmUsername, already verified user - error</p></div>
+		<? endif; 
+		?>
+
+		<?
+		// CLEAN UP
+		// delete test user
+		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
+		if($query->sql($sql)) {
+			// delete ref user
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $ref_user_id";
+			if($query->sql($sql)) {
+
+			}	
+			
+		}
+		// should there be an error message if something goes wrong here?
+
+		?>
+
+	</div>
+
 </div>
 <?
 

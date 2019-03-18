@@ -83,7 +83,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> on success, <span class="value">false</span> on error.</p>
 					</div>
 
@@ -99,7 +99,7 @@ $Zipper->zip($files, "/path/file-1-3.zip");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<!-- list php functions used by function -->

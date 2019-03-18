@@ -68,7 +68,7 @@
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -80,7 +80,7 @@
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -161,7 +161,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> Array of item properties or false if no Item is found.</p>
 					</div>
 
@@ -262,7 +262,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -335,7 +335,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">_type_</span> _returnsummary_</p>
 					</div>
 
@@ -347,7 +347,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<!-- list php functions used by function -->
@@ -428,7 +428,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">_type_</span> _returnsummary_</p>
 					</div>
 
@@ -440,7 +440,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<!-- list php functions used by function -->
@@ -520,7 +520,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -532,7 +532,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -621,7 +621,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> returns array with the full item</p>
 					</div>
 
@@ -638,7 +638,7 @@ $item = $IC->extendItem($item);</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -711,7 +711,7 @@ $item = $IC->extendItem($item);</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -723,7 +723,7 @@ $item = $IC->extendItem($item);</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -820,7 +820,7 @@ $item = $IC->extendItem($item);</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> Array of items</p>
 					</div>
 
@@ -845,7 +845,7 @@ $items = $IC->getItems(["itemtype" => "people", "where" => "name = peter", "exte
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -920,7 +920,7 @@ $items = $IC->getItems(["itemtype" => "people", "where" => "name = peter", "exte
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> List of next items</p>
 					</div>
 
@@ -948,7 +948,7 @@ $next = $IC->getNext(1, array("items" => $items));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -1025,7 +1025,7 @@ $next = $IC->getNext(1, array("items" => $items));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> List of previous items</p>
 					</div>
 
@@ -1054,7 +1054,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -1127,7 +1127,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1139,7 +1139,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -1220,7 +1220,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1232,7 +1232,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -1313,7 +1313,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1325,7 +1325,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -1406,7 +1406,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1418,7 +1418,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -1496,7 +1496,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array|false</span> Array of tags or false if nothing found.</p>
 					</div>
 
@@ -1521,7 +1521,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -1594,7 +1594,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1606,7 +1606,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->
@@ -1682,7 +1682,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> of prices</p>
 					</div>
 
@@ -1695,7 +1695,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="janitor">
 							<!-- list janitor functions used by function -->
@@ -1768,7 +1768,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 	
 						<div class="return">
-							<h4>Returns</h4>
+							<h4>Return values</h4>
 							<p><span class="type">_type_</span> _returnsummary_</p>
 						</div>
 	
@@ -1780,7 +1780,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 	
 						<div class="uses">
-							<h4>Uses</h4>
+							<h4>Dependencies</h4>
 	
 							<div class="php">
 								<!-- list php functions used by function -->

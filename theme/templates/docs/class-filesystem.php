@@ -76,7 +76,7 @@
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Array</span> array of matching files</p>
 					</div>
 
@@ -91,7 +91,7 @@ $files = $fs->files("/");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
@@ -177,7 +177,7 @@ $files = $fs->files("/");</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> if file is valid, <span class="value">false</span> if not.</p>
 					</div>
 
@@ -198,7 +198,7 @@ $files = $fs->valid("/._tempfile");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
@@ -262,7 +262,7 @@ $files = $fs->valid("/._tempfile");</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> on success, <span class="value">false</span> on error.</p>
 					</div>
 
@@ -278,7 +278,7 @@ $files = $fs->removeDirRecursively("/");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
@@ -358,7 +358,7 @@ $files = $fs->removeDirRecursively("/");</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> on success, <span class="value">false</span> on error.</p>
 					</div>
 
@@ -374,7 +374,7 @@ $files = $fs->removeEmptyDirRecursively("/");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
@@ -441,7 +441,7 @@ $files = $fs->removeEmptyDirRecursively("/");</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> on success, <span class="value">false</span> on error.</p>
 					</div>
 
@@ -457,7 +457,7 @@ $files = $fs->makeDirRecursively("/monkeys/fly");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
@@ -526,7 +526,7 @@ $files = $fs->makeDirRecursively("/monkeys/fly");</code>
 					</div>
 
 					<div class="return">
-						<h4>Returns</h4>
+						<h4>Return values</h4>
 						<p><span class="type">Boolean</span> <span class="value">true</span> on success, <span class="value">false</span> on error.</p>
 					</div>
 
@@ -542,7 +542,7 @@ $files = $fs->copy("/hello", "/goodbye");</code>
 					</div>
 
 					<div class="uses">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 
 						<div class="php">
 							<h5>PHP</h5>
