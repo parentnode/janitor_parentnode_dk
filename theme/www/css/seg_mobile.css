@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-01-09 10:51:28
+asset-builder @ 2019-03-20 16:48:22
 */
 
 /*seg_mobile_include.css*/
@@ -321,8 +321,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.functions .function .body .examples h4 {padding-bottom: 5px;}
 #content .scene div.functions .function .body .example h5 {padding-bottom: 5px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 5px;}
-#content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 10px;}
-#content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 10px;}
+#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0 10px;}
+#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0 10px;}
 #content .scene div.functions dd {padding-bottom: 5px;}
 #content .scene div.includefiles {}
 #content .scene div.segmentsupport {padding-top: 15px;}
