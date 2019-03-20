@@ -79,7 +79,7 @@
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -261,7 +261,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -346,7 +346,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -439,7 +439,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -531,7 +531,7 @@ $item = $IC->getItem(array("id" => 13, "extend" => true));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -637,7 +637,7 @@ $item = $IC->extendItem($item);</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -722,7 +722,7 @@ $item = $IC->extendItem($item);</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -844,7 +844,7 @@ $items = $IC->getItems(["itemtype" => "people", "where" => "name = peter", "exte
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -947,7 +947,7 @@ $next = $IC->getNext(1, array("items" => $items));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1053,7 +1053,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1138,7 +1138,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -1231,7 +1231,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -1324,7 +1324,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -1417,7 +1417,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -1520,7 +1520,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1605,7 +1605,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
@@ -1694,7 +1694,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1779,7 +1779,7 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 							</div>
 						</div>
 	
-						<div class="uses">
+						<div class="dependencies">
 							<h4>Dependencies</h4>
 	
 							<div class="php">
