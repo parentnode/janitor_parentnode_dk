@@ -78,7 +78,7 @@
 						<p>No example</p>
 					</div>
 					
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -151,7 +151,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -224,7 +224,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -297,7 +297,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -370,7 +370,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -444,7 +444,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -516,7 +516,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -614,7 +614,7 @@
 						<p>No example</p>
 					</div>
 					
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -711,7 +711,7 @@
 						<p>No example</p>
 					</div>
 					
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -799,7 +799,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -881,7 +881,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -953,7 +953,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1042,7 +1042,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1116,7 +1116,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1217,7 +1217,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1291,7 +1291,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1395,7 +1395,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1492,7 +1492,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1589,7 +1589,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1671,7 +1671,7 @@
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1739,7 +1739,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1804,7 +1804,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1872,7 +1872,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1939,7 +1939,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -1993,7 +1993,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2054,7 +2054,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2117,7 +2117,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2172,7 +2172,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2260,7 +2260,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2332,7 +2332,7 @@
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">
@@ -2406,7 +2406,7 @@
 						<p>No example</p>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="janitor">

@@ -98,7 +98,7 @@ $Zipper->zip($files, "/path/file-1-3.zip");</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
