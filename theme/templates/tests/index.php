@@ -11,6 +11,7 @@
 		<?= $HTML->link("FileSystem", "/janitor/tests/class.filesystem", array("wrapper" => "li.filesystem")) ?>
 		<?= $HTML->link("Cache", "/janitor/tests/class.cache", array("wrapper" => "li.cache")) ?>
 		<?= $HTML->link("PDF", "/janitor/tests/class.pdf", array("wrapper" => "li.pdf")) ?>
+		<?= $HTML->link("Output", "/janitor/tests/class.output", array("wrapper" => "li.output")) ?>		
 
 		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
