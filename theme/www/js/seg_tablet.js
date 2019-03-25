@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-20 16:48:22
+asset-builder @ 2019-03-25 17:27:00
 */
 
 /*seg_tablet_include.js*/
@@ -4268,6 +4268,7 @@ Util.Objects["page"] = new function() {
 				if(typeof(u.smartphoneSwitch) == "object") {
 					u.smartphoneSwitch.init(this);
 				}
+				u.navigation();
 				this.initHeader();
 				this.initNavigation();
 				this.initFooter();
@@ -4275,7 +4276,6 @@ Util.Objects["page"] = new function() {
 			}
 		}
 		page.cN.navigate = function(url) {
-			u.bug(url)
 			location.href = url;
 		}
 		page.acceptCookies = function() {
@@ -4628,6 +4628,7 @@ Util.Objects["signup"] = new function() {
 		scene.scrolled = function() {
 		}
 		scene.ready = function() {
+			console.log("signup/ajax");
 			page.cN.scene = this;
 			var signup_form = u.qs("form.signup", this);
 			var place_holder = u.qs("div.articlebody .placeholder.signup", this);
@@ -4636,10 +4637,77 @@ Util.Objects["signup"] = new function() {
 			}
 			if(signup_form) {
 				u.f.init(signup_form);
+				signup_form.submitted = function() {
+					var data = u.f.getParams(this); 
+					this.response = function(response) {
+						if (u.qs("form.verify_code", response)) {
+							scene.initVerify(response);
+							u.h.navigate("/signup/verify", false, true);
+						}
+						else {
+							scene.showMessage(this, response);
+						}
+					}
+					u.request(this, this.action, {"data":data, "method":"POST"});
+				}
 			}
 			page.acceptCookies();
 			u.showScene(this);
 			page.resized();
+		}
+		scene.initVerify = function(response) {
+			var verify_scene = scene.replaceScene(response);
+			if(verify_scene) {
+				var verify_form = u.qs("form.verify_code", verify_scene);
+				u.f.init(verify_form);
+			}
+			verify_form.submitted = function() {
+				data = u.f.getParams(this);
+				this.response = function(response) {
+					if (u.qs(".login", response)) {
+						location.href = "/login";
+					}
+					else if (u.qs(".confirmed", response)) {
+						u.showScene(scene.replaceScene(response));
+						u.h.navigate("/signup/confirm/receipt", false, true);
+					}
+					else {
+						scene.showMessage(this, response);
+					}
+				}
+				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
+			}
+			u.showScene(verify_scene);
+		}
+		scene.replaceScene = function(response) {
+			var current_scene = u.qs(".scene", page);
+			var new_scene = u.qs(".scene", response);
+			page.cN.replaceChild(new_scene, current_scene); 
+			return new_scene;
+		}
+		scene.showMessage = function(form, response) {
+			var new_error;
+			var current_error;
+			if (u.qs("p.errormessage", response)) {
+				new_error = u.qs("p.errormessage", response)
+				current_error = u.qs("p.errormessage", form);
+			}
+			else {
+				new_error = u.qs("p.error", response)
+				current_error = u.qs("p.error", form);
+			}
+			if (!current_error) {
+				u.ie(form, new_error);
+			}
+			else {
+				form.replaceChild(new_error, current_error);
+				u.a.transition(new_error, "all 0.15s linear", animationDone);
+				u.a.scale(new_error, 1.05);
+				function animationDone() {
+					u.a.transition(this, "all 0.15s linear");
+					u.a.scale(this, 1);
+				}
+			}
 		}
 		scene.ready();
 	}
