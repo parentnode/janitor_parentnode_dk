@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-26 16:00:53
+asset-builder @ 2019-03-26 17:57:31
 */
 
 /*seg_smartphone_include.js*/
@@ -4873,27 +4873,13 @@ Util.Objects["signup"] = new function() {
 			return new_scene;
 		}
 		scene.showMessage = function(form, response) {
-			var new_error;
-			var current_error;
-			if (u.qs("p.errormessage", response)) {
-				new_error = u.qs("p.errormessage", response)
-				current_error = u.qs("p.errormessage", form);
-			}
-			else {
-				new_error = u.qs("p.error", response)
-				current_error = u.qs("p.error", form);
-			}
+			var new_error = (u.qs("p.errormessage", response) || u.qs("p.error", response));
+			var current_error = (u.qs("p.errormessage", form) || u.qs("p.error", form));
 			if (!current_error) {
 				u.ie(form, new_error);
 			}
 			else {
 				form.replaceChild(new_error, current_error);
-				u.a.transition(new_error, "all 0.15s linear", animationDone);
-				u.a.scale(new_error, 1.05);
-				function animationDone() {
-					u.a.transition(this, "all 0.15s linear");
-					u.a.scale(this, 1);
-				}
 			}
 		}
 		scene.ready();
