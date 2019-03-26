@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-25 17:26:59
+asset-builder @ 2019-03-26 16:00:52
 */
 
 /*seg_desktop_include.js*/
@@ -4724,7 +4724,6 @@ Util.Objects["signup"] = new function() {
 		scene.scrolled = function() {
 		}
 		scene.ready = function() {
-			console.log("signup/ajax");
 			page.cN.scene = this;
 			var signup_form = u.qs("form.signup", this);
 			var place_holder = u.qs("div.articlebody .placeholder.signup", this);
