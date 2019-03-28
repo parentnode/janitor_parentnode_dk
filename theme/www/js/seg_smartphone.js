@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-20 16:48:22
+asset-builder @ 2019-03-26 17:57:31
 */
 
 /*seg_smartphone_include.js*/
@@ -4824,10 +4824,63 @@ Util.Objects["signup"] = new function() {
 			}
 			if(signup_form) {
 				u.f.init(signup_form);
+				signup_form.submitted = function() {
+					var data = u.f.getParams(this); 
+					this.response = function(response) {
+						if (u.qs("form.verify_code", response)) {
+							scene.initVerify(response);
+							u.h.navigate("/signup/verify", false, true);
+						}
+						else {
+							scene.showMessage(this, response);
+						}
+					}
+					u.request(this, this.action, {"data":data, "method":"POST"});
+				}
 			}
 			page.acceptCookies();
 			u.showScene(this);
 			page.resized();
+		}
+		scene.initVerify = function(response) {
+			var verify_scene = scene.replaceScene(response);
+			if(verify_scene) {
+				var verify_form = u.qs("form.verify_code", verify_scene);
+				u.f.init(verify_form);
+			}
+			verify_form.submitted = function() {
+				data = u.f.getParams(this);
+				this.response = function(response) {
+					if (u.qs(".login", response)) {
+						location.href = "/login";
+					}
+					else if (u.qs(".confirmed", response)) {
+						u.showScene(scene.replaceScene(response));
+						u.h.navigate("/signup/confirm/receipt", false, true);
+					}
+					else {
+						scene.showMessage(this, response);
+					}
+				}
+				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
+			}
+			u.showScene(verify_scene);
+		}
+		scene.replaceScene = function(response) {
+			var current_scene = u.qs(".scene", page);
+			var new_scene = u.qs(".scene", response);
+			page.cN.replaceChild(new_scene, current_scene); 
+			return new_scene;
+		}
+		scene.showMessage = function(form, response) {
+			var new_error = (u.qs("p.errormessage", response) || u.qs("p.error", response));
+			var current_error = (u.qs("p.errormessage", form) || u.qs("p.error", form));
+			if (!current_error) {
+				u.ie(form, new_error);
+			}
+			else {
+				form.replaceChild(new_error, current_error);
+			}
 		}
 		scene.ready();
 	}
