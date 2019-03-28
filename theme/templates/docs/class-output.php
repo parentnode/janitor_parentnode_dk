@@ -1,6 +1,6 @@
 <div class="scene docpage i:docpage">
 	<h1>Output</h1>
-	<p>The Output system class outputs references to data obejcts.</p>
+	<p>The Output system class outputs response objects. It currently outputs objects as json, but it is preprared to output different data formats.</p>
 
 	<div class="section functions">
 		<div class="header">
@@ -50,7 +50,7 @@
 										<dt><span class="value">format</span></dt>
 										<dd>Is pr default json.</dd>
 										<dt><span class="value">type</span></dt>
-										<dd>If type is 'error' cms_staus will be set to error and possible return_to values will not be added.</dd>
+										<dd>If type is 'error' cms_staus will be set to error. Any posted values will not be returned.</dd>
 										<dt><span class="value">reset_messages</span></dt>
 										<dd>Reset_messages is per default true. Set to false in order to keep messages.</dd>
 									</dl>
@@ -74,10 +74,22 @@ message()->addMessage("Hello, this is Elisabeth");
 $output = new Output();
 $output->screen($object);</code>
 							<p>Outputs data object as json and resets messages in the message class. Output:</p>
-							<code>{"cms_object":{"user":"elisabeth","age":27,"gender":"woman"},
-"cms_status":"success",
-"cms_message":{"message":["Hello, this is Elisabeth"]},
-"return_to":false}</code>
+							<code>{
+	"cms_object":
+		{
+			"user":"elisabeth",
+			"age":27,
+			"gender":"woman"
+		},
+	"cms_status":"success",
+	"cms_message":
+		{
+			"message":[
+				"Hello, this is Elisabeth"
+			]
+		},
+	"return_to":false
+}</code>
 						</div>
 						<div class="example">
 							<h5>Example 2</h5>
@@ -86,13 +98,22 @@ message()->addMessage("Hello, this is Elisabeth", array("type" => "error"));
 $output = new Output();
 $output->screen($object, ["type" => "error", "reset_messages" => false]);</code>
 							<p>Outputs data object as json with cms_status error. Does not reset messages in the message class. Output:</p>
-							<code>{"cms_object":{"user":"elisabeth","age":27,"gender":"woman"},
-"cms_status":"error",
-"cms_message":["Hello, this is Elisabeth"]}</code>
+							<code>{
+	"cms_object":
+		{
+			"user":"elisabeth",
+			"age":27,
+			"gender":"woman"
+		},
+		"cms_status":"error",
+		"cms_message":[
+			"Hello, this is Elisabeth"
+		]
+}</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Uses</h4>
 						
 						<div class="php">
