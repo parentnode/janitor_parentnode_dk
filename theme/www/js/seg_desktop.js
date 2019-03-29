@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-26 17:57:30
+asset-builder @ 2019-03-29 19:09:03
 */
 
 /*seg_desktop_include.js*/
@@ -4732,19 +4732,31 @@ Util.Objects["signup"] = new function() {
 			}
 			if(signup_form) {
 				u.f.init(signup_form);
-				signup_form.submitted = function() {
-					var data = u.f.getParams(this); 
-					this.response = function(response) {
-						if (u.qs("form.verify_code", response)) {
-							scene.initVerify(response);
-							u.h.navigate("/signup/verify", false, true);
-						}
-						else {
-							scene.showMessage(this, response);
-						}
+			}
+			signup_form.submitted = function() {
+				var data = u.f.getParams(this); 
+				this.response = function(response) {
+					if (u.qs(".scene.verify", response)) {
+						scene.initVerify(response);
+						u.h.navigate("/verify", false, true);
 					}
-					u.request(this, this.action, {"data":data, "method":"POST"});
+					else {
+						if (this.error) {
+							this.error.parentNode.removeChild(this.error);
+						}
+						this.error = scene.showMessage(this, response);
+						u.ass(this.error, {
+							transform:"translate3d(0, -15px, 0)",
+							opacity:0
+						});
+						u.a.transition(this.error, "all .5s ease-out");
+						u.ass(this.error, {
+							transform:"translate3d(0, 0, 0)",
+							opacity:1
+						});
+					}
 				}
+				u.request(this, this.action, {"data":data, "method":"POST"});
 			}
 			page.acceptCookies();
 			u.showScene(this);
@@ -4753,26 +4765,8 @@ Util.Objects["signup"] = new function() {
 		scene.initVerify = function(response) {
 			var verify_scene = scene.replaceScene(response);
 			if(verify_scene) {
-				var verify_form = u.qs("form.verify_code", verify_scene);
-				u.f.init(verify_form);
+				u.init();
 			}
-			verify_form.submitted = function() {
-				data = u.f.getParams(this);
-				this.response = function(response) {
-					if (u.qs(".login", response)) {
-						location.href = "/login";
-					}
-					else if (u.qs(".confirmed", response)) {
-						u.showScene(scene.replaceScene(response));
-						u.h.navigate("/signup/confirm/receipt", false, true);
-					}
-					else {
-						scene.showMessage(this, response);
-					}
-				}
-				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
-			}
-			u.showScene(verify_scene);
 		}
 		scene.replaceScene = function(response) {
 			var current_scene = u.qs(".scene", page);
@@ -4789,6 +4783,75 @@ Util.Objects["signup"] = new function() {
 			else {
 				form.replaceChild(new_error, current_error);
 			}
+			return new_error;
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-verify.js*/
+Util.Objects["verify"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			page.cN.scene = this;
+			var verify_form = u.qs("form.verify_code", this);
+			if(verify_form) {
+				u.f.init(verify_form);
+			}
+			verify_form.submitted = function() {
+				data = u.f.getParams(this);
+				this.response = function(response) {
+					if (u.qs(".scene.login", response)) {
+						u.showScene(scene.replaceScene(response));
+						u.h.navigate("/login", false, true);
+					}
+					else if (u.qs(".scene.confirmed", response)) {
+						u.showScene(scene.replaceScene(response));
+						u.h.navigate("/verify/receipt", false, true);
+					}
+					else {
+						if (this.error) {
+							this.error.parentNode.removeChild(this.error);
+						}
+						this.error = scene.showMessage(this, response);
+						u.ass(this.error, {
+							transform:"translate3d(0, -20px, 0) rotate3d(-1, 0, 0, 90deg)",
+							opacity:0
+						});
+						u.a.transition(this.error, "all .6s ease");
+						u.ass(this.error, {
+							transform:"translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)",
+							opacity:1
+						});
+					}
+				}
+				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
+			}
+			page.acceptCookies();
+			u.showScene(this);
+			page.resized();
+		}
+		scene.replaceScene = function(response) {
+			var current_scene = u.qs(".scene", page);
+			var new_scene = u.qs(".scene", response);
+			page.cN.replaceChild(new_scene, current_scene); 
+			return new_scene;
+		}
+		scene.showMessage = function(form, response) {
+			var new_error = (u.qs("p.errormessage", response) || u.qs("p.error", response));
+			var current_error = (u.qs("p.errormessage", form) || u.qs("p.error", form));
+			if (!current_error) {
+				u.ie(form, new_error);
+			}
+			else {
+				form.replaceChild(new_error, current_error);
+			}
+			return new_error;
 		}
 		scene.ready();
 	}

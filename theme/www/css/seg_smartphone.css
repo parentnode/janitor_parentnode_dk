@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-03-26 17:57:31
+asset-builder @ 2019-03-29 19:09:04
 */
 
 /*seg_smartphone_include.css*/
@@ -259,7 +259,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard dl.info dd li a {padding-bottom: 10px; display: inline-block;}
 #content .scene.login form {padding-bottom: 20px;}
 #content .scene form li.forgot {padding-top: 5px;}
-#content .scene div.messages > p.error {color: #df0000;}
+#content .scene p.error,
+#content .scene p.errormessage {color: #df0000;}
 #content .scene div.article {padding-bottom: 30px;}
 #content .scene div.article h2 br {display: none;}
 #content .scene div.article ul.tags li,
