@@ -27,7 +27,7 @@ if($action) {
 		// successful creation
 		if(isset($user["user_id"])) {
 			// redirect to leave POST state
-			header("Location: verify");
+			header("Location: /verify");
 			exit();
 		}
 
@@ -40,35 +40,6 @@ if($action) {
 			message()->addMessage("Sorry, computer says no!", array("type" => "error"));
 		}
 
-	}
-
-
-	// signup/verify
-	else if($action[0] == "verify") {
-
-		$page->page([
-			"templates" => "signup/verify.php"
-		]);
-		exit();
-
-	}
-	// signup/skip
-	else if($action[0] == "skip") {
-
-		$page->page([
-			"templates" => "signup/verify_skip.php"
-		]);
-		exit();
-
-	}
-
-	// /signup/receipt
-	else if($action[0] == "receipt") {
-
-		$page->page(array(
-			"templates" => "signup/receipt.php"
-		));
-		exit();
 	}
 
 }
