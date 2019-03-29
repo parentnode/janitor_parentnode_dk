@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-01-09 10:51:28
+asset-builder @ 2019-03-26 17:57:31
 */
 
 /*seg_desktop_include.css*/
@@ -663,6 +663,8 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function .body .definition dd {white-space: nowrap;}
 #content .scene div.functions .function .body .parameters dl.options {margin-left: -80px; width: 475px;}
 #content .scene div.functions .function .body .parameters dl.options dt {width: 130px;}
+#content .scene div.functions .function .body .parameters > dt {width: 115px;}
+#content .scene div.functions .function .body .parameters > dd {width: 375px;}
 #content .scene div.functions .function .body .callbacks dl {padding-left: 70px;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block; padding-left: 20px;}
@@ -670,11 +672,11 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
 #content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
-#content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
-#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 110px; stroke: #999999; stroke-width: 3px;}
-#content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .uses .manipulator ul {padding-bottom: 0;}
+#content .scene div.functions .function .body .dependencies {overflow: hidden; margin-bottom: 20px; position: relative;}
+#content .scene div.functions .function .body .dependencies svg {position: absolute; top: 1px; left: 175px; stroke: #999999; stroke-width: 3px;}
+#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .dependencies .manipulator ul {padding-bottom: 0;}
 #content .scene div.functions dd {padding-bottom: 5px;}
 #content .scene div.includefiles {padding-bottom: 15px; border-bottom: 1px solid #bbbbbb;}
 #content .scene div.includefiles .header {position: relative; cursor: pointer;}

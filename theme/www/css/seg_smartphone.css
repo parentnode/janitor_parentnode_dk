@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-01-09 10:51:29
+asset-builder @ 2019-03-26 17:57:31
 */
 
 /*seg_smartphone_include.css*/
@@ -119,10 +119,10 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 }
 #header .logo:active {text-decoration: none;}
 #header .servicenavigation {position: absolute; top: 0; left: 0; z-index: 9; width: 100%; height: 60px; background: #ffffff; opacity: 0;}
-#header .servicenavigation li.navigation {position: absolute; right: 0; top: 0; width: 30px; height: 39px; padding: 21px 15px 0;}
+#header .servicenavigation li.navigation {position: absolute; right: 0; top: 0; width: 30px; height: 39px; padding: 21px 15px 0; background: #ffffff;}
 #header .servicenavigation li.navigation div {border-radius: 1px; height: 3px; margin: 0 0 5px; background: #888888;}
 #header .servicenavigation li.navigation.open div {background: #cccccc;}
-#header .servicenavigation li.navigation a {display: none;}
+#header .servicenavigation li.navigation a {display: none; background: #ffffff;}
 #navigation {position: absolute; width: 100%; top: 75px; display: none;}
 #navigation ul {}
 #navigation ul li {padding: 10px 20px 10px 20px; font-size: 20px; color: #888888; display: block; text-align: center;
@@ -600,6 +600,8 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 #content .scene div.functions .function .body .definition dd {white-space: nowrap;}
 #content .scene div.functions .function .body .parameters dl.options {margin-left: -80px; width: 475px;}
 #content .scene div.functions .function .body .parameters dl.options dt {width: 130px;}
+#content .scene div.functions .function .body .parameters > dt {width: 115px;}
+#content .scene div.functions .function .body .parameters > dd {width: 375px;}
 #content .scene div.functions .function .body .callbacks dl {padding-left: 70px;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block; padding-left: 20px;}
@@ -607,11 +609,11 @@ body #selection_options ul.actions a.button:active {background-color: #313942;}
 #content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
 #content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
-#content .scene div.functions .function .body .uses {overflow: hidden; margin-bottom: 20px; position: relative;}
-#content .scene div.functions .function .body .uses svg {position: absolute; top: 3px; left: 110px; stroke: #999999; stroke-width: 3px;}
-#content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .uses .manipulator ul {padding-bottom: 0;}
+#content .scene div.functions .function .body .dependencies {overflow: hidden; margin-bottom: 20px; position: relative;}
+#content .scene div.functions .function .body .dependencies svg {position: absolute; top: 1px; left: 175px; stroke: #999999; stroke-width: 3px;}
+#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .dependencies .manipulator ul {padding-bottom: 0;}
 #content .scene div.functions dd {padding-bottom: 5px;}
 #content .scene div.includefiles {padding-bottom: 15px; border-bottom: 1px solid #bbbbbb;}
 #content .scene div.includefiles .header {position: relative; cursor: pointer;}

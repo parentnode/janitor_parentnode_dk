@@ -90,7 +90,7 @@ $files = $fs->files("/");</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -197,7 +197,7 @@ $files = $fs->valid("/._tempfile");</code>
 						</div>
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -277,7 +277,7 @@ $files = $fs->removeDirRecursively("/");</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -373,7 +373,7 @@ $files = $fs->removeEmptyDirRecursively("/");</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -456,7 +456,7 @@ $files = $fs->makeDirRecursively("/monkeys/fly");</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
@@ -541,7 +541,7 @@ $files = $fs->copy("/hello", "/goodbye");</code>
 
 					</div>
 
-					<div class="uses">
+					<div class="dependencies">
 						<h4>Dependencies</h4>
 
 						<div class="php">
