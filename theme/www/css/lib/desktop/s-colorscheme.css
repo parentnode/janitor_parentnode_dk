@@ -31,7 +31,8 @@ ul.actions a.button.primary,
 #content .scene h6,
 #content .scene p,
 #content .scene li,
-#content .scene dd {color: #777777;}
+#content .scene dd,
+#content .scene dd div {color: #777777;}
 
 #footer {border-color: #ffb773;}
 #footer a {color: #04859d;}
