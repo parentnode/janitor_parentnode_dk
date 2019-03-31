@@ -7,16 +7,15 @@ $item = array("status" => 1, "id" => 1);
 <script type="text/javascript">
 u.o["testValidation"] = new function() {
 	this.init = function(form) {
-		u.bug("init")
+		u.bug("init");
 		u.f.init(form, {"validation":false});
 		form.submitted = function() {
 			this.response = function(response) {
-				u.bug("response received")
+				u.bug("response received", response);
 				page.notify(response);
 
-				u.xInObject(response);
 			}
-			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
+			u.request(this, this.action, {"data":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
 
 		}
 	}	
@@ -201,7 +200,7 @@ u.o["testValidation"] = new function() {
 			</ul>
 		<?= $model->formEnd() ?>
 	</div>
-
+<? /* 
 	<div class="tests">
 		<h3>Tag validation</h3>
 		<?= $model->formStart("tagValidation", array("class" => "labelstyle:inject i:testValidation tag")) ?>
@@ -214,6 +213,7 @@ u.o["testValidation"] = new function() {
 			</ul>
 		<?= $model->formEnd() ?>
 	</div>
+*/ ?>
 
 	<div class="tests">
 		<h3>Files validation</h3>

@@ -3,25 +3,25 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `item_id` int(11) NOT NULL,
 
   `name` varchar(100) NOT NULL,
-  `v_text` text NOT NULL,
-  `v_html` text NOT NULL,
-  `v_email` varchar(100) NOT NULL,
-  `v_tel` varchar(100) NOT NULL,
-  `v_password` varchar(100) NOT NULL,
-  `v_select` varchar(100) NOT NULL,
+  `v_text` text DEFAULT NULL,
+  `v_html` text DEFAULT NULL,
+  `v_email` varchar(100) DEFAULT NULL,
+  `v_tel` varchar(100) DEFAULT NULL,
+  `v_password` varchar(100) DEFAULT NULL,
+  `v_select` varchar(100) DEFAULT NULL,
 
 
-  `v_datetime` varchar(100) NOT NULL,
-  `v_date` varchar(100) NOT NULL,
-  `v_integer` int(11) NOT NULL,
-  `v_number` varchar(100) NOT NULL,
+  `v_datetime` timestamp NULL DEFAULT NULL,
+  `v_date` date NULL DEFAULT NULL,
+  `v_integer` int(11) DEFAULT NULL,
+  `v_number` varchar(100) DEFAULT NULL,
 
-  `v_checkbox` varchar(100) NOT NULL,
-  `v_radiobuttons` varchar(100) NOT NULL,
+  `v_checkbox` varchar(100) DEFAULT NULL,
+  `v_radiobuttons` varchar(100) DEFAULT NULL,
 
-  `v_location` varchar(255) NOT NULL,
-  `v_latitude` double NOT NULL,
-  `v_longitude` double NOT NULL,
+  `v_location` varchar(255) DEFAULT NULL,
+  `v_latitude` double DEFAULT NULL,
+  `v_longitude` double DEFAULT NULL,
 
 
   PRIMARY KEY  (`id`),
