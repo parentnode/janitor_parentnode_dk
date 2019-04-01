@@ -49,7 +49,7 @@ $dom4 = DOM()->createDom($ref_dom_string4);
 			&&
 			
 			$dom2->body->childNodes->length == 1 && $dom2->body->firstChild->nodeName == "a" &&
-			$dom2->body->textContent == $res_dom_string2 && 
+			$dom2->body->textContent === $res_dom_string2 && 
 			$dom2->body->firstChild->getAttribute("class") == "test" &&
 			$dom2->body->firstChild->getAttribute("href") == "/test"
 				

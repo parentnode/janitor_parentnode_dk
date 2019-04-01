@@ -20,8 +20,8 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `v_radiobuttons` varchar(100) DEFAULT NULL,
 
   `v_location` varchar(255) DEFAULT NULL,
-  `v_latitude` double DEFAULT NULL,
-  `v_longitude` double DEFAULT NULL,
+  `v_latitude` double NULL DEFAULT NULL,
+  `v_longitude` double NULL DEFAULT NULL,
 
 
   PRIMARY KEY  (`id`),
