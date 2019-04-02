@@ -42,15 +42,9 @@ if($action) {
 
 	}
 
-}
-
-
-
-// TODO: Find out what to do and where to put unsubscribe
-if($action) {
-
 	// post username, maillist_id and verification_token
-	if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
+	// signup/unsubscribe
+	else if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
 
 		// successful creation
 		if($model->unsubscribeUserFromMaillist(["unsubscribe", "unsubscribeUserFromMaillist"])) {
