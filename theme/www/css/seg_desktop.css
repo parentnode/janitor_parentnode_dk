@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-03-29 19:09:04
+asset-builder @ 2019-04-02 16:08:17
 */
 
 /*seg_desktop_include.css*/
@@ -456,9 +456,8 @@ ul.actions a.button,
 ul.actions input.button,
 ul.actions a.button,
 #content ul.actions a.button {font-size: 14px; background-color: #dedede; color: #333333; border: none; cursor: pointer; border-radius: 3px;}
-.submitting input.button,
-.submitting a.button,
-#content .submitting a.button {padding-left: 40px !important;
+.submitting input[type="submit"].button {
+	padding-left: 40px !important;
 	background-image: url(../img/gx_loader.gif);
 	background-position: 11px 5px;
 	background-repeat: no-repeat;
@@ -722,7 +721,8 @@ ul.actions a.button.primary,
 #content .scene h6,
 #content .scene p,
 #content .scene li,
-#content .scene dd {color: #777777;}
+#content .scene dd,
+#content .scene dd div {color: #777777;}
 #footer {border-color: #ffb773;}
 #footer a {color: #04859d;}
 .terms_notification {background-color: #04859d;}

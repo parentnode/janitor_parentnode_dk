@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-03-29 19:09:04
+asset-builder @ 2019-04-02 16:08:17
 */
 
 /*seg_smartphone_include.css*/
@@ -425,9 +425,8 @@ ul.actions a.button,
 ul.actions input.button:active,
 ul.actions a.button:active,
 #content ul.actions a.button:active {background-color: #bebebe;}
-.submitting input.button,
-.submitting a.button,
-#content .submitting a.button {padding-left: 40px !important;
+.submitting input[type="submit"].button {
+	padding-left: 40px !important;
 	background-image: url(../img/gx_loader.gif);
 	background-position: 11px 7px;
 	background-repeat: no-repeat;
