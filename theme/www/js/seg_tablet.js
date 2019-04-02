@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-04-02 16:08:16
+asset-builder @ 2019-04-02 16:37:24
 */
 
 /*seg_tablet_include.js*/
@@ -4621,7 +4621,7 @@ Util.Objects["login"] = new function() {
 
 
 /*i-signup.js*/
-Util.Objects["verify"] = new function() {
+Util.Objects["signup"] = new function() {
 	this.init = function(scene) {
 		scene.resized = function() {
 		}
@@ -4629,32 +4629,31 @@ Util.Objects["verify"] = new function() {
 		}
 		scene.ready = function() {
 			page.cN.scene = this;
-			var form_verify = u.qs("form.verify_code", this);
-			if(form_verify) {
-				u.f.init(form_verify);
-				form_verify.preSubmitted = function() {
+			var form_signup = u.qs("form.signup", this);
+			var place_holder = u.qs("div.articlebody .placeholder.signup", this);
+			if(form_signup && place_holder) {
+				place_holder.parentNode.replaceChild(form_signup, place_holder);
+			}
+			if(form_signup) {
+				u.f.init(form_signup);
+				form_signup.preSubmitted = function() {
 					this.is_submitting = true; 
-					this.actions["verify"].value = "Submitting";
 					u.ac(this, "submitting");
-					u.ac(this.actions["verify"], "disabled");
+					u.ac(this.actions["signup"], "disabled");
 				}
 			}
-			form_verify.submitted = function() {
-				data = u.f.getParams(this);
+			form_signup.submitted = function() {
+				var data = u.f.getParams(this);
 				this.response = function(response) {
-					if (u.qs(".scene.login", response)) {
-						u.showScene(scene.replaceScene(response));
-						u.h.navigate("/login", false, true);
-					}
-					else if (u.qs(".scene.confirmed", response)) {
-						u.showScene(scene.replaceScene(response));
-						u.h.navigate("/verify/receipt", false, true);
+					if (u.qs(".scene.verify", response)) {
+						scene.replaceScene(response);
+						u.h.navigate("/verify", false, true);
 					}
 					else {
 						if (this.is_submitting) {
-							this.actions["verify"].value = "Verify email";
+							this.is_submitting = false; 
 							u.rc(this, "submitting");
-							u.rc(this.actions["verify"], "disabled");
+							u.rc(this.actions["signup"], "disabled");
 						}
 						if (this.error) {
 							this.error.parentNode.removeChild(this.error);
@@ -4671,7 +4670,7 @@ Util.Objects["verify"] = new function() {
 						});
 					}
 				}
-				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
+				u.request(this, this.action, {"data":data, "method":"POST"});
 			}
 			page.acceptCookies();
 			u.showScene(this);
@@ -4681,6 +4680,7 @@ Util.Objects["verify"] = new function() {
 			var current_scene = u.qs(".scene", page);
 			var new_scene = u.qs(".scene", response);
 			page.cN.replaceChild(new_scene, current_scene); 
+			u.init();
 			return new_scene;
 		}
 		scene.showMessage = function(form, response) {
@@ -4713,26 +4713,25 @@ Util.Objects["verify"] = new function() {
 				u.f.init(form_verify);
 				form_verify.preSubmitted = function() {
 					this.is_submitting = true; 
-					this.actions["verify"].value = "Submitting";
 					u.ac(this, "submitting");
 					u.ac(this.actions["verify"], "disabled");
 					u.ac(this.actions["skip"], "disabled");
 				}
 			}
 			form_verify.submitted = function() {
-				data = u.f.getParams(this);
+				var data = u.f.getParams(this);
 				this.response = function(response) {
 					if (u.qs(".scene.login", response)) {
-						u.showScene(scene.replaceScene(response));
+						scene.replaceScene(response);
 						u.h.navigate("/login", false, true);
 					}
 					else if (u.qs(".scene.confirmed", response)) {
-						u.showScene(scene.replaceScene(response));
+						scene.replaceScene(response);
 						u.h.navigate("/verify/receipt", false, true);
 					}
 					else {
 						if (this.is_submitting) {
-							this.actions["verify"].value = "Verify email";
+							this.is_submitting = false; 
 							u.rc(this, "submitting");
 							u.rc(this.actions["verify"], "disabled");
 							u.rc(this.actions["skip"], "disabled");
@@ -4762,6 +4761,7 @@ Util.Objects["verify"] = new function() {
 			var current_scene = u.qs(".scene", page);
 			var new_scene = u.qs(".scene", response);
 			page.cN.replaceChild(new_scene, current_scene); 
+			u.init();
 			return new_scene;
 		}
 		scene.showMessage = function(form, response) {
