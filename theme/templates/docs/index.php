@@ -136,6 +136,18 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/api-autoconversion">Media auto-conversion (API)</a></h3>
 				<p>Media scaling and format conversion (Image, Video, Audio)</p>
 			</li-->
+			<li>
+				<h3><a href="/docs/class-model">Model</a></h3>
+				<p>Core janitor model class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-dom">DOM</a></h3>
+				<p>DOM for Janitor</p>
+			</li>
+			<li>
+				<h3><a href="/docs/functions">Global functions</a></h3>
+				<p>General purpose functions, globally available</p>
+			</li>
 		</ul>
 	</div>
 

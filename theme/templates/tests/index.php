@@ -7,9 +7,12 @@
 		<?= $HTML->link("Page", "/janitor/tests/class.page", array("wrapper" => "li.page")) ?>
 		<?= $HTML->link("Items", "/janitor/tests/class.items", array("wrapper" => "li.items")) ?>
 
+		<?= $HTML->link("Model", "/janitor/tests/class-model", array("wrapper" => "li.model")) ?>
+
 		<?= $HTML->link("Autoconversion (Image/Video/Audio)", "/janitor/tests/autoconversion", array("wrapper" => "li.autoconversion")) ?>
 		<?= $HTML->link("FileSystem", "/janitor/tests/class.filesystem", array("wrapper" => "li.filesystem")) ?>
 		<?= $HTML->link("Cache", "/janitor/tests/class.cache", array("wrapper" => "li.cache")) ?>
+		<?= $HTML->link("DOM", "/janitor/tests/class-dom", array("wrapper" => "li.dom")) ?>
 		<?= $HTML->link("PDF", "/janitor/tests/class.pdf", array("wrapper" => "li.pdf")) ?>
 		<?= $HTML->link("Output", "/janitor/tests/class.output", array("wrapper" => "li.output")) ?>		
 
@@ -24,6 +27,11 @@
 	<ul class="tests">
 		<?= $HTML->link("Form interface", "/janitor/tests/form", array("wrapper" => "li.form")) ?>
 		<?= $HTML->link("Form validation", "/janitor/tests/form-validation", array("wrapper" => "li.formvalidation")) ?>
+	</ul>
+
+	<h3>Global functions</h3>
+	<ul class="tests">
+		<?= $HTML->link("Functions", "/janitor/tests/functions", array("wrapper" => "li.functions")) ?>
 	</ul>
 
 

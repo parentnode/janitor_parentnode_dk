@@ -190,7 +190,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("name"))) {
-			message()->addMessage("String ok");
+			message()->addMessage("String ok (".htmlentities($this->getProperty("name", "value")).")");
 			return true;
 		}
 		return false;
@@ -200,7 +200,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_text"))) {
-			message()->addMessage("Text ok");
+			message()->addMessage("Text ok (".htmlentities($this->getProperty("v_text", "value")).")");
 			return true;
 		}
 		return false;
@@ -210,7 +210,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_html"))) {
-			message()->addMessage("HTML ok");
+			message()->addMessage("HTML ok (".htmlentities($this->getProperty("v_html", "value")).")");
 			return true;
 		}
 		return false;
@@ -220,7 +220,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_select"))) {
-			message()->addMessage("Select ok");
+			message()->addMessage("Select ok (".htmlentities($this->getProperty("v_select", "value")).")");
 			return true;
 		}
 		return false;
@@ -230,7 +230,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_email"))) {
-			message()->addMessage("Email ok");
+			message()->addMessage("Email ok (".htmlentities($this->getProperty("v_email", "value")).")");
 			return true;
 		}
 		return false;
@@ -240,7 +240,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_tel"))) {
-			message()->addMessage("Tel ok");
+			message()->addMessage("Tel ok (".htmlentities($this->getProperty("v_tel", "value")).")");
 			return true;
 		}
 		return false;
@@ -250,7 +250,7 @@ class TypeTests extends Itemtype {
 
 		$this->getPostedEntities();
 		if($this->validateList(array("v_password"))) {
-			message()->addMessage("Password ok");
+			message()->addMessage("Password ok (".htmlentities($this->getProperty("v_password", "value")).")");
 			return true;
 		}
 		return false;

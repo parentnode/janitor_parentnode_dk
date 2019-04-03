@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-03-26 17:57:31
+asset-builder @ 2019-04-02 16:37:24
 */
 
 /*seg_tablet_include.js*/
@@ -4629,59 +4629,58 @@ Util.Objects["signup"] = new function() {
 		}
 		scene.ready = function() {
 			page.cN.scene = this;
-			var signup_form = u.qs("form.signup", this);
+			var form_signup = u.qs("form.signup", this);
 			var place_holder = u.qs("div.articlebody .placeholder.signup", this);
-			if(signup_form && place_holder) {
-				place_holder.parentNode.replaceChild(signup_form, place_holder);
+			if(form_signup && place_holder) {
+				place_holder.parentNode.replaceChild(form_signup, place_holder);
 			}
-			if(signup_form) {
-				u.f.init(signup_form);
-				signup_form.submitted = function() {
-					var data = u.f.getParams(this); 
-					this.response = function(response) {
-						if (u.qs("form.verify_code", response)) {
-							scene.initVerify(response);
-							u.h.navigate("/signup/verify", false, true);
-						}
-						else {
-							scene.showMessage(this, response);
-						}
-					}
-					u.request(this, this.action, {"data":data, "method":"POST"});
+			if(form_signup) {
+				u.f.init(form_signup);
+				form_signup.preSubmitted = function() {
+					this.is_submitting = true; 
+					u.ac(this, "submitting");
+					u.ac(this.actions["signup"], "disabled");
 				}
+			}
+			form_signup.submitted = function() {
+				var data = u.f.getParams(this);
+				this.response = function(response) {
+					if (u.qs(".scene.verify", response)) {
+						scene.replaceScene(response);
+						u.h.navigate("/verify", false, true);
+					}
+					else {
+						if (this.is_submitting) {
+							this.is_submitting = false; 
+							u.rc(this, "submitting");
+							u.rc(this.actions["signup"], "disabled");
+						}
+						if (this.error) {
+							this.error.parentNode.removeChild(this.error);
+						}
+						this.error = scene.showMessage(this, response);
+						u.ass(this.error, {
+							transform:"translate3d(0, -20px, 0) rotate3d(-1, 0, 0, 90deg)",
+							opacity:0
+						});
+						u.a.transition(this.error, "all .6s ease");
+						u.ass(this.error, {
+							transform:"translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)",
+							opacity:1
+						});
+					}
+				}
+				u.request(this, this.action, {"data":data, "method":"POST"});
 			}
 			page.acceptCookies();
 			u.showScene(this);
 			page.resized();
 		}
-		scene.initVerify = function(response) {
-			var verify_scene = scene.replaceScene(response);
-			if(verify_scene) {
-				var verify_form = u.qs("form.verify_code", verify_scene);
-				u.f.init(verify_form);
-			}
-			verify_form.submitted = function() {
-				data = u.f.getParams(this);
-				this.response = function(response) {
-					if (u.qs(".login", response)) {
-						location.href = "/login";
-					}
-					else if (u.qs(".confirmed", response)) {
-						u.showScene(scene.replaceScene(response));
-						u.h.navigate("/signup/confirm/receipt", false, true);
-					}
-					else {
-						scene.showMessage(this, response);
-					}
-				}
-				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
-			}
-			u.showScene(verify_scene);
-		}
 		scene.replaceScene = function(response) {
 			var current_scene = u.qs(".scene", page);
 			var new_scene = u.qs(".scene", response);
 			page.cN.replaceChild(new_scene, current_scene); 
+			u.init();
 			return new_scene;
 		}
 		scene.showMessage = function(form, response) {
@@ -4693,6 +4692,88 @@ Util.Objects["signup"] = new function() {
 			else {
 				form.replaceChild(new_error, current_error);
 			}
+			return new_error;
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-verify.js*/
+Util.Objects["verify"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			page.cN.scene = this;
+			var form_verify = u.qs("form.verify_code", this);
+			if(form_verify) {
+				u.f.init(form_verify);
+				form_verify.preSubmitted = function() {
+					this.is_submitting = true; 
+					u.ac(this, "submitting");
+					u.ac(this.actions["verify"], "disabled");
+					u.ac(this.actions["skip"], "disabled");
+				}
+			}
+			form_verify.submitted = function() {
+				var data = u.f.getParams(this);
+				this.response = function(response) {
+					if (u.qs(".scene.login", response)) {
+						scene.replaceScene(response);
+						u.h.navigate("/login", false, true);
+					}
+					else if (u.qs(".scene.confirmed", response)) {
+						scene.replaceScene(response);
+						u.h.navigate("/verify/receipt", false, true);
+					}
+					else {
+						if (this.is_submitting) {
+							this.is_submitting = false; 
+							u.rc(this, "submitting");
+							u.rc(this.actions["verify"], "disabled");
+							u.rc(this.actions["skip"], "disabled");
+						}
+						if (this.error) {
+							this.error.parentNode.removeChild(this.error);
+						}
+						this.error = scene.showMessage(this, response);
+						u.ass(this.error, {
+							transform:"translate3d(0, -20px, 0) rotate3d(-1, 0, 0, 90deg)",
+							opacity:0
+						});
+						u.a.transition(this.error, "all .6s ease");
+						u.ass(this.error, {
+							transform:"translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)",
+							opacity:1
+						});
+					}
+				}
+				u.request(this, this.action, {"data":data, "method":"POST", "responseType":"document"});
+			}
+			page.acceptCookies();
+			u.showScene(this);
+			page.resized();
+		}
+		scene.replaceScene = function(response) {
+			var current_scene = u.qs(".scene", page);
+			var new_scene = u.qs(".scene", response);
+			page.cN.replaceChild(new_scene, current_scene); 
+			u.init();
+			return new_scene;
+		}
+		scene.showMessage = function(form, response) {
+			var new_error = (u.qs("p.errormessage", response) || u.qs("p.error", response));
+			var current_error = (u.qs("p.errormessage", form) || u.qs("p.error", form));
+			if (!current_error) {
+				u.ie(form, new_error);
+			}
+			else {
+				form.replaceChild(new_error, current_error);
+			}
+			return new_error;
 		}
 		scene.ready();
 	}
