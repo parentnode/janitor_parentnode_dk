@@ -78,6 +78,24 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 			</li>
 		</ul>
 		
+		<h3>Item classes</h3>
+		<ul class="library item">
+			<li>
+				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
+				<p>Creating and manipulating itemtypes</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-items">Items</a></h3>
+				<p>Querying items and item data</p>
+			</li>
+		</ul>
+		<h3>Shop classes</h3>
+		<ul class="library shop">
+			<li>
+				<h3><a href="/docs/class-shop">Shop</a></h3>
+				<p>Creating, querying and manipulating orders and cart items data.</p>
+			</li>
+		</ul>
 		<h3>System classes</h3>
 		<ul class="library system">
 			
@@ -98,17 +116,7 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 		</ul>
 		
 		
-		<h3>Item classes</h3>
-		<ul class="library item">
-			<li>
-				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
-				<p>Creating and manipulating itemtypes</p>
-			</li>
-			<li>
-				<h3><a href="/docs/class-items">Items</a></h3>
-				<p>Querying items and item data</p>
-			</li>
-		</ul>
+		
 		
 		<h3>User classes</h3>
 		<ul class="library user">

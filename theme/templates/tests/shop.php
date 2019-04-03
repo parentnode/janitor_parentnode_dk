@@ -21,8 +21,20 @@ $UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998
 
 
 
+$IC = new Items();
+$model_tests = $IC->typeObject("tests");
 
-
+// create test item
+$_POST["name"] = "Test item";
+$item = $model_tests->save(array("save"));
+// print_r($item);
+unset($_POST);
+// create test membership item
+$model_tests_membership = $IC->TypeObject("membership");
+$_POST["name"] = "Membership Test item";
+$membership = $model_tests_membership->save(array("save"));
+// print_r($membership);
+unset($_POST);
 
 
 
@@ -48,12 +60,186 @@ $SC = new Shop();
 		<? endif; ?>
 
 
+		<? if("Your test condition"): ?>
+		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<? endif; ?>
+	
+		<? if("Your test condition"): ?>
+		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<? endif; ?>
 	</div>
+	
+	<div class="tests">
+		
+		<h3>Shop::addToCart()</h3>
+		<?
+		
+		$cart = $SC->emptyCart("emptyCart");
+		
+		$_POST["item_id"] = $membership["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		if(
+			$cart &&
+			$cart["id"] &&
+			$cart["user_id"] &&
+			$cart["cart_reference"] &&
+			$cart["country"] &&
+			$cart["currency"] &&
+			$cart["items"] &&
+			$cart["items"][1]["item_id"] == $item["item_id"] &&
+			$cart["items"][0]["item_id"] == $membership["item_id"] &&
+			$cart["items"][0]["quantity"] == 1 &&
+			$cart["items"][1]["quantity"] == 1 &&
+			$cart["items"][0]["id"] &&
+			$cart["items"][1]["id"] &&
+			$cart["items"][0]["cart_id"] &&
+			$cart["items"][1]["cart_id"] &&
+			count($cart["items"]) == 2
+			): ?>
+		<div class="testpassed"><p>Shop::addToCart(), adding two different itemtypes to cart - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToCart() - error</p></div>
+		<? endif; ?>
+	
+		<? if("Your test condition"): ?>
+		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<? endif; ?>
+	
+		<? if("Your test condition"): ?>
+		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<? endif; ?>
+	</div>
+	
+	<div class="tests">
+		<h3>Shop::deleteItemtypeFromCart()</h3>
+		<?
+		$cart = $SC->emptyCart("emptyCart");
+		
+		$_POST["item_id"] = $membership["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		$itemtype = "membership";
+		$cart = $SC->deleteItemtypeFromCart($itemtype);
+	
+		if(
+			$membership["itemtype"] &&
+			$membership["itemtype"] == "membership" &&
+			$item["itemtype"] &&
+			$item["itemtype"] == "tests" && 
+			$itemtype &&
+			$itemtype == "membership" &&
+			$cart &&
+			$cart["items"][0]["item_id"] != $membership["item_id"] &&
+			$cart["items"][0]["item_id"] == $item["item_id"] &&
+			count($cart["items"]) == 1
+			): ?>
+		<div class="testpassed"><p>Shop::deleteItemtypeFromCart, deleting existing itemtype from cart  - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::deleteItemtypeFromCart, deleting existing itemtype from cart - error</p></div>
+		<? endif; ?>
 
+		<?
+		$cart = $SC->emptyCart("emptyCart");
+		
+		$_POST["item_id"] = $membership["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$itemtype = "blabla";
+		$cart = $SC->deleteItemtypeFromCart($itemtype);
+		
+		if(
+			$membership["itemtype"] &&
+			$membership["itemtype"] == "membership" &&
+			$item["itemtype"] &&
+			$item["itemtype"] == "tests" && 
+			$itemtype &&
+			$itemtype == "blabla" &&
+			$cart &&
+			$cart["items"][0]["item_id"] == $membership["item_id"] &&
+			$cart["items"][1]["item_id"] == $item["item_id"] &&
+			count($cart["items"]) == 2
+			): ?>
+		<div class="testpassed"><p>Shop::deleteItemtypeFromCart, deleting non-existing itemtype from cart - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::deleteItemtypeFromCart, deleting non-existing itemtype from cart - error</p></div>
+		<? endif; ?>
+		
+		
+		<?
+		$cart = $SC->emptyCart("emptyCart");
+		
+		$_POST["item_id"] = $membership["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		$cart = $SC->addToCart(array("addToCart"));
+		unset($_POST);
+		
+		
+		$itemtype = "post";
+		$cart = $SC->deleteItemtypeFromCart($itemtype);
+		
+		if(
+			$membership["itemtype"] &&
+			$membership["itemtype"] == "membership" &&
+			$item["itemtype"] &&
+			$item["itemtype"] == "tests" && 
+			$itemtype &&
+			$itemtype == "post" &&
+			$cart &&
+			$cart["items"][0]["item_id"] == $membership["item_id"] &&
+			$cart["items"][1]["item_id"] == $item["item_id"] &&
+			count($cart["items"]) == 2
+			): ?>
+		<div class="testpassed"><p>Shop::deleteItemtypeFromCart, deleting existing itemtype from cart that is not in the cart - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::deleteItemtypeFromCart, deleting existing itemtype from cart that is not in the cart - error</p></div>
+		<? endif; ?>
+		
+	</div>
+	
 </div>
 
 <?
-	// CLEAN UP
-	$model->delete(array("membership/delete/".$item_with_price["item_id"]));
-	$model->delete(array("membership/delete/".$item_without_price["item_id"]));
+	// // CLEAN UP
+	// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
+	// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
 ?>

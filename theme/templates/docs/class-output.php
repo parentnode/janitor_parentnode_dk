@@ -21,7 +21,7 @@
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Void</span> = 
 								Output::screen(
-									<span class="type">Array|mixed</span> <span class="var">$object</span> 
+									<span class="type">Mixed</span> <span class="var">$object</span> 
 									[, <span class="type">Array</span> <span class="var">$_options</span> ]
 								);
 							</dd>
@@ -39,7 +39,7 @@
 							<dt><span class="var">$object</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">Array|mixed</span> The data to be printed.
+									<span class="type">Mixed</span> The data to be printed.
 								</div>
 								<!-- optional details -->
 								<div class="details">
@@ -75,19 +75,17 @@ $output = new Output();
 $output->screen($object);</code>
 							<p>Outputs data object as json and resets messages in the message class. Output:</p>
 							<code>{
-	"cms_object":
-		{
-			"user":"elisabeth",
-			"age":27,
-			"gender":"woman"
-		},
+	"cms_object": {
+		"user":"elisabeth",
+		"age":27,
+		"gender":"woman"
+	},
 	"cms_status":"success",
-	"cms_message":
-		{
-			"message":[
-				"Hello, this is Elisabeth"
-			]
-		},
+	"cms_message": {
+		"message":[
+			"Hello, this is Elisabeth"
+		]
+	},
 	"return_to":false
 }</code>
 						</div>
@@ -99,22 +97,21 @@ $output = new Output();
 $output->screen($object, ["type" => "error", "reset_messages" => false]);</code>
 							<p>Outputs data object as json with cms_status error. Does not reset messages in the message class. Output:</p>
 							<code>{
-	"cms_object":
-		{
-			"user":"elisabeth",
-			"age":27,
-			"gender":"woman"
-		},
-		"cms_status":"error",
-		"cms_message":[
-			"Hello, this is Elisabeth"
-		]
+	"cms_object": {
+		"user":"elisabeth",
+		"age":27,
+		"gender":"woman"
+	},
+	"cms_status":"error",
+	"cms_message": [
+		"Hello, this is Elisabeth"
+	]
 }</code>
 						</div>
 					</div>
 
 					<div class="dependencies">
-						<h4>Uses</h4>
+						<h4>Dependencies</h4>
 						
 						<div class="php">
 							<!-- list php functions used by function -->
