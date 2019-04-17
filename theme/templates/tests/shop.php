@@ -240,6 +240,16 @@ $SC = new Shop();
 
 <?
 	// // CLEAN UP
-	// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
-	// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
+	$model->delete(array("membership/delete/".$item_with_price["item_id"]));
+	$model->delete(array("membership/delete/".$item_without_price["item_id"]));
+	
+	// DELETE TEST ITEMS
+	$item["item_id"] = $item_id;
+	$membership["item_id"] = $membership_id;
+	
+	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+	$query->sql($sql);
+	// delete membership
+	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
+	$query->sql($sql);
 ?>
