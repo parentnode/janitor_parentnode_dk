@@ -2,7 +2,9 @@
 // ensure correct default values are available for test
 include_once("classes/system/upgrade.class.php");
 $UpgradeClass = new Upgrade();
-
+global $model;
+global $action;
+$page = new Page();
 // $UpgradeClass->checkDefaultValues(UT_LANGUAGES);
 // // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
 // // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
@@ -408,6 +410,108 @@ $UC = new User();
 		?>
 
 	</div>
+	
+	<div class="tests">
+		<h3>User::setPassword</h3>
+		<?
+		
+		// add test user
+		// 
+		include_once("classes/users/superuser.class.php");
+		$SU = new SuperUser();
+		$test_user_name = "testuser@test.com";
+		$test_user_password = "test_password";
+		
+		$_POST["nickname"] = "testuser@test.com";
+		$_POST["user_group_id"] = 3;
+		$user = $SU->save(["save"]);
+		unset($_POST);
+	
+		$user_id = $user["item_id"];
+		$_POST["email"] = "testuser@test.com";
+		$SU->updateEmail(["updateEmail", $user["item_id"]]);
+		unset($_POST);
+		
+		$verification = $SU->getVerificationCode("email", $test_user_name);
+		$UC->confirmUsername($test_user_name, $verification);
+		// print_r($verification);
+		unset($_POST);
+		
+
+		$_POST["password"] = "test_password";
+		$SU->setPassword(["setPassword", $user_id]);
+		unset($_POST);
+		
+		
+		include_once("classes/helpers/curl.class.php");
+		$curl = new CurlRequest;
+		$params = [
+			"method" => "POST",
+			"post_fields" => "username=testuser@test.com&password=test_password&ajaxlogin=true",
+			"cookiejar" => "-"
+		];
+		$curl->init($params);
+		$url = SITE_URL."/login?login=true";
+		$login_result = $curl->exec($url);
+		$body = $login_result["body"];
+		$result = json_decode($body, true);
+		if 	(
+			$result["cms_object"] &&
+			$result["cms_object"]["csrf-token"] &&
+			$result["cms_status"] &&
+			$result["cms_status"] == "success"
+			): ?>
+			<div class="testpassed"><p>User::setPassword (Set password, user does not have password already) - correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>User::setPassword (Set password, user does not have password already) - error</p></div>
+			<? endif; 
+		// // get CSRF and Cookie after logging in
+		$csrf = $model->getCSRF($login_result);
+		$cookie = $model->getCookie($login_result);
+		
+		
+		$params = [
+			"header" => array("Cookie: ".$cookie),
+			"method" => "POST",
+			"post_fields" => "old_password=wrong_password&new_password=new_test_password&csrf-token=".$csrf
+		];
+		$curl->init($params);
+		$result = $curl->exec(SITE_URL."/janitor/admin/profile/setPassword");
+		$body = $result["body"]; 
+		$result = json_decode($body, true);
+		if (
+		
+			$result["cms_object"] &&
+			$result["cms_object"]["error"] &&
+			$result["cms_object"]["error"] == "wrong_password" &&
+			$result["cms_status"] == "error"
+			): ?>
+			<div class="testpassed"><p>User::setPassword (incorrect old password, password not set) - correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>User::setPassword (incorrect old password, password not set) - error</p></div>
+			<? endif; 
+		
+			$params = [
+				"header" => array("Cookie: ".$cookie),
+				"method" => "POST",
+				"post_fields" => "old_password=test_password&new_password=new_test_password&csrf-token=".$csrf
+			];
+			$curl->init($params);
+			$result = $curl->exec(SITE_URL."/janitor/admin/profile/setPassword");
+			$body = $result["body"]; 
+			$result = json_decode($body, true);
+		if 	(
+			$result["cms_object"] == true &&
+			$result["cms_status"] == "success"
+			): ?>
+			<div class="testpassed"><p>User::setPassword (Set password, correct old password) - correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>User::setPassword (Set password, correct old password) - error</p></div>
+			<? endif; 
+		
+		
+		?>
+	</div>
 
 </div>
 <?
@@ -415,5 +519,10 @@ $UC = new User();
 
 	// CLEAN UP
 	$model_tests->delete(array("delete", $item["item_id"]));
-//	$model->delete(array("delete", $membership_without_price["item_id"]));
+	$sql = "DELETE FROM ".SITE_DB.".user_members WHERE user_id = $user_id";
+	$query->sql($sql);
+	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
+	$query->sql($sql);
+	
+	// $model->delete(array("delete", $membership_without_price["item_id"]));
 ?>
