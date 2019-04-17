@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2019-04-04 02:31:09
+asset-builder @ 2019-04-12 12:19:07
 */
 
 /*seg_smartphone_include.js*/
@@ -4507,15 +4507,17 @@ Util.Objects["page"] = new function() {
 				this.cN.scene.resized();
 			}
 			this.offsetHeight;
-			if(this.bn_nav.is_open) {
-				u.ass(page.hN, {
-					"height":window.innerHeight + "px"
-				});
-				u.ass(page.nN, {
-					"height":(window.innerHeight - page.hN.service.offsetHeight) + "px"
-				});
-				u.e.setDragPosition(page.nN.nav, 0, 0);
-				u.e.setDragBoundaries(page.nN.nav, page.nN);
+			if(this.bn_nav) {
+				if (this.bn_nav.is_open) {
+					u.ass(page.hN, {
+						"height":window.innerHeight + "px"
+					});
+					u.ass(page.nN, {
+						"height":(window.innerHeight - page.hN.service.offsetHeight) + "px"
+					});
+					u.e.setDragPosition(page.nN.nav, 0, 0);
+					u.e.setDragBoundaries(page.nN.nav, page.nN);
+				}
 			}
 		}
 		page.fixiOSScroll = function() {
@@ -4772,13 +4774,6 @@ Util.Objects["article"] = new function() {
 		if(article.geolocation && typeof(u.injectGeolocation) == "function") {
 			u.injectGeolocation(article);
 		}
-	}
-}
-u.f.fixFieldHTML = function(field) {
-	u.bug("fixFieldHTML");
-	var label = u.qs("label", field);
-	if(label) {
-		u.ae(label, field._indicator);
 	}
 }
 u.injectGeolocation = function(node) {

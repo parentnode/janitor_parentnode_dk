@@ -63,6 +63,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-audio">Audio</a></h3>
 				<p>Audio class</p>
 			</li-->
+			<li>
+				<h3><a href="/docs/class-dom">DOM</a></h3>
+				<p>DOM for Janitor</p>
+			</li>
 			
 			<li>
 				<h3><a href="/docs/class-session">Session</a></h3>
@@ -102,7 +106,6 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 		</ul>
 		<h3>System classes</h3>
 		<ul class="library system">
-			
 			<li>
 				<h3><a href="/docs/class-page">Page</a></h3>
 				<p>Core request and response structure</p>
@@ -111,17 +114,16 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-html">HTML</a></h3>
 				<p>HTML class</p>
 			</li>
-	
+			<li>
+				<h3><a href="/docs/class-model">Model</a></h3>
+				<p>Core janitor model class</p>
+			</li>
 			<li>
 				<h3><a href="/docs/class-output">Output</a></h3>
 				<p>Output helper class</p>
 			</li>
-			
 		</ul>
-		
-		
-		
-		
+
 		<h3>User classes</h3>
 		<ul class="library user">
 			
@@ -134,25 +136,23 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<p>Plain user creation and manipulation</p>
 			</li>
 		</ul>
+
 		<h3>API</h3>
 		<ul class="library api">
 			<!--li>
 				<h3><a href="/docs/api-autoconversion">Media auto-conversion (API)</a></h3>
 				<p>Media scaling and format conversion (Image, Video, Audio)</p>
 			</li-->
-			<li>
-				<h3><a href="/docs/class-model">Model</a></h3>
-				<p>Core janitor model class</p>
-			</li>
-			<li>
-				<h3><a href="/docs/class-dom">DOM</a></h3>
-				<p>DOM for Janitor</p>
-			</li>
+		</ul>
+
+		<h3>Standalone functions</h3>
+		<ul class="library functions">
 			<li>
 				<h3><a href="/docs/functions">Global functions</a></h3>
 				<p>General purpose functions, globally available</p>
 			</li>
 		</ul>
+
 	</div>
 
 </div>
