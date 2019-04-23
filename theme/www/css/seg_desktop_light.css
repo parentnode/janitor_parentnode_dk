@@ -1,51 +1,55 @@
 /*
-asset-builder @ 2019-04-12 12:19:08
+asset-builder @ 2019-04-23 22:41:35
 */
 
 /*seg_desktop_light_include.css*/
 
 /*seg_desktop_light.css*/
+/*
+MIT license, 2019 parentNode.dk
+asset-builder @ 2019-04-18 08:54:59
+*/
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-regular-webfont.eot');
-	src: url('fonts/open_sans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('fonts/open_sans/opensans-regular-webfont.woff2') format('woff2'),
-		 url('fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
-		 url('fonts/open_sans/opensans-regular-webfont.ttf') format('truetype'),
-		 url('fonts/open_sans/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.eot');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.woff2') format('woff2'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.woff') format('woff'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.ttf') format('truetype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-bold-webfont.eot');
-	src: url('fonts/open_sans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('fonts/open_sans/opensans-bold-webfont.woff2') format('woff2'),
-		 url('fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
-		 url('fonts/open_sans/opensans-bold-webfont.ttf') format('truetype'),
-		 url('fonts/open_sans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.eot');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.woff2') format('woff2'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.woff') format('woff'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.ttf') format('truetype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-bold-webfont.svg#open_sansbold') format('svg');
 	font-weight: bold;
 	font-style: normal;
 }
 @font-face {
 	font-family: 'OpenSans';
-	src: url('fonts/open_sans/opensans-italic-webfont.eot');
-	src: url('fonts/open_sans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('fonts/open_sans/opensans-italic-webfont.woff2') format('woff2'),
-		 url('fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
-		 url('fonts/open_sans/opensans-italic-webfont.ttf') format('truetype'),
-		 url('fonts/open_sans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.eot');
+	src: url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.woff2') format('woff2'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.woff') format('woff'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.ttf') format('truetype'),
+		 url('../assets/parentnode-skin-default/css/fonts/open_sans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
 	font-weight: normal;
 	font-style: italic;
 }
 @font-face {
 	font-family: 'PT Serif';
-	src: url('fonts/pt_serif/pt_serif-regular-webfont.eot');
-	src: url('fonts/pt_serif/pt_serif-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('fonts/pt_serif/pt_serif-regular-webfont.woff2') format('woff2'),
-		 url('fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
-		 url('fonts/pt_serif/pt_serif-regular-webfont.ttf') format('truetype'),
-		 url('fonts/pt_serif/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
+	src: url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.eot');
+	src: url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.woff2') format('woff2'),
+		 url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.woff') format('woff'),
+		 url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.ttf') format('truetype'),
+		 url('../assets/parentnode-skin-default/css/fonts/pt_serif/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -332,18 +336,18 @@ div.field.focus div.hint {display: block;}
 }
 #content .scene .usedby ul {padding-bottom: 0;}
 #content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
-#content .scene .usedby ul li.metro {background-image: url(../img/logos/metro.png); background-size: 70px auto;}
-#content .scene .usedby ul li.soulland {background-image: url(../img/logos/soulland.png); background-size: 70px auto;}
-#content .scene .usedby ul li.cphpix {background-image: url(../img/logos/cphpix.png);}
-#content .scene .usedby ul li.tuborg {background-image: url(../img/logos/tuborg.png);}
-#content .scene .usedby ul li.distortion {background-image: url(../img/logos/distortion.png);}
-#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../img/logos/landskabsarkitekter.png);}
-#content .scene .usedby ul li.urbangreen {background-image: url(../img/logos/urbangreen.png);}
-#content .scene .usedby ul li.oeo {background-image: url(../img/logos/oeo.png);}
-#content .scene .usedby ul li.torvehallerne {background-image: url(../img/logos/torvehallerne.png);}
-#content .scene .usedby ul li.peoplegroup {background-image: url(../img/logos/peoplegroup.png);}
-#content .scene .usedby ul li.lsb {background-image: url(../img/logos/lsb.png);}
-#content .scene .usedby ul li.punkt1 {background-image: url(../img/logos/punkt1.png);}
+#content .scene .usedby ul li.metro {background-image: url(../assets/parentnode-skin-default/img/logos/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(../assets/parentnode-skin-default/img/logos/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(../assets/parentnode-skin-default/img/logos/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(../assets/parentnode-skin-default/img/logos/tuborg.png);}
+#content .scene .usedby ul li.distortion {background-image: url(../assets/parentnode-skin-default/img/logos/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(../assets/parentnode-skin-default/img/logos/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(../assets/parentnode-skin-default/img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(../assets/parentnode-skin-default/img/logos/oeo.png);}
+#content .scene .usedby ul li.torvehallerne {background-image: url(../assets/parentnode-skin-default/img/logos/torvehallerne.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(../assets/parentnode-skin-default/img/logos/peoplegroup.png);}
+#content .scene .usedby ul li.lsb {background-image: url(../assets/parentnode-skin-default/img/logos/lsb.png);}
+#content .scene .usedby ul li.punkt1 {background-image: url(../assets/parentnode-skin-default/img/logos/punkt1.png);}
 
 
 /*s-documentation.css*/
@@ -358,7 +362,7 @@ div.field.focus div.hint {display: block;}
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {font-size: 13px; color: #999999; padding: 0;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(../img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function:hover {background: #ededed;}
