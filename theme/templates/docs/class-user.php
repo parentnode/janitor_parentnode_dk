@@ -110,7 +110,7 @@
 					<div class="parameters">
 						<h4>Parameters</h4>
 
-						<<dl class="parameters">
+						<dl class="parameters">
 							<dt><span class="var">$action</span></dt>
 							<dd>
 								<div class="summary">

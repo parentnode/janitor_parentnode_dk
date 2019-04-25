@@ -50,7 +50,7 @@
 										<dt><span class="value">$action[0]</span></dt>
 										<dd>"cancel"|arbritary parameter</dd>
 										<dt><span class="value">$action[1]</span></dt>
-										<dd>user_id of user to delete.</dd>
+										<dd>user_id of user to delete</dd>
 									</dl>
 								</div>
 							</dd>
