@@ -20,7 +20,6 @@ $items = $IC->paginate(array(
 	),
 	"sindex" => $sindex
 ));
-debug([$items]);
 
 ?>
 
