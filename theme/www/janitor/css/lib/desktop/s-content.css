@@ -46,12 +46,3 @@ body.tests #navigation .test a,
 body.wish #navigation .wish a,
 body.wishlist #navigation .wishlist a,
 body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
-
-
-
-/* PAGINATION */
-#content div.pagination {min-height: 28px;}
-#content div.pagination ul {text-align:center; margin-top: 22px;}
-#content div.pagination ul li a {padding: 4px 12px 6px; font-size: 1rem; line-height: 1.2em; background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px; text-decoration: none;}
-#content div.pagination ul li {padding: 0 10px 0 0}
-#content div.pagination ul li a.disabled {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
