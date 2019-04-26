@@ -54,8 +54,18 @@ if(is_array($action) && count($action)) {
 	}
 	// enable forwarding to Tests Class on all posts
 	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) >= 1) {
+		
+	// LIST/EDIT/NEW ITEM
+		if(preg_match("/^(list|edit|new)$/", $action[0])) {
 
-		if(count($action) == 1) {
+			$page->page(array(
+				"type" => "janitor",
+				"templates" => "janitor/tests/".$action[0].".php"
+			));
+			exit();
+		}
+
+		else if(count($action) == 1) {
 
 			# /tests/#sindex#
 			# Tests should use Janitor interface to validate CSS and JS in output functions like HTML
