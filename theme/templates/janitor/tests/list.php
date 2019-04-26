@@ -53,7 +53,7 @@ debug([$items]);
 				<? else: ?>
 				<li class="previous"><a class="disabled">Previous</a></li>
 				<? endif; ?>
-				<li><?= $items["total"] / $limit?></li>
+				<li><?= ceil($items["total"] / $limit) ?> pages</li>
 				<? if($items["next"]): ?>
 					<li class="next"><a href="/janitor/tests/list/<?= $items["next"][0]["sindex"] ?>">Next</a></li>
 				<? else: ?>	
