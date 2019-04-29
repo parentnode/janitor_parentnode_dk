@@ -1079,14 +1079,11 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							<h4>Definition</h4>
 							<dl class="definition">
 								<dt class="name">Name</dt>
-								<dd class="name">_functionname_</dd>
-								<dt class="shorthand">Shorthand</dt>
-								<dd class="shorthand">_functionshorthand_</dd>
+								<dd class="name">Item::paginate</dd>
 								<dt class="syntax">Syntax</dt>
-								<dd class="syntax"><span class="type">_returntype_</span> = 
-									_functionname_(
-										<span class="type">String</span> <span class="var">format</span> 
-										[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+								<dd class="syntax"><span class="type">Array</span> = 
+									Item::paginate(
+										<span class="type">Array</span> <span class="var">$_options</span> 
 									);
 								</dd>
 							</dl>
@@ -1094,17 +1091,17 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 	
 						<div class="description">
 							<h4>Description</h4>
-							<p>_description_</p>
+							<p>Return array of information requried to create meaningful pagination. Items list is split into the smaller fragments arrays: range, prev and next. The function is prepared to take id as a parameter, but it is currently not implemented.</p>
 						</div>
 	
 						<div class="parameters">
 							<h4>Parameters</h4>
 	
 							<dl class="parameters">
-								<dt><span class="var">_var_</span></dt>
+								<dt><span class="var">$_options</span></dt>
 								<dd>
 									<div class="summary">
-										<span class="type">_type_</span> _summary_
+										<span class="type">Array</span> Array of options
 									</div>
 									<!-- optional details -->
 									<div class="details">
@@ -1112,15 +1109,15 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 										<h5>Options</h5>
 										<dl class="options">
 											<!-- specific options -->
-											<dt><span class="value">_value_</span></dt>
-											<dd>_description_</dd>
+											<dt><span class="value">pattern</span></dt>
+											<dd>Query syntax to perform <a href=#Item::getItems>Item::getItems</a> request.</dd>
+											<dt><span class="value">limit</span></dt>
+											<dd>Limit of items per page</dd>
+											<dt><span class="value">sindex</span></dt>
+											<dd>Sindex is used to base the range array on.</dd>
+											<dt><span class="value">direction</span></dt>
+											<dd>List the next or previous items after sindex in range array.</dd>
 										</dl>
-									</div>
-								</dd>
-								<dt><span class="var">identifier</span></dt>
-								<dd>
-									<div class="summary">
-										<span class="type">_type_</span> _summary_
 									</div>
 								</dd>
 							</dl>
@@ -1128,13 +1125,143 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 	
 						<div class="return">
 							<h4>Return values</h4>
-							<p><span class="type">_type_</span> _returnsummary_</p>
+							<p><span class="type">Array</span> Array of items</p>
 						</div>
 	
 						<div class="examples">
 							<h4>Examples</h4>
+							<div class="example">
+								<h5>Example 1</h5>
+								<code>$sindex = "test-item-aaa";
+$items = $IC->paginate(array(
+	"limit" => 2, 
+	"pattern" => array(
+		"itemtype" => "tests", 
+		"order" => "sindex ASC"
+	),
+	"sindex" => $sindex
+));</code>
+								<p>Returns fragmented items list array with 2 items per page. Range array is based on item with sindex. Order is defined by ascending sindex.</p><code>Array
+	(
+		[range_items] => Array
+			(
+				[0] => Array 
+					(
+						[id] => 420,
+						[sindex] => test-item-aaa,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13
+					)
+					
+				[1] => array
+				(
+					[id] => 421,
+					[sindex] => test-item-bbb,
+					[status] => 0,
+					[itemtype] => tests,
+					[user_id] => 
+					[created_at] => 2019-04-28 19:15:13,
+					[modified_at] => 2019-04-28 19:15:13,
+					[published_at] => 2019-04-28 19:15:13,	
+				)
+				
+			)
+			
+		["next"] => Array 
+			(
+				[0] => array
+				(
+					[id] => 422,
+					[sindex] => test-item-ccc,
+					[status] => 0,
+					[itemtype] => tests,
+					[user_id] => 
+					[created_at] => 2019-04-28 19:15:13,
+					[modified_at] => 2019-04-28 19:15:13,
+					[published_at] => 2019-04-28 19:15:13	
+				)
+				
+			)
+		["prev"] => Array
+			(
+			)
+		[first_id] => 420,
+		[last_id] => 421,
+		[first_sindex] => test-item-aaa,
+		[last_sindex] => test-item-bbb,
+		[total] => 3 
+	)</code>
+							</div>
 	
 							<div class="example">
+								<h5>Example 2</h5>
+								<code>$sindex = "test-item-bbb";
+$items = $IC->paginate(array(
+	"limit" => 2, 
+	"pattern" => array(
+		"itemtype" => "tests", 
+		"order" => "sindex ASC"
+	),
+	"sindex" => $sindex,
+	"direction" => "prev"
+));</code>
+								<p>Return fragmented items list array with ascending sindex, itemtype 'tests' and 2 items per page. Range is ending with item previous of item with sindex.</p><code>Array
+	(
+		[range_items] => Array
+			(
+				[0] => Array 
+					(
+						[id] => 420,
+						[sindex] => test-item-aaa,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13
+					)
+				
+			)
+			
+		["next"] => Array 
+			(
+				[0] => array
+				(
+					[id] => 421,
+					[sindex] => test-item-bbb,
+					[status] => 0,
+					[itemtype] => tests,
+					[user_id] => 
+					[created_at] => 2019-04-28 19:15:13,
+					[modified_at] => 2019-04-28 19:15:13,
+					[published_at] => 2019-04-28 19:15:13,	
+				)
+				[1] => array
+				(
+					[id] => 422,
+					[sindex] => test-item-ccc,
+					[status] => 0,
+					[itemtype] => tests,
+					[user_id] => 
+					[created_at] => 2019-04-28 19:15:13,
+					[modified_at] => 2019-04-28 19:15:13,
+					[published_at] => 2019-04-28 19:15:13	
+				)
+				
+			)
+		["prev"] => Array
+			(
+			)
+		[first_id] => 420,
+		[last_id] => 420,
+		[first_sindex] => test-item-aaa,
+		[last_sindex] => test-item-aaa,
+		[total] => 3 
+	)</code>
 							</div>
 						</div>
 	
@@ -1145,7 +1272,10 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 								<!-- list php functions used by function -->
 								<h5>PHP</h5>
 								<ul>
-									<li>_function_</li>
+									<li>array</li>
+									<li>count</li>
+									<li>isset</li>
+									<li>unset</li>
 								</ul>
 							</div>
 	
@@ -1153,7 +1283,11 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 								<!-- list janitor functions used by function -->
 								<h5>Janitor</h5>
 								<ul>
-									<li>_function_</li>
+									<li>Items::extendItem</li>
+									<li>Items::getIdFromSindex</li>
+									<li>Items::getItems</li>
+									<li>Items::getNext</li>
+									<li>Items::getPrev</li>
 								</ul>
 							</div>
 	
@@ -1802,7 +1936,6 @@ $tag = $IC->getTags(array("value" => "javascript"));</code>
 	
 					</div>
 			</div>
-
 
 		</div>
 	</div>

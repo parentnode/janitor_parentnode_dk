@@ -79,9 +79,7 @@ $post_model = $IC->typeObject("post");
 			debug([$items, message()->getMessages()]);
 			message()->resetMessages();
 		}
-
-		print_r($items);
-
+		
 		if("Your test condition"): ?>
 		<div class="testpassed"><p>#Class::method# - correct</p></div>
 		<? else: ?>
@@ -90,12 +88,260 @@ $post_model = $IC->typeObject("post");
 	</div>
 
 	<div class="tests">
-		<h3>#Test name#</h3>
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<h3>Items pagination</h3>
+		<?
+		$query = new Query();
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE itemtype = 'tests'";
+		$query->sql($sql);
+		
+		$model_tests = $IC->typeObject("tests");
+		
+		unset($_POST);
+		$_POST["name"] = "Test item AAA";
+		$item = $model_tests->save(array("save", "tests"));
+		$item_id_A = $item["item_id"];
+		
+		unset($_POST);
+		$_POST["name"] = "Test item BBB";
+		$item = $model_tests->save(array("save", "tests"));
+		$item_id_B = $item["item_id"];
+		
+		unset($_POST);
+		$_POST["name"] = "Test item CCC";
+		$item = $model_tests->save(array("save", "tests"));
+		$item_id_C = $item["item_id"];
+		
+	
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "tests",
+				"order" => "sindex ASC")
+		));
+		?>
+		
+		<? if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 2 &&
+			$items["range_items"][0]["id"] == $item_id_A &&
+			$items["range_items"][1]["id"] == $item_id_B &&
+			$items["range_items"][0]["itemtype"] == "tests" &&
+			$items["next"] && 
+			count($items["next"]) == 1 &&
+			$items["next"][0]["id"] == $item_id_C &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] &&
+			$items["last_sindex"] &&
+			$items["total"] == 3
+			
+			): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		$sindex = "test-item-aaa";
+		
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "tests",
+				"order" => "sindex ASC"),
+			"sindex" => $sindex
+		));
+		print_r($items);
+		?>
+		
+		<? if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 2 &&
+			$items["range_items"][0]["id"] == $item_id_A &&
+			$items["range_items"][1]["id"] == $item_id_B &&
+			$items["range_items"][0]["itemtype"] == "tests" &&
+			$items["next"] && 
+			count($items["next"]) == 1 &&
+			$items["next"][0]["id"] == $item_id_C &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] &&
+			$items["last_sindex"] &&
+			$items["total"] == 3
+			
+			): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "tests",
+				"order" => "sindex ASC"),
+			"sindex" => $sindex,
+			"direction" => "next"
+		));
+		?>
+		
+		<? if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 2 &&
+			$items["range_items"][0]["id"] == $item_id_B &&
+			$items["range_items"][1]["id"] == $item_id_C &&
+			$items["range_items"][0]["itemtype"] == "tests" &&
+			$items["prev"] && 
+			count($items["prev"]) == 1 &&
+			$items["prev"][0]["id"] == $item_id_A &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] &&
+			$items["last_sindex"] &&
+			$items["total"] == 3
+			
+			): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		$sindex = "test-item-bbb";
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "tests",
+				"order" => "sindex ASC"),
+			"sindex" => $sindex,
+			"direction" => "prev"
+		));
+		print_r($items);
+		?>
+		
+		<? if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 1 &&
+			$items["range_items"][0]["id"] == $item_id_A &&
+			$items["range_items"][0]["itemtype"] == "tests" &&
+			$items["next"] && 
+			count($items["next"]) == 2 &&
+			$items["next"][0]["id"] == $item_id_B &&
+			$items["next"][1]["id"] == $item_id_C &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] &&
+			$items["last_sindex"] &&
+			$items["total"] == 3
+			
+			): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		
+		$sindex = "test-item-3-i-should-be-third";
+		
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "post",
+				"order" => "rating DESC", 
+				"extend" => array(
+					"ratings" => true
+				)),
+			"sindex" => $sindex,
+			"direction" => "prev"
+		));
+		if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 2 &&
+			$items["range_items"][0]["total_rating"] == 26 &&
+			$items["range_items"][0]["sindex"] == "test-item-4-i-should-be-second" &&
+			$items["range_items"][0]["ratings"] &&
+			$items["range_items"][1]["total_rating"] == 25 &&
+			$items["range_items"][1]["sindex"] == "test-item-1-i-should-be-first" &&
+			$items["range_items"][0]["itemtype"] == "post" &&
+			$items["next"] && 
+			count($items["next"]) == 2 &&
+			$items["next"][0]["sindex"] == "test-item-3-i-should-be-third" &&
+			$items["next"][0]["total_rating"] == 16 &&
+			$items["next"][1]["sindex"] == "test-item-2-i-should-be-forth" &&
+			$items["next"][1]["total_rating"] = 2 &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] == "test-item-4-i-should-be-second" &&
+			$items["last_sindex"] ==  "test-item-1-i-should-be-first" &&
+			$items["total"] == 4
+			
+		): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "post",
+				"order" => "rating DESC", 
+				"extend" => array(
+					"ratings" => true
+				)),
+			"sindex" => "test-item-3-i-should-be-third",
+			"direction" => "next"
+		));
+		if(
+			$items &&
+			$items["range_items"] &&
+			count($items["range_items"]) == 1 &&
+			$items["range_items"][0]["total_rating"] == 2 &&
+			$items["range_items"][0]["sindex"] == "test-item-2-i-should-be-forth" &&
+			$items["range_items"][0]["ratings"] &&
+			$items["range_items"][0]["itemtype"] == "post" &&
+			$items["prev"] && 
+			count($items["prev"]) == 2 &&
+			$items["prev"][0]["sindex"] == "test-item-1-i-should-be-first" &&
+			$items["prev"][0]["total_rating"] == 25 &&
+			$items["prev"][1]["sindex"] == "test-item-3-i-should-be-third" &&
+			$items["prev"][1]["total_rating"] == 16 &&
+			$items["first_id"] &&
+			$items["last_id"] &&
+			$items["first_sindex"] == "test-item-2-i-should-be-forth" &&
+			$items["last_sindex"] ==  "test-item-2-i-should-be-forth" &&
+			$items["total"] == 4
+			
+		): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
+		<? endif;
+		
+		$items = $IC->paginate(array(
+			"limit" => 2, 
+			"pattern" => array(
+				"itemtype" => "membership",
+				"order" => "rating DESC", 
+				"extend" => array(
+					"ratings" => true
+				))
+		));
+		if(
+			$items &&
+			$items["range_items"] == [] &&
+			empty($items["range_items"]) &&
+			$items["total"] == 0
+		): ?>
+		<div class="testpassed"><p>Items::paginate - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Items::paginate - error</p></div>
 		<? endif; ?>
 	</div>
+
+	
 
 </div>
