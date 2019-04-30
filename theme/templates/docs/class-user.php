@@ -8,7 +8,7 @@
 		</div>
 		<div class="body">
 
-			<div class="function" id="_functionname_">
+			<div class="function" id="User::confirmUsername">
 				<div class="header">
 					<h3>User::confirmUsername</h3>
 				</div>
@@ -30,7 +30,8 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get relevant user data and check verification before activating user.</p>
+						<p>Verify and activate user (if not already verified).</p>
+						<p>Deletes verification reminder log for username.</p>
 					</div>
 
 					<div class="parameters">
@@ -55,14 +56,19 @@
 					<div class="return">
 						<h4>Return values</h4>
 						<p><span class="type">Integer</span> <span class="value">$user_id</span> if the username is succesfully confirmed. The username will be verified and the user will be activated (<span class="value">status = 1</span>).</p>
-						<p><span class="type">Array</span> with the value <span class="value">"status" => "USER_VERIFIED"</span> if the username is already verified.</p>
-						<p><span class="type">False</span> if confirmation fails (wrong user id and/or wrong verification code).</p>
+						<p><span class="type">Array</span> with the element <span class="value">"status" => "USER_VERIFIED"</span> if the username is already verified.</p>
+						<p><span class="type">False</span> if confirmation fails (wrong username and/or wrong verification code).</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example">
+						<div class="example"><code>$UC = new User();
+
+$username = "example@parentnode.dk";
+$verification_code = "7dof205k";
+
+$user_id = $UC->confirmUsername($username, $verification_code);</code>
 						</div>
 					</div>
 

@@ -48,7 +48,7 @@ cache()->reset("vatrates");
 			$test_user_id = $query->lastInsertId();
 
 			// add non-verified username (email) for test user
-			$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'login@test.com', 'email', 0, '12345678')";
+			$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'test.parentnode@gmail.com', 'email', 0, '12345678')";
 			$query->sql($sql);
 			$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id'";
 			// print ($sql); 
@@ -63,7 +63,7 @@ cache()->reset("vatrates");
 					$ref_user_id = $query->lastInsertId();
 					
 					// add non-verified username (email) for ref user
-					$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'ref@test.com', 'email', 0, '87654321')";
+					$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'test3.parentnode@gmail.com', 'email', 0, '87654321')";
 					$query->sql($sql);
 					$sql = "SELECT username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$ref_user_id'";
 					if($query->sql($sql)) {
@@ -79,7 +79,7 @@ cache()->reset("vatrates");
 		<?
 		// wrong username/password, activated	
 
-		$_POST["username"] = "i_dont_exist@test.com";
+		$_POST["username"] = "i_dont_exist@parentnode.dk";
 		$_POST["password"] = "i_dont_exist";
 		if(!$this->logIn()): ?>
 		
@@ -98,11 +98,11 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
 		$query->sql($sql);
 
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "i_dont_exist";
 		$result = $this->logIn(); 
 		
-		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (no password, not activated, not verified - should return NOT_VERIFIED) - correct</p></div>
 		<? else: ?>
@@ -118,12 +118,12 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".users SET status = 0 WHERE id = $test_user_id";
 		$query->sql($sql);
 
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "i_dont_exist";
 		$result = $this->logIn(); 
 		// print_r ($result); exit;
 		
-		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (no password, activated, not verified - should return NOT_VERIFIED) - correct</p></div>
 		<? else: ?>
@@ -142,12 +142,12 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
 		$query->sql($sql); 		
 
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "i_dont_exist";
 		$result = $this->logIn(); 
 		// print_r ($result); exit;
 		
-		if($result["status"] == "NO_PASSWORD" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result["status"] == "NO_PASSWORD" && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (no password, activated, verified - should return NO_PASSWORD) - correct</p></div>
 		<? else: ?>
@@ -166,11 +166,11 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
 		$query->sql($sql); 
 
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "i_dont_exist";
 		$result = $this->logIn(); 
 		
-		if($result == false && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result == false && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (no password, not activated, verified - should return false) - correct</p></div>
 		<? else: ?>
@@ -195,11 +195,11 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 1 WHERE user_id = $test_user_id";
 		$query->sql($sql); 
 		
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "test_password";
 		
 		$result = $this->logIn();
-		if($result == false && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result == false && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 		
 		<div class="testpassed"><p>Page::logIn (correct username/password, not activated - should return false) - correct</p></div>
 		<? else: ?>
@@ -221,12 +221,12 @@ cache()->reset("vatrates");
 		$sql = "UPDATE ".SITE_DB.".user_usernames SET verified = 0 WHERE user_id = $test_user_id";
 		$query->sql($sql); 	
 
-		$_POST["username"] = "login@test.com";
+		$_POST["username"] = "test.parentnode@gmail.com";
 		$_POST["password"] = "test_password";
 		$result = $this->logIn(); 
 		
 		
-		if($result["status"] == "NOT_VERIFIED" && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($result["status"] == "NOT_VERIFIED" && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (correct username/password, activated, not verified - should return NOT_VERIFIED) - correct</p></div>
 		<? else: ?>
@@ -252,7 +252,7 @@ cache()->reset("vatrates");
 		$curl = new CurlRequest;
 		$params = [
 			"method" => "POST",
-			"post_fields" => "username=login@test.com&password=test_password&login_forward=/login/login_test&ajaxlogin=true",
+			"post_fields" => "username=test.parentnode@gmail.com&password=test_password&login_forward=/login/login_test&ajaxlogin=true",
 			"cookiejar" => "-"
 		];
 		
@@ -263,7 +263,7 @@ cache()->reset("vatrates");
 		preg_match("/cms_status\":\"success/", $result["body"], $ajaxlogin_match);
 
 		// run test condition
-		if($ajaxlogin_match && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($ajaxlogin_match && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (correct username/password, activated, verified, ajax login - should return CSRF token) - correct</p></div>
 		<? else: ?>
@@ -286,7 +286,7 @@ cache()->reset("vatrates");
 		$curl = new CurlRequest;
 		$params = [
 			"method" => "POST",
-			"post_fields" => "username=login@test.com&password=test_password&login_forward=/login/login_test",
+			"post_fields" => "username=test.parentnode@gmail.com&password=test_password&login_forward=/login/login_test",
 			"cookiejar" => "-"
 		];
 		
@@ -304,7 +304,7 @@ cache()->reset("vatrates");
 
 
 		// run test condition
-		if($requested_user_id == $test_user_id && $ref_username == "ref@test.com" && $ref_verification_code == "87654321"): ?>
+		if($requested_user_id == $test_user_id && $ref_username == "test3.parentnode@gmail.com" && $ref_verification_code == "87654321"): ?>
 
 		<div class="testpassed"><p>Page::logIn (correct username/password, activated, verified) - correct</p></div>
 		<? else: ?>
