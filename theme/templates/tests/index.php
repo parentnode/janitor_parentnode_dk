@@ -13,6 +13,7 @@
 		<?= $HTML->link("PDF", "/janitor/tests/class.pdf", array("wrapper" => "li.pdf")) ?>
 
 		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
+		<?= $HTML->link("SuperUser", "/janitor/tests/class.superuser", array("wrapper" => "li.superuser")) ?>
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
 
 		<?= $HTML->link("Mail", "/janitor/tests/mail", array("wrapper" => "li.mail")) ?>
