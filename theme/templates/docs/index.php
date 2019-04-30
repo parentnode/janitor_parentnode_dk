@@ -86,9 +86,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<p>Audio class</p>
 			</li-->
 			<li>
-				<h3><a href="/docs/class-filesystem">FileSystem</a></h3>
-				<p>FileSystem helper class</p>
+				<h3><a href="/docs/class-dom">DOM</a></h3>
+				<p>DOM for Janitor</p>
 			</li>
+			
 			<li>
 				<h3><a href="/docs/class-session">Session</a></h3>
 				<p>Session helper class</p>
@@ -101,11 +102,79 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-zipper">Zipper</a></h3>
 				<p>Zip helper class</p>
 			</li>
+		</ul>
+		
+		<h3>Item classes</h3>
+		<ul class="library item">
+			<li>
+				<h3><a href="/docs/class-itemtype">Itemtype</a></h3>
+				<p>Creating and manipulating itemtypes</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-items">Items</a></h3>
+				<p>Querying items and item data</p>
+			</li>
+		</ul>
+		<h3>Shop classes</h3>
+		<ul class="library shop">
+			<li>
+				<h3><a href="/docs/class-shop">Shop</a></h3>
+				<p>Creating, querying and manipulating orders and cart items data.</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-supershop">SuperShop</a></h3>
+				<p>Creating, querying and manipulating orders and cart items data.</p>
+			</li>
+		</ul>
+		<h3>System classes</h3>
+		<ul class="library system">
+			<li>
+				<h3><a href="/docs/class-page">Page</a></h3>
+				<p>Core request and response structure</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-html">HTML</a></h3>
+				<p>HTML class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-model">Model</a></h3>
+				<p>Core janitor model class</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-output">Output</a></h3>
+				<p>Output helper class</p>
+			</li>
+		</ul>
+
+		<h3>User classes</h3>
+		<ul class="library user">
+			
+			<li>
+				<h3><a href="/docs/class-superuser">Superusers</a></h3>
+				<p>Getting, creating and manipulating users</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-user">Users</a></h3>
+				<p>Plain user creation and manipulation</p>
+			</li>
+		</ul>
+
+		<h3>API</h3>
+		<ul class="library api">
 			<!--li>
 				<h3><a href="/docs/api-autoconversion">Media auto-conversion (API)</a></h3>
 				<p>Media scaling and format conversion (Image, Video, Audio)</p>
 			</li-->
 		</ul>
+
+		<h3>Standalone functions</h3>
+		<ul class="library functions">
+			<li>
+				<h3><a href="/docs/functions">Global functions</a></h3>
+				<p>General purpose functions, globally available</p>
+			</li>
+		</ul>
+
 	</div>
 
 </div>

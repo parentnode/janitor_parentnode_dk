@@ -1,5 +1,6 @@
 /*
-asset-builder @ 2019-03-26 17:30:51
+MIT license, 2019 parentNode.dk
+asset-builder @ 2019-04-18 08:54:59
 */
 
 /*seg_mobile_include.css*/
@@ -197,6 +198,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard dl.info dd {padding-bottom: 10px; color: #cccccc;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
+#content .scene p.error,
+#content .scene p.errormessage {color: #df0000;}
 
 
 /*s-article.css*/

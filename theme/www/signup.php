@@ -27,7 +27,7 @@ if($action) {
 		// successful creation
 		if(isset($user["user_id"])) {
 			// redirect to leave POST state
-			header("Location: verify");
+			header("Location: /verify");
 			exit();
 		}
 
@@ -42,44 +42,9 @@ if($action) {
 
 	}
 
-
-	// signup/verify
-	else if($action[0] == "verify") {
-
-		$page->page([
-			"templates" => "signup/verify.php"
-		]);
-		exit();
-
-	}
-	// signup/skip
-	else if($action[0] == "skip") {
-
-		$page->page([
-			"templates" => "signup/verify_skip.php"
-		]);
-		exit();
-
-	}
-
-	// /signup/receipt
-	else if($action[0] == "receipt") {
-
-		$page->page(array(
-			"templates" => "signup/receipt.php"
-		));
-		exit();
-	}
-
-}
-
-
-
-// TODO: Find out what to do and where to put unsubscribe
-if($action) {
-
 	// post username, maillist_id and verification_token
-	if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
+	// signup/unsubscribe
+	else if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
 
 		// successful creation
 		if($model->unsubscribeUserFromMaillist(["unsubscribe", "unsubscribeUserFromMaillist"])) {

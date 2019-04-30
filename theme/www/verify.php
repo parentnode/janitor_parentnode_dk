@@ -38,23 +38,21 @@ if($action) {
 
 			// code is valid
 			else if($result) {
-				header("Location: /verify/confirm/receipt");
+				header("Location: /verify/receipt");
 				exit();
 			}
 
 			// code is not valid
 			else {
 				message()->addMessage("Incorrect verification code, try again!", array("type" => "error"));
-				header("Location: /signup/verify");
+				header("Location: /verify");
 				exit();
 			}
 		}
 
 
-		// /verify/confirm/email|mobile/#email|mobile#/#verification_code#
+		// verify/confirm/#email|mobile#/#verification_code#
 		else if(count($action) == 3) {
-			// session()->value("signup_type", $action[1]);
-			// session()->value("signup_username", $action[2]);
 			
 			$username = $action[1];
 			$verification_code = $action[2];
@@ -72,42 +70,51 @@ if($action) {
 
 			// code is valid
 			else if($result) {
-				header("Location: /verify/confirm/receipt");
+				header("Location: /verify/receipt");
 				exit();
 			}
 
 			// code is not valid
 			else {
 				// redirect to leave POST state
-				header("Location: /verify/confirm/error");
+				header("Location: /verify/error");
 				exit();
 			}
 		}
 
+	}
 
-		else if($action[1] == "receipt") {
+	// verify/receipt
+	else if($action[0] == "receipt") {
 
-			$page->page(array(
-				"templates" => "verify/confirmed.php"
-			));
-			exit();
-		}
-		
-		else if($action[1] == "error") {
-	
-			$page->page(array(
-				"templates" => "verify/confirmation_failed.php"
-			));
-			exit();
-		}
+		$page->page(array(
+			"templates" => "verify/confirmed.php"
+		));
+		exit();
+	}
+	// verify/error
+	else if($action[0] == "error") {
+
+		$page->page(array(
+			"templates" => "verify/confirmation_failed.php"
+		));
+		exit();
+	}
+	// verify/skip
+	else if($action[0] == "skip") {
+
+		$page->page([
+			"templates" => "verify/verify_skip.php"
+		]);
+		exit();
 	}
 
 }
 
 // fallback
-// /login
+// /verify
 $page->page(array(
-	"templates" => "pages/login.php"
+	"templates" => "verify/verify.php"
 ));
 
 ?>

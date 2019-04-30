@@ -25,18 +25,16 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => false, 
 
 u.o["testForm"] = new function() {
 	this.init = function(form) {
-		u.bug("init")
+		u.bug("init");
 		u.f.init(form, {"validation":false});
 
 		form.submitted = function() {
 			this.response = function(response) {
-				u.bug("response received")
+				u.bug("response received", response);
 				page.notify(response);
 
-				u.xInObject(response);
-
 			}
-			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
+			u.request(this, this.action, {"data":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
 
 		}
 	}	
