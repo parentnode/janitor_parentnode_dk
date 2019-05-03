@@ -151,7 +151,7 @@ $post_model = $IC->typeObject("post");
 				"order" => "sindex ASC"),
 			"sindex" => $sindex
 		));
-		print_r($items);
+	
 		?>
 		
 		<? if(
@@ -217,7 +217,7 @@ $post_model = $IC->typeObject("post");
 			"sindex" => $sindex,
 			"direction" => "prev"
 		));
-		print_r($items);
+
 		?>
 		
 		<? if(
