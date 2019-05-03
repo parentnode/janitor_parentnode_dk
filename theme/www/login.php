@@ -45,7 +45,7 @@ if(is_array($action) && count($action)) {
 		// could not create reset request
 		else {
 			message()->addMessage("Sorry, you cannot reset the password for the specified user!", array("type" => "error"));
-			header("Location: glemt");
+			header("Location: forgot");
 			exit();
 		}
 	}
