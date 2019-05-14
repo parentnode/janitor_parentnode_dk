@@ -18,12 +18,7 @@ body {}
 #content ul.actions a.button.primary,
 #content .scene .pagination .next,
 #content .scene .pagination .previous {background-color: #04859d;}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover,
-#content .scene .pagination .next:hover,
-#content .scene .pagination .previous:hover {background-color: #ff7c00;}
 #content .scene div.categories ul.tags li.selected a {color: #04859d;}
-#content .scene ul.tags a:hover {color: #04859d;}
 
 #content .scene h3,
 #content .scene h4,
