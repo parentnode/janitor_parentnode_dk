@@ -3,7 +3,7 @@
 
 @import url(../../assets/parentnode-skin-default/css/lib/smartphone/s-form.css);
 @import url(../../assets/parentnode-skin-default/css/lib/smartphone/s-used_by.css);
-@import url(../../assets/parentnode-skin-default/css/lib/desktop/s-documentation.css);
+@import url(../../assets/parentnode-skin-default/css/lib/smartphone/s-documentation.css);
 
 /* Project */
 @import url(/css/lib/smartphone/s-colorscheme.css);
