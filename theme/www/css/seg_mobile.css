@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-05-14 11:29:32
+asset-builder @ 2019-05-23 02:04:27
 */
 
 /*seg_mobile_include.css*/
@@ -7,7 +7,7 @@ asset-builder @ 2019-05-14 11:29:32
 /*seg_mobile.css*/
 /*
 MIT license, 2019 parentNode.dk
-asset-builder @ 2019-05-13 22:10:14
+asset-builder @ 2019-05-14 16:31:41
 */
 @font-face {
 	font-family: 'OpenSans';
@@ -213,6 +213,11 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content fieldset {border: none; display: block;}
 #content .field {padding: 0 8px 10px; position: relative; font-size: 0;}
 #content label {display: block; font-size: 13px;}
+input,
+textarea {-webkit-appearance: none; border-radius: 0;}
+.boolean input,
+.checkbox input {-webkit-appearance: checkbox;}
+.radiobuttons input {-webkit-appearance: radio;}
 #content .field input,
 #content .field select,
 #content .field textarea {color: #333333; background: #ffffff; border: 1px solid #dcdcdc; margin: 0; outline: none; position: relative; z-index: 10;}
