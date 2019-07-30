@@ -165,6 +165,9 @@ class TypeTests extends Itemtype {
 
 	// CUSTOM SUBSCRIBE/UNSUBSCRIBE
 
+	function ordered($order_item, $order){
+		session()->value("test_item_ordered_callback", true);
+	}
 
 	function subscribed($subscription) {
 		
