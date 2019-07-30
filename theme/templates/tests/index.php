@@ -16,7 +16,9 @@
 		<?= $HTML->link("PDF", "/janitor/tests/class-pdf", array("wrapper" => "li.pdf")) ?>
 		<?= $HTML->link("Output", "/janitor/tests/class-output", array("wrapper" => "li.output")) ?>		
 		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
-		<?= $HTML->link("SuperUser", "/janitor/tests/class.superuser", array("wrapper" => "li.superuser")) ?>
+		<?= $HTML->link("SuperUser", "/janitor/tests/class-superuser", array("wrapper" => "li.superuser")) ?>
+		<?= $HTML->link("Subscription", "/janitor/tests/class-subscription", array("wrapper" => "li.subscription")) ?>
+		<?= $HTML->link("SuperSubscription", "/janitor/tests/class-supersubscription", array("wrapper" => "li.supersubscription")) ?>
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
 		<?= $HTML->link("SuperShop", "/janitor/tests/supershop", array("wrapper" => "li.supershop")) ?>
 

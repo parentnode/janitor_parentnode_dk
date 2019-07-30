@@ -37,7 +37,7 @@ $post_model = $IC->typeObject("post");
 
 			
 			unset($_POST);
-			$_POST["name"] = "Test item 2 -  I should be forth";
+			$_POST["name"] = "Test item 2 -  I should be fourth";
 			$item = $post_model->save(array("save", "post"));
 			$item_id = $item["id"];
 
