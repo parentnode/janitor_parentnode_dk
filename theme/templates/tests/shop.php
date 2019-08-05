@@ -37,6 +37,150 @@ $SSC = new SuperShop();
 	</ul>
 
 	<div class="tests">
+		<h3>Shop::addCart</h3>
+
+
+		<? 	// addCart
+			// ARRANGE
+			$cart = false;
+
+		?>
+		<? 	// ACT 
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart 
+			): ?>
+		<div class="testpassed"><p>Shop::addCart – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addCart – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		?>
+
+		<? 	// addCart – internal cart
+			// ARRANGE
+			$cart = false;
+
+		?>
+		<? 	// ACT 
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart 
+			): ?>
+		<div class="testpassed"><p>Shop::addCart – internal cart – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addCart – internal cart – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		?>
+
+		<? 	// addCart – overwrite default values
+			// ARRANGE
+			$cart = false;
+
+		?>
+		<? 	// ACT 
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart 
+			): ?>
+		<div class="testpassed"><p>Shop::addCart – overwrite default values – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addCart – overwrite default values – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		?>
+
+	</div>
+
+	<div class="tests">
+		<h3>Shop::addToNewInternalCart</h3>
+
+		<? 	// addToNewInternalCart
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
+		
+		// add price to test item
+		$_POST["item_price"] = 100;
+		$_POST["item_price_currency"] = "DKK";
+		$_POST["item_price_vatrate"] = 1;
+		$_POST["item_price_type"] = "default";
+		$_POST["item_price_quantity"] = null;
+		$model_tests->addPrice(["addPrice", $item_id]);
+		unset($_POST);
+		
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id);
+		$cart_id = $cart["id"];
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart &&
+			$cart["items"][0]["item_id"] == $item_id &&
+			$cart["user_id"] == session()->value("user_id")
+			): ?>
+		<div class="testpassed"><p>Shop::addToNewInternalCart – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToNewInternalCart – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		// delete cart
+		$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
+		$query->sql($sql);
+
+		?>
+
+		<? 	// addToNewInternalCart – item has no price (should return false)
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
+
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id);
+		$cart_id = $cart["id"];	
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart === false
+			): ?>
+		<div class="testpassed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		?>
+
+	</div>
+
+
+	<div class="tests">
 		<h3>Shop::getCart()</h3>
 		
 		<? // SETUP
@@ -73,6 +217,7 @@ $SSC = new SuperShop();
 
 	</div>
 	
+
 	<div class="tests">
 		
 		<h3>Shop::addToCart()</h3>

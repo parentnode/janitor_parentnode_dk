@@ -426,5 +426,82 @@ $model_tests = $IC->typeObject("tests");
 
 	</div>
 
+	<div class="tests">
+		<h3>switchMembership</h3>
+
+
+		<? 	// switchMembership
+			// ARRANGE
+
+		// create test membership item
+		$model_membership = $IC->TypeObject("membership");
+		$_POST["name"] = "Membership Test item 1";
+		$membership_item_1 = $model_membership->save(array("save"));
+		$membership_item_1_id = $membership_item_1["id"];
+		unset($_POST);
+		
+		// create another test membership item
+		$_POST["name"] = "Membership Test item 2";
+		$membership_item_2 = $model_membership->save(array("save"));
+		$membership_item_2_id = $membership_item_2["id"];
+		unset($_POST);
+
+		// add subscription method to second membership item
+		$_POST["item_subscription_method"] = 2;
+		$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+		unset($_POST);
+
+		// add price to second membership item
+		$_POST["item_price"] = 100;
+		$_POST["item_price_currency"] = "DKK";
+		$_POST["item_price_vatrate"] = 999;
+		$_POST["item_price_type"] = "default";
+		$membership_item_2_price = $model_tests->addPrice(array("addPrice", $membership_item_2_id));
+
+		$added_membership = $MC->addMembership($membership_item_1_id);
+		$added_membership_id = $added_membership["id"];
+
+		?>
+		<? 	// ACT 
+		
+		$order = $MC->switchMembership($membership_item_2_id);
+		$switched_membership = $MC->getMembership();
+		?>
+		<? 	// ASSERT 
+		if(
+			$order && 
+			$order["items"][0]["item_id"] == $membership_item_2_id
+			): ?>
+		<div class="testpassed"><p>Member::switchMembership – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Member::switchMembership – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+		// delete membership
+		$added_membership_id = $added_membership["id"];
+		$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
+		$query->sql($sql);
+
+		// delete membership item 1
+		$sql = "DELETE FROM ".SITE_DB.".item_membership WHERE item_id = $membership_item_1_id";
+		$query->sql($sql);
+
+		// delete membership item 2
+		$sql = "DELETE FROM ".SITE_DB.".item_membership WHERE item_id = $membership_item_2_id";
+		$query->sql($sql);
+
+		// delete membership item 2 subscription method
+		$sql = "DELETE FROM ".SITE_DB.".items_subscription_method WHERE item_id = $membership_item_2_id";
+		$query->sql($sql);
+
+		// delete order
+		$order_no = $order["order_no"];
+		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
+		$query->sql($sql);
+		?>
+
+	</div>
+
+
 	
 </div>
