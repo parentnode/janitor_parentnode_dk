@@ -193,6 +193,90 @@ $SC = new SuperShop();
 	</div>
 
 	<div class="tests">
+		<h3>SuperShop::addToNewInternalCart</h3>
+
+		<? 	// addToNewInternalCart
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
+		
+		// add price to test item
+		$_POST["item_price"] = 100;
+		$_POST["item_price_currency"] = "DKK";
+		$_POST["item_price_vatrate"] = 1;
+		$_POST["item_price_type"] = "default";
+		$_POST["item_price_quantity"] = null;
+		$model_tests->addPrice(["addPrice", $item_id]);
+		unset($_POST);
+
+		$user_id = session()->value("user_id");
+		
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id, ["user_id" => $user_id]);
+		$cart_id = $cart["id"];
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart &&
+			$cart["items"][0]["item_id"] == $item_id &&
+			$cart["user_id"] == session()->value("user_id")
+			): ?>
+		<div class="testpassed"><p>SuperShop::addToNewInternalCart – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>SuperShop::addToNewInternalCart – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		// delete cart
+		$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
+		$query->sql($sql);
+
+		?>
+
+		<? 	// addToNewInternalCart – item has no price (should return false)
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
+
+		$user_id = session()->value("user_id");
+
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id, ["user_id" => $user_id]);
+		$cart_id = $cart["id"];	
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart === false
+			): ?>
+		<div class="testpassed"><p>SuperShop::addToNewInternalCart – item has no price (should return false, no cart created) – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>SuperShop::addToNewInternalCart – item has no price (should return false, no cart created) – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		?>
+
+	</div>
+
+	<div class="tests">
 		<h3>SuperShop::newOrderFromCart()</h3>
 
 		<?

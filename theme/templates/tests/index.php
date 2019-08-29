@@ -21,6 +21,7 @@
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
 		<?= $HTML->link("Subscription", "/janitor/tests/class-subscription", array("wrapper" => "li.subscription")) ?>
 		<?= $HTML->link("SuperUser", "/janitor/tests/class-superuser", array("wrapper" => "li.superuser")) ?>
+		<?= $HTML->link("SuperMember", "/janitor/tests/class-supermember", array("wrapper" => "li.supermember")) ?>
 		<?= $HTML->link("SuperShop", "/janitor/tests/supershop", array("wrapper" => "li.supershop")) ?>
 		<?= $HTML->link("SuperSubscription", "/janitor/tests/class-supersubscription", array("wrapper" => "li.supersubscription")) ?>
 

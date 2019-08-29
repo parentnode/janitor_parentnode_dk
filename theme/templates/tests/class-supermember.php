@@ -1,18 +1,21 @@
 <div class="scene i:scene tests">
-	<h1>Member</h1>	
-	<h2>Testing Member class</h2>
+	<h1>SuperMember</h1>	
+	<h2>Testing SuperMember class</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
-
 	<div class="tests">
-		<h3>addMembership</h3>		
+		<h3>addMembership</h3>	
+
 		<? function addMembership_noSubscription_returnMembership() {
 
 			// addMembership – no subscription
 	
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 
@@ -24,13 +27,14 @@
 			unset($_POST);
 	
 			// ACT 
-			$added_membership = $MC->addMembership($membership_item["id"]);
+			$added_membership = $MC->addMembership($membership_item["id"], ["user_id" => session()->value("user_id")]);
 			
 			// ASSERT 
 			if(
 				$added_membership &&
 				$added_membership["id"] &&
-				$added_membership["user_id"] == session()->value("user_id")
+				$added_membership["user_id"] == session()->value("user_id") &&
+				$added_membership["subscription_id"] === NULL
 				): ?>
 			<div class="testpassed"><p>Member::addMembership – no subscription – correct</p></div>
 			<? else: ?>
@@ -55,17 +59,30 @@
 			// addMembership – with subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			include_once("classes/shop/supersubscription.class.php");
+			include_once("classes/shop/supershop.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
-			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
+			$SC = new SuperShop();
+			
+			$user_id = session()->value("user_id");
 
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
 			$_POST["name"] = "Membership Test item";
 			$membership_item = $model_membership->save(array("save"));
 			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
 			// update test item subscription method
@@ -75,22 +92,34 @@
 	
 			// create test order
 			$order_no = $SC->getNewOrderNumber();
-			$sql = "SELECT id FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
+			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			if($query->sql($sql)) {
-				$order_id = $query->result(0, "id");
+				$order = $query->result(0);
+				$order_id = $order["id"];
+
+				// add user_id to order
+				$sql = "UPDATE ".SITE_DB.".shop_orders SET user_id = '$user_id' WHERE id = '$order_id'";
+				$query->sql($sql);
 			}
+
+			// create order item for test order
+			$sql = "INSERT INTO ".SITE_DB.".shop_order_items (order_id, item_id, name, quantity, unit_price, unit_vat, total_price, total_vat) VALUES ($order_id, $membership_item_id, 'test order item', 1, 100, 0, 100, 0)";
+			$query->sql($sql);
+
+
 	
-			$subscription = $SubscriptionClass->addSubscription($membership_item_id, ["order_id" => $order_id]);
+			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id, "order_id" => $order_id]);
 			$subscription_id = $subscription["id"];
+
 	
 			// ACT 
-			$added_membership = $MC->addMembership($membership_item["id"], ["subscription_id" => $subscription_id]);
+			$added_membership = $MC->addMembership($membership_item["id"], ["user_id" => $user_id, "subscription_id" => $subscription_id]);
 			
 			// ASSERT 
 			if(
 				$added_membership &&
 				$added_membership["id"] &&
-				$added_membership["user_id"] == session()->value("user_id") &&
+				$added_membership["user_id"] == $user_id &&
 				$added_membership["subscription_id"] == $subscription_id &&
 				$added_membership["item_id"] == $membership_item["id"] &&
 				$added_membership["order_id"] == $order_id
@@ -129,10 +158,12 @@
 			// addMembership – membership already exists (should return false)
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
-			$SubscriptionClass = new Subscription();
 
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -170,20 +201,21 @@
 		?>
 	</div>
 
-
 	<div class="tests">
-		<h3>getMembership</h3>		
+		<h3>getMemberships</h3>		
 		<? 
-		function getMembership_membershipExists_returnMembership() {
+		function getMemberships_byMemberIdMembershipExists_returnMembership() {
 
-			// getMembership
+			// getMemberships by member_id, membership exists
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -191,11 +223,13 @@
 			$membership_item = $model_membership->save(array("save"));
 			$membership_item_id = $membership_item["id"];
 			unset($_POST);
+
+			$user_id = session()->value("user_id");
 	
-			$added_membership = $MC->addMembership($membership_item_id);
+			$added_membership = $MC->addMembership($membership_item_id, ["user_id" => $user_id]);
 			
 			// ACT 
-			$fetched_membership = $MC->getMembership();
+			$fetched_membership = $MC->getMemberships(["member_id" => $added_membership["id"]]);
 			
 			// ASSERT 
 			if(
@@ -204,9 +238,9 @@
 				$fetched_membership["user_id"] == session()->value("user_id") &&
 				$fetched_membership["id"] == $added_membership["id"]
 				): ?>
-			<div class="testpassed"><p>Member::getMembership – correct</p></div>
+			<div class="testpassed"><p>SuperMember::getMemberships – by member_id, membership exists – correct</p></div>
 			<? else: ?>
-			<div class="testfailed"><p>Member::getMembership – error</p></div>
+			<div class="testfailed"><p>SuperMember::getMemberships – by member_id, membership exists – error</p></div>
 			<? endif;
 			
 			// CLEAN UP
@@ -220,36 +254,41 @@
 			$query->sql($sql);		
 		
 		}	
-		getMembership_membershipExists_returnMembership(); 
+		getMemberships_byMemberIdMembershipExists_returnMembership(); 
 		?>	
 		<? 
-		function getMembership_noMembershipExists_returnFalse() {
-			// getMembership – no membership exists
+		function getMemberships_byMemberIdNoMembershipExists_returnFalse() {
+			// getMembership – by wrong member id, no such membership exists
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// ACT 
-			$fetched_membership = $MC->getMembership();
+			$fetched_membership = $MC->getMembership(["member_id" => 9999]);
 			
 			// ASSERT 
 			if(
 				$fetched_membership === false
 				): ?>
-			<div class="testpassed"><p>Member::getMembership – no membership exists (should return false) – correct</p></div>
+			<div class="testpassed"><p>Member::getMembership – by wrong member id, no such membership exists (should return false) – correct</p></div>
 			<? else: ?>
-			<div class="testfailed"><p>Member::getMembership – no membership exists (should return false) – error</p></div>
+			<div class="testfailed"><p>Member::getMembership – by wrong member id, no such membership exists (should return false) – error</p></div>
 			<? endif; 
 			
 			// CLEAN UP 
 		}
-		getMembership_noMembershipExists_returnFalse();
+		getMemberships_byMemberIdNoMembershipExists_returnFalse();
 		?>				
 	</div>
+
+
+
 
 
 	<div class="tests">
@@ -260,11 +299,13 @@
 			// updateMembership – no changes
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -301,18 +342,20 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);	
 		}
-		updateMembership_noChanges_returnUpdatedMembership();
+		// updateMembership_noChanges_returnUpdatedMembership();
 		?>
 		<? 	
 		function updateMembership_changeSubscriptionId_returnUpdatedMembership() {
 			// updateMembership – change subscription_id
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -333,7 +376,7 @@
 				$order_id = $query->result(0, "id");
 			}
 	
-			$subscription = $SubscriptionClass->addSubscription($membership_item_id, ["order_id" => $order_id]);
+			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["order_id" => $order_id]);
 			$subscription_id = $subscription["id"];
 	
 			$added_membership = $MC->addMembership($membership_item["id"]);
@@ -374,18 +417,20 @@
 			$query->sql($sql);
 
 		}
-		updateMembership_changeSubscriptionId_returnUpdatedMembership();
+		// updateMembership_changeSubscriptionId_returnUpdatedMembership();
 		?>
 		<? 	
 		function updateMembership_toNoSubscriptionId_returnUpdatedMembershipSubscriptionIdNull() {
 			// updateMembership – change subscription_id
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -466,7 +511,7 @@
 			
 
 		}
-		updateMembership_toNoSubscriptionId_returnUpdatedMembershipSubscriptionIdNull();
+		// updateMembership_toNoSubscriptionId_returnUpdatedMembershipSubscriptionIdNull();
 		?>
 		<? 	
 		function updateMembership_noMembershipExists_returnFalse() {
@@ -474,11 +519,13 @@
 			// updateMembership – no membership exists
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// ACT 
 			$updated_membership = $MC->updateMembership();
@@ -496,7 +543,7 @@
 			
 			// CLEAN UP
 		}
-		updateMembership_noMembershipExists_returnFalse();
+		// updateMembership_noMembershipExists_returnFalse();
 		?>
 	</div>
 
@@ -509,11 +556,13 @@
 			// cancelMembership
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -550,18 +599,20 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		cancelMembership_membershipExists_membershipIsCancelled();
+		// cancelMembership_membershipExists_membershipIsCancelled();
 		?>
 		<? 	
 		function cancelMembership_membershipInvalid_returnFalse() {
 			// cancelMembership – invalid membership (should return false)
 				
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// ACT 
 				$cancellation_success = $MC->cancelMembership(9999);
@@ -580,7 +631,7 @@
 
 
 		}
-		cancelMembership_membershipInvalid_returnFalse();
+		// cancelMembership_membershipInvalid_returnFalse();
 		?>
 	</div>
 
@@ -593,11 +644,13 @@
 			// switchMembership – from no subscription to no subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -658,7 +711,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			$query->sql($sql);
 		}
-		switchMembership_fromNoSubscriptionToNoSubscription_returnOrderUpdateMembership();
+		// switchMembership_fromNoSubscriptionToNoSubscription_returnOrderUpdateMembership();
 		?>
 		<? 	
 		function switchMembership_fromNoSubscriptionToSubscription_returnOrderAddSubscriptionUpdateMembership() {
@@ -666,11 +719,13 @@
 			// switchMembership – from no subscription to subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -743,7 +798,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			$query->sql($sql);
 		}
-		switchMembership_fromNoSubscriptionToSubscription_returnOrderAddSubscriptionUpdateMembership();
+		// switchMembership_fromNoSubscriptionToSubscription_returnOrderAddSubscriptionUpdateMembership();
 		?>
 		<? 	
 		function switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership() {
@@ -751,11 +806,13 @@
 			// switchMembership – from no subscription to subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -855,7 +912,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			$query->sql($sql);
 		}
-		switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
+		// switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
 		?>
 		<? 	
 		function switchMembership_fromSubscriptionToNoSubscription_returnOrderRemoveSubscriptionUpdateMembership() {
@@ -863,11 +920,13 @@
 			// switchMembership – from subscription to no subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -921,7 +980,7 @@
 				$switched_membership &&
 				$switched_membership["id"] == $added_membership_id &&
 				$added_membership_subscription_id &&
-				!$SubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]) &&
+				!$SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]) &&
 				!$switched_membership["subscription_id"] &&
 				$switched_membership_order["items"][0]["item_id"] == $membership_item_2_id &&
 				$switched_membership["order_id"] === false
@@ -959,18 +1018,20 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$switched_membership_order_no'";
 			$query->sql($sql);
 		}
-		switchMembership_fromSubscriptionToNoSubscription_returnOrderRemoveSubscriptionUpdateMembership();
+		// switchMembership_fromSubscriptionToNoSubscription_returnOrderRemoveSubscriptionUpdateMembership();
 		?>
 		<? 
 		function switchMembership_noMembershipExists_returnFalse() {
 			// switchMembership – no membership exists
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -997,7 +1058,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		switchMembership_noMembershipExists_returnFalse();
+		// switchMembership_noMembershipExists_returnFalse();
 		?>
 	</div>
 
@@ -1010,11 +1071,13 @@
 			// upgradeMembership – to more expensive subscription
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create first test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -1115,7 +1178,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 		}
-		upgradeMembership_toMoreExpensiveSubscription_returnTrueUpgradeMembership();
+		// upgradeMembership_toMoreExpensiveSubscription_returnTrueUpgradeMembership();
 		?>
 		<? 	
 		function upgradeMembership_toCheaperSubscription_returnFalse() {
@@ -1123,11 +1186,13 @@
 			// upgradeMembership – to cheaper subscription (should return false)
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create first test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -1217,7 +1282,7 @@
 			$query->sql($sql);
 	
 		}
-		upgradeMembership_toCheaperSubscription_returnFalse();
+		// upgradeMembership_toCheaperSubscription_returnFalse();
 		?>
 		<? 	
 		function upgradeMembership_existingMembershipHasNoSubscription_returnFalse() {
@@ -1225,11 +1290,13 @@
 			// upgradeMembership – existing membership has no subscription (should return false)
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create first test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -1315,7 +1382,7 @@
 			$query->sql($sql);
 
 		}
-		upgradeMembership_existingMembershipHasNoSubscription_returnFalse();
+		// upgradeMembership_existingMembershipHasNoSubscription_returnFalse();
 		?>
 		<? 	
 		function upgradeMembership_newMembershipHasNoSubscription_returnTrueUpgradeMembershipInheritSubscriptionDeleteExpiry() {
@@ -1323,11 +1390,13 @@
 			// upgradeMembership – new membership has no subscription (upgraded membership should inherit subscription and delete expiry_at)
 			
 			// ARRANGE
-			$MC = new Member();
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
 			
 			// create first test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -1416,7 +1485,7 @@
 			$query->sql($sql);
 
 		}
-		upgradeMembership_newMembershipHasNoSubscription_returnTrueUpgradeMembershipInheritSubscriptionDeleteExpiry();
+		// upgradeMembership_newMembershipHasNoSubscription_returnTrueUpgradeMembershipInheritSubscriptionDeleteExpiry();
 		?>
 	</div>
 
