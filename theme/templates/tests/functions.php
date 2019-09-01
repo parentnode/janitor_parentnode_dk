@@ -9,75 +9,82 @@
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
-		<h3>Functions</h3>
+	<div class="tests getPost">
+		<h3>getPost</h3>
 
-<?
-// getPost
+		<?
+		// getPost
 
-$ref1 = "test æøå %€&§$ \"' < >(){}[]?!*`´@/\\ test";
-$_POST["test1"] = $ref1;
-$res1 = "test æøå %€&§$ \\\"\\' < >(){}[]?!*`´@/\\\\ test";
+		$ref1 = "test æøå %€&§$ \"' < >(){}[]?!*`´@/\\ test";
+		$_POST["test1"] = $ref1;
+		$res1 = "test æøå %€&§$ \\\"\\' < >(){}[]?!*`´@/\\\\ test";
 
-$ref2 = "test <script> test <> test";
-$_POST["test2"] = $ref2;
-$res2 = "test  test  test";
+		$ref2 = "test <script> test <> test";
+		$_POST["test2"] = $ref2;
+		$res2 = "test  test  test";
 
-$ref3 = "test <script>alert('hej');</script> test";
-$_POST["test3"] = $ref3;
-$res3 = "test alert(\\'hej\\'); test";
+		$ref3 = "test <script>alert('hej');</script> test";
+		$_POST["test3"] = $ref3;
+		$res3 = "test alert(\\'hej\\'); test";
 
-$ref4 = "test <span>test</span> test";
-$_POST["test4"] = $ref4;
-$res4 = "test <span>test</span> test";
+		$ref4 = "test <span>test</span> test";
+		$_POST["test4"] = $ref4;
+		$res4 = "test <span>test</span> test";
 
-$string1 = getPost("test1");
-$string2 = getPost("test2");
-$string3 = getPost("test3");
-$string4 = getPost("test4");
+		$string1 = getPost("test1");
+		$string2 = getPost("test2");
+		$string3 = getPost("test3");
+		$string4 = getPost("test4");
 
-$string0 = getPost("test0");
+		$string0 = getPost("test0");
 
-// debug([$ref1, $string1, $res1, $ref2, $string2, $res2, $ref3, $string3, $res3, $ref4, $string4, $res4]);
-?>
-		<? if($string1 === $res1 && $string2 === $res2 && $string3 === $res3 && $string4 === $res4 && !$string0): ?>
-		<div class="testpassed"><p>getPost - correct</p></div>
+		// debug([$ref1, $string1, $res1, $ref2, $string2, $res2, $ref3, $string3, $res3, $ref4, $string4, $res4]);
+
+		if($string1 === $res1 && $string2 === $res2 && $string3 === $res3 && $string4 === $res4 && !$string0): ?>
+		<div class="testpassed">getPost - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>getPost - error</p></div>
+		<div class="testfailed">getPost - error</div>
 		<? endif; ?>
 
+	</div>
 
-<?
-// getPosts	
+	<div class="tests getPosts">
+		<h3>getPosts</h3>
 
-$ref1 = "test æøå %€&§$ \"' < >(){}[]?!*`´@/\\ test";
-$_POST["test1"] = $ref1;
-$res1 = "test æøå %€&§$ \\\"\\' < >(){}[]?!*`´@/\\\\ test";
+		<?
+		// getPosts	
 
-$ref2 = "test <script> test <> test";
-$_POST["test2"] = $ref2;
-$res2 = "test  test  test";
+		$ref1 = "test æøå %€&§$ \"' < >(){}[]?!*`´@/\\ test";
+		$_POST["test1"] = $ref1;
+		$res1 = "test æøå %€&§$ \\\"\\' < >(){}[]?!*`´@/\\\\ test";
 
-$ref3 = "test <script>alert('hej');</script> test";
-$_POST["test3"] = $ref3;
-$res3 = "test alert(\\'hej\\'); test";
+		$ref2 = "test <script> test <> test";
+		$_POST["test2"] = $ref2;
+		$res2 = "test  test  test";
 
-$ref4 = "test <span>test</span> test";
-$_POST["test4"] = $ref4;
-$res4 = "test <span>test</span> test";
+		$ref3 = "test <script>alert('hej');</script> test";
+		$_POST["test3"] = $ref3;
+		$res3 = "test alert(\\'hej\\'); test";
 
-$strings = getPosts(["test1", "test2", "test3", "test4", "test0"]);
+		$ref4 = "test <span>test</span> test";
+		$_POST["test4"] = $ref4;
+		$res4 = "test <span>test</span> test";
 
-// debug([$strings]);
-// debug([$ref1, $strings["test1"], $res1, $ref2, $strings["test2"], $res2, $ref3, $strings["test3"], $res3, $ref4, $strings["test4"], $res4]);
-?>
+		$strings = getPosts(["test1", "test2", "test3", "test4", "test0"]);
+
+		// debug([$strings]);
+		// debug([$ref1, $strings["test1"], $res1, $ref2, $strings["test2"], $res2, $ref3, $strings["test3"], $res3, $ref4, $strings["test4"], $res4]);
+		?>			
 		<? if($strings["test1"] === $res1 && $strings["test2"] === $res2 && $strings["test3"] === $res3 && $strings["test4"] === $res4 && !$strings["test0"]): ?>
-		<div class="testpassed"><p>getPosts - correct</p></div>
+		<div class="testpassed">getPosts - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>getPosts - error</p></div>
+		<div class="testfailed">getPosts - error</div>
 		<? endif; ?>
 
+	</div>
 
+	<div class="tests getPostPassword">
+		<h3>getPostPassword</h3>
 
 <?
 // getPostPassword
@@ -96,12 +103,15 @@ $string2 = getPostPassword("test2");
 // debug([$ref1, $string1, $res1, $ref2, $string2, $res2]);
 ?>
 		<? if($string1 === $res1 && $string2 === $res2): ?>
-		<div class="testpassed"><p>getPostPassword - correct</p></div>
+		<div class="testpassed">getPostPassword - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>getPostPassword - error</p></div>
+		<div class="testfailed">getPostPassword - error</div>
 		<? endif; ?>
 
+	</div>
 
+	<div class="tests prepareForDB">
+		<h3>prepareForDB</h3>
 
 <?
 // prepareForDB
@@ -130,11 +140,15 @@ $strings = prepareForDB(["test1" => $ref1, "test2" => $ref2]);
 // debug([$ref1, $string1, $res1, $ref2, $string2, $res2, $ref3, $string3, $res3, $ref4, $string4, $res4]);
 ?>
 		<? if($string1 === $res1 && $string2 === $res2 && $string3 === $res3 && $string4 === $res4 && $strings["test1"] === $res1 && $strings["test2"] === $res2): ?>
-		<div class="testpassed"><p>prepareForDB - correct</p></div>
+		<div class="testpassed">prepareForDB - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>prepareForDB - error</p></div>
+		<div class="testfailed">prepareForDB - error</div>
 		<? endif; ?>
 
+	</div>
+
+	<div class="tests getPostPassword">
+		<h3>getPostPassword</h3>
 
 
 <?
@@ -160,11 +174,15 @@ $string4 = prepareForHTML($ref4);
 $strings = prepareForHTML(["test1" => $ref1, "test2" => $ref2]);
 ?>
 		<? if($string1 === $res1 && $string2 === $res2 && $string3 === $res3 && $string4 === $res4 && $strings["test1"] === $res1 && $strings["test2"] === $res2): ?>
-		<div class="testpassed"><p>prepareForHTML - correct</p></div>
+		<div class="testpassed">prepareForHTML - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>prepareForHTML - error</p></div>
+		<div class="testfailed">prepareForHTML - error</div>
 		<? endif; ?>
 
+	</div>
+
+	<div class="tests stripDisallowed">
+		<h3>stripDisallowed</h3>
 
 
 <?
@@ -192,25 +210,24 @@ $string5 = stripDisallowed($ref5);
 	
 ?>
 		<? if($string1 === $res1 && $string2 === $res2 && $string3 === $res3 && $string4 === $res4 && $string5 === $res5): ?>
-		<div class="testpassed"><p>stripDisallowed - correct</p></div>
+		<div class="testpassed">stripDisallowed - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>stripDisallowed - error</p></div>
+		<div class="testfailed">stripDisallowed - error</div>
 		<? endif; ?>
 
 	</div>
 
 
-	<div class="tests">
+	<div class="tests shorthands">
 		<h3>Class shorthands</h3>
-
 
 <?
 $dom_class = DOM();
 ?>
 		<? if(is_a($dom_class, "DOM")): ?>
-		<div class="testpassed"><p>DOM() - correct</p></div>
+		<div class="testpassed">DOM() - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>DOM() - error</p></div>
+		<div class="testfailed">DOM() - error</div>
 		<? endif; ?>
 
 
@@ -218,9 +235,9 @@ $dom_class = DOM();
 $mailer_class = mailer();
 ?>
 		<? if(is_a($mailer_class, "MailGateway")): ?>
-		<div class="testpassed"><p>mailer() - correct</p></div>
+		<div class="testpassed">mailer() - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>mailer() - error</p></div>
+		<div class="testfailed">mailer() - error</div>
 		<? endif; ?>
 
 
@@ -228,9 +245,9 @@ $mailer_class = mailer();
 $payment_class = payments();
 ?>
 		<? if(is_a($payment_class, "PaymentGateway")): ?>
-		<div class="testpassed"><p>payments() - correct</p></div>
+		<div class="testpassed">payments() - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>payments() - error</p></div>
+		<div class="testfailed">payments() - error</div>
 		<? endif; ?>
 
 

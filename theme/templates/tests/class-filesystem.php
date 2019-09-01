@@ -25,32 +25,33 @@ function checkFiles($files, $expected) {
 
 ?>
 
-<div class="scene i:scene tests defaultEdit">
+<div class="scene i:scene tests ">
 	<h1>FileSystem</h1>	
 	<h2>Testing filesystem read/write methods</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
+
+	<div class="tests makeDirRecursively">
 		<h3>FileSystem::makeDirRecursively</h3>
 		<? if(file_exists(PUBLIC_FILE_PATH."/filesystem-test/level1/level11")): ?>
-		<div class="testpassed"><p>FileSystem::makeDirRecursively - correct</p></div>
+		<div class="testpassed">FileSystem::makeDirRecursively - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::makeDirRecursively - error</p></div>
+		<div class="testfailed">FileSystem::makeDirRecursively - error</div>
 		<? endif; ?>
 	</div>
 
-	<div class="tests">
+	<div class="tests copy">
 		<h3>FileSystem::copy</h3>
 		<? if(file_exists(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt")): ?>
-		<div class="testpassed"><p>FileSystem::copy - correct</p></div>
+		<div class="testpassed">FileSystem::copy - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::copy - error</p></div>
+		<div class="testfailed">FileSystem::copy - error</div>
 		<? endif; ?>
 	</div>
 
-	<div class="tests">
+	<div class="tests valid">
 		<h3>FileSystem::valid</h3>
 	<?
 
@@ -76,14 +77,13 @@ function checkFiles($files, $expected) {
 			$fs->valid(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt", array("allow_folders" => "level1"))
 		):
 		?>
-		<div class="testpassed"><p>FileSystem::valid - correct</p></div>
+		<div class="testpassed">FileSystem::valid - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::valid - error</p></div>
+		<div class="testfailed">FileSystem::valid - error</div>
 		<? endif; ?>
 	</div>
 
-
-	<div class="tests">
+	<div class="tests files">
 		<h3>FileSystem::files</h3>
 		<?
 		$files = $fs->files(PUBLIC_FILE_PATH."/filesystem-test");
@@ -94,9 +94,9 @@ function checkFiles($files, $expected) {
 			"/filesystem-test/level2/level22/test.txt"
 		))):
 		?>
-		<div class="testpassed"><p>FileSystem::files (ignore tempfiles) - correct</p></div>
+		<div class="testpassed">FileSystem::files (ignore tempfiles) - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::files (ignore tempfiles) - error</p></div>
+		<div class="testfailed">FileSystem::files (ignore tempfiles) - error</div>
 		<? endif; ?>
 
 		<?
@@ -112,9 +112,9 @@ function checkFiles($files, $expected) {
 		))):
 		
 		?>
-		<div class="testpassed"><p>FileSystem::files (include tempfiles) - correct</p></div>
+		<div class="testpassed">FileSystem::files (include tempfiles) - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::files (include tempfiles) - error</p></div>
+		<div class="testfailed">FileSystem::files (include tempfiles) - error</div>
 		<? endif; ?>
 
 		<?
@@ -124,15 +124,13 @@ function checkFiles($files, $expected) {
 			"/filesystem-test/level2/level22/test.txt"
 		))):
 		?>
-		<div class="testpassed"><p>FileSystem::files (allow/deny) - correct</p></div>
+		<div class="testpassed">FileSystem::files (allow/deny) - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::files (allow/deny) - error</p></div>
+		<div class="testfailed">FileSystem::files (allow/deny) - error</div>
 		<? endif; ?>
 	</div>
 
-
-
-	<div class="tests">
+	<div class="tests removeEmptyDirRecursively">
 		<h3>FileSystem::removeEmptyDirRecursively</h3>
 		<?
 		$passed = false;
@@ -178,33 +176,33 @@ function checkFiles($files, $expected) {
 		?>
 
 		<? if($passed): ?>
-		<div class="testpassed"><p>FileSystem::removeEmptyDirRecursively - correct</p></div>
+		<div class="testpassed">FileSystem::removeEmptyDirRecursively - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::removeEmptyDirRecursively - error</p></div>
+		<div class="testfailed">FileSystem::removeEmptyDirRecursively - error</div>
 		<? endif; ?>
 	</div>
 
-	<div class="tests">
+	<div class="tests filesize">
 		<h3>FileSystem::filesize</h3>
 		<? if($fs->filesize(PUBLIC_FILE_PATH."/filesystem-test/level2/level21/test.jpg") == "12.23K" && $fs->filesize(PUBLIC_FILE_PATH."/filesystem-test/level1/test.txt") == "16.00B"): ?>
-		<div class="testpassed"><p>FileSystem::makeDirRecursively - correct</p></div>
+		<div class="testpassed">FileSystem::makeDirRecursively - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::makeDirRecursively - error</p></div>
+		<div class="testfailed">FileSystem::makeDirRecursively - error</div>
 		<? endif; ?>
 
 	</div>
 
-	<?
-	// cleanup
-	$fs->removeDirRecursively(PUBLIC_FILE_PATH."/filesystem-test");
-	?>
-
-	<div class="tests">
+	<div class="tests removeDirRecursively">
 		<h3>FileSystem::removeDirRecursively</h3>
-		<? if(!file_exists(PUBLIC_FILE_PATH."/filesystem-test")): ?>
-		<div class="testpassed"><p>FileSystem::removeDirRecursively - correct</p></div>
+		<?
+
+		// cleanup
+		$fs->removeDirRecursively(PUBLIC_FILE_PATH."/filesystem-test");
+		
+		if(!file_exists(PUBLIC_FILE_PATH."/filesystem-test")): ?>
+		<div class="testpassed">FileSystem::removeDirRecursively - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>FileSystem::removeDirRecursively - error</p></div>
+		<div class="testfailed">FileSystem::removeDirRecursively - error</div>
 		<? endif; ?>
 
 	</div>

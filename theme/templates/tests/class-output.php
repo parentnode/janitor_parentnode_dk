@@ -12,18 +12,19 @@ $message = "This is a test message.";
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-<? 
-	message()->addMessage($message);
-	message()->addMessage($error_message, array("type" => "error"));
-	ob_start();
-	$output->screen($test_object, ["type" => "error"]);
-	$screen_output = ob_get_contents();
-	ob_end_clean();
-	$output_array = json_decode($screen_output, true);
-?>
-	<div class="tests">
+
+	<div class="tests output reset">
 		<h3>Output object and reset error message.</h3> 
-		<? if(
+		<?
+		message()->addMessage($message);
+		message()->addMessage($error_message, array("type" => "error"));
+		ob_start();
+		$output->screen($test_object, ["type" => "error"]);
+		$screen_output = ob_get_contents();
+		ob_end_clean();
+		$output_array = json_decode($screen_output, true);
+
+		if(
 			$output_array &&
 			isset($output_array["cms_object"]) &&
 			isset($output_array["cms_object"]["id"]) &&
@@ -36,24 +37,24 @@ $message = "This is a test message.";
 			count($output_array["cms_message"]) == 1 &&
 			count($output_array) == 3
 			): ?>
-		<div class="testpassed"><p>Output::screen (object, ["type" => "error"]) - correct</p></div>
+		<div class="testpassed">Output::screen (object, ["type" => "error"]) - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>Output::screen (object, ["type" => "error"])- error</p></div> 
+		<div class="testfailed">Output::screen (object, ["type" => "error"])- error</div> 
 		<? endif; ?>
 	</div>
 	
-<?
-	message()->addMessage($message);
-	message()->addMessage($error_message, array("type" => "error"));
-	ob_start();
-	$output->screen($test_object, ["type" => "error", "reset_messages" => false]);
-	$screen_output = ob_get_contents();
-	ob_end_clean();
-	$output_array = json_decode($screen_output, true);
-?>
-	<div class="tests">
+	<div class="tests output no_reset">
 		<h3>Output object and do not reset error message.</h3>
-		 <? if(
+		<?
+	 	message()->addMessage($message);
+	 	message()->addMessage($error_message, array("type" => "error"));
+	 	ob_start();
+	 	$output->screen($test_object, ["type" => "error", "reset_messages" => false]);
+	 	$screen_output = ob_get_contents();
+	 	ob_end_clean();
+	 	$output_array = json_decode($screen_output, true);
+
+		if(
 			$output_array &&
  			isset($output_array["cms_object"]) &&
  			isset($output_array["cms_object"]["id"]) &&
@@ -67,24 +68,25 @@ $message = "This is a test message.";
 			count(message()->getMessages()) == 2
 			
 		): ?>
-		<div class="testpassed"><p>Output::screen (object, ["type" => "error", "reset_messages" => false]) - correct</p></div>
-	<? else: ?>
-		<div class="testfailed"><p>Output::screen (object, ["type" => "error", "reset_messages" => false]) - error</p></div>
-	<? endif; ?>
+		<div class="testpassed">Output::screen (object, ["type" => "error", "reset_messages" => false]) - correct</div>
+		<? else: ?>
+		<div class="testfailed">Output::screen (object, ["type" => "error", "reset_messages" => false]) - error</div>
+		<? endif; ?>
 	</div>
-<?	
-	message()->resetMessages();
-	message()->addMessage($message);
-	message()->addMessage($error_message, array("type" => "error"));
-	ob_start();
-	$output->screen($test_object, ["type" => "message", "reset_messages" => false]);
-	$screen_output = ob_get_contents();
-	ob_end_clean();
-	$output_array = json_decode($screen_output, true);
-?>
-	<div class="tests">
+
+	<div class="tests output no_reset">
 		<h3>Output object and do not reset messages.</h3>
-		 <? if(
+		<?
+	 	message()->resetMessages();
+	 	message()->addMessage($message);
+	 	message()->addMessage($error_message, array("type" => "error"));
+	 	ob_start();
+	 	$output->screen($test_object, ["type" => "message", "reset_messages" => false]);
+	 	$screen_output = ob_get_contents();
+	 	ob_end_clean();
+	 	$output_array = json_decode($screen_output, true);
+
+		if(
 			$output_array &&
 			isset($output_array["cms_object"]) &&
 			isset($output_array["cms_object"]["id"]) &&
@@ -104,26 +106,25 @@ $message = "This is a test message.";
 			count(message()->getMessages()) == 2
 			
 		): ?>
-		<div class="testpassed"><p>Output::screen (object, ["type" => "message", "reset_messages" => false]) - correct</p></div>
-	<? else: ?>
-		<div class="testfailed"><p>Output::screen (object, ["type" => "message", "reset_messages" => false]) - error</p></div>
-	<? endif; ?>
+		<div class="testpassed">Output::screen (object, ["type" => "message", "reset_messages" => false]) - correct</div>
+		<? else: ?>
+		<div class="testfailed">Output::screen (object, ["type" => "message", "reset_messages" => false]) - error</div>
+		<? endif; ?>
 	</div>
 
-<?	
-	message()->resetMessages();
-	message()->addMessage($message);
-	message()->addMessage($error_message, array("type" => "error"));
-	ob_start();
-	$output->screen($test_object, ["type" => "message"]);
-	$screen_output = ob_get_contents();
-	ob_end_clean();
-	$output_array = json_decode($screen_output, true);
-
-?>
-	<div class="tests">
+	<div class="tests output reset">
 		<h3>Output object and reset messages.</h3>
-		 <? if(
+		<?
+	 	message()->resetMessages();
+	 	message()->addMessage($message);
+	 	message()->addMessage($error_message, array("type" => "error"));
+	 	ob_start();
+	 	$output->screen($test_object, ["type" => "message"]);
+	 	$screen_output = ob_get_contents();
+	 	ob_end_clean();
+	 	$output_array = json_decode($screen_output, true);
+		
+		if(
 			$output_array &&
 			isset($output_array["cms_object"]) &&
 			isset($output_array["cms_object"]["id"]) &&
@@ -142,10 +143,10 @@ $message = "This is a test message.";
 			count($output_array) == 4 
 			
 		): ?>
-		<div class="testpassed"><p>Output::screen (object, ["type" => "message"]) - correct</p></div>
-	<? else: ?>
-		<div class="testfailed"><p>Output::screen (object, ["type" => "message"]) - error</p></div>
-	<? endif; ?>
+		<div class="testpassed">Output::screen (object, ["type" => "message"]) - correct</div>
+		<? else: ?>
+		<div class="testfailed">Output::screen (object, ["type" => "message"]) - error</div>
+		<? endif; ?>
 	</div>
 	
 	
