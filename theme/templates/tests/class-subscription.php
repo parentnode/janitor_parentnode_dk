@@ -13,9 +13,11 @@ $model_tests = $IC->typeObject("tests");
 
 ?>
 
+
+
 <? // SETUP
 // create test system_subscription_methods
-$sql = "INSERT INTO ".UT_SUBSCRIPTION_METHODS." (id, name, duration, starts_on) VALUES (999, 'Month', 'monthly', DEFAULT), (998, 'Week', 'weekly', DEFAULT)";
+$sql = "INSERT INTO ".UT_SUBSCRIPTION_METHODS." (id, name, duration, starts_on) VALUES (999, 'Month', 'monthly', DEFAULT), (998, 'Week', 'weekly', DEFAULT), (997, 'Never expires', '*', DEFAULT)";
 // print $sql;
 $query->sql($sql);
 
@@ -29,6 +31,11 @@ $_POST["name"] = "Test item";
 $item = $model_tests->save(array("save"));
 $item_id = $item["item_id"];
 unset($_POST);
+
+// add subscription method (indefinite)
+$_POST["item_subscription_method"] = 997;
+$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+
 ?>
 
 <div class="scene i:scene tests">
@@ -39,7 +46,7 @@ unset($_POST);
 	</ul>
 
 	<div class="tests">
-		<h3>Subscriptions (without price or subscription method)</h3>
+		<h3>Subscriptions (without price, with subscription method, no expiry)</h3>
 		<?
 
 		// item without price – should succeed
@@ -265,7 +272,7 @@ unset($_POST);
 	</div>
 
 	<div class="tests">
-		<h3>Subscriptions (with subscription method, weekly, with price)</h3>
+		<h3>Subscriptions (with subscription method, weekly, with price, no order_id)</h3>
 		<?
 		// update test item (add price)
 		$_POST["item_price"] = 100;
@@ -276,17 +283,44 @@ unset($_POST);
 		
 		$subscription = $SubscriptionClass->addSubscription($item_id);
 
-		if(!$subscription): ?>
-		<div class="testpassed"><p>Subscription::addSubscription (not added) - correct</p></div>
+		if($subscription === false): ?>
+		<div class="testpassed"><p>Subscription::addSubscription – price but no order_id (should not add) – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Subscription::addSubscription (not added) - error</p></div>
+		<div class="testfailed"><p>Subscription::addSubscription – price but no order_id (should not add) – error</p></div>
 		<? endif; ?>
 
 
 		<?
 		// get the created subscription
 		$subscription = $SubscriptionClass->getSubscriptions(array("item_id" => $item_id));
-		if(!$subscription): ?>
+		if($subscription === false): ?>
+		<div class="testpassed"><p>Subscription::getSubscription (should not exist) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Subscription::getSubscription (should not exist) - error</p></div>
+		<? endif; ?>
+
+	</div>
+
+	<div class="tests">
+		<h3>Subscriptions (without subscription method)</h3>
+		<?
+		// update test item (delete subscription method)
+		$_POST["item_subscription_method"] = NULL;
+		$price = $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+		
+		$subscription = $SubscriptionClass->addSubscription($item_id);
+
+		if($subscription === false): ?>
+		<div class="testpassed"><p>Subscription::addSubscription – item has no subscription method – should return false – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Subscription::addSubscription – item has no subscription method – should return false – error</p></div>
+		<? endif; ?>
+
+
+		<?
+		// get the created subscription
+		$subscription = $SubscriptionClass->getSubscriptions(array("item_id" => $item_id));
+		if($subscription === false): ?>
 		<div class="testpassed"><p>Subscription::getSubscription (should not exist) - correct</p></div>
 		<? else: ?>
 		<div class="testfailed"><p>Subscription::getSubscription (should not exist) - error</p></div>
@@ -295,10 +329,10 @@ unset($_POST);
 	</div>
 	
 	<? // CLEAN UP
-	$sql = "DELETE FROM ".UT_ITEMS_SUBSCRIPTION_METHOD." WHERE subscription_method_id IN (998, 999)";
+	$sql = "DELETE FROM ".UT_ITEMS_SUBSCRIPTION_METHOD." WHERE subscription_method_id IN (997, 998, 999)";
 	$query->sql($sql);
 	
-	$sql = "DELETE FROM ".UT_SUBSCRIPTION_METHODS." WHERE id IN (998, 999)";
+	$sql = "DELETE FROM ".UT_SUBSCRIPTION_METHODS." WHERE id IN (997, 998, 999)";
 	// print $sql;
 	$query->sql($sql);
 
@@ -310,7 +344,7 @@ unset($_POST);
 	$query->sql($sql);
 
 	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-	$query->sql($sql);
+ 	$query->sql($sql);
 
 
 	?>

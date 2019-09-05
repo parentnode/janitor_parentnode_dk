@@ -15,7 +15,7 @@ $model_tests = $IC->typeObject("tests");
 
 <? // SETUP
 // create test system_subscription_methods
-$sql = "INSERT INTO ".UT_SUBSCRIPTION_METHODS." (id, name, duration, starts_on) VALUES (999, 'Month', 'monthly', DEFAULT), (998, 'Week', 'weekly', DEFAULT)";
+$sql = "INSERT INTO ".UT_SUBSCRIPTION_METHODS." (id, name, duration, starts_on) VALUES (999, 'Month', 'monthly', DEFAULT), (998, 'Week', 'weekly', DEFAULT), (997, 'Never expires', '*', DEFAULT)";
 // print $sql;
 $query->sql($sql);
 
@@ -30,6 +30,10 @@ $_POST["name"] = "Test item";
 $item = $model_tests->save(array("save"));
 $item_id = $item["item_id"];
 unset($_POST);
+
+// add subscription method (indefinite)
+$_POST["item_subscription_method"] = 997;
+$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
 
 // create test user
 $sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
@@ -286,9 +290,9 @@ if($query->sql($sql)) {
 		$subscription = $SuperSubscriptionClass->addSubscription($item_id);
 
 		if(!$subscription): ?>
-		<div class="testpassed"><p>SuperSubscription::addSubscription (not added) - correct</p></div>
+		<div class="testpassed"><p>SuperSubscription::addSubscription – price but no order_id (should not add) – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>SuperSubscription::addSubscription (not added) - error</p></div>
+		<div class="testfailed"><p>SuperSubscription::addSubscription – price but no order_id (should not add) – error</p></div>
 		<? endif; ?>
 
 
@@ -299,6 +303,33 @@ if($query->sql($sql)) {
 		<div class="testpassed"><p>SuperSubscription::getSubscriptions (should not exist) - correct</p></div>
 		<? else: ?>
 		<div class="testfailed"><p>SuperSubscription::getSubscriptions (should not exist) - error</p></div>
+		<? endif; ?>
+
+	</div>
+
+	<div class="tests">
+		<h3>Subscriptions (without subscription method)</h3>
+		<?
+		// update test item (delete subscription method)
+		$_POST["item_subscription_method"] = NULL;
+		$price = $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+		
+		$subscription = $SuperSubscriptionClass->addSubscription($item_id);
+
+		if($subscription === false): ?>
+		<div class="testpassed"><p>Subscription::addSubscription – item has no subscription method – should return false – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Subscription::addSubscription – item has no subscription method – should return false – error</p></div>
+		<? endif; ?>
+
+
+		<?
+		// get the created subscription
+		$subscription = $SuperSubscriptionClass->getSubscriptions(array("item_id" => $item_id));
+		if($subscription === false): ?>
+		<div class="testpassed"><p>Subscription::getSubscription (should not exist) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Subscription::getSubscription (should not exist) - error</p></div>
 		<? endif; ?>
 
 	</div>
@@ -340,14 +371,14 @@ if($query->sql($sql)) {
 	</div>
 	
 	<? // CLEAN UP
-	$sql = "DELETE FROM ".UT_ITEMS_SUBSCRIPTION_METHOD." WHERE subscription_method_id IN (998, 999)";
+	$sql = "DELETE FROM ".UT_ITEMS_SUBSCRIPTION_METHOD." WHERE subscription_method_id IN (997, 998, 999)";
 	$query->sql($sql);
 	
-	$sql = "DELETE FROM ".UT_SUBSCRIPTION_METHODS." WHERE id IN (998, 999)";
+	$sql = "DELETE FROM ".UT_SUBSCRIPTION_METHODS." WHERE id IN (997, 998, 999)";
 	// print $sql;
 	$query->sql($sql);
 
-	$sql = "DELETE FROM ".UT_ITEMS_PRICES." WHERE subscription_method_id IN (998, 999)";
+	$sql = "DELETE FROM ".UT_ITEMS_PRICES." WHERE subscription_method_id IN (997, 998, 999)";
 	$query->sql($sql);
 	
 	$sql = "DELETE FROM ".UT_VATRATES." WHERE id IN (998, 999)";
