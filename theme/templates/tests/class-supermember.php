@@ -5,6 +5,260 @@
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 	<div class="tests">
+		<h3>addNewMembership</h3>
+
+		<? function addNewMembership_correctAction_returnOrder() {
+			// addNewMembership – with correct $action – should return order object
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			include_once("classes/shop/supersubscription.class.php");
+			include_once("classes/shop/supershop.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// create test user
+			$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
+			if($query->sql($sql)) {
+				$test_user_id = $query->lastInsertId();
+			}
+			
+			// ACT 
+			$_POST["item_id"] = $membership_item_id;
+			$added_membership_order = $MC->addNewMembership(["addNewMembership", $test_user_id]);
+			$added_membership_order_id = $added_membership_order["id"];
+			unset($_POST);
+			
+			
+			// ASSERT 
+			if(
+				$added_membership_order &&
+				$added_membership_order["user_id"] == $test_user_id &&
+				$added_membership_order["items"][0]["item_id"] == $membership_item_id
+	
+				): ?>
+			<div class="testpassed"><p>SuperMember::addNewMembership – with correct $action – should return order object – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::addNewMembership – with correct $action – should return order object – error</p></div>
+			<? endif;
+
+			// CLEAN UP
+			// delete memberships
+			$added_membership = $MC->getMembers(["user_id" => $test_user_id]);
+			$added_membership_id = $added_membership["id"];
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($added_membership_id)";
+			$query->sql($sql);
+
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN ($membership_item_id)";
+			$query->sql($sql);
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
+			$query->sql($sql);
+			
+			// delete orders
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN ($added_membership_order_id)";
+			$query->sql($sql);
+			
+			// delete users
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN ($test_user_id)";
+			$query->sql($sql);
+			
+			
+		}
+		addNewMembership_correctAction_returnOrder();
+		?>
+		<? function addNewMembership_noUserIdSent_returnFalse() {
+			// addNewMembership – no user_id in $action – should return false
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// ACT 
+			$_POST["item_id"] = $membership_item_id;
+			$added_membership_order = $MC->addNewMembership(["addNewMembership"]);
+			unset($_POST);
+			
+			
+			// ASSERT 
+			if(
+				$added_membership_order === false
+				): ?>
+			<div class="testpassed"><p>SuperMember::addNewMembership – no user_id in $action – should return false – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::addNewMembership – no user_id in $action – should return false – error</p></div>
+			<? endif;
+
+			// CLEAN UP
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
+			$query->sql($sql);
+			
+		}
+		addNewMembership_noUserIdSent_returnFalse();
+		?>
+		<? function addNewMembership_invalidUserIdSent_returnFalse() {
+			// addNewMembership – invalid user_id in $action – should return false
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// ACT 
+			$_POST["item_id"] = $membership_item_id;
+			$added_membership_order = $MC->addNewMembership(["addNewMembership", "invalid_id"]);
+			unset($_POST);
+			
+			
+			// ASSERT 
+			if(
+				$added_membership_order === false
+				): ?>
+			<div class="testpassed"><p>SuperMember::addNewMembership – invalid user_id in $action – should return false – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::addNewMembership – invalid user_id in $action – should return false – error</p></div>
+			<? endif;
+
+			// CLEAN UP
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
+			$query->sql($sql);
+			
+		}
+		addNewMembership_invalidUserIdSent_returnFalse();
+		?>
+		<? function addNewMembership_validButNonexistingUserId_returnFalse() {
+			// addNewMembership – valid but non-existing user_id in $action – should return false
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// ACT 
+			$_POST["item_id"] = $membership_item_id;
+			$added_membership_order = $MC->addNewMembership(["addNewMembership", 9999]);
+			unset($_POST);
+			
+			
+			// ASSERT 
+			if(
+				$added_membership_order === false
+				): ?>
+			<div class="testpassed"><p>SuperMember::addNewMembership – valid but non-existing user_id in $action – should return false – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::addNewMembership – valid but non-existing user_id in $action – should return false – error</p></div>
+			<? endif;
+
+			// CLEAN UP
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
+			$query->sql($sql);
+		}
+		addNewMembership_validButNonexistingUserId_returnFalse();
+		?>
+		
+	</div>
+	<div class="tests">
 		<h3>addMembership</h3>	
 
 		<? function addMembership_nonexistingSubscription_returnFalse() {
@@ -717,6 +971,484 @@
 		}
 		getMembers_byItemIdNoMembershipExists_returnFalse();
 		?>	
+	</div>
+
+	<div class="tests">
+		<h3>getMemberCount</h3>		
+		<? 
+		function getMemberCount_noParameters_countAllMembersReturnString() {
+
+			// getMemberCount no parameters, memberships exist – count all memberships, return member count as string
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$UC = new SuperUser();
+
+			// WISH WE COULD DO LIKE THIS
+			// $membership_item_1 = $model_tests->createTestItem([
+			// 	"itemtype" => "membership",
+			// 	"extend" => [
+			// 		"subscription_method" => true,
+			// 		"price" => [
+			// 			"item_price" => 200
+			// 		]
+			// 	]
+			// ]);
+			
+			// create first membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add price to first membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+	
+			// update subscription method for first membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+
+			// create second membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_2 = $model_membership->save(array("save"));
+			$membership_item_2_id = $membership_item_2["id"];
+			unset($_POST);
+
+			// add price to second membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
+			unset($_POST);
+	
+			// update subscription method for second membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+			unset($_POST);
+
+			// create 3 test users
+			for($i = 0; $i < 3; $i++) {
+				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user $i', 1, '2019-01-01 00:00:00')";
+				if($query->sql($sql)) {
+					$test_user_ids[$i] = $query->lastInsertId();
+				}
+			}
+
+			// create two memberships based on first membership item  
+			$membership_1_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[0]]);
+			$membership_1_cart_reference = $membership_1_cart["cart_reference"];
+			$membership_1_cart_id = $membership_1_cart["id"];
+			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
+			$membership_1_order_id = $membership_1_order["id"];
+			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
+			$membership_1_id = $membership_1["id"];
+
+			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
+			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
+			$membership_2_cart_id = $membership_2_cart["id"];
+			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
+			$membership_2_order_id = $membership_2_order["id"];
+			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
+			$membership_2_id = $membership_2["id"];
+
+			// create one membership based on second membership item  
+			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
+			$membership_3_cart_reference = $membership_3_cart["cart_reference"];
+			$membership_3_cart_id = $membership_3_cart["id"];
+			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
+			$membership_3_order_id = $membership_3_order["id"];
+			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
+			$membership_3_id = $membership_3["id"];
+
+			
+			
+			// ACT 
+			$member_count = $MC->getMemberCount();
+			
+			// ASSERT 
+			if(
+				$member_count &&
+				$member_count === "3"
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMemberCount – no parameters, memberships exist – count all memberships, return member count as string – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMemberCount – no parameters, memberships exist – count all memberships, return member count as string – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+			// delete memberships
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($membership_1_id, $membership_2_id, $membership_3_id)";
+			$query->sql($sql);
+
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+			
+			// delete orders
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN ($membership_1_order_id, $membership_2_order_id, $membership_3_order_id)";
+			$query->sql($sql);
+
+			// delete users
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN (".$test_user_ids[0].", ".$test_user_ids[1].", ".$test_user_ids[2].")";
+			$query->sql($sql);
+		
+		}	
+		getMemberCount_noParameters_countAllMembersReturnString(); 
+		?>
+		<? 
+		function getMemberCount_noParametersNoMemberships_returnZero() {
+
+			// getMemberCount no parameters, no memberships exist – return "0"
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+
+			
+			// ACT 
+			$member_count = $MC->getMemberCount();
+			
+			// ASSERT 
+			if(
+				$member_count === "0"
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMemberCount – no parameters, no memberships exist – return "0" – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMemberCount – no parameters, no memberships exist – return "0" – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+		
+		}	
+		getMemberCount_noParametersNoMemberships_returnZero(); 
+		?>
+		<?
+		function getMemberCount_byItemId_countMembersWithMembertypeReturnString() {
+			// getMemberCount no parameters, memberships exist – count all memberships, return member count as string
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$UC = new SuperUser();
+			
+			// create first membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add price to first membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+	
+			// update subscription method for first membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+
+			// create second membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_2 = $model_membership->save(array("save"));
+			$membership_item_2_id = $membership_item_2["id"];
+			unset($_POST);
+
+			// add price to second membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
+			unset($_POST);
+	
+			// update subscription method for second membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+			unset($_POST);
+
+			// create 3 test users
+			for($i = 0; $i < 3; $i++) {
+				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user $i', 1, '2019-01-01 00:00:00')";
+				if($query->sql($sql)) {
+					$test_user_ids[$i] = $query->lastInsertId();
+				}
+			}
+
+			// create two memberships based on first membership item  
+			$membership_1_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[0]]);
+			$membership_1_cart_reference = $membership_1_cart["cart_reference"];
+			$membership_1_cart_id = $membership_1_cart["id"];
+			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
+			$membership_1_order_id = $membership_1_order["id"];
+			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
+			$membership_1_id = $membership_1["id"];
+
+			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
+			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
+			$membership_2_cart_id = $membership_2_cart["id"];
+			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
+			$membership_2_order_id = $membership_2_order["id"];
+			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
+			$membership_2_id = $membership_2["id"];
+
+			// create one membership based on second membership item  
+			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
+			$membership_3_cart_reference = $membership_3_cart["cart_reference"];
+			$membership_3_cart_id = $membership_3_cart["id"];
+			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
+			$membership_3_order_id = $membership_3_order["id"];
+			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
+			$membership_3_id = $membership_3["id"];
+
+			
+			
+			// ACT 
+			$member_count = $MC->getMemberCount(["item_id" => $membership_item_1_id]);
+			
+			// ASSERT 
+			if(
+				$member_count &&
+				$member_count === "2"
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMemberCount – no parameters, memberships exist – count all memberships, return member count as string – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMemberCount – no parameters, memberships exist – count all memberships, return member count as string – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+			// delete memberships
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($membership_1_id, $membership_2_id, $membership_3_id)";
+			$query->sql($sql);
+
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+			
+			// delete orders
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN ($membership_1_order_id, $membership_2_order_id, $membership_3_order_id)";
+			$query->sql($sql);
+
+			// delete users
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN (".$test_user_ids[0].", ".$test_user_ids[1].", ".$test_user_ids[2].")";
+			$query->sql($sql);
+		}
+		getMemberCount_byItemId_countMembersWithMembertypeReturnString();
+		?>
+		<?
+		function getMemberCount_byItemIdNoMemberships_returnZero() {
+			// getMemberCount by item_id, no memberships exists – should return "0"
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$UC = new SuperUser();
+			
+			// create first membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add price to first membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+	
+			// update subscription method for first membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+
+			
+			
+			// ACT 
+			$member_count = $MC->getMemberCount(["item_id" => $membership_item_1_id]);
+			
+			// ASSERT 
+			if(
+				$member_count === "0"
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMemberCount – by item_id, no memberships exists – should return "0" – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMemberCount – by item_id, no memberships exists – should return "0" – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_1_id)";
+			$query->sql($sql);
+			
+		}
+		getMemberCount_byItemIdNoMemberships_returnZero();
+		?>
+		<?
+		function getMemberCount_byInvalidItemId_returnZero() {
+			// getMemberCount by invalid item_id, memberships exist – return "0"
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$UC = new SuperUser();
+			
+			// create first membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add price to first membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+	
+			// update subscription method for first membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+
+			// create second membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item_2 = $model_membership->save(array("save"));
+			$membership_item_2_id = $membership_item_2["id"];
+			unset($_POST);
+
+			// add price to second membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
+			unset($_POST);
+	
+			// update subscription method for second membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+			unset($_POST);
+
+			// create 3 test users
+			for($i = 0; $i < 3; $i++) {
+				$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user $i', 1, '2019-01-01 00:00:00')";
+				if($query->sql($sql)) {
+					$test_user_ids[$i] = $query->lastInsertId();
+				}
+			}
+
+			// create two memberships based on first membership item  
+			$membership_1_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[0]]);
+			$membership_1_cart_reference = $membership_1_cart["cart_reference"];
+			$membership_1_cart_id = $membership_1_cart["id"];
+			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
+			$membership_1_order_id = $membership_1_order["id"];
+			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
+			$membership_1_id = $membership_1["id"];
+
+			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
+			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
+			$membership_2_cart_id = $membership_2_cart["id"];
+			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
+			$membership_2_order_id = $membership_2_order["id"];
+			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
+			$membership_2_id = $membership_2["id"];
+
+			// create one membership based on second membership item  
+			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
+			$membership_3_cart_reference = $membership_3_cart["cart_reference"];
+			$membership_3_cart_id = $membership_3_cart["id"];
+			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
+			$membership_3_order_id = $membership_3_order["id"];
+			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
+			$membership_3_id = $membership_3["id"];
+
+			
+			
+			// ACT 
+			$member_count = $MC->getMemberCount(["item_id" => 9999]);
+			
+			// ASSERT 
+			if(
+				$member_count === "0"
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMemberCount – by invalid item_id, memberships exist – return "0" – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMemberCount – by invalid item_id, memberships exist – return "0" – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+			// delete memberships
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($membership_1_id, $membership_2_id, $membership_3_id)";
+			$query->sql($sql);
+
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+	
+			// delete membership items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_1_id, $membership_item_2_id)";
+			$query->sql($sql);
+			
+			// delete orders
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN ($membership_1_order_id, $membership_2_order_id, $membership_3_order_id)";
+			$query->sql($sql);
+
+			// delete users
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN (".$test_user_ids[0].", ".$test_user_ids[1].", ".$test_user_ids[2].")";
+			$query->sql($sql);
+		}
+		getMemberCount_byInvalidItemId_returnZero();
+		?>
+			
 	</div>
 
 	<div class="tests">
