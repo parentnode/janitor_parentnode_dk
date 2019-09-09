@@ -746,11 +746,13 @@
 			$_POST["item_price_type"] = "default";
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
-
-	
+			
+			
 			// ACT 
-			$order = $MC->switchMembership($membership_item_2_id);
+			$_POST["item_id"] = $membership_item_2_id;
+			$order = $MC->switchMembership(["switchMembership"]);
 			$switched_membership = $MC->getMembership();
+			unset($_POST);
 			
 			// ASSERT 
 			if(
@@ -830,9 +832,11 @@
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
-			// create membership and subscription
-			$added_membership_cart_reference = $SC->addToNewInternalCart($membership_item_1_id)["cart_reference"];
-			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_reference]);
+			$_POST["item_id"] = $membership_item_1_id;
+			$added_membership_order = $MC->addNewMembership(["addNewMembership"]);
+			$added_membership = $MC->getMembership();
+			$added_membership_id = $added_membership["id"];
+			unset($_POST);
 			
 			// create another test membership item
 			$_POST["name"] = "Membership Test item 2";
@@ -853,12 +857,12 @@
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 			
-			$added_membership = $MC->getMembership($membership_item_1_id);
-			$added_membership_id = $added_membership["id"];
-	
+			
 			// ACT 
-			$order = $MC->switchMembership($membership_item_2_id);
+			$_POST["item_id"] = $membership_item_2_id;
+			$order = $MC->switchMembership(["switchMembership"]);
 			$switched_membership = $MC->getMembership();
+			unset($_POST);
 			
 			// ASSERT 
 			if(
@@ -891,8 +895,8 @@
 			$query->sql($sql);
 
 			// delete membership 1 order
-			$added_membership_order_no = $added_membership_order["order_no"];
-			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$added_membership_order_no'";
+			$added_membership_order_id = $added_membership_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$added_membership_order_id'";
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
@@ -904,8 +908,8 @@
 			$query->sql($sql);
 			
 			// delete order
-			$order_no = $order["order_no"];
-			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
+			$order_id = $order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$order_id'";
 			$query->sql($sql);
 		}
 		switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
@@ -927,13 +931,15 @@
 			$membership_item = $model_membership->save(array("save"));
 			$membership_item_id = $membership_item["id"];
 			unset($_POST);
-
+			
 			// ACT 
-			$switched_membership = $MC->switchMembership($membership_item_id);
+			$_POST["item_id"] = $membership_item_id;
+			$order = $MC->switchMembership(["switchMembership"]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
-				$switched_membership === false
+				$order === false
 				): ?>
 			<div class="testpassed"><p>Member::switchMembership – no membership exists – should return false – correct</p></div>
 			<? else: ?>

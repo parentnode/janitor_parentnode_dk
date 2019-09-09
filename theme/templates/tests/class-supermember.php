@@ -1921,7 +1921,9 @@
 			unset($_POST);
 	
 			// ACT 
-			$switched_membership_order = $MC->switchMembership($membership_item_2_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_2_id;
+			$switched_membership_order = $MC->switchMembership(["switchMembership", $user_id]);
+			unset($_POST);
 			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
 			// ASSERT 
@@ -2037,19 +2039,21 @@
 
 	
 			// ACT 
-			$order = $MC->switchMembership($membership_item_2_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_2_id;
+			$switched_membership_order = $MC->switchMembership(["switchMembership", $user_id]);
+			unset($_POST);
 			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
 			// ASSERT 
 			if(
-				$order && 
+				$switched_membership_order && 
 				$switched_membership &&
 				$switched_membership["id"] == $added_membership_id &&
 				$added_membership["subscription_id"] &&
 				$switched_membership["subscription_id"] &&
 				$switched_membership != $added_membership &&
-				$order["items"][0]["item_id"] == $membership_item_2_id &&
-				$switched_membership["order_id"] == $order["id"]
+				$switched_membership_order["items"][0]["item_id"] == $membership_item_2_id &&
+				$switched_membership["order_id"] == $switched_membership_order["id"]
 				): ?>
 			<div class="testpassed"><p>SuperMember::switchMembership – from one subscription to another subscription – correct</p></div>
 			<? else: ?>
@@ -2076,7 +2080,7 @@
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$switched_membership_order["id"];
 			$query->sql($sql);
 			
 			// delete membership item 2
@@ -2084,8 +2088,8 @@
 			$query->sql($sql);
 			
 			// delete order
-			$order_no = $order["order_no"];
-			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
+			$switched_membership_order_id = $switched_membership_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
 		switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
@@ -2112,11 +2116,13 @@
 			unset($_POST);
 
 			// ACT 
-			$switched_membership = $MC->switchMembership($membership_item_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$switched_membership_order = $MC->switchMembership(["switchMembership", $user_id]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
-				$switched_membership === false
+				$switched_membership_order === false
 				): ?>
 			<div class="testpassed"><p>SuperMember::switchMembership – no membership exists – should return false – correct</p></div>
 			<? else: ?>
@@ -2153,7 +2159,10 @@
 			unset($_POST);
 
 			// ACT 
-			$switched_membership = $MC->switchMembership($membership_item_id);
+			$_POST["item_id"] = $membership_item_id;
+			$switched_membership_order = $MC->switchMembership(["switchMembership"]);
+			unset($_POST);
+			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
 			// ASSERT 
 			if(
@@ -2194,11 +2203,13 @@
 			unset($_POST);
 
 			// ACT 
-			$switched_membership = $MC->switchMembership($membership_item_id, ["user_id" => 9999]);
+			$_POST["item_id"] = $membership_item_id;
+			$switched_membership_order = $MC->switchMembership(["switchMembership", 9999]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
-				$switched_membership === false
+				$switched_membership_order === false
 				): ?>
 			<div class="testpassed"><p>SuperMember::switchMembership – invalid user_id sent – should return false – correct</p></div>
 			<? else: ?>
