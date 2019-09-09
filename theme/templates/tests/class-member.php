@@ -624,7 +624,7 @@
 	
 			// ACT 
 			
-			$cancellation_success = $MC->cancelMembership($added_membership_id);
+			$cancellation_success = $MC->cancelMembership(["cancelMembership", $added_membership_id]);
 			
 			// ASSERT 
 			if(
@@ -663,7 +663,8 @@
 			$SubscriptionClass = new Subscription();
 			
 			// ACT 
-				$cancellation_success = $MC->cancelMembership(9999);
+				$cancellation_success = $MC->cancelMembership(["cancelMembership", 9999]);
+
 			
 			
 			// ASSERT 
@@ -725,7 +726,7 @@
 			$added_membership_id = $added_membership["id"];
 			
 			// cancel membership 1 
-			$MC->cancelMembership($added_membership_id);
+			$MC->cancelMembership(["cancelMembership", $added_membership_id]);
 			$added_membership = $MC->getMembership();
 
 			// create another test membership item
@@ -1058,7 +1059,7 @@
 			$added_membership_id = $added_membership["id"];
 			
 			// cancel membership 1 (remove subscription_id)
-			$MC->cancelMembership($added_membership_id);
+			$MC->cancelMembership(["cancelMembership",$added_membership_id]);
 			$added_membership = $MC->getMembership();
 
 			// create second test membership item
@@ -1456,7 +1457,7 @@
 			$existing_membership_id = $existing_membership["id"];
 
 			// cancel membership 1 (remove subscription_id)
-			$MC->cancelMembership($existing_membership_id);
+			$MC->cancelMembership(["cancelMembership", $existing_membership_id]);
 			$existing_membership = $MC->getMembership();
 	
 			// ACT 
