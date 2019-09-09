@@ -1243,7 +1243,9 @@
 			$existing_membership_id = $existing_membership["id"];
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership"]);
+			unset($_POST);
 			$upgraded_membership = $MC->getMembership();
 			
 			// ASSERT 
@@ -1356,7 +1358,9 @@
 			$existing_membership_id = $existing_membership["id"];
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership"]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
@@ -1461,7 +1465,9 @@
 			$existing_membership = $MC->getMembership();
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership"]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(

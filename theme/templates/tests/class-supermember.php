@@ -2300,7 +2300,9 @@
 			$existing_membership_id = $existing_membership["id"];
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership", $user_id]);
+			unset($_POST);
 			$upgraded_membership = $MC->getMembers(["user_id" => $user_id]);
 			
 			// ASSERT 
@@ -2418,7 +2420,9 @@
 			unset($_POST);
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership", $user_id]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
@@ -2528,7 +2532,9 @@
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
 	
 			// ACT 
-			$upgrade_success = $MC->upgradeMembership($membership_item_2_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership", $user_id]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
@@ -2593,11 +2599,12 @@
 			unset($_POST);
 
 			// ACT 
-			$upgraded_membership = $MC->upgradeMembership($membership_item_id);
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership"]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
-				$upgraded_membership === false
+				$upgrade_success === false
 				): ?>
 			<div class="testpassed"><p>SuperMember::upgradeMembership – no user_id sent – should return false – correct</p></div>
 			<? else: ?>
@@ -2634,11 +2641,12 @@
 			unset($_POST);
 
 			// ACT 
-			$upgraded_membership = $MC->upgradeMembership($membership_item_id, ["user_id" => 9999]);
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership", 9999]);
+			unset($_POST);
 			
 			// ASSERT 
 			if(
-				$upgraded_membership === false
+				$upgrade_success === false
 				): ?>
 			<div class="testpassed"><p>SuperMember::upgradeMembership – invalid user_id sent – should return false – correct</p></div>
 			<? else: ?>
