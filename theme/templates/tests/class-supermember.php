@@ -1502,7 +1502,7 @@
 	
 			// ACT 
 			
-			$cancellation_success = $MC->cancelMembership($added_membership_id, ["user_id" => $user_id]);
+			$cancellation_success = $MC->cancelMembership(["cancelMembership", $user_id, $added_membership_id]);
 			
 			// ASSERT 
 			if(
@@ -1546,9 +1546,15 @@
 			$query = new Query();
 			$IC = new Items();
 			$SC = new SuperShop();
+
+			// create test user
+			$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
+			if($query->sql($sql)) {
+				$test_user_id = $query->lastInsertId();
+			}
 			
 			// ACT 
-				$cancellation_success = $MC->cancelMembership(9999);
+				$cancellation_success = $MC->cancelMembership(["cancelMembership", $test_user_id, 9999]);
 			
 			
 			// ASSERT 
@@ -1561,7 +1567,9 @@
 			<? endif; 
 			
 			// CLEAN UP
-
+			// delete users
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN ($test_user_id)";
+			$query->sql($sql);
 
 		}
 		cancelMembership_membershipInvalid_returnFalse();
@@ -1898,7 +1906,7 @@
 			$added_membership_id = $added_membership["id"];
 			
 			// cancel membership 1 (removes subscription_id)
-			$MC->cancelMembership($added_membership_id, ["user_id" => $user_id]);
+			$MC->cancelMembership(["cancelMembership", $user_id, $added_membership_id]);
 			$added_membership = $MC->getMembers();
 			
 			// create another test membership item
@@ -2516,7 +2524,7 @@
 			$existing_membership_id = $existing_membership["id"];
 
 			// cancel membership (removes subscription_id)
-			$MC->cancelMembership($existing_membership_id, ["user_id" => $user_id]);
+			$MC->cancelMembership(["cancelMembership", $user_id, $existing_membership_id]);
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
 	
 			// ACT 
