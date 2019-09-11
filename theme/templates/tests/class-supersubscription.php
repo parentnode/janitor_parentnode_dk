@@ -34,6 +34,7 @@ unset($_POST);
 // add subscription method (indefinite)
 $_POST["item_subscription_method"] = 997;
 $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+unset($_POST);
 
 // create test user
 $sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
@@ -56,7 +57,10 @@ if($query->sql($sql)) {
 		<?
 
 		// item without price – should succeed
-		$subscription = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription &&
@@ -73,7 +77,11 @@ if($query->sql($sql)) {
 
 		<?
 		// adding existing item – should succeed (but return existing subscription with updated modified_at)
-		$subscription_duplet = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription_duplet = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
+
 		
 		// debug(["item", $item,"subscr", $subscription, "duplet", $subscription_duplet]);
 		
@@ -109,9 +117,10 @@ if($query->sql($sql)) {
 
 		<?
 		// delete the created subscription
+		$deletion_success = $SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $subscription["id"]]);
 		if(
 			$subscription && 
-			$SuperSubscriptionClass->deleteSubscription($subscription["id"], ["user_id" => $test_user_id]) &&
+			$deletion_success &&
 			!$SuperSubscriptionClass->getSubscriptions(["item_id" => $item_id])
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -132,9 +141,10 @@ if($query->sql($sql)) {
 
 
 		// item without price – should succeed
-		// $_POST["item_id"] = $item_id;
-		$subscription = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		$expires_at = date("Y-m-d 00:00:00", time() + (date("t")*24*60*60));
 		// debug(["sub", $subscription, "exp", $expires_at]);
@@ -154,9 +164,10 @@ if($query->sql($sql)) {
 
 		<?
 		// adding existing item – should succeed (but return existing subscription)
-		// $_POST["item_id"] = $item_id;
-		$subscription_duplet = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription_duplet = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription_duplet &&
@@ -191,7 +202,7 @@ if($query->sql($sql)) {
 		// delete the created subscription
 		if(
 			$subscription && 
-			$SuperSubscriptionClass->deleteSubscription($subscription["id"], ["user_id" => $test_user_id]) &&
+			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $subscription["id"]]) &&
 			!$SuperSubscriptionClass->getSubscriptions(array("item_id" => $item_id))
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -211,9 +222,10 @@ if($query->sql($sql)) {
 
 
 		// item without price – should succeed
-		// $_POST["item_id"] = $item_id;
-		$subscription = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		$expires_at = date("Y-m-d 00:00:00", time() + (7*24*60*60));
 
@@ -232,9 +244,10 @@ if($query->sql($sql)) {
 
 		<?
 		// adding existing item – should succeed (but return existing subscription)
-		// $_POST["item_id"] = $item_id;
-		$subscription_duplet = $SuperSubscriptionClass->addSubscription($item_id, ["user_id" => $test_user_id]);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription_duplet = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription_duplet &&
@@ -268,7 +281,7 @@ if($query->sql($sql)) {
 		// delete the created subscription
 		if(
 			$subscription && 
-			$SuperSubscriptionClass->deleteSubscription($subscription["id"], ["user_id" => $test_user_id]) &&
+			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $subscription["id"]]) &&
 			!$SuperSubscriptionClass->getSubscriptions(array("item_id" => $item_id))
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -286,8 +299,12 @@ if($query->sql($sql)) {
 		$_POST["item_price_vatrate"] = 999;
 		$_POST["item_price_type"] = "default";
 		$price = $model_tests->addPrice(array("addPrice", $item_id));
+		unset($_POST);
 		
-		$subscription = $SuperSubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(!$subscription): ?>
 		<div class="testpassed"><p>SuperSubscription::addSubscription – price but no order_id (should not add) – correct</p></div>
@@ -313,8 +330,12 @@ if($query->sql($sql)) {
 		// update test item (delete subscription method)
 		$_POST["item_subscription_method"] = NULL;
 		$price = $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+		unset($_POST);
 		
-		$subscription = $SuperSubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$_POST["user_id"] = $test_user_id;
+		$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if($subscription === false): ?>
 		<div class="testpassed"><p>Subscription::addSubscription – item has no subscription method – should return false – correct</p></div>
@@ -390,8 +411,307 @@ if($query->sql($sql)) {
 
 	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
 	$query->sql($sql);
-
-
-
 	?>
+
+	<div class="tests">
+		<h3>updateSubscription</h3>		
+		<? 	
+		function updateSubscription_noChanges_returnUpdatedSubscription() {
+			// updateSubscription – no changes – return updated subscription
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			include_once("classes/shop/supersubscription.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			
+			// create test user
+			$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
+			if($query->sql($sql)) {
+				$test_user_id = $query->lastInsertId();
+			}
+			
+			// create first test item
+			$model_tests = $IC->typeObject("tests");
+			$_POST["name"] = "Test item 1";
+			$test_item_1 = $model_tests->save(["save"]);
+			$test_item_1_id = $test_item_1["item_id"];
+			unset($_POST);
+
+			// add price to first test item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
+			unset($_POST);
+
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $test_item_1_id));
+			unset($_POST);
+
+			// create test item and subscription
+			$added_item_cart = $SC->addToNewInternalCart($test_item_1_id, ["user_id" => $test_user_id]);
+			$added_item_cart_reference = $added_item_cart["cart_reference"];
+			$added_item_cart_id = $added_item_cart["id"];
+			$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart_id, $added_item_cart_reference]);
+			$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_1_id]);
+
+			// clear session for old callback checks
+			session()->reset("test_item_subscribed_callback");
+			session()->reset("test_item_ordered_callback");
+
+			// ACT 
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $test_user_id, $added_subscription["id"]]);
+			
+			// ASSERT 
+			if(
+				$updated_subscription &&
+				$updated_subscription["id"] &&
+				$updated_subscription["user_id"] == $test_user_id &&
+				$updated_subscription["item_id"] == $test_item_1_id &&
+				$updated_subscription["modified_at"] != $added_subscription["modified_at"] &&
+				!session()->value("test_item_subscribed_callback")
+				): ?>
+			<div class="testpassed"><p>SuperSubscription::updateSubscription – no changes – return updated subscription – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperSubscription::updateSubscription – no changes – return updated subscription – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_1_id AND user_id = $test_user_id";
+			$query->sql($sql);
+
+			// delete test item
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $test_item_1_id";
+			$query->sql($sql);	
+
+			// delete order
+			$added_item_order_id = $added_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_item_order_id";
+			$query->sql($sql);
+
+			// delete test user
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
+			$query->sql($sql);
+
+			// clear session for callback checks
+			session()->reset("test_item_subscribed_callback");
+			session()->reset("test_item_ordered_callback");
+
+		}
+		updateSubscription_noChanges_returnUpdatedSubscription();
+		?>
+		<? 	
+		function updateSubscription_changeItemId_returnUpdatedSubscriptionCallbackSubscribed() {
+			// updateSubscription – change item_id – return updated subscription and callback 'subscribed'
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			include_once("classes/shop/supersubscription.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			
+			// create test user
+			$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
+			if($query->sql($sql)) {
+				$test_user_id = $query->lastInsertId();
+			}
+			
+			// create first test item
+			$model_tests = $IC->typeObject("tests");
+			$_POST["name"] = "Test item 1";
+			$test_item_1 = $model_tests->save(["save"]);
+			$test_item_1_id = $test_item_1["item_id"];
+			unset($_POST);
+
+			// add price to first test item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
+			unset($_POST);
+
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $test_item_1_id));
+			unset($_POST);
+
+			// order first test item and create subscription
+			$added_item_cart = $SC->addToNewInternalCart($test_item_1_id, ["user_id" => $test_user_id]);
+			$added_item_cart_reference = $added_item_cart["cart_reference"];
+			$added_item_cart_id = $added_item_cart["id"];
+			$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart_id, $added_item_cart_reference]);
+			$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_1_id]);
+
+			// create second test item
+			$model_tests = $IC->typeObject("tests");
+			$_POST["name"] = "Test item 1";
+			$test_item_2 = $model_tests->save(["save"]);
+			$test_item_2_id = $test_item_2["item_id"];
+			unset($_POST);
+
+			// add price to second test item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
+			unset($_POST);
+
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $test_item_2_id));
+			unset($_POST);
+
+			// ACT 
+			$_POST["item_id"] = $test_item_2_id;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $test_user_id, $added_subscription["id"]]);
+			unset($_POST);
+			
+			// ASSERT 
+			if(
+				$updated_subscription["id"] == $added_subscription["id"] &&
+				$updated_subscription["user_id"] == $test_user_id &&
+				$added_subscription["item_id"] == $test_item_1_id &&
+				$updated_subscription["item_id"] == $test_item_2_id &&
+				$updated_subscription["modified_at"] != $added_subscription["modified_at"] &&
+				session()->value("test_item_subscribed_callback")
+				): ?>
+			<div class="testpassed"><p>SuperSubscription::updateSubscription – change item_id – return updated subscription and callback 'subscribed' – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperSubscription::updateSubscription – change item_id – return updated subscription and callback 'subscribed' – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$query->sql($sql);
+
+			// delete test items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id, $test_item_2_id)";
+			$query->sql($sql);	
+
+			// delete order
+			$added_item_order_id = $added_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_item_order_id";
+			$query->sql($sql);
+
+			// delete test user
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
+			$query->sql($sql);
+
+			// clear session for callback checks
+			session()->reset("test_item_subscribed_callback");
+			session()->reset("test_item_ordered_callback");
+
+		}
+		updateSubscription_changeItemId_returnUpdatedSubscriptionCallbackSubscribed();
+		?>
+		<? 	
+		function updateSubscription_changeExpiryDate_returnUpdatedSubscription() {
+			// updateSubscription – change expiry date, while not changing item_id – return updated subscription without callback
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			include_once("classes/shop/supersubscription.class.php");
+			$MC = new SuperMember();
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			
+			// create test user
+			$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
+			if($query->sql($sql)) {
+				$test_user_id = $query->lastInsertId();
+			}
+			
+			// create first test item
+			$model_tests = $IC->typeObject("tests");
+			$_POST["name"] = "Test item 1";
+			$test_item_1 = $model_tests->save(["save"]);
+			$test_item_1_id = $test_item_1["item_id"];
+			unset($_POST);
+
+			// add price to first test item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_type"] = "default";
+			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
+			unset($_POST);
+
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $test_item_1_id));
+			unset($_POST);
+
+			// order first test item and create subscription
+			$added_item_cart = $SC->addToNewInternalCart($test_item_1_id, ["user_id" => $test_user_id]);
+			$added_item_cart_reference = $added_item_cart["cart_reference"];
+			$added_item_cart_id = $added_item_cart["id"];
+			$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart_id, $added_item_cart_reference]);
+			$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_1_id]);
+
+			// ACT 
+			$_POST["expires_at"] = "2222-01-01 00:00:00";
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $test_user_id, $added_subscription["id"]]);
+			unset($_POST);
+			
+			// ASSERT 
+			if(
+				// $updated_subscription["id"] == $added_subscription["id"] &&
+				// $updated_subscription["user_id"] == $test_user_id &&
+				// $added_subscription["item_id"] == $test_item_1_id &&
+				// $updated_subscription["item_id"] == $test_item_1_id &&
+				// $updated_subscription["modified_at"] != $added_subscription["modified_at"] &&
+				// $updated_subscription["renewed_at"] == $added_subscription["renewed_at"] &&
+				// $updated_subscription["expires_at"] == "2222-01-01 00:00:00" &&
+				!session()->value("test_item_subscribed_callback") &&
+				!session()->value("test_item_subscribtion_renewed_callback")
+				): ?>
+			<div class="testpassed"><p>SuperSubscription::updateSubscription – change expiry date, while not changing item_id – return updated subscription without callback – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperSubscription::updateSubscription – change expiry date, while not changing item_id – return updated subscription without callback – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_1_id AND user_id = $test_user_id";
+			$query->sql($sql);
+
+			// delete test items
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id)";
+			$query->sql($sql);	
+
+			// delete order
+			$added_item_order_id = $added_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_item_order_id";
+			$query->sql($sql);
+
+			// delete test user
+			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
+			$query->sql($sql);
+
+			// clear session for callback checks
+			session()->reset("test_item_subscribed_callback");
+			session()->reset("test_item_ordered_callback");
+
+		}
+		updateSubscription_changeExpiryDate_returnUpdatedSubscription();
+		?>
+	</div>
 </div>

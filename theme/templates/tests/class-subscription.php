@@ -50,7 +50,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		<?
 
 		// item without price – should succeed
-		$subscription = $SubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription &&
@@ -67,7 +69,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 		<?
 		// adding existing item – should succeed (but return existing subscription with updated modified_at)
-		$subscription_duplet = $SubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$subscription_duplet = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 		
 		// debug(["item", $item,"subscr", $subscription, "duplet", $subscription_duplet]);
 		
@@ -105,7 +109,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		// delete the created subscription
 		if(
 			$subscription && 
-			$SubscriptionClass->deleteSubscription($subscription["id"]) &&
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $subscription["id"]]) &&
 			!$SubscriptionClass->getSubscriptions(array("item_id" => $item_id))
 		): ?>
 		<div class="testpassed"><p>Subscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -124,11 +128,10 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
 		unset($_POST);
 
-
 		// item without price – should succeed
-		// $_POST["item_id"] = $item_id;
-		$subscription = $SubscriptionClass->addSubscription($item_id);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		$expires_at = date("Y-m-d 00:00:00", time() + (date("t")*24*60*60));
 		// debug(["sub", $subscription, "exp", $expires_at]);
@@ -148,9 +151,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 		<?
 		// adding existing item – should succeed (but return existing subscription)
-		// $_POST["item_id"] = $item_id;
-		$subscription_duplet = $SubscriptionClass->addSubscription($item_id);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$subscription_duplet = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription_duplet &&
@@ -185,7 +188,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		// delete the created subscription
 		if(
 			$subscription && 
-			$SubscriptionClass->deleteSubscription($subscription["id"]) &&
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $subscription["id"]]) &&
 			!$SubscriptionClass->getSubscriptions(array("item_id" => $item_id))
 		): ?>
 		<div class="testpassed"><p>Subscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -205,9 +208,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 
 		// item without price – should succeed
-		// $_POST["item_id"] = $item_id;
-		$subscription = $SubscriptionClass->addSubscription($item_id);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		$expires_at = date("Y-m-d 00:00:00", time() + (7*24*60*60));
 
@@ -226,9 +229,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 		<?
 		// adding existing item – should succeed (but return existing subscription)
-		// $_POST["item_id"] = $item_id;
-		$subscription_duplet = $SubscriptionClass->addSubscription($item_id);
-		// unset($_POST);
+		$_POST["item_id"] = $item_id;
+		$subscription_duplet = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if(
 			$subscription_duplet &&
@@ -262,7 +265,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		// delete the created subscription
 		if(
 			$subscription && 
-			$SubscriptionClass->deleteSubscription($subscription["id"]) &&
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $subscription["id"]]) &&
 			!$SubscriptionClass->getSubscriptions(array("item_id" => $item_id))
 		): ?>
 		<div class="testpassed"><p>Subscription::deleteSubscription, item without price or subscription method - correct</p></div>
@@ -281,7 +284,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		$_POST["item_price_type"] = "default";
 		$price = $model_tests->addPrice(array("addPrice", $item_id));
 		
-		$subscription = $SubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if($subscription === false): ?>
 		<div class="testpassed"><p>Subscription::addSubscription – price but no order_id (should not add) – correct</p></div>
@@ -308,7 +313,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		$_POST["item_subscription_method"] = NULL;
 		$price = $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
 		
-		$subscription = $SubscriptionClass->addSubscription($item_id);
+		$_POST["item_id"] = $item_id;
+		$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+		unset($_POST);
 
 		if($subscription === false): ?>
 		<div class="testpassed"><p>Subscription::addSubscription – item has no subscription method – should return false – correct</p></div>
