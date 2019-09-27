@@ -211,7 +211,7 @@ class TypeTests extends Itemtype {
 	}
 	
 	function subscription_renewed($subscription) {
-		session()->value("test_item_subscribtion_renewed_callback", true);
+		session()->value("test_item_subscription_renewed_callback", true);
 	}
 
 	// Do I really want this to work for all users

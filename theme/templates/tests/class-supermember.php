@@ -335,8 +335,11 @@
 			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
 			unset($_POST);
 
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$_POST["user_id"] = $user_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
+			unset($_POST);
 
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
@@ -388,8 +391,11 @@
 			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
 			unset($_POST);
 
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$_POST["user_id"] = $user_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
+			unset($_POST);
 
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id, ["user_id" => 9999]);
@@ -443,9 +449,12 @@
 			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
 			unset($_POST);
 
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$_POST["user_id"] = $user_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
-	
+			unset($_POST);
+
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id, ["user_id" => $user_id]);
 			
@@ -531,9 +540,12 @@
 
 
 	
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id, "order_id" => $order_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$_POST["user_id"] = $user_id;
+			$_POST["order_id"] = $order_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
-
+			unset($_POST);
 	
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id, ["user_id" => $user_id]);
@@ -600,9 +612,10 @@
 			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
 			unset($_POST);
 
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id);
+			$_POST["item_id"] = $membership_item_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
-	
+			unset($_POST);
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
 	
 			
@@ -686,9 +699,12 @@
 			$sql = "INSERT INTO ".SITE_DB.".shop_order_items (order_id, item_id, name, quantity, unit_price, unit_vat, total_price, total_vat) VALUES ($order_id, $membership_item_id, 'test order item', 1, 100, 0, 100, 0)";
 			$query->sql($sql);
 
-			$subscription = $SuperSubscriptionClass->addSubscription($membership_item_id, ["user_id" => $user_id, "order_id" => $order_id]);
+			$_POST["item_id"] = $membership_item_id;
+			$_POST["user_id"] = $user_id;
+			$_POST["order_id"] = $order_id;
+			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 			$subscription_id = $subscription["id"];
-
+			unset($_POST);
 	
 			$added_membership = $MC->addMembership($membership_item_id, $subscription_id, ["user_id" => $user_id]);
 			
