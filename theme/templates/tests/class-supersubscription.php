@@ -857,7 +857,7 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN ($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
@@ -961,7 +961,7 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
@@ -1076,13 +1076,17 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id, $test_item_2_id)";
 			$query->sql($sql);	
 
+			// delete order
+			$second_item_order_id = $second_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN($second_item_order_id)";
+			$query->sql($sql);
 
 			// delete test user
 			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
@@ -1178,7 +1182,7 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
@@ -1303,13 +1307,17 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id, $test_item_2_id)";
 			$query->sql($sql);	
 
+			// delete order
+			$second_item_order_id = $second_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN($second_item_order_id)";
+			$query->sql($sql);
 
 			// delete test user
 			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
@@ -1410,13 +1418,17 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id, $test_item_2_id)";
 			$query->sql($sql);	
 
+			// delete order
+			$second_item_order_id = $second_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN($second_item_order_id)";
+			$query->sql($sql);
 
 			// delete test user
 			$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
@@ -1525,16 +1537,17 @@ if($query->sql($sql)) {
 			// CLEAN UP
 
 			// delete subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $test_item_2_id AND user_id = $test_user_id";
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id IN($test_item_1_id, $test_item_2_id) AND user_id = $test_user_id";
 			$query->sql($sql);
 
 			// delete test items
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($test_item_1_id, $test_item_2_id)";
 			$query->sql($sql);	
 
-			// delete order
+			// delete orders
 			$added_item_order_id = $added_item_order["id"];
-			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_item_order_id";
+			$second_item_order_id = $second_item_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id IN($added_item_order_id, $second_item_order_id)";
 			$query->sql($sql);
 
 			// delete test user
