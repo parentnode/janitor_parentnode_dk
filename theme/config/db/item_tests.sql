@@ -10,7 +10,6 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `v_password` varchar(100) DEFAULT NULL,
   `v_select` varchar(100) DEFAULT NULL,
 
-
   `v_datetime` timestamp NULL DEFAULT NULL,
   `v_date` date NULL DEFAULT NULL,
   `v_integer` int(11) DEFAULT NULL,
