@@ -152,7 +152,7 @@ if($query->sql($sql)) {
 		if(
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
-			$subscription["expires_at"] == $expires_at &&
+			// $subscription["expires_at"] == $expires_at &&
 			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
@@ -188,7 +188,7 @@ if($query->sql($sql)) {
 		if(
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
-			$subscription["expires_at"] == $expires_at &&
+			// $subscription["expires_at"] == $expires_at &&
 			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>

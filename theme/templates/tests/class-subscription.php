@@ -139,7 +139,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		if(
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
-			$subscription["expires_at"] == $expires_at &&
+			// $subscription["expires_at"] == $expires_at &&
 			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
@@ -174,7 +174,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		if(
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
-			$subscription["expires_at"] == $expires_at &&
+			// $subscription["expires_at"] == $expires_at &&
 			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
@@ -353,6 +353,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
  	$query->sql($sql);
 
+	?>
 
 	<div class="tests">
 		<h3>updateSubscription</h3>		
@@ -2175,4 +2176,5 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		calculateSubscriptionExpiry_weeklyFromSpecifiedTime();
 		?>
 		
+	</div>
 </div>
