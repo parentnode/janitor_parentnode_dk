@@ -1938,6 +1938,241 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		?>
 	</div>
 
+	<div class="tests">
+		<h3>calculateSubscriptionExpiry</h3>
+		<? 	
+		function calculateSubscriptionExpiry_annuallyFromCurrentTime() {
+			// calculateSubscriptionExpiry – annual subscription, no parameters sent – return current time + 1 year
 
-	?>
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			$current_time = date("Y-m-d 00:00:00");
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("annually");
+			
+			// ASSERT 
+			$current_timestamp = strtotime($current_time);
+			$calculated_timestamp = strtotime($calculated_time);
+			$time_diff = $calculated_timestamp - $current_timestamp;
+			if(
+				$current_time &&
+				$calculated_time &&
+				($time_diff == 31622400 || $time_diff == 31536000)
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, no parameters sent – return current time + 1 year – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, no parameters sent – return current time + 1 year – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_annuallyFromCurrentTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_annuallyFromSpecifiedTime() {
+			// calculateSubscriptionExpiry – annual subscription, specify start time – return start time + 1 year
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("annually", "2018-01-01 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2019-01-01 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, specify start time – return start time + 1 year – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, specify start time – return start time + 1 year – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_annuallyFromSpecifiedTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_annuallyFromFeb29th() {
+			// calculateSubscriptionExpiry – annual subscription, specify start time as Feb 29th in a leap year – return Feb 28th next year
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("annually", "2016-02-29 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2017-02-28 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, specify start time as Feb 29th in a leap year – return Feb 28th next year – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – annual subscription, specify start time as Feb 29th in a leap year – return Feb 28th next year – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_annuallyFromFeb29th();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_monthlyFromCurrentTime() {
+			// calculateSubscriptionExpiry – monthly subscription, no parameters sent – return current time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			$current_time = date("Y-m-d 00:00:00");
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("monthly");
+			
+			// ASSERT 
+			$current_timestamp = strtotime($current_time);
+			$calculated_timestamp = strtotime($calculated_time);
+			$time_diff = $calculated_timestamp - $current_timestamp;
+			if(
+				$current_time &&
+				$calculated_time &&
+				($time_diff == (28*86400) || $time_diff == (29*86400) || $time_diff == (30*86400) || $time_diff == (31*86400) || $time_diff == (31*86400+3600))
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, no parameters sent – return current time + 1 month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, no parameters sent – return current time + 1 month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_monthlyFromCurrentTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_monthlyFromSpecifiedTime() {
+			// calculateSubscriptionExpiry – monthly subscription, specify start time – return start time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("monthly", "2018-01-01 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-02-01 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time – return start time + 1 month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time – return start time + 1 month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_monthlyFromSpecifiedTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_monthlyFromShorterMonth() {
+			// calculateSubscriptionExpiry – monthly subscription, specify start time as last day in a short month – return last day in longer month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("monthly", "2018-02-28 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-03-31 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time as last day in a short month – return last day in longer month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time as last day in a short month – return last day in longer month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_monthlyFromShorterMonth();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_monthlyFromLongerMonth() {
+			// calculateSubscriptionExpiry – monthly subscription, specify start time as last day in longer month – return last day in short month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("monthly", "2018-03-31 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-04-30 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time as last day in longer month – return last day in short month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – monthly subscription, specify start time as last day in longer month – return last day in short month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_monthlyFromLongerMonth();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_weeklyFromCurrentTime() {
+			// calculateSubscriptionExpiry – weekly subscription, no parameters sent – return current time + 1 week
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			$current_time = date("Y-m-d 00:00:00");
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("weekly");
+			
+			// ASSERT 
+			$current_timestamp = strtotime($current_time);
+			$calculated_timestamp = strtotime($calculated_time);
+			$time_diff = $calculated_timestamp - $current_timestamp;
+			if(
+				$current_time &&
+				$calculated_time &&
+				$time_diff == (7*24*60*60)
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – weekly subscription, no parameters sent – return current time + 1 week – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – weekly subscription, no parameters sent – return current time + 1 week – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_weeklyFromCurrentTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_weeklyFromSpecifiedTime() {
+			// calculateSubscriptionExpiry – weekly subscription, specify start time – return start time + 1 week
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("weekly", "2018-01-01 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-01-08 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – weekly subscription, specify start time – return start time + 1 week – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – weekly subscription, specify start time – return start time + 1 week – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_weeklyFromSpecifiedTime();
+		?>
+		
 </div>
