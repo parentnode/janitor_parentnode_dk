@@ -1,4 +1,4 @@
-<div class="scene i:scene tests defaultEdit">
+<div class="scene i:scene tests">
 	<h1>PDF</h1>	
 	<h2>Testing PDF generation</h2>
 	<ul class="actions">

@@ -11,166 +11,193 @@
 	<div class="tests addToModel">
 		<h3>Model::addToModel</h3>
 		<?
-		$model = new Model();
-		$random_name = "fun".randomKey(8);
+
+		if(1 && "addToModel") {
+
+			$model = new Model();
+			$random_name = "fun".randomKey(8);
 
 
-		$model->addToModel($random_name, [
-			"label" => "My first label",
-			"type" => "string",
-			"value" => "nothing",
-			"options" => ["text" => "value"],
-			"pattern" => "/abc/",
-			"error_message" => "My first error",
-			"hint_message" => "My first hint",
+			$model->addToModel($random_name, [
+				"label" => "My first label",
+				"type" => "string",
+				"value" => "nothing",
+				"options" => ["text" => "value"],
+				"pattern" => "/abc/",
+				"error_message" => "My first error",
+				"hint_message" => "My first hint",
 
-			"i_dont_exist" => "hello error"
-		]);
+				"i_dont_exist" => "hello error"
+			]);
 
 
-		if(
-			$model->data_entities[$random_name]["label"] == "My first label" &&
-			$model->data_entities[$random_name]["type"] == "string" &&
-			$model->data_entities[$random_name]["value"] == "nothing" &&
-			$model->data_entities[$random_name]["options"] == ["text" => "value"] &&
-			$model->data_entities[$random_name]["pattern"] == "/abc/" &&
-			$model->data_entities[$random_name]["error_message"] == "My first error" &&
-			$model->data_entities[$random_name]["hint_message"] == "My first hint" &&
+			if(
+				$model->data_entities[$random_name]["label"] == "My first label" &&
+				$model->data_entities[$random_name]["type"] == "string" &&
+				$model->data_entities[$random_name]["value"] == "nothing" &&
+				$model->data_entities[$random_name]["options"] == ["text" => "value"] &&
+				$model->data_entities[$random_name]["pattern"] == "/abc/" &&
+				$model->data_entities[$random_name]["error_message"] == "My first error" &&
+				$model->data_entities[$random_name]["hint_message"] == "My first hint" &&
 
-			!isset($model->data_entities[$random_name]["i_dont_exist"])
+				!isset($model->data_entities[$random_name]["i_dont_exist"])
 		
-		): ?>
-		<div class="testpassed">Model::addToModel - correct</div>
-		<? else: ?>
-		<div class="testfailed">Model::addToModel - error</div>
-		<? endif; ?>
+			): ?>
+			<div class="testpassed">Model::addToModel - correct</div>
+			<? else: ?>
+			<div class="testfailed">Model::addToModel - error</div>
+			<? endif;
 
+		}
+
+		?>
 	</div>
 
 	<div class="tests getModel">
 		<h3>Model::getModel</h3>
 		<?
 
-		message()->resetMessages();
+		if(1 && "getModel") {
 
-		$model = new Model();
+			message()->resetMessages();
 
-		// Get model containing only predefined entities
-		$entities = $model->getModel();
+			$model = new Model();
 
-		if(
-			isset($entities["user_id"]) &&
-			$entities["user_id"]["type"] == "user_id" &&
-			isset($entities["user_id"]["label"]) &&
+			// Get model containing only predefined entities
+			$entities = $model->getModel();
 
-			isset($entities["html"]) &&
-			$entities["html"]["type"] == "html" &&
-			isset($entities["html"]["allowed_tags"]) &&
+			if(
+				isset($entities["user_id"]) &&
+				$entities["user_id"]["type"] == "user_id" &&
+				isset($entities["user_id"]["label"]) &&
+
+				isset($entities["html"]) &&
+				$entities["html"]["type"] == "html" &&
+				isset($entities["html"]["allowed_tags"]) &&
 			
-			isset($entities["published_at"]) &&
-			$entities["published_at"]["type"] == "datetime" &&
+				isset($entities["published_at"]) &&
+				$entities["published_at"]["type"] == "datetime" &&
 
-			!isset($entities["name"])
-		): ?>
-		<div class="testpassed">Model::getModel - correct</div>
-		<? else: ?>
-		<div class="testfailed">Model::getModel - error</div>
-		<? endif; ?>
+				!isset($entities["name"])
+			): ?>
+			<div class="testpassed">Model::getModel - correct</div>
+			<? else: ?>
+			<div class="testfailed">Model::getModel - error</div>
+			<? endif;
 
+		}
+
+		?>
 	</div>
 
 	<div class="tests setProperty">
 		<h3>Model::setProperty</h3>
 		<?
 
-		message()->resetMessages();
+		if(1 && "setProperty") {
 
-		$model = new Model();
-		$model->setProperty("user_id", "type", "string");
-		$model->setProperty("user_id", "label", "What");
+			message()->resetMessages();
 
-		$entities = $model->getModel();
+			$model = new Model();
+			$model->setProperty("user_id", "type", "string");
+			$model->setProperty("user_id", "label", "What");
 
-		if(
-			isset($entities["user_id"]) &&
-			$entities["user_id"]["type"] == "string" &&
-			$entities["user_id"]["label"] == "What"
-		): ?>
-		<div class="testpassed">Model::setProperty - correct</div>
-		<? else: ?>
-		<div class="testfailed">Model::setProperty - error</div>
-		<? endif; ?>
+			$entities = $model->getModel();
 
+			if(
+				isset($entities["user_id"]) &&
+				$entities["user_id"]["type"] == "string" &&
+				$entities["user_id"]["label"] == "What"
+			): ?>
+			<div class="testpassed">Model::setProperty - correct</div>
+			<? else: ?>
+			<div class="testfailed">Model::setProperty - error</div>
+			<? endif;
+
+		}
+
+		?>
 	</div>
 
 	<div class="tests getProperty">
 		<h3>Model::getProperty</h3>
 		<?
 
-		message()->resetMessages();
+		if(1 && "getProperty") {
 
-		$model = new Model();
+			message()->resetMessages();
 
-		$model->setProperty("user_id", "type", "string");
-		$model->setProperty("user_id", "label", "What");
+			$model = new Model();
 
-		if(
-			$model->getProperty("user_id", "type") == "string" &&
-			$model->getProperty("user_id", "label") == "What" &&
+			$model->setProperty("user_id", "type", "string");
+			$model->setProperty("user_id", "label", "What");
 
-			$model->getProperty("html", "type") == "html" &&
-			!$model->getProperty("html", "value") &&
+			if(
+				$model->getProperty("user_id", "type") == "string" &&
+				$model->getProperty("user_id", "label") == "What" &&
 
-			$model->getProperty("item_id", "type") == "item_id" &&
-			!$model->getProperty("item_id", "value") &&
-			$model->getProperty("item_id", "hint_message")
-		): ?>
-		<div class="testpassed">Model::getProperty - correct</div>
-		<? else: ?>
-		<div class="testfailed">Model::getProperty - error</div>
-		<? endif; ?>
+				$model->getProperty("html", "type") == "html" &&
+				!$model->getProperty("html", "value") &&
 
+				$model->getProperty("item_id", "type") == "item_id" &&
+				!$model->getProperty("item_id", "value") &&
+				$model->getProperty("item_id", "hint_message")
+			): ?>
+			<div class="testpassed">Model::getProperty - correct</div>
+			<? else: ?>
+			<div class="testfailed">Model::getProperty - error</div>
+			<? endif;
+
+		}
+
+		?>
 	</div>
 
 	<div class="tests getPostedEntities">
 		<h3>Model::getPostedEntities</h3>
 		<?
 
-		message()->resetMessages();
+		if(1 && "getPostedEntities") {
 
-		$model = new Model();
+			message()->resetMessages();
 
-		// Add to elements to model to perform test
-		$model->addToModel("password", ["type" => "password"]);
-		$model->addToModel("name", ["type" => "string"]);
-		$model->addToModel("email", ["type" => "email"]);
+			$model = new Model();
+
+			// Add to elements to model to perform test
+			$model->addToModel("password", ["type" => "password"]);
+			$model->addToModel("name", ["type" => "string"]);
+			$model->addToModel("email", ["type" => "email"]);
 
 
-		$_POST["user_id"] = 1;
-		$_POST["name"] = "Test name";
-		$_POST["email"] = "message+email@domain.tld";
-		$_POST["password"] = "æøå<span>#€%&!/()";
-		$_POST["html"] = "<p>æøå<script>#€%&!/()</script></p>";
-		$_FILES["mediae"] = ["tmp_name" => "Test file name"];
+			$_POST["user_id"] = 1;
+			$_POST["name"] = "Test name";
+			$_POST["email"] = "message+email@domain.tld";
+			$_POST["password"] = "æøå<span>#€%&!/()";
+			$_POST["html"] = "<p>æøå<script>#€%&!/()</script></p>";
+			$_FILES["mediae"] = ["tmp_name" => "Test file name"];
 
-		$model->getPostedEntities();
+			$model->getPostedEntities();
 
 	
-		if(
-			$model->getProperty("user_id", "value") == 1 &&
-			$model->getProperty("name", "value") == "Test name" &&
-			$model->getProperty("email", "value") == "message+email@domain.tld" &&
-			$model->getProperty("password", "value") == "æøå<span>#€%&!/()" &&
-			$model->getProperty("html", "value") == "<p>æøå#€%&!/()</p>" &&
-			$model->getProperty("mediae", "value") == "Test file name" &&
+			if(
+				$model->getProperty("user_id", "value") == 1 &&
+				$model->getProperty("name", "value") == "Test name" &&
+				$model->getProperty("email", "value") == "message+email@domain.tld" &&
+				$model->getProperty("password", "value") == "æøå<span>#€%&!/()" &&
+				$model->getProperty("html", "value") == "<p>æøå#€%&!/()</p>" &&
+				$model->getProperty("mediae", "value") == "Test file name" &&
 
-			!$model->getProperty("item_id", "value") &&
-			!$model->getProperty("i_dont_exist", "value")
-		): ?>
-		<div class="testpassed">Model::getPostedEntities - correct</div>
-		<? else: ?>
-		<div class="testfailed">Model::getPostedEntities - error</div>
-		<? endif; ?>
+				!$model->getProperty("item_id", "value") &&
+				!$model->getProperty("i_dont_exist", "value")
+			): ?>
+			<div class="testpassed">Model::getPostedEntities - correct</div>
+			<? else: ?>
+			<div class="testfailed">Model::getPostedEntities - error</div>
+			<? endif;
+
+		}
+
+		?>
 	</div>
 
 	<div class="tests validate">
@@ -3623,15 +3650,21 @@
 				!$model->getProperty("name1", "error") &&
 				$model->getProperty("name3", "error")
 			): ?>
-			<div class="testpassed">Model::validateAll - correct</div>
+			<div class="testpassed">Model::validateAll, one failing - correct</div>
 			<? else: ?>
-			<div class="testfailed">Model::validateAll - error</div>
+			<div class="testfailed">Model::validateAll, one failing - error</div>
 			<? endif;
 
 		}	
 
 
-		if(1 && "validateAll, positive cannot be tested meaningfully (yet) – some defaults are required (still)") {}
+		if(1 && "validateAll, positive cannot be tested meaningfully (yet)") {
+
+			// – some defaults entities are required (still)
+			// This means a variable/potentially changing number of entities will be included in an validateAll test
+			// on top of what is declared in Tests model – and it is not entirely meaningful to use validateAll
+
+		}
 
 
 		?>
