@@ -594,6 +594,53 @@ $SC = new SuperShop();
 		$query->sql($sql);
 
 		?>
+		
 	</div> 
+	<div class="tests">
+		<h3>SuperShop::addCart</h3>
+
+		<? 	
+		function addCart_internalCart_returnCartNoCartReferenceInSession() {
+			// addCart – internal cart – should return cart, no cart_reference in session
+				
+			// ARRANGE
+			$query = new Query();
+			$SC = new SuperShop();
+
+			$cart = false;
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
+			$session_cart_reference = session()->value("cart_reference");
+
+			// ACT
+			$cart = $SC->addCart(["addCart"]);
+			
+			// ASSERT 
+			$session_cart_reference = session()->value("cart_reference");
+			if(
+				$cart &&
+				$cart["id"] &&
+				!$session_cart_reference
+				): ?>
+			<div class="testpassed"><p>SuperShop::addCart – internal cart – should return cart, no cart_reference in session – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperShop::addCart – internal cart – should return cart, no cart_reference in session – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete cart
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = ".$cart["id"];
+			$query->sql($sql);
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
+
+		}
+		addCart_internalCart_returnCartNoCartReferenceInSession();
+		?>
+
+	</div>
 
 </div>

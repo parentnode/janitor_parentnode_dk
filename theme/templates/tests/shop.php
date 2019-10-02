@@ -39,62 +39,88 @@ $SSC = new SuperShop();
 	<div class="tests">
 		<h3>Shop::addCart</h3>
 
-
-		<? 	// addCart
+		<? 	
+		function addCart_normalCart_returnCartAddCartReferenceToSession() {
+			// addCart – normal cart – should return cart and add cart_reference to session
+				
 			// ARRANGE
+			$query = new Query();
+			$SC = new Shop();
+
 			$cart = false;
 
-		?>
-		<? 	// ACT 
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart 
-			): ?>
-		<div class="testpassed"><p>Shop::addCart – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>Shop::addCart – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+			// ACT 
+			$cart = $SC->addCart(["addCart"]);
+			
+			
+			// ASSERT 
+			if(
+				$cart &&
+				$cart["id"] &&
+				session()->value("cart_reference") == $cart["cart_reference"]
+				): ?>
+			<div class="testpassed"><p>Shop::addCart – normal cart – should return cart and add cart_reference to session – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Shop::addCart – normal cart – should return cart and add cart_reference to session – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
 
-		?>
+			// delete cart
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = ".$cart["id"];
+			$query->sql($sql);
 
-		<? 	// addCart – internal cart
+			// clear cart reference from session
+			session()->reset("cart_reference");
+
+
+		}
+		addCart_normalCart_returnCartAddCartReferenceToSession();
+		?>
+		<? 	
+		function addCart_internalCart_returnCartNoCartReferenceInSession() {
+			// addCart – internal cart – should return cart, no cart_reference in session
+				
 			// ARRANGE
+			$query = new Query();
+			$SC = new Shop();
+
 			$cart = false;
 
-		?>
-		<? 	// ACT 
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart 
-			): ?>
-		<div class="testpassed"><p>Shop::addCart – internal cart – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>Shop::addCart – internal cart – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+			// clear cart reference from session
+			session()->reset("cart_reference");
+			$session_cart_reference = session()->value("cart_reference");
 
-		?>
 
-		<? 	// addCart – overwrite default values
-			// ARRANGE
-			$cart = false;
+			// ACT
+			$_POST["is_internal"] = true;
+			$cart = $SC->addCart(["addCart"]);
+			unset($_POST);
+			
+			
+			// ASSERT 
+			$session_cart_reference = session()->value("cart_reference");
+			if(
+				$cart &&
+				$cart["id"] &&
+				!$session_cart_reference
+				): ?>
+			<div class="testpassed"><p>Shop::addCart – internal cart – should return cart, no cart_reference in session – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Shop::addCart – internal cart – should return cart, no cart_reference in session – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
 
-		?>
-		<? 	// ACT 
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart 
-			): ?>
-		<div class="testpassed"><p>Shop::addCart – overwrite default values – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>Shop::addCart – overwrite default values – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+			// delete cart
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = ".$cart["id"];
+			$query->sql($sql);
 
+			// clear cart reference from session
+			session()->reset("cart_reference");
+
+		}
+		addCart_internalCart_returnCartNoCartReferenceInSession();
 		?>
 
 	</div>
