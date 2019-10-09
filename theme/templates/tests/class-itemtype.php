@@ -2219,7 +2219,7 @@ function manualCleanUp($item_id) {
 			<? endif;
 
 			// Clear datasets
-			// manualCleanUp($test_upload["id"]);
+			manualCleanUp($test_upload["id"]);
 
 		}
 
@@ -2344,7 +2344,7 @@ function manualCleanUp($item_id) {
 
 		}
 
-		if(1 && "addMedia (png + disallowed txt)") {
+		if(1 && "addSingleMedia (disallowed txt)") {
 
 			message()->resetMessages();
 			unset($_POST);
