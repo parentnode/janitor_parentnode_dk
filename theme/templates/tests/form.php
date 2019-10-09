@@ -89,7 +89,7 @@ u.o["testForm"] = new function() {
 
 	<?//= $JML->editTags($item) ?>
 
-	<?//= $JML->editMedia($item) ?>
+	<?//= $JML->editMediae($item) ?>
 
 
 </div>	

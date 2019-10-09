@@ -10,7 +10,7 @@ $page_item = $IC->getItem(array("tags" => "page:front", "extend" => array("user"
 <div class="scene front i:scene">
 
 <? if($page_item && $page_item["status"]): 
-	$media = $IC->sliceMedia($page_item); ?>
+	$media = $IC->sliceMediae($page_item); ?>
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 

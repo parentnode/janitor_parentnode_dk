@@ -17,7 +17,7 @@ $todotags_priority = array("General", "Backend interface");
 <div class="scene milestones i:scene">
 
 <? if($page_item && $page_item["status"]): 
-	$media = $IC->sliceMedia($page_item); ?>
+	$media = $IC->sliceMediae($page_item); ?>
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 		<? if($media): ?>

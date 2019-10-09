@@ -8,7 +8,7 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 <div class="scene docsindex i:docsindex">
 
 <? if($page_item && $page_item["status"]): 
-	$media = $IC->sliceMedia($page_item); ?>
+	$media = $IC->sliceMediae($page_item); ?>
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 		<? if($media): ?>
