@@ -4,3 +4,5 @@ u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me 
 
 u.ga_account = 'UA-49739795-1';
 u.ga_domain = 'janitor.parentnode.dk';
+
+u.gapi_key = "AIzaSyAVqnYpqFln-qAYsp5rkEGs84mrhmGQB_I";
