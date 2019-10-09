@@ -93,6 +93,93 @@
 				</div>
 			</div>
 
+			<div class="function" id="JanitorHTML::jsData">
+				<div class="header">
+					<h3>JanitorHTML::jsData</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">JanitorHTML::jsData</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">String</span> = 
+								JanitorHTML::jsData(
+									<span class="type">Array</span> <span class="var">$_options</span> 
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Create data attributes with backend endpoints for JavaScript interfaces.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$_options</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Array</span> Array of endpoint areas to include
+								</div>
+								<div class="details">
+									<h5>Available endpoint areas</h5>
+									<dl class="options">
+										<dt><span class="value">order</span></dt>
+										<dd>Endpoint for updating item order</dd>
+										<dt><span class="value">tags</span></dt>
+										<dd>Endpoint for getting, adding and removing tags</dd>
+										<dt><span class="value">media</span></dt>
+										<dd>Endpoint for deleting media and updating media name and order</dd>
+										<dt><span class="value">comments</span></dt>
+										<dd>Endpoint for updating or deleting comments</dd>
+										<dt><span class="value">prices</span></dt>
+										<dd>Endpoint for deleting prices</dd>
+										<dt><span class="value">qna</span></dt>
+										<dd>Endpoint for updating or deleting QnA's</dd>
+									</dl>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">String</span> String of data attributes with all the endpoint related to specifed areas – or all areas if none are defined. Will always add a csrf-token data attribute.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						<p>No examples</p>
+					</div>
+
+					<div class="dependencies">
+						<h4>Dependencies</h4>
+
+						<div class="php">
+							<h5>PHP</h5>
+							<ul>
+								<li>array_search</li>
+							</ul>
+						</div>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session::value</li>
+								<li>Page::validPath</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
 			<div class="function" id="_functionname_">
 				<div class="header">
 					<h3>_functionname_</h3>
