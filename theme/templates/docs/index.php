@@ -73,6 +73,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<h3><a href="/docs/class-html">HTML</a></h3>
 				<p>HTML class</p>
 			</li>
+			<li>
+				<h3><a href="/docs/class-html-janitor">Janitor HTML (JML)</a></h3>
+				<p>Janitor style HTML class</p>
+			</li>
 			<!--li>
 				<h3><a href="/docs/class-image">Image</a></h3>
 				<p>Image class</p>
@@ -115,6 +119,7 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<p>Querying items and item data</p>
 			</li>
 		</ul>
+
 		<h3>Shop classes</h3>
 		<ul class="library shop">
 			<li>

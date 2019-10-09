@@ -4,15 +4,14 @@ global $IC;
 global $model;
 global $itemtype;
 
-$sindex = isset($action[1]) ? $action[1]:false;
-$limit = 2;
+$sindex = isset($action[1]) ? $action[1] : false;
+$limit = 100;
 
-// $items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DESC, published_at DESC", "extend" => array("tags" => true, "mediae" => true)));
 $items = $IC->paginate(array(
 	"limit" => $limit, 
 	"pattern" => array(
 		"itemtype" => $itemtype, 
-		"order" => "status DESC, published_at DESC", 
+		"order" => "status DESC, position ASC", 
 		"extend" => array(
 			"tags" => true, 
 			"mediae" => true
@@ -30,11 +29,11 @@ $items = $IC->paginate(array(
 		<?= $JML->listNew(array("label" => "New test")) ?>
 	</ul>
 
-	<div class="all_items i:defaultList taggable filters images width:100"<?= $JML->jsData() ?>>
+	<div class="all_items i:defaultList taggable filters sortable images width:100"<?= $JML->jsData(["order", "tags", "search"]) ?>>
 <?		if($items && $items["range_items"]): ?>
 		<ul class="items">
-<?			foreach($items["range_items"] as $item): ?>
-			<li class="item item_id:<?= $item["id"] ?><?= $JML->jsMedia($item) ?>">
+<?			foreach($items["range_items"] as $item):?>
+			<li class="item item_id:<?= $item["id"] ?><?= $JML->jsMedia($item, "mediae") ?>">
 				<h3><?= strip_tags($item["name"]) ?></h3>
 
 				<?= $JML->tagList($item["tags"]) ?>
