@@ -136,9 +136,10 @@ class TypeTests extends Itemtype {
 			"type" => "files",
 			"label" => "Files",
 			"required" => true,
+			"min" => 3,
 			"max" => 20,
 			"hint_message" => "Type * files",
-			"error_message" => "Files must be added"
+			"error_message" => "Between 3 and 20 files must be added"
 		));
 
 

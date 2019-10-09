@@ -22,6 +22,8 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `v_latitude` double NULL DEFAULT NULL,
   `v_longitude` double NULL DEFAULT NULL,
 
+  `position` int(11) NOT NULL DEFAULT '0',
+
 
   PRIMARY KEY  (`id`),
   KEY `item_id` (`item_id`),
