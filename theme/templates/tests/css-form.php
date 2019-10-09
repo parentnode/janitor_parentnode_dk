@@ -5,7 +5,7 @@ global $itemtype;
 
 
 //$model = new Tests();
-$items = $IC->getItems(array("itemtype" => $itemtype));
+$items = $IC->getItems(["itemtype" => $itemtype, "order" => "id ASC"]);
 if(!$items) {
 
 	unset($_POST);
@@ -18,48 +18,41 @@ else {
 	$item_id = $items[0]["id"];
 }
 
-$item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => false, "mediae" => false)));
-	
+$item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "mediae" => true, "comments" => true)));
+
+$v_file_value = $IC->filterMediae($item, "v_file");
+$v_files_value = $IC->filterMediae($item, "v_files");
+
 ?>
 <script type="text/javascript">
 
 u.o["testForm"] = new function() {
 	this.init = function(form) {
-		u.bug("init")
+
 		u.f.init(form);
 
 		form.submitted = function() {
 			this.response = function(response) {
 				page.notify(response);
 
-				u.xInObject(response);
-
+				u.f.updateFilelistStatus(this, response);
 			}
-			u.request(this, this.action, {"params":u.f.getParams(this, {"send_as":"formdata"}), "method":"post"});
-
+			u.request(this, this.action, {"data":this.getData({"format":"formdata"}), "method":"post"});
 		}
-	}	
+
+	}
 }
+
 
 </script>
 
-<div class="scene i:scene tests">
+<div class="scene i:scene defaultEdit tests">
 	<h1>Form CSS</h1>	
 	<h2>Testing backend UI</h2>
 
-	<ul class="actions">
-		<?= $model->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
-		<?= $model->link("Back", "/janitor/tests", array("class" => "button primary", "wrapper" => "li.back")) ?>
-		<li class="delete">
-			<form enctype="application/x-www-form-urlencoded" method="post" action="/janitor/admin/user/delete/1" novalidate="novalidate">
-				<input type="hidden" value="9be4c079-8b38-4cf1-a773-cf00e773b928" name="csrf-token">
-				<input type="submit" class="button delete clickable" name="delete" value="Delete">
-			</form>
-		</li>
-	</ul>
+	<?= $JML->editGlobalActions($item) ?>
 
-
-	<div class="tests">
+	<div class="tests item">
 
 		<h3>Test item (All-in-one)</h3>
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
@@ -83,9 +76,21 @@ u.o["testForm"] = new function() {
 				<?= $model->input("v_checkbox", array("value" => $item["v_checkbox"])) ?>
 				<?= $model->input("v_radiobuttons", array("value" => $item["v_radiobuttons"])) ?>
 
+				<?= $model->input("v_file", array("value" => $v_file_value)) ?>
+				<?= $model->input("v_files", array("value" => $v_files_value)) ?>
 
-				<?= $model->inputHTML("v_html", array("value" => $item["v_html"])) ?>
+
+				<?= $model->input("user_id", array("type" => "string", "value" => $item["user_id"])) ?>
+				<?= $model->input("item_id", array("type" => "string", "value" => $item["item_id"])) ?>
+
+
+				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
+
+				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
+
 				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "value_lon" => $item["v_longitude"])) ?>
+
+				<?//= $model->inputTags("tags", array("type" => "string", "value" => $item["tags"])) ?>
 			</fieldset>
 
 			<?= $JML->editActions($item) ?>
@@ -100,9 +105,18 @@ u.o["testForm"] = new function() {
 	</div>
 
 
-	<?//= $JML->editTags($item) ?>
+	<?= $JML->editTags($item) ?>
 
-	<?//= $JML->editMedia($item) ?>
+	<?= $JML->editMediae($item, ["label" => "Mediae"]) ?>
 
+	<?= $JML->editMediae($item, ["label" => "v_files", "variant" => "v_files"]) ?>
+
+	<?= $JML->editSingleMedia($item, ["label" => "Single Media"]) ?>
+
+	<?= $JML->editSingleMedia($item, ["label" => "v_file", "variant" => "v_file"]) ?>
+
+	<?= $JML->editOwner($item) ?>
+
+	<?= $JML->editComments($item) ?>
 
 </div>	
