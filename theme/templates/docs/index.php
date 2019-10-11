@@ -62,12 +62,20 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "extend" => arra
 				<p>Creating and manipulating itemtypes</p>
 			</li>
 			<li>
+				<h3><a href="/docs/class-user">Users</a></h3>
+				<p>Plain user creation and manipulation</p>
+			</li>
+			<li>
 				<h3><a href="/docs/class-superuser">Superusers</a></h3>
 				<p>Getting, creating and manipulating users</p>
 			</li>
 			<li>
-				<h3><a href="/docs/class-user">Users</a></h3>
-				<p>Plain user creation and manipulation</p>
+				<h3><a href="/docs/class-member">Members</a></h3>
+				<p>Plain member creation and manipulation</p>
+			</li>
+			<li>
+				<h3><a href="/docs/class-supermember">SuperMembers</a></h3>
+				<p>Getting, creating and manipulating members</p>
 			</li>
 			<li>
 				<h3><a href="/docs/class-html">HTML</a></h3>
