@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-05-06 12:04:31
+asset-builder @ 2019-10-07 17:24:15
 */
 
 /*seg_smartphone_include.css*/
@@ -499,6 +499,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.shopList ul.tabs li.complete {color: green;}
 #content .scene.shopList ul.items > li dl.info dt.price {display: none;}
 #content .scene.shopList ul.items > li dl.info dd.price {position: absolute; top: 10px; right: 100px; font-size: 26px;}
+#content .scene.shopList ul.items > li.ship dl.info dd.price {right: 180px;}
 #content .scene.shopView > ul.actions li.invoice {float: right; padding: 0 0 10px 10px;}
 #content .scene.shopView > ul.actions li.creditnote {float: right; padding: 0 0 10px 10px;}
 #content .scene.shopView > ul.actions li.ship {float: right; padding: 0 0 10px 10px;}
@@ -560,6 +561,8 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.orderView div.payments h3 {padding-bottom: 15px;}
 #content .scene.orderView div.payments ul.actions {padding-bottom: 15px;}
 #content .scene.paymentList ul.items > li dl.info dd.price {right: 140px;}
+#content .scene.newPayment div.notice {background: orange; padding: 25px 0 0; border-bottom: 1px solid #bbbbbb; margin: 0 0 20px;}
+#content .scene.newPayment div.notice p {font-size: 20px; color: #ffffff;}
 #content .scene.newPayment div.basics {border-top: 1px solid #bbbbbb;}
 #content .scene.newPayment div.charge,
 #content .scene.newPayment div.reminder,
