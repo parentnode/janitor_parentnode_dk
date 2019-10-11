@@ -129,7 +129,7 @@ $user_id = $UC->confirmUsername($username, $verification_code);</code>
 									<dl class="options">
 										<!-- specific actions -->
 										<dt><span class="value">$action[0]</span></dt>
-										<dd>"setPassword"|arbritary parameter</dd>
+										<dd>"setPassword"|arbitrary parameter</dd>
 									</dl>
 								</div>
 							</dd>
