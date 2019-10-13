@@ -1,7 +1,6 @@
 Util.Objects["docsindex"] = new function() {
 	this.init = function(scene) {
-
-//		u.bug("init docsindex");
+		// u.bug("init docsindex", scene);
 
 		var files = u.qsa("div.files li", scene);
 		var i, node;
@@ -15,17 +14,19 @@ Util.Objects["docsindex"] = new function() {
 		var field = u.f.addField(fieldset, {"name":"search", "label":"Search term of minimum 3 chars"})
 		u.f.init(form);
 
+		form.submitted = function() {}
+
 		// enable search
-		field._input.div_search = scene.div_search;
+		field.input.div_search = scene.div_search;
 
 		// content needs to be indexed
 		// inject result container
-		field._input.results = u.ae(scene.div_search, "div", {"class":"results"});
+		field.input.results = u.ae(scene.div_search, "div", {"class":"results"});
 		for(i = 0; node = files[i]; i++) {
 
 			u.ce(node, {"type":"link"});
 
-			node.results = field._input.results;
+			node.results = field.input.results;
 			node.response = function(response) {
 
 				var i, _function;
@@ -49,11 +50,10 @@ Util.Objects["docsindex"] = new function() {
 		}
 
 
-//		u.bug("field._input:" + field._input);
+		// u.bug("field.input:", field.input);
 		// auto complete handler
-		field._input._autocomplete = function() {
-//			u.bug("autocomplete");
-
+		field.input._autocomplete = function() {
+			// u.bug("autocomplete");
 
 			var i, _function;
 
@@ -81,19 +81,19 @@ Util.Objects["docsindex"] = new function() {
 
 		}
 
-		field._input._keyup = function(event) {
-//			u.bug("keyup");
+		field.input._keyup = function(event) {
+			// u.bug("keyup");
 			// reset existing timer
 			u.t.resetTimer(this.t_autocomplete);
 			this.t_autocomplete = u.t.setTimer(this, this._autocomplete, 300);
 		}
 
-		field._input.focused = function() {
-//			u.bug("focused");
+		field.input.focused = function() {
+			// u.bug("focused");
 			u.e.addEvent(this, "keyup", this._keyup);
 		}
 
-		field._input.blurred = function() {
+		field.input.blurred = function() {
 			u.t.resetTimer(this.t_autocomplete);
 			u.e.removeEvent(this, "keyup", this._keyup);
 		}
@@ -120,6 +120,7 @@ Util.Objects["docpage"] = new function() {
 			// FUNCTION HEADER
 
 			func._header = u.qs(".header", func);
+			func._header._func = func;
 
 			func._header.expandarrow = u.svg({
 				"name":"expandarrow",
@@ -146,10 +147,10 @@ Util.Objects["docpage"] = new function() {
 			});
 
 
-			func._header._func = func;
 			func._body = u.qs(".body", func);
 			u.as(func._body, "display", "none");
 			func._body._func = func;
+
 
 			u.e.click(func._header);
 			func._header.clicked = function(event) {
@@ -180,12 +181,15 @@ Util.Objects["docpage"] = new function() {
 			// FUNCTION DEPENDENCIES
 
 			func._dependencies = u.qs(".dependencies", func);
+			func._dependencies._header = u.qs("h4", func._dependencies);
+			func._dependencies._header._dependencies = func._dependencies;
+
 			u.as(func._dependencies, "height", "20px");
 			func._dependencies._func = func;
 
 			func._dependencies.expandarrow = u.svg({
 				"name":"expandarrow",
-				"node":func._dependencies,
+				"node":func._dependencies._header,
 				"class":"arrow",
 				"width":17,
 				"height":17,
@@ -208,34 +212,40 @@ Util.Objects["docpage"] = new function() {
 			});
 
 
-			u.e.click(func._dependencies);
-			func._dependencies.clicked = function(event) {
+			u.e.click(func._dependencies._header);
+			func._dependencies._header.clicked = function(event) {
 
-				if(u.hc(this, "open")) {
+				if(u.hc(this._dependencies, "open")) {
 
-					u.as(this, "height", "20px");
-					u.rc(this, "open");
+					u.as(this._dependencies, "height", "20px");
+					u.rc(this._dependencies, "open");
 				}
 				else {
 
-					u.as(this, "height", "auto");
-					u.ac(this, "open");
+					u.as(this._dependencies, "height", "auto");
+					u.ac(this._dependencies, "open");
 				}
+
 			}
-
-
 
 		}
 
-		// is specific function stated in url
+
+		// is specific function stated in location HASH
 		if(location.hash) {
+			// var selected_function = u.qs(location.hash);
+			// u.ge is a very tolerant selector tool
 			var selected_function = u.ge(location.hash.replace("#", ""))
 			if(selected_function) {
+
+				// Open first – makes scrollto work better if item is not collapsed
 				if(!u.hc(selected_function, "open")) {
 					selected_function._header.clicked();
 				}
 
-				window.scrollTo(0, u.absY(selected_function));
+				u.t.setTimer(selected_function, function() {
+					u.scrollTo(window, {node: this, offset_y: 100});
+				}, 700);
 			}
 		}
 
