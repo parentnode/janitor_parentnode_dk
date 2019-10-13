@@ -1,13 +1,13 @@
 /*
-asset-builder @ 2019-05-23 03:37:30
+asset-builder @ 2019-10-13 20:10:10
 */
 
 /*seg_tablet_include.css*/
 
 /*seg_desktop.css*/
 /*
-MIT license, 2019 parentNode.dk
-asset-builder @ 2019-05-23 03:35:14
+MIT license, 2002-2019 parentNode.dk
+asset-builder @ 2019-10-13 18:58:25
 */
 @font-face {
 	font-family: 'OpenSans';
@@ -70,9 +70,9 @@ h2 {padding: 0 70px 30px; font-size: 30px; line-height: 1.1em;
 	font-family: "PT Serif", Times, serif;
 }
 h3 {padding: 0 70px 10px; font-size: 20px; line-height: 1.25em;}
-h4 {padding: 0 70px 5px; font-size: 14px; line-height: 1em; font-weight: bold;}
-h5 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
-h6 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
+h4 {padding: 0 70px 5px; font-size: 17px; line-height: 1.2em; font-weight: bold;}
+h5 {padding: 0 70px 2px; font-size: 14px; line-height: 1.2em; font-weight: bold;}
+h6 {padding: 0 70px 2px; font-size: 14px; line-height: 1em; font-weight: normal; font-style: italic;}
 p {padding: 0 70px 20px; font-size: 14px; line-height: 1.38em;}
 ul,
 ol {font-size: 0;}
@@ -162,9 +162,9 @@ body > div.hint a {text-decoration: underline; display: inline-block; vertical-a
 #content .scene ul.items li.item {display: block; padding-top: 20px; padding-bottom: 30px; border-top: 1px solid #dedede; position: relative;}
 #content .scene ul.items li.item h2 {position: relative; z-index: 1;}
 #content .scene dl {padding: 0 70px 15px; width: 500px;}
-#content .scene dt {width: 100px; text-align: right; padding: 0 5px 6px 0; color: #999999;}
+#content .scene dt {width: 115px; text-align: right; padding: 0 5px 6px 0; color: #999999;}
 #content .scene dt:after {content: ":";}
-#content .scene dd {padding: 0 0 6px; width: 394px;}
+#content .scene dd {padding: 0 0 6px; width: 380px;}
 #content .scene dt span {text-transform: none;}
 #content .scene dl dl {padding: 0 0 10px; margin-left: -30px; width: 425px;}
 #content .scene dl dl dt {width: 80px;}
@@ -357,7 +357,8 @@ div.field select option {padding: 5px 3px 2px 6px;}
 div.field textarea {width: 372px; height: 100px; overflow: auto; padding: 6px 0 2px 6px;}
 div.field.short textarea {height: 40px;}
 div.field textarea.autoexpand {width: 366px; padding: 6px 6px 2px; overflow: hidden;}
-div.field .pseudolabel {position: absolute; font-size: 14px; display: inline-block; padding: 5px 6px; z-index: 2;}
+div.field .pseudolabel {z-index: 2; display: none; position: absolute; font-size: 14px; padding: 2px 5px 2px; margin: 3px 2px; background-color: #ffffff;}
+div.field input.default ~ .pseudolabel {display: inline-block;}
 div.field.checkbox,
 div.field.boolean {}
 div.field.checkbox input,
@@ -381,8 +382,17 @@ div.field input[type="number"]::-webkit-outer-spin-button {margin: 0;
 	-webkit-appearance: none;
 }
 div.field.files {border: 3px dashed #dedede; display: block; width: 378px; border-radius: 5px; position: relative; margin: 2px 68px 17px; padding: 0;}
-div.field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;}
-div.field.files label {color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
+div.field.files input[type=file] {opacity: 0; width: 360px; height: 49px; margin: 0; border: 0;
+}
+div.field.files label {
+	color: #333333; font-size: 14px; display: block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;
+}
+div.field.files ul.filelist {
+	color: #333333; 
+	font-size: 14px; 
+	display: block; 
+	position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 16px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;
+}
 div.field.files.loading label {display: none;}
 div.field.files.loading {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat center center;}
 div.field.location {}
@@ -630,18 +640,13 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {font-size: 13px; color: #999999; padding: 0;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading .indicator {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat center center;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
 #content .scene.docsindex .search .results .function .definition dl {width: auto;}
 #content .scene.docsindex .search .results .function .definition dd {padding-bottom: 0; width: auto; display: block;}
-#content .scene.docsindex .search .results .function .parameters,
-#content .scene.docsindex .search .results .function .examples,
-#content .scene.docsindex .search .results .function .return,
-#content .scene.docsindex .search .results .function .uses,
-#content .scene.docsindex .search .results .function .description,
-#content .scene.docsindex .search .results .function .callbacks,
+#content .scene.docsindex .search .results .function .body div:not(.definition),
 #content .scene.docsindex .search .results .function .definition h4,
 #content .scene.docsindex .search .results .function .definition .name,
 #content .scene.docsindex .search .results .function .definition dt {display: none;}
@@ -652,33 +657,40 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene div.functions .function {padding: 10px 0 0; overflow: hidden; border-top: 1px solid #bbbbbb; background: #ffffff;}
 #content .scene div.functions .function .header {position: relative;}
 #content .scene div.functions .function .header svg {position: absolute; top: 5px; right: 50px; stroke: #999999; stroke-width: 3px;}
+#content .scene div.functions .function.open .header svg {transform: rotate(180deg); top: 0px; right: 54px;}
 #content .scene div.functions .function .body {padding: 20px 0 0; border: none;}
 #content .scene div.functions .function .body .definition dd {white-space: nowrap;}
-#content .scene div.functions .function .body .parameters dl.options {margin-left: -80px; width: 475px;}
-#content .scene div.functions .function .body .parameters dl.options dt {width: 130px;}
-#content .scene div.functions .function .body .parameters > dt {width: 115px;}
-#content .scene div.functions .function .body .parameters > dd {width: 375px;}
-#content .scene div.functions .function .body .callbacks dl {padding-left: 70px;}
-#content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
-#content .scene div.functions .function .body .callbacks dd {width: auto; display: block; padding-left: 20px;}
+#content .scene div.functions .function .body .parameters div.details {margin-left: -120px;}
+#content .scene div.functions .function .body .parameters div.details h5 {width: 170px; text-align: right;}
+#content .scene div.functions .function .body .parameters dl.options {width: 500px; margin-left: 0;}
+#content .scene div.functions .function .body .parameters dl.options dt {width: 170px;}
+#content .scene div.functions .function .body .parameters dl.options dd {width: 325px;}
+#content .scene div.functions .function .body .callbacks dt {width: 190px;}
+#content .scene div.functions .function .body .callbacks dd {width: 305px;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
 #content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
 #content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 20px;}
+#content .scene div.functions .function .body .example p+code {margin-top: -15px;}
+#content .scene div.functions .function .body .example code+p {margin-top: -10px;}
 #content .scene div.functions .function .body .dependencies {overflow: hidden; margin-bottom: 20px; position: relative;}
-#content .scene div.functions .function .body .dependencies svg {position: absolute; top: 1px; left: 175px; stroke: #999999; stroke-width: 3px;}
-#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .dependencies h4 {width: auto; position: relative; cursor: pointer;}
+#content .scene div.functions .function .body .dependencies svg {position: absolute; top: 10px; right: 50px; stroke: #999999; stroke-width: 3px;}
+#content .scene div.functions .function .body .dependencies.open svg {transform: rotate(180deg); top: 5px; right: 54px;}
+#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0;}
+#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0;}
 #content .scene div.functions .function .body .dependencies .manipulator ul {padding-bottom: 0;}
 #content .scene div.functions dd {padding-bottom: 5px;}
-#content .scene div.includefiles {padding-bottom: 15px; border-bottom: 1px solid #bbbbbb;}
+#content .scene div.includefiles {border-bottom: 1px solid #bbbbbb;}
 #content .scene div.includefiles .header {position: relative; cursor: pointer;}
 #content .scene div.includefiles .header svg {position: absolute; top: 10px; right: 50px; stroke: #999999; stroke-width: 3px;}
-#content .scene div.includefiles .body {}
-#content .scene div.segmentsupport {padding-top: 25px; padding-bottom: 15px; border-bottom: 1px solid #bbbbbb;}
+#content .scene div.includefiles.open .header svg {transform: rotate(180deg); top: 5px; right: 54px;}
+#content .scene div.includefiles .body {padding-bottom: 15px; }
+#content .scene div.segmentsupport {padding-top: 25px; border-bottom: 1px solid #bbbbbb;}
 #content .scene div.segmentsupport .header {position: relative; cursor: pointer;}
 #content .scene div.segmentsupport .header svg {position: absolute; top: 10px; right: 50px; stroke: #999999; stroke-width: 3px;}
-#content .scene div.segmentsupport .body {}
+#content .scene div.segmentsupport.open .header svg {transform: rotate(180deg); top: 5px; right: 54px;}
+#content .scene div.segmentsupport .body {padding-bottom: 15px; }
 #content .scene div.segmentsupport dd {padding-bottom: 5px;}
 
 
@@ -691,6 +703,12 @@ body #selection_options ul.actions a.button {background-color: #8c9399; color: #
 #content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
 #content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
 #content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
+#content .scene div.functions div.inputtypes h5 {padding-top: 10px; padding-bottom: 5px;}
+#content .scene div.functions div.inputtypes h5 span {font-size: 16px; font-weight: normal;}
+#content .scene div.functions div.inputtypes h6 {margin-top: -5px; padding-bottom: 3px;}
+#content .scene div.functions div.inputtypes h5 span {font-size: 16px; font-weight: normal;}
+#content .scene div.functions div.inputtypes dl dt {width: 120px;}
+#content .scene div.functions div.inputtypes dl dd {width: 374px;}
 
 
 /*s-colorscheme.css*/
