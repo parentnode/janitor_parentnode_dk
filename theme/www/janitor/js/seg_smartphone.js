@@ -9675,7 +9675,7 @@ Util.Objects["defaultSubscriptionmethod"] = new function() {
 		div.csrf_token = div.getAttribute("data-csrf-token");
 		div._sm_form = u.qs("form", div);
 		div._sm_change_div = u.qs("div.change_subscription_method", div);
-		div._sm_setting = u.qs("dl.settings dd.subscription_method", div);
+		div._sm_setting = u.qs("dl.info dd.subscription_method", div);
 		if(div._sm_form) {
 			div._sm_form.div = div;
 			div.actions_change = u.ae(div, "ul", {"class":"actions change"});

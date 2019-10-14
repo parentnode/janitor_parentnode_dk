@@ -18,7 +18,7 @@ $SC = new SuperShop();
 	</ul>
 	
 <?
-	// ADD VALUES
+	// SETUP
 	// create test user, no password, activated, and also create reference user
 	$query = new Query();
 	
@@ -176,6 +176,8 @@ $SC = new SuperShop();
 
 
 	</div>
+
+
 
 	<div class="tests">
 		<h3>SuperUser::sendVerificationLink</h3>
@@ -509,13 +511,18 @@ skip_cleanup:
 		unset($_POST);
 		
 		$_POST["user_id"] = $user_id;
-		$order = $SC->addOrder(["addOrder"]);
+		$cart = $SC->addCart(["addCart"]);
 		unset($_POST);
-		$order_id = $order["id"];
+		
+		$cart_id = $cart["id"];
+		$cart_reference = $cart["cart_reference"];
 		$_POST["item_id"] = $item_id;
 		$_POST["quantity"] = 1;
-		$order = $SC->addToOrder(["addToOrder", $order_id]);
+		$cart = $SC->addToCart(["addToCart", $cart_reference]);
 		unset($_POST);
+
+		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+		$order_id = $order["id"];
 
 		$result = $UC->cancel(["cancel", $user_id]);
 		// print_r($result);
@@ -583,15 +590,17 @@ skip_cleanup:
 			<div class="testfailed"><p>SuperUser::cancel (cancels user with no exisiting orders) - error</p></div>
 			<? endif; 
 			
-		//clean up
-		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = '$user_id";
-		$query->sql($sql);
+		// CLEAN UP
 		$model->delete(array("delete", $item_id));
 		$sql = "DELETE FROM ".SITE_DB.".shop_payments WHERE order_id = $order_id";
 		$query->sql($sql);
 		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
 		$query->sql($sql);
 
+		// user must be deleted last due to dependencies
+		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
+		$query->sql($sql);
+		
 		?>
 	</div>
 </div>

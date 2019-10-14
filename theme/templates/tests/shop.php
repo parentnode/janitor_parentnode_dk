@@ -21,72 +21,290 @@ $UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998
 
 
 
+$query = new Query();
 $IC = new Items();
-$model_tests = $IC->typeObject("tests");
 
-// create test item
-$_POST["name"] = "Test item";
-$item = $model_tests->save(array("save"));
-// print_r($item);
-unset($_POST);
-// create test membership item
-$model_tests_membership = $IC->TypeObject("membership");
-$_POST["name"] = "Membership Test item";
-$membership = $model_tests_membership->save(array("save"));
-// print_r($membership);
-unset($_POST);
-
-
+include_once("classes/shop/supershop.class.php");
 $SC = new Shop();
+$SSC = new SuperShop();
 ?>
 
 <div class="scene i:scene tests defaultEdit">
 	<h1>Shop</h1>	
-	<h2>Testing Shop classs</h2>
+	<h2>Testing Shop class</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
 	<div class="tests">
-		<h3>Shop::getCart()</h3>
-		<?
-		$cart = $SC->getCart();
+		<h3>Shop::addCart</h3>
+
+		<? 	
+		function addCart_normalCart_returnCartAddCartReferenceToSession() {
+			// addCart – normal cart – should return cart and add cart_reference to session
+				
+			// ARRANGE
+			$query = new Query();
+			$SC = new Shop();
+
+			$cart = false;
+
+			// ACT 
+			$cart = $SC->addCart(["addCart"]);
+			
+			
+			// ASSERT 
+			if(
+				$cart &&
+				$cart["id"] &&
+				session()->value("cart_reference") == $cart["cart_reference"]
+				): ?>
+			<div class="testpassed"><p>Shop::addCart – normal cart – should return cart and add cart_reference to session – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Shop::addCart – normal cart – should return cart and add cart_reference to session – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete cart
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = ".$cart["id"];
+			$query->sql($sql);
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
+
+
+		}
+		addCart_normalCart_returnCartAddCartReferenceToSession();
+		?>
+		<? 	
+		function addCart_internalCart_returnCartNoCartReferenceInSession() {
+			// addCart – internal cart – should return cart, no cart_reference in session
+				
+			// ARRANGE
+			$query = new Query();
+			$SC = new Shop();
+
+			$cart = false;
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
+			$session_cart_reference = session()->value("cart_reference");
+
+
+			// ACT
+			$_POST["is_internal"] = true;
+			$cart = $SC->addCart(["addCart"]);
+			unset($_POST);
+			
+			
+			// ASSERT 
+			$session_cart_reference = session()->value("cart_reference");
+			if(
+				$cart &&
+				$cart["id"] &&
+				!$session_cart_reference
+				): ?>
+			<div class="testpassed"><p>Shop::addCart – internal cart – should return cart, no cart_reference in session – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Shop::addCart – internal cart – should return cart, no cart_reference in session – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+
+			// delete cart
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = ".$cart["id"];
+			$query->sql($sql);
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
+
+		}
+		addCart_internalCart_returnCartNoCartReferenceInSession();
+		?>
+
+	</div>
+
+	<div class="tests">
+		<h3>Shop::addToNewInternalCart</h3>
+
+		<? 	// addToNewInternalCart
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
 		
-		if($cart): ?>
+		// add price to test item
+		$_POST["item_price"] = 100;
+		$_POST["item_price_currency"] = "DKK";
+		$_POST["item_price_vatrate"] = 1;
+		$_POST["item_price_type"] = "default";
+		$_POST["item_price_quantity"] = null;
+		$model_tests->addPrice(["addPrice", $item_id]);
+		unset($_POST);
+		
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id);
+		$cart_id = $cart["id"];
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart &&
+			$cart["items"][0]["item_id"] == $item_id &&
+			$cart["user_id"] == session()->value("user_id")
+			): ?>
+		<div class="testpassed"><p>Shop::addToNewInternalCart – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToNewInternalCart – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		// delete cart
+		$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
+		$query->sql($sql);
+
+		?>
+
+		<? 	// addToNewInternalCart – item has no price (should return false)
+			// ARRANGE
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		$item_id = $item["id"];
+
+		?>
+		<? 	// ACT 
+		$cart = $SC->addToNewInternalCart($item_id);
+		$cart_id = $cart["id"];	
+		?>
+		<? 	// ASSERT 
+		if(
+			$cart === false
+			): ?>
+		<div class="testpassed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – error</p></div>
+		<? endif; ?>
+		<? 	// CLEAN UP
+
+		// delete test item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+
+		?>
+
+	</div>
+
+
+	<div class="tests">
+		<h3>Shop::getCart()</h3>
+		
+		<? // SETUP
+
+		// create test item
+		$model_tests = $IC->typeObject("tests");
+		$_POST["name"] = "Test item";
+		$item = $model_tests->save(array("save"));
+		// print_r($item);
+		unset($_POST);
+
+		// create test membership item
+		$model_tests_membership = $IC->TypeObject("membership");
+		$_POST["name"] = "Membership Test item";
+		$membership = $model_tests_membership->save(array("save"));
+		// print_r($membership);
+		unset($_POST);
+		?>
+		
+		<? 
+		$cart = $SC->getCart();
+		// debug([$cart]);
+		?>
+		
+		
+		<? if(
+			$cart && 
+			$cart["user_id"] == session()->value("user_id"))
+		: ?>
 		<div class="testpassed"><p>Shop::getCart - correct</p></div>
 		<? else: ?>
 		<div class="testfailed"><p>Shop::getCart - error</p></div>
 		<? endif; ?>
 
-
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
-		<? endif; ?>
-	
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
-		<? endif; ?>
 	</div>
 	
+
 	<div class="tests">
 		
 		<h3>Shop::addToCart()</h3>
 		<?
+		// ADD ITEM WITHOUT PRICE
+		$cart_id = $cart["id"];
+		$cart = $SC->emptyCart("emptyCart");
 		
+		$item_id = $item["item_id"];
+		$_POST["item_id"] = $item_id;
+		$_POST["quantity"] = 1;
+		
+		$result = $SC->addToCart(["addToCart"]);
+		unset($_POST);
+
+		$cart = $SC->getCart();
+		// debug([$cart]);
+
+		if(
+			$result === false &&
+			$cart &&
+			!$cart["items"]
+		): ?>
+		<div class="testpassed"><p>Shop::addToCart(), adding item without price (should return false) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::addToCart(), adding item without price (should return false) - error</p></div>
+		
+		<? endif; 
+		
+		// goto cleanup;
+		?>
+
+		<?
+		// add prices to test item and membership item	
+		$_POST["item_price"] = 100;
+		$_POST["item_price_currency"] = "DKK";
+		$_POST["item_price_vatrate"] = 1;
+		$_POST["item_price_type"] = "default";
+		$_POST["item_price_quantity"] = null;
+
+		$model_tests_membership->addPrice(["addPrice", $membership["item_id"]]);
+		$model_tests->addPrice(["addPrice", $item["item_id"]]);
+		unset($_POST);
+		?>
+		
+		
+		<?
+		// ADD TWO DIFFERENT ITEMTYPES
 		$cart = $SC->emptyCart("emptyCart");
 		
 		$_POST["item_id"] = $membership["item_id"];
 		$_POST["quantity"] = 1;
+		
+			
 		$cart = $SC->addToCart(array("addToCart"));
 		unset($_POST);
 		
 		
 		$_POST["item_id"] = $item["item_id"];
 		$_POST["quantity"] = 1;
+
 		$cart = $SC->addToCart(array("addToCart"));
 		unset($_POST);
 		
@@ -111,19 +329,120 @@ $SC = new Shop();
 		<div class="testpassed"><p>Shop::addToCart(), adding two different itemtypes to cart - correct</p></div>
 		<? else: ?>
 		<div class="testfailed"><p>Shop::addToCart() - error</p></div>
-		<? endif; ?>
-	
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? endif; 
+		// goto cleanup;
+		?>
+
+		<?
+		// ADD ALREADY EXISTING ITEM
+		$cart = $SC->emptyCart("emptyCart");
+		
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		
+		$cart = $SC->addToCart(["addToCart"]);
+		$cart = $SC->addToCart(["addToCart"]);
+		unset($_POST);
+		
+		if(
+			$cart &&
+			$cart["items"] &&
+			$cart["items"][0]["quantity"] == 2 &&
+			$cart["items"][0]["item_id"] == $item["item_id"] &&
+			count($cart["items"]) == 1 &&
+			$cart["id"] &&
+			$cart["user_id"] &&
+			$cart["cart_reference"] &&
+			$cart["country"] &&
+			$cart["currency"]
+			): ?>
+		<div class="testpassed"><p>Shop::addToCart(), adding item that already exists in cart - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
-		<? endif; ?>
-	
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<div class="testfailed"><p>Shop::addToCart(), adding item that already exists in cart - error</p></div>
+		<? endif; 
+
+		// goto cleanup;
+		?>
+
+		<? 
+		// ADD ITEM TO NON-EXISTING CART
+		$SSC->deleteCart(["deleteCart", $cart["id"], $cart["cart_reference"]]);
+		$cart = false;
+
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;
+		
+		$cart = $SC->addToCart(["addToCart"]);
+		unset($_POST);
+
+
+		if(
+			$cart &&
+			$cart["items"] &&
+			$cart["items"][0]["quantity"] == 1 &&
+			$cart["items"][0]["item_id"] == $item["item_id"] &&
+			count($cart["items"]) == 1 &&
+			$cart["id"] &&
+			$cart["user_id"] &&
+			$cart["cart_reference"] &&
+			$cart["country"] &&
+			$cart["currency"]	
+			): ?>
+		<div class="testpassed"><p>Shop::addToCart(), adding item to non-existing cart - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<div class="testfailed"><p>Shop::addToCart(), adding item to non-existing cart - error</p></div>
 		<? endif; ?>
+	</div>
+
+	<div class="tests">
+		<h3>Shop::newOrderFromCart()</h3>
+		<?
+		// NEW ORDER FROM CART - REGULAR
+
+		session()->reset("test_item_ordered_callback");
+
+		// print_r($cart);
+		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+		$order_id = $order["id"];
+		// print_r($order);
+
+
+		if(
+			$order &&
+			$order["items"] &&
+			$order["status"] == 0 &&
+			$order["payment_status"] == 0 &&
+			$order["shipping_status"] == 0 &&
+			$order["user_id"] &&
+			$order["currency"] &&
+			$order["country"] &&
+			session()->value("test_item_ordered_callback") &&
+			$order["id"]
+			): ?>
+		<div class="testpassed"><p>Shop::newOrderFromCart - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::newOrderFromCart - error</p></div>
+		<? endif; ?>
+
+
+		<?
+		// NEW ORDER FROM CART - EMPTY CART
+
+		$SC->emptyCart(["emptyCart"]);
+		session()->reset("test_item_ordered_callback");
+
+		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+		if(
+			$cart &&
+			isset($cart["cart_reference"]) && 
+			$order == false
+		): ?>
+		<div class="testpassed"><p>Shop::newOrderFromCart, empty cart (should return false) - correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::newOrderFromCart, empty cart (should return false) - error</p></div>
+		<? endif; ?>
+
 	</div>
 	
 	<div class="tests">
@@ -234,21 +553,28 @@ $SC = new Shop();
 		<? endif; ?>
 		
 	</div>
+	<?
+		cleanup:
+		// // CLEAN UP
+		// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
+		// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
+		
+		// DELETE TEST ITEMS
+		$item_id = $item["id"];
+		$membership_id = $membership["id"];
+		$query = new Query();
+
+		// delete item
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
+		$query->sql($sql);
+		// delete membership
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
+		$query->sql($sql);
+		// delete order
+		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+		$query->sql($sql);
+
+		skip_cleanup:
+	?>
 	
 </div>
-
-<?
-	// // CLEAN UP
-	// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
-	// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
-	
-	// DELETE TEST ITEMS
-	$item_id = $item["id"];
-	$membership_id = $membership["id"];
-	$query = new Query();
-	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-	$query->sql($sql);
-	// delete membership
-	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
-	$query->sql($sql);
-?>
