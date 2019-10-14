@@ -1,6 +1,6 @@
 <div class="scene docpage i:docpage">
-	<h1>The Member Class</h1>
-	<p>Member creation and manipulation</p>
+	<h1>The SuperMember Class</h1>
+	<p>Getting, creating and manipulating members.</p>
 
 	<div class="section functions">
 		<div class="header">
@@ -8,7 +8,7 @@
 		</div>
 		<div class="body">
 
-			<div class="function" id="Member::addNewMembership">
+			<div class="function" id="addNewMembership">
 				<div class="header">
 					<h3>addNewMembership</h3>
 				</div>
@@ -29,9 +29,9 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Add new membership to current user.</p>
-						<p>Can be called via API, as opposed to Member::addMembership.</p>
-						<p>/#controller#/addNewMembership/</p>
+						<p>Add new membership to specified user.</p>
+						<p>Can be called via API, as opposed to SuperMember::addMembership.</p>
+						<p>/#controller#/addNewMembership/#user_id#</p>
 					</div>
 
 					<div class="parameters">
@@ -51,6 +51,8 @@
 										<!-- specific actions -->
 										<dt><span class="value">$action[0]</span></dt>
 										<dd>"addNewMembership"</dd>
+										<dt><span class="value">$action[1]</span></dt>
+										<dd>#user_id#</dd>
 									</dl>
 								</div>
 								<!-- optional details -->
@@ -75,7 +77,7 @@
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$MC = new Member();
+						<div class="example"><code>$MC = new SuperMember();
 
 $_POST["item_id"] = $item_id;
 $order = $MC->addNewMembership($action);</code>
@@ -102,8 +104,8 @@ $order = $MC->addNewMembership($action);</code>
 								<li>Model::validateList</li>
 								<li>Model::getProperty</li>
 								<li>User::getUser</li>
-								<li>Shop::addToNewInternalCart</li>
-								<li>Shop::newOrderFromCart</li>
+								<li>SuperShop::addToNewInternalCart</li>
+								<li>SuperShop::newOrderFromCart</li>
 							</ul>
 						</div>
 
@@ -112,7 +114,7 @@ $order = $MC->addNewMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="Member::addMembership">
+			<div class="function" id="addMembership">
 				<div class="header">
 					<h3>addMembership</h3>
 				</div>
@@ -135,8 +137,8 @@ $order = $MC->addNewMembership($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Add membership to current user.</p>
-						<p>Meant for internal use, as opposed to Member::addNewMembership.</p>
+						<p>Add membership to specified user.</p>
+						<p>Meant for internal use, as opposed to SuperMember::addNewMembership.</p>
 					</div>
 
 					<div class="parameters">
@@ -158,7 +160,17 @@ $order = $MC->addNewMembership($action);</code>
 							<dt><span class="var">$_options</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">Array|false</span> Not in use. Exists to maintain compatibility with SuperMember::addMembership.
+									<span class="type">Array|false</span> Options array
+								</div>
+								<!-- optional details -->
+								<div class="details">
+									<!-- write parameter details -->
+									<h5>Options</h5>
+									<dl class="options">
+										<!-- specific options -->
+										<dt><span class="value">user_id</span></dt>
+										<dd>Required</dd>
+									</dl>
 								</div>
 							</dd>
 						</dl>
@@ -172,8 +184,9 @@ $order = $MC->addNewMembership($action);</code>
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$MC = new Member();
-$membership = $MC->addMembership($item_id, $subscription_id);</code>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$membership = $MC->addMembership($item_id, subscription_id, ["user_id" => $user_id]);</code>
 						</div>
 					</div>
 
@@ -184,7 +197,9 @@ $membership = $MC->addMembership($item_id, $subscription_id);</code>
 							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>Member::getMembership</li>
+								<li>SuperSubscription::getSubscriptions</li>
+								<li>SuperMember::getMembers</li>
+								<li>SuperMember::updateMembership</li>
 								<li>Query::sql</li>
 								<li>Page::addLog</li>
 							</ul>
@@ -194,63 +209,8 @@ $membership = $MC->addMembership($item_id, $subscription_id);</code>
 
 				</div>
 			</div>
-			<div class="function" id="Member::getMembership">
-				<div class="header">
-					<h3>getMembership</h3>
-				</div>
-				<div class="body">
-					<div class="definition">
-						<h4>Definition</h4>
-						<dl class="definition">
-							<dt class="name">Name</dt>
-							<dd class="name">getMembership</dd>
-							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">Array|False</span> = 
-								getMembership();
-							</dd>
-						</dl>
-					</div>
 
-					<div class="description">
-						<h4>Description</h4>
-						<p>Get membership for current user.</p>
-						<p>Includes membership item and order.</p>
-					</div>
-
-					<div class="return">
-						<h4>Return values</h4>
-						<p><span class="type">Array|false</span> Membership object. False on error.</p>
-					</div>
-
-					<div class="examples">
-						<h4>Examples</h4>
-
-						<div class="example"><code>$MC = new Member();
-$membership = $MC->getMembership();</code>
-						</div>
-					</div>
-
-					<div class="dependencies">
-						<h4>Dependencies</h4>
-
-						<div class="janitor">
-							<!-- list janitor functions used by function -->
-							<h5>Janitor</h5>
-							<ul>
-								<li>session()->value</li>
-								<li>Query::sql</li>
-								<li>Query::result</li>
-								<li>Items::getItems</li>
-								<li>Shop::getOrders</li>
-							</ul>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-
-			<div class="function" id="Member::updateMembership">
+			<div class="function" id="updateMembership">
 				<div class="header">
 					<h3>updateMembership</h3>
 				</div>
@@ -271,7 +231,7 @@ $membership = $MC->getMembership();</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Update membership for current user.</p>
+						<p>Update membership for specified user.</p>
 					</div>
 
 					<div class="parameters">
@@ -289,6 +249,8 @@ $membership = $MC->getMembership();</code>
 									<h5>Options</h5>
 									<dl class="options">
 										<!-- specific options -->
+										<dt><span class="value">user_id</span></dt>
+										<dd>Required</dd>
 										<dt><span class="value">subscription_id</span></dt>
 										<dd>To be used if reactivating an inactive membership</dd>
 									</dl>
@@ -307,13 +269,13 @@ $membership = $MC->getMembership();</code>
 
 						<div class="example">
 							<p>Normal use:</p>
-							<code>$MC = new Member();
-$membership = $MC->updateMembership();</code>
+							<code>$MC = new SuperMember();
+$membership = $MC->updateMembership(["user_id" => $user_id]);</code>
 						</div>
 						<div class="example">
 							<p>Reactivating an inactive (cancelled) membership:</p>
-							<code>$MC = new Member();
-$membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</code>
+							<code>$MC = new SuperMember();
+$membership = $MC->updateMembership(["user_id" => $user_id, "subscription_id" => $subscription_id]);</code>
 						</div>
 					</div>
 
@@ -324,11 +286,11 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>session()->value()</li>
-								<li>Subscription::getSubscriptions</li>
-								<li>Member::getMembership</li>
+								<li>SuperSubscription::getSubscriptions</li>
+								<li>SuperMember::getMembers</li>
 								<li>Query::sql</li>
 								<li>Page::addLog</li>
+								<li>message()->addMessage()</li>
 							</ul>
 						</div>
 
@@ -337,7 +299,7 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 				</div>
 			</div>
 
-			<div class="function" id="Member::cancelMembership">
+			<div class="function" id="cancelMembership">
 				<div class="header">
 					<h3>cancelMembership</h3>
 				</div>
@@ -358,9 +320,9 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Cancel membership of current user.</p>
+						<p>Cancel membership for specified user.</p>
 						<p>Removes subscription_id from membership and deletes related subscription. Sends a notification email to administrator.</p>
-						<p>/#controller#/cancelMembership/#member_id#</p>
+						<p>/#controller#/cancelMembership/#user_id/#member_id#</p>
 					</div>
 
 					<div class="parameters">
@@ -381,6 +343,8 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 										<dt><span class="value">$action[0]</span></dt>
 										<dd>"cancelMembership"</dd>
 										<dt><span class="value">$action[1]</span></dt>
+										<dd>#user_id#</dd>
+										<dt><span class="value">$action[2]</span></dt>
 										<dd>#member_id#</dd>
 									</dl>
 								</div>
@@ -397,7 +361,7 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$MC = new Member();
+							<code>$MC = new SuperMember();
 $order = $MC->cancelMembership($action);</code>
 						</div>
 					</div>
@@ -417,11 +381,12 @@ $order = $MC->cancelMembership($action);</code>
 							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>session()->value()</li>
-								<li>Member::getMembership</li>
-								<li>Subscription::deleteSubscription</li>
+								<li>SuperUser::getUsers</li>
+								<li>SuperMember::getMembers</li>
+								<li>SuperSubscription::deleteSubscription</li>
+								<li>Query::sql</li>
 								<li>Page::addLog</li>
-								<li>mailer()->send()</li>
+								<li>message()->addMessage()</li>
 							</ul>
 						</div>
 
@@ -430,7 +395,7 @@ $order = $MC->cancelMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="Member::upgradeMembership">
+			<div class="function" id="upgradeMembership">
 				<div class="header">
 					<h3>upgradeMembership</h3>
 				</div>
@@ -451,9 +416,9 @@ $order = $MC->cancelMembership($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Upgrade membership for current user.</p>
+						<p>Upgrade membership for specified user.</p>
 						<p>Adds new order with custom price (new_price - current_price). Gets existing membership order and copies info to new membership order, then adds manual order line.</p>
-						<p>/#controller#/upgradeMembership/</p>
+						<p>/#controller#/upgradeMembership/#user_id#</p>
 					</div>
 
 					<div class="parameters">
@@ -473,6 +438,8 @@ $order = $MC->cancelMembership($action);</code>
 										<!-- specific actions -->
 										<dt><span class="value">$action[0]</span></dt>
 										<dd>"upgradeMembership"</dd>
+										<dt><span class="value">$action[1]</span></dt>
+										<dd>#user_id#</dd>
 									</dl>
 								</div>
 								<!-- optional details -->
@@ -498,7 +465,7 @@ $order = $MC->cancelMembership($action);</code>
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$MC = new Member();
+							<code>$MC = new SuperMember();
 $_POST["item_id"] = $item_id;
 $upgrade_success = $MC->upgradeMembership($action);</code>
 						</div>
@@ -521,11 +488,12 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 							<h5>Janitor</h5>
 							<ul>
 								<li>Model::getProperty</li>
-								<li>Member::getMembership</li>
-								<li>Shop::getPrice</li>
-								<li>Shop::getNewOrderNumber</li>
-								<li>Shop::getOrders</li>
-								<li>Subscription::getSubscriptions</li>
+								<li>SuperUser::getUsers</li>
+								<li>SuperMember::getMembers</li>
+								<li>SuperShop::getPrice</li>
+								<li>SuperShop::getNewOrderNumber</li>
+								<li>SuperShop::getOrders</li>
+								<li>SuperSubscription::getSubscriptions</li>
 								<li>Subscription::calculateSubscriptionExpiry</li>
 								<li>Items::getItem</li>
 								<li>Items::typeObject</li>
@@ -540,7 +508,7 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="Member::switchMembership">
+			<div class="function" id="switchMembership">
 				<div class="header">
 					<h3>switchMembership</h3>
 				</div>
@@ -561,8 +529,8 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Switch membership for current user.</p>
-						<p>/#controller#/switchMembership/</p>
+						<p>Switch membership for specified user.</p>
+						<p>/#controller#/switchMembership/#user_id#</p>
 					</div>
 
 					<div class="parameters">
@@ -581,7 +549,9 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 									<dl class="options">
 										<!-- specific actions -->
 										<dt><span class="value">$action[0]</span></dt>
-										<dd>"switchNewMembership"</dd>
+										<dd>"switchMembership"</dd>
+										<dt><span class="value">$action[1]</span></dt>
+										<dd>#user_id#</dd>
 									</dl>
 								</div>
 								<!-- optional details -->
@@ -607,7 +577,7 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$MC = new Member();
+							<code>$MC = new SuperMember();
 $_POST["item_id"] = $item_id;
 $order = $MC->switchMembership($action);</code>
 						</div>
@@ -628,13 +598,13 @@ $order = $MC->switchMembership($action);</code>
 							<!-- list janitor functions used by function -->
 							<h5>Janitor</h5>
 							<ul>
-								<li>session()->value()</li>
 								<li>Model::getPostedEntities</li>
 								<li>Model::validateList</li>
 								<li>Model::getProperty</li>
-								<li>Member::getMembership</li>
-								<li>Shop::addToNewInternalCart</li>
-								<li>Shop::newOrderFromCart</li>
+								<li>SuperUser::getUsers</li>
+								<li>SuperMember::getMembers</li>
+								<li>SuperShop::addToNewInternalCart</li>
+								<li>SuperShop::newOrderFromCart</li>
 							</ul>
 						</div>
 
@@ -643,10 +613,6 @@ $order = $MC->switchMembership($action);</code>
 				</div>
 			</div>
 
-
-
-
 		</div>
 	</div>
-
 </div>
