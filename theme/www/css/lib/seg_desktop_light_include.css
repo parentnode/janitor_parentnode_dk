@@ -6,4 +6,5 @@
 @import url(../../assets/parentnode-skin-default/css/lib/desktop_light/s-documentation.css);
 /* Project */
 @import url(desktop_light/s-pages.css);
+@import url(desktop_light/s-pages-hovers.css);
 @import url(desktop_light/s-colorscheme.css);

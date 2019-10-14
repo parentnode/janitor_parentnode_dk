@@ -122,7 +122,7 @@ Util.Events = u.e = new function() {
 			u.e.removeEvent(node, this.events.touch.start, action);
 		}
 		else {
-			// u.bug("Remove single:", this.events[this.event_support].start);
+			//u.bug("Remove single:", this.events[this.event_support].start);
 			u.e.removeEvent(node, this.events[this.event_support].start, action);
 		}
 	}
@@ -393,6 +393,7 @@ Util.Events = u.e = new function() {
 				// u.bug("drag set:", this);
 				// pick up element when it is moved
 				u.e.addMoveEvent(this, u.e._pick);
+				u.e.addEndEvent(this, u.e._cancelPick);
 			}
 
 			// Scrolling enabled?

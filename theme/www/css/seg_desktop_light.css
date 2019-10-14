@@ -1,13 +1,13 @@
 /*
-asset-builder @ 2019-10-07 17:24:04
+asset-builder @ 2019-10-13 20:10:10
 */
 
 /*seg_desktop_light_include.css*/
 
 /*seg_desktop_light.css*/
 /*
-MIT license, 2019 parentNode.dk
-asset-builder @ 2019-05-06 10:25:14
+MIT license, 2002-2019 parentNode.dk
+asset-builder @ 2019-10-13 18:58:25
 */
 @font-face {
 	font-family: 'OpenSans';
@@ -101,20 +101,16 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #header .logo {font-size: 30px; padding: 20px 50px 20px; color: #888888; cursor: pointer; display: block; width: 200px;
 	font-family: "PT Serif", Times, serif;
 }
-#header .logo:hover {text-decoration: underline;}
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
 #header .servicenavigation li {display: inline; vertical-align: top; color: #bbbbbb; padding-left: 10px;}
 #header .servicenavigation li.navigation,
-#header .servicenavigation li.admin,
-#header .servicenavigation li.user,
-#header .servicenavigation li.cart {display: none;}
+#header .servicenavigation li.admin {display: none;}
 #navigation {position: absolute; right: 50px; top: 75px;}
 #navigation ul {}
 #navigation ul li {display: inline; vertical-align: top; padding: 0 0 0 20px; font-size: 20px; color: #888888;}
 #navigation ul li a {
 	font-family: "PT Serif", Times, serif;
 }
-#navigation ul li a:hover {text-decoration: underline;}
 #navigation ul li.front {display: none;}
 #footer {text-align: center; border-top: 1px solid #888888; margin: 0 50px;}
 #footer p {padding: 10px; cursor: pointer;}
@@ -122,7 +118,6 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene {position: relative; padding: 50px 0 70px;}
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #888888;}
-#content .scene a:hover {text-decoration: underline;}
 #content .scene h1,
 #content .scene h2,
 #content .scene h3,
@@ -236,7 +231,6 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene p.errormessage {color: #df0000;}
 #content .scene div.article {padding-bottom: 30px;}
 #content .scene div.article ul.tags {padding-bottom: 20px;}
-#content .scene ul.tags a:hover {color: #888888;}
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
 #content .scene .articlebody ul {list-style-type: disc;}
@@ -250,6 +244,20 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 	font-family: "PT Serif", Times, serif;
 }
 #content .scene .article ul.info ul.geo {padding: 0;}
+#header .logo:hover,
+#navigation ul li a:hover {text-decoration: underline;}
+#content .scene ul.tags a:hover {color: #888888;}
+#content .scene a:hover {text-decoration: underline;}
+#content ul.actions input.button:hover,
+#content ul.actions a.button:hover {background-color: #bebebe;}
+#content ul.actions input.button.primary:hover,
+#content ul.actions a.button.primary:hover {background-color: #313942;}
+#content ul.actions input.button.secondary:hover,
+#content ul.actions a.button.secondary:hover {background-color: #313942;}
+#content form input.button.disabled:hover {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
+#content .scene.docsindex .search .results .function:hover {background: #ededed;}
+#content .scene .pagination .next a:hover,
+#content .scene .pagination .previous a:hover {background-color: #313942;}
 
 
 /*s-form.css*/
@@ -257,6 +265,11 @@ form {}
 fieldset {border: none; display: block;}
 div.field {padding: 0 70px 15px; position: relative; font-size: 0;}
 div.field label {font-size: 14px; display: block;}
+input,
+textarea {-webkit-appearance: none; border-radius: 0;}
+.boolean input,
+.checkbox input {-webkit-appearance: checkbox;}
+.radiobuttons input {-webkit-appearance: radio;}
 div.field input,
 div.field select,
 div.field textarea {color: #333333; background: #ffffff; border: 1px solid #dcdcdc; outline: none; position: relative; z-index: 1;}
@@ -308,18 +321,11 @@ div.field.location.error input.error {margin: 0; border: 3px solid #a62300;}
 #content ul.actions a.button {text-decoration: none; display: block; font-size: 14px; padding: 6px 12px;}
 #content ul.actions input.button,
 #content ul.actions a.button {background-color: #dedede; color: #333333; border: none; cursor: pointer; font-size: 14px;}
-#content ul.actions input.button:hover,
-#content ul.actions a.button:hover {background-color: #bebebe;}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary {background-color: #8c9399; color: #ffffff;}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover {background-color: #313942;}
 #content ul.actions input.button.secondary,
 #content ul.actions a.button.secondary {background-color: #8c9399; color: #ffffff;}
-#content ul.actions input.button.secondary:hover,
-#content ul.actions a.button.secondary:hover {background-color: #313942;}
-#content form input.button.disabled,
-#content form input.button.disabled:hover {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
+#content form input.button.disabled {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
 div.field div.help {position: absolute; left: 455px; top: 6px; width: 200px;}
 div.field div.error,
 div.field div.hint {display: none; padding: 5px; font-size: 12px; margin-top: -3px;}
@@ -365,14 +371,13 @@ div.field.focus div.hint {display: block;}
 #content .scene.docsindex .search.loading {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
-#content .scene.docsindex .search .results .function:hover {background: #ededed;}
 #content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
 #content .scene.docsindex .search .results .function .definition dl {width: auto;}
 #content .scene.docsindex .search .results .function .definition dd {padding-bottom: 0; width: auto; display: block;}
 #content .scene.docsindex .search .results .function .parameters,
 #content .scene.docsindex .search .results .function .examples,
 #content .scene.docsindex .search .results .function .return,
-#content .scene.docsindex .search .results .function .uses,
+#content .scene.docsindex .search .results .function .dependencies,
 #content .scene.docsindex .search .results .function .description,
 #content .scene.docsindex .search .results .function .callbacks,
 #content .scene.docsindex .search .results .function .definition h4,
@@ -391,12 +396,23 @@ div.field.focus div.hint {display: block;}
 #content .scene div.functions .function .body .callbacks dl {padding-left: 70px;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block;}
+#content .scene div.functions .function .body .methods dl {}
+#content .scene div.functions .function .body .methods dt {width: auto; display: block; text-align: left;}
+#content .scene div.functions .function .body .methods dd {width: auto; display: block;}
+#content .scene div.functions .function .body .properties dl {}
+#content .scene div.functions .function .body .properties dt {width: auto; display: block; text-align: left;}
+#content .scene div.functions .function .body .properties dd {width: auto; display: block;}
+#content .scene div.functions .function .body .inputtypes dl {}
+#content .scene div.functions .function .body .inputtypes dt {width: auto; display: block; text-align: left;}
+#content .scene div.functions .function .body .inputtypes dd {width: auto; display: block;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
 #content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
 #content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 5px;}
-#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0 20px;}
-#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0 20px;}
+#content .scene div.functions .function .body .example p+code {margin-top: -15px;}
+#content .scene div.functions .function .body .example code+p {margin-top: -15px;}
+#content .scene div.functions .function .body .dependencies .javascript {padding: 5px 0 0;}
+#content .scene div.functions .function .body .dependencies .manipulator {padding: 5px 0 0;}
 #content .scene div.functions dd {padding-bottom: 5px;}
 #content .scene div.includefiles {}
 #content .scene div.includefiles .header {cursor: pointer;}
@@ -413,6 +429,14 @@ div.field.focus div.hint {display: block;}
 #content .scene.milestones div.todolists ul.todolists li.todolist h2 {padding-top: 20px;}
 
 
+/*s-pages-hovers.css*/
+#content ul.actions input.button.primary:hover,
+#content ul.actions a.button.primary:hover,
+#content .scene .pagination .next:hover,
+#content .scene .pagination .previous:hover {background-color: #ff7c00;}
+#content .scene ul.tags a:hover {color: #04859d;}
+
+
 /*s-colorscheme.css*/
 * {color: #ff7c00;}
 body {}
@@ -424,12 +448,7 @@ body {}
 #content ul.actions a.button.primary,
 #content .scene .pagination .next,
 #content .scene .pagination .previous {background-color: #04859d;}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover,
-#content .scene .pagination .next:hover,
-#content .scene .pagination .previous:hover {background-color: #ff7c00;}
 #content .scene div.categories ul.tags li.selected a {color: #04859d;}
-#content .scene ul.tags a:hover {color: #04859d;}
 #content .scene h3,
 #content .scene h4,
 #content .scene h5,

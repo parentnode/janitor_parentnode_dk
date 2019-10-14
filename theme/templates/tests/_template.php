@@ -9,12 +9,15 @@
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
+	<div class="tests #method#">
 		<h3>#Test name#</h3>
-		<? if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
+		<? 
+
+		// Your test code
+		if("Your test condition"): ?>
+		<div class="testpassed">#Class::method# - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
+		<div class="testfailed">#Class::method# - error</div>
 		<? endif; ?>
 	</div>
 

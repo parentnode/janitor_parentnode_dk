@@ -54,6 +54,8 @@ class TypeTests extends Itemtype {
 		$this->addToModel("v_password", array(
 			"type" => "password",
 			"label" => "Password",
+			"min" => 1,
+			"max" => 100,
 			"required" => true,
 			"hint_message" => "Type password",
 			"error_message" => "Password must be password"
@@ -72,16 +74,20 @@ class TypeTests extends Itemtype {
 			"type" => "datetime",
 			"label" => "Datetime (yyyy-mm-dd hh:mm)",
 			"required" => true,
-			"hint_message" => "Type datetime",
-			"error_message" => "Datetime must be of format (yyyy-mm-dd hh:mm)"
+			"min" => "2019-10-11 12:30",
+			"max" => "2019-10-11 12:34",
+			"hint_message" => "Type datetime between 2019-10-11 12:30 and 2019-10-11 12:34",
+			"error_message" => "Datetime must be of format (yyyy-mm-dd hh:mm) and at or after 2019-10-11 12:30 and at or before 2019-10-11 12:34"
 		));
 
 		$this->addToModel("v_date", array(
 			"type" => "date",
 			"label" => "Date (yyyy-mm-dd)",
+			"min" => "2019-10-11",
+			"max" => "2019-10-12",
 			"required" => true,
-			"hint_message" => "Type date",
-			"error_message" => "Date must be of format (yyyy-mm-dd)"
+			"hint_message" => "Type date between 2019-10-11 and 2019-10-12",
+			"error_message" => "Date must be of format (yyyy-mm-dd) and on or after 2019-10-11 and on or before 2019-10-12"
 		));
 
 		$this->addToModel("v_integer", array(
@@ -118,10 +124,29 @@ class TypeTests extends Itemtype {
 		));
 
 
+		$this->addToModel("v_file", array(
+			"type" => "files",
+			"label" => "File",
+			"required" => true,
+			"hint_message" => "Type * files",
+			"error_message" => "File must be added"
+		));
+
+		$this->addToModel("v_files", array(
+			"type" => "files",
+			"label" => "Files",
+			"required" => true,
+			"min" => 3,
+			"max" => 20,
+			"hint_message" => "Type * files",
+			"error_message" => "Between 3 and 20 files must be added"
+		));
+
+
 		$this->addToModel("v_html", array(
 			"type" => "html",
 			"label" => "HTML",
-			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube", //",mp4",
+			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube,mp4",
 			"required" => true,
 			"hint_message" => "Type html",
 			"error_message" => "HTML must be HTML"
@@ -152,13 +177,6 @@ class TypeTests extends Itemtype {
 			"error_message" => "Tag must be valid tag"
 		));
 
-		$this->addToModel("file", array(
-			"type" => "files",
-			"label" => "Files",
-			"required" => true,
-			"hint_message" => "Type files",
-			"error_message" => "Files must be added"
-		));
 
 	}
 

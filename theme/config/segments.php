@@ -14,7 +14,7 @@ $segments_config["www"] = array(
 	"tv"            => "desktop_light",
 
 	"tablet"        => "tablet",
-	"tablet_light"  => "tablet",
+	"tablet_light"  => "tablet_light",
 
 	"mobile"        => "mobile",
 	"mobile_light"  => "mobile",

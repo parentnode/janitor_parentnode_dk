@@ -24,8 +24,8 @@ $ref_dom_string5 = '<a class="test" href="https://test">test æøå</a></body>';
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
-		<h3>DOM</h3>
+	<div class="tests createDom">
+		<h3>DOM::createDom</h3>
 
 
 <?
@@ -65,11 +65,15 @@ $dom4 = DOM()->createDom($ref_dom_string4);
 		
 		
 		): ?>
-		<div class="testpassed"><p>DOM()->createDom - correct</p></div>
+		<div class="testpassed">DOM()->createDom - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>DOM()->createDom - error</p></div>
+		<div class="testfailed">DOM()->createDom - error</div>
 		<? endif; ?>
 
+	</div>
+
+	<div class="tests stripAttributes">
+		<h3>DOM::stripAttributes</h3>
 
 
 <?
@@ -92,11 +96,10 @@ DOM()->stripAttributes($dom4);
 			$dom4->body && $dom4->body->firstChild->hasAttribute("class") && !$dom4->body->firstChild->hasAttribute("href")
 		
 		): ?>
-		<div class="testpassed"><p>DOM()->stripAttributes - correct</p></div>
+		<div class="testpassed">DOM()->stripAttributes - correct</div>
 		<? else: ?>
-		<div class="testfailed"><p>DOM()->stripAttributes - error</p></div>
+		<div class="testfailed">DOM()->stripAttributes - error</div>
 		<? endif; ?>
-
 
 	</div>
 

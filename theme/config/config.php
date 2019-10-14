@@ -40,7 +40,7 @@ define("SITE_SHOP", true);
 define("SHOP_ORDER_NOTIFIES", "test.parentnode@gmail.com");
 
 // Enable notifications (send collection email after N notifications)
-define("SITE_COLLECT_NOTIFICATIONS", 50);
+define("SITE_COLLECT_NOTIFICATIONS", 100);
 
 //define("SITE_INSTALL", true);
 

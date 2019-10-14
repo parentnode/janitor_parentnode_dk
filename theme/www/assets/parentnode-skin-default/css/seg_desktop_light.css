@@ -1,6 +1,6 @@
 /*
-MIT license, 2019 parentNode.dk
-asset-builder @ 2019-05-06 10:25:14
+MIT license, 2002-2019 parentNode.dk
+asset-builder @ 2019-10-13 18:58:25
 */
 
 /*seg_desktop_light_include.css*/
@@ -104,20 +104,16 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #header .logo {font-size: 30px; padding: 20px 50px 20px; color: #888888; cursor: pointer; display: block; width: 200px;
 	font-family: "PT Serif", Times, serif;
 }
-#header .logo:hover {text-decoration: underline;}
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
 #header .servicenavigation li {display: inline; vertical-align: top; color: #bbbbbb; padding-left: 10px;}
 #header .servicenavigation li.navigation,
-#header .servicenavigation li.admin,
-#header .servicenavigation li.user,
-#header .servicenavigation li.cart {display: none;}
+#header .servicenavigation li.admin {display: none;}
 #navigation {position: absolute; right: 50px; top: 75px;}
 #navigation ul {}
 #navigation ul li {display: inline; vertical-align: top; padding: 0 0 0 20px; font-size: 20px; color: #888888;}
 #navigation ul li a {
 	font-family: "PT Serif", Times, serif;
 }
-#navigation ul li a:hover {text-decoration: underline;}
 #navigation ul li.front {display: none;}
 
 
@@ -130,7 +126,6 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene {position: relative; padding: 50px 0 70px;}
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #888888;}
-#content .scene a:hover {text-decoration: underline;}
 #content .scene h1,
 #content .scene h2,
 #content .scene h3,
@@ -247,7 +242,6 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 /*s-article.css*/
 #content .scene div.article {padding-bottom: 30px;}
 #content .scene div.article ul.tags {padding-bottom: 20px;}
-#content .scene ul.tags a:hover {color: #888888;}
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
 #content .scene .articlebody ul {list-style-type: disc;}
@@ -261,3 +255,20 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 	font-family: "PT Serif", Times, serif;
 }
 #content .scene .article ul.info ul.geo {padding: 0;}
+
+/*s-hovers.css*/
+#header .logo:hover,
+#navigation ul li a:hover {text-decoration: underline;}
+#content .scene ul.tags a:hover {color: #888888;}
+#content .scene a:hover {text-decoration: underline;}
+#content ul.actions input.button:hover,
+#content ul.actions a.button:hover {background-color: #bebebe;}
+#content ul.actions input.button.primary:hover,
+#content ul.actions a.button.primary:hover {background-color: #313942;}
+#content ul.actions input.button.secondary:hover,
+#content ul.actions a.button.secondary:hover {background-color: #313942;}
+#content form input.button.disabled:hover {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
+#content .scene.docsindex .search .results .function:hover {background: #ededed;}
+#content .scene .pagination .next a:hover,
+#content .scene .pagination .previous a:hover {background-color: #313942;}
+

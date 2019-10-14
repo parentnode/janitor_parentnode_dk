@@ -7,6 +7,8 @@
 @import url(../../lib/desktop_light/s-content.css);
 @import url(../../lib/desktop_light/s-article.css);
 
+@import url(../../lib/desktop_light/s-hovers.css);
+
 /* Optionals */
 @import url(../../lib/desktop_light/s-comments.css);
 @import url(../../lib/desktop_light/s-documentation.css);

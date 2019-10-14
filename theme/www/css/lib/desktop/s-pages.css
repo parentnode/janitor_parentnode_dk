@@ -18,3 +18,12 @@
 #content .scene.folderlayout ul.folders {margin: 0; width: 485px; list-style: none;}
 #content .scene.folderlayout ul.folders li {font-size: 14px; padding-bottom: 7px; padding-left: 3px;}
 
+
+#content .scene div.functions div.inputtypes h5 {padding-top: 10px; padding-bottom: 5px;}
+#content .scene div.functions div.inputtypes h5 span {font-size: 16px; font-weight: normal;}
+
+#content .scene div.functions div.inputtypes h6 {margin-top: -5px; padding-bottom: 3px;}
+#content .scene div.functions div.inputtypes h5 span {font-size: 16px; font-weight: normal;}
+#content .scene div.functions div.inputtypes dl dt {width: 120px;}
+#content .scene div.functions div.inputtypes dl dd {width: 374px;}
+

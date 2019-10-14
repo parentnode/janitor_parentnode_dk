@@ -1,0 +1,6 @@
+#content ul.actions input.button.primary:active,
+#content ul.actions a.button.primary:active,
+#content .scene .pagination .next:active,
+#content .scene .pagination .previous:active {background-color: #ff7c00;}
+
+#content .scene ul.tags a:active {color: #04859d;}
