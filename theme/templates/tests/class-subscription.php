@@ -280,7 +280,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		// update test item (add price)
 		$_POST["item_price"] = 100;
 		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 999;
+		$_POST["item_price_vatrate"] = 1;
 		$_POST["item_price_type"] = "default";
 		$price = $model_tests->addPrice(array("addPrice", $item_id));
 		
@@ -382,7 +382,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -469,7 +469,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -549,7 +549,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -629,7 +629,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -707,7 +707,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -734,7 +734,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -806,7 +806,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -921,7 +921,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -1011,7 +1011,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1038,7 +1038,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -1122,7 +1122,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1137,7 +1137,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -1245,7 +1245,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -1330,7 +1330,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1357,7 +1357,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to second test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
@@ -1443,7 +1443,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1531,7 +1531,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1613,7 +1613,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1694,7 +1694,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1782,7 +1782,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
@@ -1862,7 +1862,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			// add price to first test item
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 999;
+			$_POST["item_price_vatrate"] = 1;
 			$_POST["item_price_type"] = "default";
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
