@@ -303,7 +303,8 @@ $SC = new SuperShop();
 		// print_r($membership);
 		unset($_POST);
 
-		// add prices to test item and membership item	
+
+		// add prices to test items
 		$_POST["item_price"] = 100;
 		$_POST["item_price_currency"] = "DKK";
 		$_POST["item_price_vatrate"] = 1;
@@ -313,7 +314,8 @@ $SC = new SuperShop();
 		$model_tests_membership->addPrice(["addPrice", $membership["item_id"]]);
 		$model_tests->addPrice(["addPrice", $item["item_id"]]);
 		unset($_POST);
-		
+
+		// add test item to cart
 		$_POST["user_id"] = $user_id;
 		$cart = $SC->addCart(["addCart"]);
 		// print_r($cart);
@@ -321,7 +323,6 @@ $SC = new SuperShop();
 		$cart_reference = $cart["cart_reference"];
 		unset($_POST);
 		
-		// debug([$membership]);
 		$_POST["item_id"] = $item["item_id"];
 		$_POST["quantity"] = 1;		
 		$cart = $SC->addToCart(["addToCart", $cart_reference]);
@@ -329,10 +330,10 @@ $SC = new SuperShop();
 		?>
 
 		<?
-		// NEW ORDER FROM CART - REGULAR
+		// NEW ORDER FROM CART - ITEM WITHOUT SUBSCRIPTION METHOD
 		
 		session()->reset("test_item_ordered_callback");
-		
+
 		// print_r($cart);
 		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
 		$order_id = $order["id"];
@@ -351,9 +352,56 @@ $SC = new SuperShop();
 			session()->value("test_item_ordered_callback") &&
 			$order["id"]
 			): ?>
-		<div class="testpassed"><p>Shop::newOrderFromCart - correct</p></div>
+		<div class="testpassed"><p>Shop::newOrderFromCart – item without subscription_method – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::newOrderFromCart - error</p></div>
+		<div class="testfailed"><p>Shop::newOrderFromCart – item without subscription_method – error</p></div>
+		<? endif; ?>
+
+		<?
+		// NEW ORDER FROM CART - ITEM WITH SUBSCRIPTION METHOD
+		
+		session()->reset("test_item_ordered_callback");
+		session()->reset("test_item_subscribed_callback");
+
+		// add subscription method to test item
+		$_POST["item_subscription_method"] = 1;
+		$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item["item_id"]));
+		unset($_POST);
+
+		// add test item to cart
+		$_POST["user_id"] = $user_id;
+		$cart = $SC->addCart(["addCart"]);
+		$cart_id = $cart["id"];
+		$cart_reference = $cart["cart_reference"];
+		unset($_POST);
+		
+		$_POST["item_id"] = $item["item_id"];
+		$_POST["quantity"] = 1;		
+		$cart = $SC->addToCart(["addToCart", $cart_reference]);
+		unset($_POST);
+		
+		// print_r($cart);
+		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+		$order_id = $order["id"];
+		// print_r($order);
+		// debug($_SESSION);
+
+		if(
+			$order &&
+			$order["items"] &&
+			$order["status"] == 0 &&
+			$order["payment_status"] == 0 &&
+			$order["shipping_status"] == 0 &&
+			$order["user_id"] &&
+			$order["currency"] &&
+			$order["country"] &&
+			session()->value("test_item_ordered_callback") &&
+			session()->value("test_item_subscribed_callback") &&
+			$order["id"]
+			): ?>
+		<div class="testpassed"><p>Shop::newOrderFromCart – item with subscription_method – correct</p></div>
+		<? else: ?>
+		<div class="testfailed"><p>Shop::newOrderFromCart – item with subscription_method – error</p></div>
 		<? endif; ?>
 
 
@@ -369,9 +417,9 @@ $SC = new SuperShop();
 			isset($cart["cart_reference"]) &&
 			$order == false
 		): ?>
-		<div class="testpassed"><p>Shop::newOrderFromCart, empty cart (should return false) - correct</p></div>
+		<div class="testpassed"><p>Shop::newOrderFromCart – empty cart – should return false – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::newOrderFromCart, empty cart (should return false) - error</p></div>
+		<div class="testfailed"><p>Shop::newOrderFromCart – empty cart – should return false – error</p></div>
 		<? endif; ?>
 
 		<?
@@ -397,7 +445,6 @@ $SC = new SuperShop();
 		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
 		$query->sql($sql);
 
-		// skip_cleanup:
 		?>
 
 	</div>
