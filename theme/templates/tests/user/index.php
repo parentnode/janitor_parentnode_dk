@@ -57,7 +57,7 @@ $SubscriptionClass = new Subscription();
 			$user["email"] &&
 			$user["language"] &&
 			array_key_exists("firstname", $user) && 
-			array_key_exists("lastname", 	$user) &&
+			array_key_exists("lastname", $user) &&
 			array_key_exists("mobile", $user) &&
 			array_key_exists("addresses", $user) &&
 			array_key_exists("membership", $user) &&
