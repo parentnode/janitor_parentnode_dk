@@ -8,9 +8,9 @@
 		</div>
 		<div class="body">
 
-			<div class="function" id="addNewMembership">
+			<div class="function" id="SuperMember::addNewMembership">
 				<div class="header">
-					<h3>addNewMembership</h3>
+					<h3>SuperMember::addNewMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -20,7 +20,7 @@
 							<dd class="name">addNewMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								addNewMembership(
+								SuperMember::addNewMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -114,9 +114,9 @@ $order = $MC->addNewMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="addMembership">
+			<div class="function" id="SuperMember::addMembership">
 				<div class="header">
-					<h3>addMembership</h3>
+					<h3>SuperMember::addMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -126,7 +126,7 @@ $order = $MC->addNewMembership($action);</code>
 							<dd class="name">addMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								addMembership(
+								SuperMember::addMembership(
 									<span class="type">Integer</span> <span class="var">$item_id</span>, 
 									<span class="type">Integer</span> <span class="var">$subscription_id</span>, 
 									<span class="type">Array|false</span> <span class="var">$_options</span> 
@@ -210,9 +210,9 @@ $membership = $MC->addMembership($item_id, subscription_id, ["user_id" => $user_
 				</div>
 			</div>
 
-			<div class="function" id="updateMembership">
+			<div class="function" id="SuperMember::updateMembership">
 				<div class="header">
-					<h3>updateMembership</h3>
+					<h3>SuperMember::updateMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -222,7 +222,7 @@ $membership = $MC->addMembership($item_id, subscription_id, ["user_id" => $user_
 							<dd class="name">updateMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								updateMembership(
+								SuperMember::updateMembership(
 									<span class="type">Array</span> <span class="var">$options = false</span> 
 								);
 							</dd>
@@ -299,9 +299,9 @@ $membership = $MC->updateMembership(["user_id" => $user_id, "subscription_id" =>
 				</div>
 			</div>
 
-			<div class="function" id="cancelMembership">
+			<div class="function" id="SuperMember::cancelMembership">
 				<div class="header">
-					<h3>cancelMembership</h3>
+					<h3>SuperMember::cancelMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -311,7 +311,7 @@ $membership = $MC->updateMembership(["user_id" => $user_id, "subscription_id" =>
 							<dd class="name">cancelMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
-								cancelMembership(
+								SuperMember::cancelMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -395,9 +395,9 @@ $order = $MC->cancelMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="upgradeMembership">
+			<div class="function" id="SuperMember::upgradeMembership">
 				<div class="header">
-					<h3>upgradeMembership</h3>
+					<h3>SuperMember::upgradeMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -407,7 +407,7 @@ $order = $MC->cancelMembership($action);</code>
 							<dd class="name">upgradeMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
-								upgradeMembership(
+								SuperMember::upgradeMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -508,9 +508,9 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 				</div>
 			</div>
 
-			<div class="function" id="switchMembership">
+			<div class="function" id="SuperMember::switchMembership">
 				<div class="header">
-					<h3>switchMembership</h3>
+					<h3>SuperMember::switchMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -520,7 +520,7 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 							<dd class="name">switchMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								switchMembership(
+								SuperMember::switchMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -605,6 +605,200 @@ $order = $MC->switchMembership($action);</code>
 								<li>SuperMember::getMembers</li>
 								<li>SuperShop::addToNewInternalCart</li>
 								<li>SuperShop::newOrderFromCart</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="SuperMember::getMemberCount">
+				<div class="header">
+					<h3>SuperMember::getMemberCount</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">getMemberCount</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Integer</span> = 
+								SuperMember::getMemberCount(
+									<span class="type">Array|false</span> <span class="var">$_options</span> 
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>A shorthand function to get order count for UI.</p>
+						<p>Can return the total member count, or member count for a specific membership type.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$_options</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Array|false</span> Options array
+								</div>
+								<!-- optional details -->
+								<div class="details">
+									<!-- write parameter details -->
+									<h5>Options</h5>
+									<dl class="options">
+										<!-- specific options -->
+										<dt><span class="value">item_id</span></dt>
+										<dd>Id for specific membership type</dd>
+									</dl>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">Integer</span> Member count. Will return <span class="value">0</span> on error.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						<p>Count all members.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$member_count = $MC->getMemberCount();</code>
+						</div>
+						<p>Count all members with specific membership type.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$member_count = $MC->getMemberCount(["item_id" =>  $membership_item_id]);</code>
+						</div>
+					</div>
+					
+
+					<div class="dependencies">
+						<h4>Dependencies</h4>
+						
+						<div class="php">
+							<!-- list php functions used by function -->
+							<h5>PHP</h5>
+							<ul>
+								<li>count</li>
+							</ul>
+						</div>
+						
+						<div class="janitor">
+							<!-- list janitor functions used by function -->
+							<h5>Janitor</h5>
+							<ul>
+								<li>Query::sql</li>
+								<li>Query::result</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="SuperMember::getMembers">
+				<div class="header">
+					<h3>SuperMember::getMembers</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">getMembers</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">Array|False</span> = 
+								SuperMember::getMembers(
+									<span class="type">Array|false</span> <span class="var">$_options</span> 
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Get members (by user_id, member_id, item_id or all).</p>
+						<p>Passing no parameters in $_options will return all members, including cancelled members.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$_options</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Array|false</span> Options array
+								</div>
+								<!-- optional details -->
+								<div class="details">
+									<!-- write parameter details -->
+									<h5>Options</h5>
+									<dl class="options">
+										<!-- specific options -->
+										<dt><span class="value">user_id</span></dt>
+										<dd>Get member object for user_id.</dd>
+										<dt><span class="value">member_id</span></dt>
+										<dd>Get specific member object.</dd>
+										<dt><span class="value">item_id</span></dt>
+										<dd>Get all members with specific membership.</dd>
+									</dl>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">Array|false</span> One or several membership objects. False on error.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						<p>Get all members, including cancelled memberships.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$members = $MC->getMembers();</code>
+						</div>
+						<p>Get member object for user_id.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$member = $MC->getMembers(["user_id"] => $user_id);</code>
+						</div>
+						<p>Get specific member object.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$member = $MC->getMembers(["member_id" => $member_id]);</code>
+						</div>
+						<p>Get all members with specific membership.</p>
+						<div class="example">
+							<code>$MC = new SuperMember();
+$members = $MC->getMembers(["item_id"] => $membership_item_id);</code>
+						</div>
+					</div>
+
+					<div class="dependencies">
+						<h4>Dependencies</h4>
+
+						<div class="janitor">
+							<!-- list janitor functions used by function -->
+							<h5>Janitor</h5>
+							<ul>
+								<li>SuperUser::getUsers</li>
+								<li>Items::getItem</li>
+								<li>SuperShop::getOrders</li>
+								<li>Query::sql</li>
+								<li>Query::result</li>
 							</ul>
 						</div>
 

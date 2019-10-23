@@ -10,7 +10,7 @@
 
 			<div class="function" id="Member::addNewMembership">
 				<div class="header">
-					<h3>addNewMembership</h3>
+					<h3>Member::addNewMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -20,7 +20,7 @@
 							<dd class="name">addNewMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								addNewMembership(
+								Member::addNewMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -114,7 +114,7 @@ $order = $MC->addNewMembership($action);</code>
 
 			<div class="function" id="Member::addMembership">
 				<div class="header">
-					<h3>addMembership</h3>
+					<h3>Member::addMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -124,7 +124,7 @@ $order = $MC->addNewMembership($action);</code>
 							<dd class="name">addMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								addMembership(
+								Member::addMembership(
 									<span class="type">Integer</span> <span class="var">$item_id</span>, 
 									<span class="type">Integer</span> <span class="var">$subscription_id</span>, 
 									<span class="type">Array|false</span> <span class="var">$_options</span> 
@@ -194,9 +194,10 @@ $membership = $MC->addMembership($item_id, $subscription_id);</code>
 
 				</div>
 			</div>
+
 			<div class="function" id="Member::getMembership">
 				<div class="header">
-					<h3>getMembership</h3>
+					<h3>Member::getMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -206,7 +207,7 @@ $membership = $MC->addMembership($item_id, $subscription_id);</code>
 							<dd class="name">getMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								getMembership();
+								Member::getMembership();
 							</dd>
 						</dl>
 					</div>
@@ -252,7 +253,7 @@ $membership = $MC->getMembership();</code>
 
 			<div class="function" id="Member::updateMembership">
 				<div class="header">
-					<h3>updateMembership</h3>
+					<h3>Member::updateMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -262,7 +263,7 @@ $membership = $MC->getMembership();</code>
 							<dd class="name">updateMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								updateMembership(
+								Member::updateMembership(
 									<span class="type">Array</span> <span class="var">$options = false</span> 
 								);
 							</dd>
@@ -339,7 +340,7 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 
 			<div class="function" id="Member::cancelMembership">
 				<div class="header">
-					<h3>cancelMembership</h3>
+					<h3>Member::cancelMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -349,7 +350,7 @@ $membership = $MC->updateMembership(["subscription_id" => $subscription_id]);</c
 							<dd class="name">cancelMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
-								cancelMembership(
+								Member::cancelMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -432,7 +433,7 @@ $order = $MC->cancelMembership($action);</code>
 
 			<div class="function" id="Member::upgradeMembership">
 				<div class="header">
-					<h3>upgradeMembership</h3>
+					<h3>Member::upgradeMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -442,7 +443,7 @@ $order = $MC->cancelMembership($action);</code>
 							<dd class="name">upgradeMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
-								upgradeMembership(
+								Member::upgradeMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>
@@ -542,7 +543,7 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 
 			<div class="function" id="Member::switchMembership">
 				<div class="header">
-					<h3>switchMembership</h3>
+					<h3>Member::switchMembership</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
@@ -552,7 +553,7 @@ $upgrade_success = $MC->upgradeMembership($action);</code>
 							<dd class="name">switchMembership</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
-								switchMembership(
+								Member::switchMembership(
 									<span class="type">Array</span> <span class="var">$action</span> 
 								);
 							</dd>

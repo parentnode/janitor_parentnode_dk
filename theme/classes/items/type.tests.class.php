@@ -183,12 +183,12 @@ class TypeTests extends Itemtype {
 
 	// CUSTOM SUBSCRIBE/UNSUBSCRIBE
 
+	// TypeTests::ordered should be identical to ItemType::ordered 
 	function ordered($order_item, $order){
 		session()->value("test_item_ordered_callback", true);
 
 		include_once("classes/shop/supersubscription.class.php");
 		$SuperSubscriptionClass = new SuperSubscription();
-		$IC = new Items();
 
 		// order item can be subscribed to
 		if(SITE_SUBSCRIPTIONS && $order_item["subscription_method"]) {
@@ -241,8 +241,6 @@ class TypeTests extends Itemtype {
 			"message" => "test unsubscribed"
 		]);
 	}
-
-	function subscriptionRenewed() {}
 
 
 
