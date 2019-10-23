@@ -203,40 +203,40 @@ fi
 
 
 echo
-echo "Creating apache.conf for project"
+echo "Creating httpd-vhosts.conf for project"
 
 
 # Adding apache configuration for project
 mkdir apache &>/dev/null
-# Remove any existing apache.conf
-if [ -f "apache/apache.conf" ]; then
-	rm apache/apache.conf
+# Remove any existing httpd-vhosts.conf
+if [ -f "apache/httpd-vhosts.conf" ]; then
+	rm apache/httpd-vhosts.conf
 fi
-# Create clean apache.conf
-touch apache/apache.conf
+# Create clean httpd-vhosts.conf
+touch apache/httpd-vhosts.conf
 
 
 
 
 # Add actual VHOST configuration
-echo "<VirtualHost *:80>" >> apache/apache.conf
-echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/apache.conf
-echo "	ServerName ${domain}" >> apache/apache.conf
-echo "	AddType application/x-httpd-php .php" >> apache/apache.conf
+echo "<VirtualHost *:80>" >> apache/httpd-vhosts.conf
+echo "	DocumentRoot \"${working_directory}/theme/www\"" >> apache/httpd-vhosts.conf
+echo "	ServerName ${domain}" >> apache/httpd-vhosts.conf
+echo "	AddType application/x-httpd-php .php" >> apache/httpd-vhosts.conf
 
 # Add Directory directive to project Apache conf to ensure project can run in current location
-echo "	<Directory \"${working_directory}\">" >> apache/apache.conf
-echo "		Options All MultiViews" >> apache/apache.conf
-echo "		AllowOverride All" >> apache/apache.conf
-echo "		Order allow,deny" >> apache/apache.conf
-echo "		Allow from all" >> apache/apache.conf
-echo "		Require all granted" >> apache/apache.conf
-echo "	</Directory>" >> apache/apache.conf
+echo "	<Directory \"${working_directory}\">" >> apache/httpd-vhosts.conf
+echo "		Options All MultiViews" >> apache/httpd-vhosts.conf
+echo "		AllowOverride All" >> apache/httpd-vhosts.conf
+echo "		Order allow,deny" >> apache/httpd-vhosts.conf
+echo "		Allow from all" >> apache/httpd-vhosts.conf
+echo "		Require all granted" >> apache/httpd-vhosts.conf
+echo "	</Directory>" >> apache/httpd-vhosts.conf
 
-echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src/www\"" >> apache/apache.conf
-echo "	SetEnv \"LOCAL_PATH\" \"${working_directory}/theme\"" >> apache/apache.conf
-echo "	SetEnv \"FRAMEWORK_PATH\" \"${working_directory}/submodules/janitor/src\"" >> apache/apache.conf
-echo "</VirtualHost>" >> apache/apache.conf
+echo "	Alias \"/janitor/admin\" \"${working_directory}/submodules/janitor/src/www\"" >> apache/httpd-vhosts.conf
+echo "	SetEnv \"LOCAL_PATH\" \"${working_directory}/theme\"" >> apache/httpd-vhosts.conf
+echo "	SetEnv \"FRAMEWORK_PATH\" \"${working_directory}/submodules/janitor/src\"" >> apache/httpd-vhosts.conf
+echo "</VirtualHost>" >> apache/httpd-vhosts.conf
 
 
 
@@ -305,7 +305,7 @@ if [ -z "${apache_include_exists}" ]; then
 
 	echo "" >> /srv/sites/apache/apache.conf
 	echo "" >> /srv/sites/apache/apache.conf
-	echo "Include \"${working_directory}/apache/apache.conf\"" >> /srv/sites/apache/apache.conf
+	echo "Include \"${working_directory}/apache/httpd-vhosts.conf\"" >> /srv/sites/apache/apache.conf
 
 fi
 
