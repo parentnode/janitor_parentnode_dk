@@ -183,9 +183,53 @@ class TypeTests extends Itemtype {
 
 	// CUSTOM SUBSCRIBE/UNSUBSCRIBE
 
+	// TypeTests::ordered should be identical to ItemType::ordered 
+	function ordered($order_item, $order){
+		session()->value("test_item_ordered_callback", true);
+
+		include_once("classes/shop/supersubscription.class.php");
+		$SuperSubscriptionClass = new SuperSubscription();
+
+		// order item can be subscribed to
+		if(SITE_SUBSCRIPTIONS && $order_item["subscription_method"]) {
+			
+			$order_item_item_id = $order_item["item_id"];
+			$order_id = $order["id"];
+			$user_id = $order["user_id"];
+			
+			$subscription = $SuperSubscriptionClass->getSubscriptions(array("item_id" => $order_item_item_id));
+
+			// user already subscribes to item
+			if($subscription) {
+
+				// update existing subscription
+				// makes callback to 'subscribed' if item_id changes
+				$_POST["order_id"] = $order["id"];
+				$_POST["item_id"] = $order_item_id;
+				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $user_id, $subscription["id"]]);
+				unset($_POST);
+
+			}
+			
+			else {
+				// add new subscription
+				// makes callback to 'subscribed'
+				$_POST["item_id"] = $order_item_item_id;
+				$_POST["user_id"] = $user_id;
+				$_POST["order_id"] = $order_id;
+				$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
+				unset($_POST);
+
+			}
+		}
+	}
 
 	function subscribed($subscription) {
-		
+		session()->value("test_item_subscribed_callback", true);
+	}
+	
+	function subscription_renewed($subscription) {
+		session()->value("test_item_subscription_renewed_callback", true);
 	}
 
 	// Do I really want this to work for all users
@@ -197,8 +241,6 @@ class TypeTests extends Itemtype {
 			"message" => "test unsubscribed"
 		]);
 	}
-
-	function subscriptionRenewed() {}
 
 
 

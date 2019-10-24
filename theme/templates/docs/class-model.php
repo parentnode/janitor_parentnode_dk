@@ -3,7 +3,7 @@
 	<h2>Data modeling and validation</h2>
 
 	<p>
-		 In Janitor the Model bridges the gab between data storage and input. When you define a model, you have to consider
+		 In Janitor the Model bridges the gap between data storage and input. When you define a model, you have to consider
 		 both, because in the end they are unseparable. If no one puts in any data, there is nothing to store. So the Model
 		 is covering storage, transaction and input aspects all together. Read more about the 
 		 <a href="concept-model">Janitor Model Concept</a>.

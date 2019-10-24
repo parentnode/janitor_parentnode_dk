@@ -1091,7 +1091,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 	
 						<div class="description">
 							<h4>Description</h4>
-							<p>Return array of information requried to create meaningful pagination. Items list is split into the smaller fragments arrays: range, prev and next. The function is prepared to take id as a parameter, but it is currently not implemented.</p>
+							<p>Splits a list of items into smaller fragments and returns information required to create meaningful pagination.</p>
 						</div>
 	
 						<div class="parameters">
@@ -1110,13 +1110,13 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 										<dl class="options">
 											<!-- specific options -->
 											<dt><span class="value">pattern</span></dt>
-											<dd>Query syntax to perform <a href=#Item::getItems>Item::getItems</a> request.</dd>
+											<dd>Array of options to be sent to <a href=#Item::getItems>Item::getItems</a>, which returns the items to be paginated.</dd>
 											<dt><span class="value">limit</span></dt>
-											<dd>Limit of items per page</dd>
+											<dd>Maximal number of items per page. Default: 5.</dd>
 											<dt><span class="value">sindex</span></dt>
-											<dd>Sindex is used to base the range array on.</dd>
+											<dd>If passed <em>without</em> the <span class="value">direction</span> parameter, the pagination will start with the associated item.</dd>
 											<dt><span class="value">direction</span></dt>
-											<dd>List the next or previous items after sindex in range array.</dd>
+											<dd>Can be passed in combination with the <span class="value">sindex</span> parameter. If value is <span class="value">next</span>, pagination will start with the item that comes <em>after</em> the item with the specified sindex. If value is <span class="value">prev</span>, will show the items that come immediately <em>before</em> the item with the specified sindex. </dd>
 										</dl>
 									</div>
 								</dd>
@@ -1125,7 +1125,7 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 	
 						<div class="return">
 							<h4>Return values</h4>
-							<p><span class="type">Array</span> Array of items</p>
+							<p><span class="type">Array</span> Array of items. Contains the subarrays <span class="value">range_items</span> (items in the specified range), <span class="value">next</span> (next items), and <span class="value">prev</span> (previous items). Also contains <span class="value">first_id</span> and <span class="value">last_id</span>, as well as <span class="value">first_sindex</span> and <span class="value">last_sindex</span>, for the items within the specified range. Lastly, it contains the <span class="value">total</span> number of items in the whole list.</p>
 						</div>
 	
 						<div class="examples">
@@ -1133,17 +1133,17 @@ $prev = $IC->getPrev(20, array("items" => $items));</code>
 							<div class="example">
 								<h5>Example 1</h5>
 								<code>$sindex = "test-item-aaa";
-$items = $IC->paginate(array(
+$items = $IC->paginate([
 	"limit" => 2, 
-	"pattern" => array(
+	"pattern" => [
 		"itemtype" => "tests", 
 		"order" => "sindex ASC"
-	),
+	],
 	"sindex" => $sindex
-));</code>
-								<p>Returns fragmented items list array with 2 items per page. Range array is based on item with sindex. Order is defined by ascending sindex.</p><code>Array
+]);</code>
+								<p>Returns fragmented list of items with a limit of 2 items per fragment. The beginning of range_items is based on sindex. Sorting order is according to ascending sindex.</p><code>Array
 	(
-		[range_items] => Array
+		["range_items"] => Array
 			(
 				[0] => Array 
 					(
@@ -1157,38 +1157,36 @@ $items = $IC->paginate(array(
 						[published_at] => 2019-04-28 19:15:13
 					)
 					
-				[1] => array
-				(
-					[id] => 421,
-					[sindex] => test-item-bbb,
-					[status] => 0,
-					[itemtype] => tests,
-					[user_id] => 
-					[created_at] => 2019-04-28 19:15:13,
-					[modified_at] => 2019-04-28 19:15:13,
-					[published_at] => 2019-04-28 19:15:13,	
-				)
-				
+				[1] => Array
+					(
+						[id] => 421,
+						[sindex] => test-item-bbb,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13,	
+					)
+					
 			)
 			
 		["next"] => Array 
 			(
-				[0] => array
-				(
-					[id] => 422,
-					[sindex] => test-item-ccc,
-					[status] => 0,
-					[itemtype] => tests,
-					[user_id] => 
-					[created_at] => 2019-04-28 19:15:13,
-					[modified_at] => 2019-04-28 19:15:13,
-					[published_at] => 2019-04-28 19:15:13	
-				)
+				[0] => Array
+					(
+						[id] => 422,
+						[sindex] => test-item-ccc,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13	
+					)
 				
 			)
-		["prev"] => Array
-			(
-			)
+		["prev"] => Array ()
 		[first_id] => 420,
 		[last_id] => 421,
 		[first_sindex] => test-item-aaa,
@@ -1209,9 +1207,10 @@ $items = $IC->paginate(array(
 	"sindex" => $sindex,
 	"direction" => "prev"
 ));</code>
-								<p>Return fragmented items list array with ascending sindex, itemtype 'tests' and 2 items per page. Range is ending with item previous of item with sindex.</p><code>Array
+								<p>Returns fragmented list of items with a limit of 2 items per fragment. Sorting order of all items is according to ascending sindex. The item in range_items precedes the item with the specified sindex.
+</p><code>Array
 	(
-		[range_items] => Array
+		["range_items"] => Array
 			(
 				[0] => Array 
 					(
@@ -1230,27 +1229,27 @@ $items = $IC->paginate(array(
 		["next"] => Array 
 			(
 				[0] => array
-				(
-					[id] => 421,
-					[sindex] => test-item-bbb,
-					[status] => 0,
-					[itemtype] => tests,
-					[user_id] => 
-					[created_at] => 2019-04-28 19:15:13,
-					[modified_at] => 2019-04-28 19:15:13,
-					[published_at] => 2019-04-28 19:15:13,	
-				)
-				[1] => array
-				(
-					[id] => 422,
-					[sindex] => test-item-ccc,
-					[status] => 0,
-					[itemtype] => tests,
-					[user_id] => 
-					[created_at] => 2019-04-28 19:15:13,
-					[modified_at] => 2019-04-28 19:15:13,
-					[published_at] => 2019-04-28 19:15:13	
-				)
+					(
+						[id] => 421,
+						[sindex] => test-item-bbb,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13,	
+					)
+					[1] => array
+					(
+						[id] => 422,
+						[sindex] => test-item-ccc,
+						[status] => 0,
+						[itemtype] => tests,
+						[user_id] => 
+						[created_at] => 2019-04-28 19:15:13,
+						[modified_at] => 2019-04-28 19:15:13,
+						[published_at] => 2019-04-28 19:15:13	
+					)
 				
 			)
 		["prev"] => Array

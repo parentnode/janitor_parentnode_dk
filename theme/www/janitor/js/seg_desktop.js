@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-10-13 20:10:22
+asset-builder @ 2019-10-15 10:34:54
 */
 
 /*seg_desktop_include.js*/
@@ -9766,7 +9766,7 @@ Util.Objects["defaultSubscriptionmethod"] = new function() {
 		div.csrf_token = div.getAttribute("data-csrf-token");
 		div._sm_form = u.qs("form", div);
 		div._sm_change_div = u.qs("div.change_subscription_method", div);
-		div._sm_setting = u.qs("dl.settings dd.subscription_method", div);
+		div._sm_setting = u.qs("dl.info dd.subscription_method", div);
 		if(div._sm_form) {
 			div._sm_form.div = div;
 			div.actions_change = u.ae(div, "ul", {"class":"actions change"});
@@ -9908,27 +9908,38 @@ Util.Objects["usernames"] = new function() {
 		var indicators = u.qsa(".indicator", form);
 		u.ass(indicators[0], {"display":"none"});
 		u.ass(indicators[1], {"display":"none"});
+		var latest_verification_link = u.qs("div.email .send_verification_link p.reminded_at", div);
+		latest_verification_link.date_time = u.qs("span.date_time", latest_verification_link);
 		var send_verification_link = u.qs("li.send_verification_link", div);
-		send_verification_link.form = u.qs("form", send_verification_link);
-		send_verification_link.input = send_verification_link.form.lastChild;
+		if(send_verification_link) {
+			send_verification_link.form = u.qs("form", send_verification_link);
+			send_verification_link.input = send_verification_link.form.lastChild;
+		}
+		else {
+			u.as(latest_verification_link, "display", "none");
+		}
 		form.inputs.email.saved_email = form.inputs.email.val();
 		form.inputs.verification_status.saved_status = form.inputs.verification_status.val();
 		form.inputs.verification_status.current_status = form.inputs.verification_status.val();
-		var latest_verification_link = u.qs("div.email .send_verification_link p.reminded_at", div);
-		latest_verification_link.date_time = u.qs("span.date_time", latest_verification_link);
 		if(u.hc(latest_verification_link.date_time, "never")) {
 			u.ass(latest_verification_link, {"display":"none"});
 		}
 		if (!form.inputs.email.saved_email) {
 			form.inputs.verification_status.disabled = true;
-			u.ac(send_verification_link.input, "disabled");
+			if(send_verification_link) {
+				u.ac(send_verification_link.input, "disabled");
+			}
 		}
 		else if( form.inputs["verification_status"].val()) {
-			u.ac(send_verification_link.input, "disabled");
+			if(send_verification_link) {
+				u.ac(send_verification_link.input, "disabled");
+			}
 		}
 		else {
 			form.inputs.verification_status.disabled = false;
-			u.rc(send_verification_link.input, "disabled");
+			if(send_verification_link) {
+				u.rc(send_verification_link.input, "disabled");
+			}
 		}
 		form.inputs.email.updated = function() {
 			if(this.val() != this.saved_email) {
@@ -9962,19 +9973,21 @@ Util.Objects["usernames"] = new function() {
 				u.ac(this._form.actions["save"], "disabled");
 			}
 		}
-		send_verification_link.confirmed = function(response) {
-			if(!latest_verification_link) {
-				latest_verification_link = u.qs("div.email .send_verification_link p.reminded_at", div);
-				latest_verification_link.date_time = u.qs("span.date_time", latest_verification_link);
+		if(send_verification_link) {
+			send_verification_link.confirmed = function(response) {
+				if(!latest_verification_link) {
+					latest_verification_link = u.qs("div.email .send_verification_link p.reminded_at", div);
+					latest_verification_link.date_time = u.qs("span.date_time", latest_verification_link);
+				}
+				latest_verification_link.date_time.textContent = response.cms_object.reminded_at;
+				u.ass(latest_verification_link, {"display":"block"});
+				u.rc(send_verification_link, "invite");
+				u.rc(send_verification_link.input, "invite");
+				u.ac(send_verification_link, "reminder");
+				u.ac(send_verification_link.input, "reminder");
+				send_verification_link.input.value = "Send reminder";
+				send_verification_link.form[1].value = "signup_reminder";
 			}
-			latest_verification_link.date_time.textContent = response.cms_object.reminded_at;
-			u.ass(latest_verification_link, {"display":"block"});
-			u.rc(send_verification_link, "invite");
-			u.rc(send_verification_link.input, "invite");
-			u.ac(send_verification_link, "reminder");
-			u.ac(send_verification_link.input, "reminder");
-			send_verification_link.input.value = "Send reminder";
-			send_verification_link.form[1].value = "signup_reminder";
 		}
 		form.submitted = function(iN) {
 			if(!latest_verification_link) {
