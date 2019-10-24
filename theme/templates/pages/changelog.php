@@ -6,9 +6,32 @@ $this->pageTitle("It's just improvements");
 
 	<h1>Changelog</h1>
 
-	<h2>Version 0.7.7 - current development</h2>
+	<h2>Version 0.7.9 - current development</h2>
+	<p>
+		Version 0.7.9 includes a "third draft shop implementation, as well as improved handling of forms and mediae.
+	</p>
 	<p>
 		The most important updates are:
+	</p>
+
+	<ul class="changes">
+		<li>Improved form handling: updated validation rules and improved upload capabilities</li>
+		<li>Extended media functionality</li>
+		<li>New orders can now only be created by checking out a cart</li>
+		<li>Callback functions for addedToCart, ordered, subscribed, and shipped are now an part of the purchase flow for an item. The callbacks can be customized on a per-itemtype basis.</li>
+		<li>Member and SuperMember are now stand-alone classes separate from the User and SuperUser classes.</li>
+		<li>Subscription and SuperSubscription are now stand-alone classes separate from the Shop and SuperShop classes.</li>
+		<li>And lot's of bug-fixes and minor enhancements.</li>
+	</ul>
+
+	<h2>Version 0.7.8</h2>
+	<p>
+		Version 0.7.8 included a full "second draft" shop implementation.
+	</p>
+
+	<h2>Version 0.7.7</h2>
+	<p>
+		The most important updates were:
 	</p>
 
 	<ul class="changes">
@@ -29,7 +52,7 @@ $this->pageTitle("It's just improvements");
 
 	<h2>Version 0.7.6</h2>
 	<p>
-		The most important updates are:
+		The most important updates were:
 	</p>
 
 	<ul class="changes">
