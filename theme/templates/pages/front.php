@@ -4,13 +4,13 @@ global $action;
 $IC = new Items();
 
 
-$page_item = $IC->getItem(array("tags" => "page:front", "extend" => array("user" => true, "tags" => true, "mediae" => true)));
+$page_item = $IC->getItem(array("tags" => "page:front", "status" => 1, "extend" => array("user" => true, "tags" => true, "mediae" => true)));
 
 ?>
 <div class="scene front i:scene">
 
-<? if($page_item && $page_item["status"]): 
-	$media = $IC->sliceMediae($page_item); ?>
+<? if($page_item): 
+	$media = $IC->sliceMediae($page_item, "single_media"); ?>
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 
