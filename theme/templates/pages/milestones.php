@@ -6,7 +6,7 @@ $model = $IC->typeObject("todo");
 $this->bodyClass("gettingstarted");
 $this->pageTitle("Where we are heading ...");
 
-$page_item = $IC->getItem(array("tags" => "page:milestones", "extend" => array("user" => true, "tags" => true, "mediae" => true)));
+$page_item = $IC->getItem(array("tags" => "page:milestones", "status" => 1, "extend" => array("user" => true, "tags" => true, "mediae" => true)));
 
 $todolists = $IC->getItems(array("itemtype" => "todolist", "status" => 1, "order" => "position ASC", "extend" => true));
 $todotags = $IC->getTags(array("context" => "todo"));
@@ -16,8 +16,8 @@ $todotags_priority = array("General", "Backend interface");
 ?>
 <div class="scene milestones i:scene">
 
-<? if($page_item && $page_item["status"]): 
-	$media = $IC->sliceMediae($page_item); ?>
+<? if($page_item): 
+	$media = $IC->sliceMediae($page_item, "single_media"); ?>
 	<div class="article i:article" itemscope itemtype="http://schema.org/Article">
 
 		<? if($media): ?>
