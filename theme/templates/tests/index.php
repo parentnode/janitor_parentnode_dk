@@ -2,37 +2,53 @@
 	<h1>Janitor Unit tests</h1>
 	<h2>All purpose testing index</h2>
 	
-	<h3>Classes</h3>
+	<h3>Item classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("Itemtype", "/janitor/tests/class-itemtype", array("wrapper" => "li.itemtype")) ?>
+		<?= $HTML->link("Items", "/janitor/tests/class-items", array("wrapper" => "li.items")) ?>
+	</ul>
+
+	<h3>Shop classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
+		<?= $HTML->link("SuperShop", "/janitor/tests/supershop", array("wrapper" => "li.supershop")) ?>
+	</ul>
+
+	<h3>Subscription classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("Subscription", "/janitor/tests/class-subscription", array("wrapper" => "li.subscription")) ?>
+		<?= $HTML->link("SuperSubscription", "/janitor/tests/class-supersubscription", array("wrapper" => "li.supersubscription")) ?>
+	</ul>
+
+	<h3>System classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("Page", "/janitor/tests/class-page", array("wrapper" => "li.page")) ?>
-
-		<?= $HTML->link("Items", "/janitor/tests/class-items", array("wrapper" => "li.items")) ?>
-
-		<?= $HTML->link("Model", "/janitor/tests/class-model", array("wrapper" => "li.model")) ?>
-		<?= $HTML->link("Itemtype", "/janitor/tests/class-itemtype", array("wrapper" => "li.itemtype")) ?>
 		<?= $HTML->link("HTML", "/janitor/tests/class-html", array("wrapper" => "li.html")) ?>
-
-		<?= $HTML->link("Autoconversion (Image/Video/Audio)", "/janitor/tests/api-autoconversion", array("wrapper" => "li.autoconversion")) ?>
-		<?= $HTML->link("FileSystem", "/janitor/tests/class-filesystem", array("wrapper" => "li.filesystem")) ?>
-		<?= $HTML->link("Cache", "/janitor/tests/class-cache", array("wrapper" => "li.cache")) ?>
-		<?= $HTML->link("DOM", "/janitor/tests/class-dom", array("wrapper" => "li.dom")) ?>
-		<?= $HTML->link("PDF", "/janitor/tests/class-pdf", array("wrapper" => "li.pdf")) ?>
+		<?= $HTML->link("Model", "/janitor/tests/class-model", array("wrapper" => "li.model")) ?>
 		<?= $HTML->link("Output", "/janitor/tests/class-output", array("wrapper" => "li.output")) ?>		
-		<?= $HTML->link("Mail", "/janitor/tests/mail", array("wrapper" => "li.mail")) ?>
-		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
-		<?= $HTML->link("Member", "/janitor/tests/class-member", array("wrapper" => "li.member")) ?>
-		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
-		<?= $HTML->link("Subscription", "/janitor/tests/class-subscription", array("wrapper" => "li.subscription")) ?>
-		<?= $HTML->link("SuperUser", "/janitor/tests/class-superuser", array("wrapper" => "li.superuser")) ?>
-		<?= $HTML->link("SuperMember", "/janitor/tests/class-supermember", array("wrapper" => "li.supermember")) ?>
-		<?= $HTML->link("SuperShop", "/janitor/tests/supershop", array("wrapper" => "li.supershop")) ?>
-		<?= $HTML->link("SuperSubscription", "/janitor/tests/class-supersubscription", array("wrapper" => "li.supersubscription")) ?>
+		<?= $HTML->link("Cache", "/janitor/tests/class-cache", array("wrapper" => "li.cache")) ?>
 
 	</ul>
 
-	<h3>Helpers</h3>
+	<h3>User classes</h3>
 	<ul class="tests">
+		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
+		<?= $HTML->link("SuperUser", "/janitor/tests/class-superuser", array("wrapper" => "li.superuser")) ?>
+	</ul>
 
+	<h3>Member classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("Member", "/janitor/tests/class-member", array("wrapper" => "li.member")) ?>
+		<?= $HTML->link("SuperMember", "/janitor/tests/class-supermember", array("wrapper" => "li.supermember")) ?>
+	</ul>
+
+	<h3>Helper classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("DOM", "/janitor/tests/class-dom", array("wrapper" => "li.dom")) ?>
+		<?= $HTML->link("Mail", "/janitor/tests/mail", array("wrapper" => "li.mail")) ?>
+		<?= $HTML->link("FileSystem", "/janitor/tests/class-filesystem", array("wrapper" => "li.filesystem")) ?>
+		<?= $HTML->link("PDF", "/janitor/tests/class-pdf", array("wrapper" => "li.pdf")) ?>
+		<?= $HTML->link("Autoconversion (Image/Video/Audio)", "/janitor/tests/api-autoconversion", array("wrapper" => "li.autoconversion")) ?>
 	</ul>
 
 	<h3>Form and model</h3>
