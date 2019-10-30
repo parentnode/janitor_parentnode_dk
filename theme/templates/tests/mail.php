@@ -70,7 +70,7 @@ $custom_values = [
 	</div>
 
 	<div class="tests">
-		<h3>Mailer::send - custom html template to admin with system varaibles only</h3>
+		<h3>Mailer::send - custom html template to admin with system variables only</h3>
 		<? if(mailer()->send([
 			"subject" => "I'm a custom html template, with global variables only.",
 			"template" => "test_html"
