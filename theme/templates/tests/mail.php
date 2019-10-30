@@ -2,15 +2,17 @@
 // init mailer to expose ADMIN_EMAIL
 mailer();
 
-$custom_recipients = [ADMIN_EMAIL, "martin_kaestel@icloud.com"];
+$secondary_email = "test.parentnode@gmail.com";
+
+$custom_recipients = [ADMIN_EMAIL, $secondary_email];
 $custom_values = [
 	ADMIN_EMAIL => [
 		"name" => preg_replace("/[\.@]/", "-", ADMIN_EMAIL), 
 		"text" => "I'm the primary test recipient"
 	], 
-	"martin_kaestel@icloud.com" => [
+	$secondary_email => [
 		"name" => "martin_kaestel at icloud", 
-		"text" => "icloud"
+		"text" => "I'm the secondary test recipient"
 	]
 ];
 ?>
