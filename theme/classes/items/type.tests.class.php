@@ -197,7 +197,7 @@ class TypeTests extends Itemtype {
 			$order_id = $order["id"];
 			$user_id = $order["user_id"];
 			
-			$subscription = $SuperSubscriptionClass->getSubscriptions(array("item_id" => $order_item_item_id));
+			$subscription = $SuperSubscriptionClass->getSubscriptions(array("user_id" => $user_id, "item_id" => $order_item_item_id));
 
 			// user already subscribes to item
 			if($subscription) {
@@ -205,8 +205,8 @@ class TypeTests extends Itemtype {
 				// update existing subscription
 				// makes callback to 'subscribed' if item_id changes
 				$_POST["order_id"] = $order["id"];
-				$_POST["item_id"] = $order_item_id;
-				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $user_id, $subscription["id"]]);
+				$_POST["item_id"] = $order_item_item_id;
+				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $subscription["id"]]);
 				unset($_POST);
 
 			}
