@@ -8,6 +8,11 @@
 		<?= $HTML->link("Items", "/janitor/tests/class-items", array("wrapper" => "li.items")) ?>
 	</ul>
 
+	<h3>Itemtypes classes</h3>
+	<ul class="tests">
+		<?= $HTML->link("TypeMessage", "/janitor/tests/class-type-message", array("wrapper" => "li.type-message")) ?>
+	</ul>
+
 	<h3>Shop classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
