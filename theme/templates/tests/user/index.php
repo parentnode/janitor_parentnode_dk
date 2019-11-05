@@ -4,7 +4,6 @@ include_once("classes/system/upgrade.class.php");
 $UpgradeClass = new Upgrade();
 global $model;
 global $action;
-$page = new Page();
 // $UpgradeClass->checkDefaultValues(UT_LANGUAGES);
 // // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
 // // $UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
@@ -22,6 +21,7 @@ $page = new Page();
 
 $IC = new Items();
 $model_tests = $IC->typeObject("tests");
+$UC = new User();
 
 
 
@@ -31,11 +31,11 @@ $item = $model_tests->save(array("save"));
 unset($_POST);
 
 
-$UC = new User();
 
 include_once("classes/shop/subscription.class.php");
 $SubscriptionClass = new Subscription();
 ?>
+
 
 <div class="scene i:scene tests defaultEdit">
 	<h1>User</h1>	

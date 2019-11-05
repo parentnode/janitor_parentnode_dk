@@ -1,21 +1,90 @@
 <?
 global $model;
+$existing_rows = [];
 
 // ensure correct default values are available for test
 include_once("classes/system/upgrade.class.php");
 $UpgradeClass = new Upgrade();
 
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DE','Deutch'", "id = 'DE'");
+setLocalizationValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
+setLocalizationValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
+setLocalizationValues(UT_LANGUAGES, "'DE','Deutch'", "id = 'DE'");
 
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'DKK', 'Kroner (Denmark)', 'DKK', 'after', 2, ',', '.'", "id = 'DKK'");
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'EUR', 'Euro (Denmark)', '€', 'before', 2, ',', '.'", "id = 'EUR'");
+setLocalizationValues(UT_CURRENCIES, "'DKK', 'Kroner (Denmark)', 'DKK', 'after', 2, ',', '.'", "id = 'DKK'");
+setLocalizationValues(UT_CURRENCIES, "'EUR', 'Euro (Denmark)', '€', 'before', 2, ',', '.'", "id = 'EUR'");
 
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DK', 'Danmark', '45', '#### ####', 'DA', 'DKK'", "id = 'DK'");
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DE', 'Deutchland', '49', '#### ####', 'DE', 'EUR'", "id = 'DE'");
+setLocalizationValues(UT_COUNTRIES, "'DK', 'Danmark', '45', '#### ####', 'DA', 'DKK'", "id = 'DK'");
+setLocalizationValues(UT_COUNTRIES, "'DE', 'Deutchland', '49', '#### ####', 'DE', 'EUR'", "id = 'DE'");
 
-$UpgradeClass->checkDefaultValues(UT_VATRATES, "DEFAULT, 'No VAT', 0, 'DK'", "country = 'DK'");
+setLocalizationValues(UT_VATRATES, "DEFAULT, 'No VAT', 0, 'DK'", "vatrate = '0' AND country = 'DK'");
+setLocalizationValues(UT_VATRATES, "DEFAULT, '25%', 25, 'DK'", "vatrate = '25' AND country = 'DK'");
+
+
+function setLocalizationValues($db_table, $values, $accept_row) {
+	$query = new Query();
+	global $existing_rows;
+
+	$sql = "SELECT * FROM ".$db_table." WHERE ".$accept_row;
+	if(!$query->sql($sql)) {
+		$sql = "INSERT INTO ".$db_table." VALUES (".$values.")"	;
+		$query->sql($sql);
+	}
+	else {
+
+		if(!isset($existing_rows[$db_table])) {
+			$existing_rows[$db_table] = [];
+		}
+		array_push($existing_rows[$db_table], $accept_row);
+	}
+}
+	
+function resetLocalizationValues($db_table) {
+	
+	$query = new Query();
+	global $existing_rows;
+
+	$sql = "SELECT * FROM ".$db_table;
+	if($query->sql($sql)) {
+		$results = $query->results();
+		for($i = 0; $i < count($results); $i++) {
+
+			if($db_table == "janitor_parentnode_dk.system_vatrates") {
+				
+				$row_vatrate = $results[$i]["vatrate"];
+				$search_result = array_search("vatrate = '$row_vatrate' AND country = 'DK'", $existing_rows[$db_table]);
+	
+				// row did not exist before test
+				if($search_result === false) {
+				
+					$sql = "DELETE FROM ".$db_table." WHERE vatrate = '".$row_vatrate."'";
+					$query->sql($sql);
+				}
+			}
+			else {
+				
+				$row_id = $results[$i]["id"];
+				$search_result = array_search("id = '$row_id'", $existing_rows[$db_table]);
+	
+				// row did not exist before test
+				if($search_result === false) {
+				
+					$sql = "DELETE FROM ".$db_table." WHERE id = '".$row_id."'";
+					$query->sql($sql);
+				}
+			}
+
+
+
+		}
+		
+	}
+	
+}
+
+	
+
+
+
 
 // clear cached values
 cache()->reset("languages");
@@ -345,13 +414,15 @@ cache()->reset("vatrates");
 		<div class="testfailed">Page::language (SET DA) - error</div>
 		<? endif; ?>
 
-		<? 
-		$this->language("DE");
-		if($this->language() == "DE"):
-		?>
-		<div class="testpassed">Page::language (SET DE) - correct</div>
-		<? else: ?>
-		<div class="testfailed">Page::language (SET DE) - error</div>
+		<? if(1 && "Page::language (SET DE)"): ?>
+			<? 
+			$this->language("DE");
+			if($this->language() == "DE"):
+			?>
+			<div class="testpassed">Page::language (SET DE) - correct</div>
+			<? else: ?>
+			<div class="testfailed">Page::language (SET DE) - error</div>
+			<? endif; ?>
 		<? endif; ?>
 
 		<? 
@@ -389,13 +460,15 @@ cache()->reset("vatrates");
 		<div class="testfailed">Page::languages (GET DA) - error</div>
 		<? endif; ?>
 
-		<?
-		$language_details = $this->languages("DE");
-		if(is_array($language_details) && $language_details["id"] == "DE"):
-		?>
-		<div class="testpassed">Page::languages (GET DE) - correct</div>
-		<? else: ?>
-		<div class="testfailed">Page::languages (GET DE) - error</div>
+		<? if(1 && "Page::languages (GET DE)"): ?>
+			<?
+			$language_details = $this->languages("DE");
+			if(is_array($language_details) && $language_details["id"] == "DE"):
+			?>
+			<div class="testpassed">Page::languages (GET DE) - correct</div>
+			<? else: ?>
+			<div class="testfailed">Page::languages (GET DE) - error</div>
+			<? endif; ?>
 		<? endif; ?>
 
 		<?
@@ -425,14 +498,18 @@ cache()->reset("vatrates");
 		<div class="testfailed">Page::country (SET DK) - error</div>
 		<? endif; ?>
 
-		<? 
-		$this->country("DE");
-		if($this->country() == "DE"):
-		?>
-		<div class="testpassed">Page::country (SET DE) - correct</div>
-		<? else: ?>
-		<div class="testfailed">Page::country (SET DE) - error</div>
+		
+		<? if(1 && "page::country (SET DE)"): ?>
+			<? 
+			$this->country("DE");
+			if($this->country() == "DE"):
+			?>
+			<div class="testpassed">Page::country (SET DE) - correct</div>
+			<? else: ?>
+			<div class="testfailed">Page::country (SET DE) - error</div>
+			<? endif; ?>
 		<? endif; ?>
+
 
 		<? 
 		$this->country("XX");
@@ -451,6 +528,7 @@ cache()->reset("vatrates");
 
 	<div class="tests countries">
 		<h3>Page::countries</h3>
+		
 		<?
 		$countries = $this->countries();
 		if(is_array($countries) && arrayKeyValue($countries, "id", "DK") !== false && arrayKeyValue($countries, "id", "DE") !== false):
@@ -598,5 +676,14 @@ cache()->reset("vatrates");
 		<? endif; ?>
 
 	</div>
+
+	<?
+	// CLEAN UP
+	resetLocalizationValues(UT_COUNTRIES);
+	resetLocalizationValues(UT_CURRENCIES);
+	resetLocalizationValues(UT_VATRATES);
+	resetLocalizationValues(UT_LANGUAGES);
+
+	?>
 
 </div>
