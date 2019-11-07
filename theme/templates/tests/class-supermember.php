@@ -1005,17 +1005,6 @@
 			$IC = new Items();
 			$SC = new SuperShop();
 			$UC = new SuperUser();
-
-			// WISH WE COULD DO LIKE THIS
-			// $membership_item_1 = $model_tests->createTestItem([
-			// 	"itemtype" => "membership",
-			// 	"extend" => [
-			// 		"subscription_method" => true,
-			// 		"price" => [
-			// 			"item_price" => 200
-			// 		]
-			// 	]
-			// ]);
 			
 			// create first membership item
 			$model_membership = $IC->TypeObject("membership");
