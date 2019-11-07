@@ -222,7 +222,7 @@ function deleteTestMailingList($maillist_id) {
 		<p>Note: many of these tests send out emails (currently to test.parentnode@gmail.com and test2.parentnode@gmail.com) which should be verified manually, according to the instructions in the email's subject line. </p>
 		<? 
 
-		if(0 && "send message – no parameters send – return null") {
+		if(1 && "send message – no parameters send – return null") {
 
 			(function() {
 				
@@ -246,7 +246,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass only item_id – return null") {
+		if(1 && "send message – pass only item_id – return null") {
 
 			(function() {
 
@@ -272,7 +272,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype != message) and user_id – return null") {
+		if(1 && "send message – pass item_id (itemtype != message) and user_id – return null") {
 
 			(function() {
 
@@ -306,7 +306,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1") {
+		if(1 && "send message – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1") {
 
 			(function() {
 
@@ -341,7 +341,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message) and recipients (empty) – return null") {
+		if(1 && "send message – pass item_id (itemtype == message) and recipients (empty) – return null") {
 
 			(function() {
 
@@ -374,7 +374,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2") {
+		if(1 && "send message – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2") {
 
 			(function() {
 
@@ -410,7 +410,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3") {
+		if(1 && "send message – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3") {
 
 			(function() {
 
@@ -447,7 +447,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), recipients, and several values (same values for each recipient) – return recipient list and send Test Message 4") {
+		if(1 && "send message – pass item_id (itemtype == message), recipients, and several values (same values for each recipient) – return recipient list and send Test Message 4") {
 
 			(function() {
 
@@ -484,7 +484,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), recipients, and values (different values for each recipient) – return recipient list and send Test Message 5") {
+		if(1 && "send message – pass item_id (itemtype == message), recipients, and values (different values for each recipient) – return recipient list and send Test Message 5") {
 
 			(function() {
 
@@ -524,7 +524,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6") {
+		if(1 && "send message – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6") {
 
 			(function() {
 
@@ -581,7 +581,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), user_id (user is paying member), and custom value – return recipient list and send Test Message 7") {
+		if(1 && "send message – pass item_id (itemtype == message), user_id (user is paying member), and custom value – return recipient list and send Test Message 7") {
 
 			(function() {
 
@@ -628,7 +628,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – return recipient list and send Test Message 8") {
+		if(1 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – return recipient list and send Test Message 8") {
 
 			(function() {
 
@@ -703,7 +703,7 @@ function deleteTestMailingList($maillist_id) {
 
 		}
 
-		if(0 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for both subscribers – return recipient list and send Test Message 9") {
+		if(1 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for both subscribers – return recipient list and send Test Message 9") {
 
 			(function() {
 
