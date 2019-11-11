@@ -6,9 +6,9 @@ $this->pageTitle("It's just improvements");
 
 	<h1>Changelog</h1>
 
-	<h2>Version 0.7.9 - current development</h2>
+	<h2>Version 0.7.9 – current development</h2>
 	<p>
-		Version 0.7.9 includes a "third draft shop implementation, as well as improved handling of forms and mediae.
+		Version 0.7.9 includes a "third draft" shop implementation, as well as improved handling of forms and mediae.
 	</p>
 	<p>
 		The most important updates are:
