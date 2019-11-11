@@ -55,9 +55,9 @@ $SC = new SuperShop();
 			$cart &&
 			!$cart["items"]
 			): ?>
-		<div class="testpassed"><p>Shop::addToCart(), adding item without price (should return false) - correct</p></div>
+		<div class="testpassed"><p>SuperShop::addToCart(), adding item without price (should return false) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::addToCart(), adding item without price (should return false) - error</p></div>
+		<div class="testfailed"><p>SuperShop::addToCart(), adding item without price (should return false) - error</p></div>
 		
 		<? endif; 
 		
@@ -114,9 +114,9 @@ $SC = new SuperShop();
 			$cart["items"][1]["cart_id"] &&
 			count($cart["items"]) == 2
 			): ?>
-		<div class="testpassed"><p>Shop::addToCart(), adding two different itemtypes to cart - correct</p></div>
+		<div class="testpassed"><p>SuperShop::addToCart(), adding two different itemtypes to cart - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::addToCart(), adding two different itemtypes to cart - error</p></div>
+		<div class="testfailed"><p>SuperShop::addToCart(), adding two different itemtypes to cart - error</p></div>
 		<? endif; 
 		// goto cleanup;
 		?>
@@ -146,9 +146,9 @@ $SC = new SuperShop();
 			$cart["country"] &&
 			$cart["currency"]
 			): ?>
-		<div class="testpassed"><p>Shop::addToCart(), adding item that already exists in cart - correct</p></div>
+		<div class="testpassed"><p>SuperShop::addToCart(), adding item that already exists in cart - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::addToCart(), adding item that already exists in cart - error</p></div>
+		<div class="testfailed"><p>SuperShop::addToCart(), adding item that already exists in cart - error</p></div>
 		<? endif; 
 
 		// goto cleanup;
@@ -169,9 +169,9 @@ $SC = new SuperShop();
 		if(
 			$cart === false
 			): ?>
-		<div class="testpassed"><p>Shop::addToCart(), adding item to non-existing cart (should return false) - correct</p></div>
+		<div class="testpassed"><p>SuperShop::addToCart(), adding item to non-existing cart (should return false) - correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::addToCart(), adding item to non-existing cart (should return false) - error</p></div>
+		<div class="testfailed"><p>SuperShop::addToCart(), adding item to non-existing cart (should return false) - error</p></div>
 		<? endif; ?>
 
 		<?
@@ -352,9 +352,9 @@ $SC = new SuperShop();
 			session()->value("test_item_ordered_callback") &&
 			$order["id"]
 			): ?>
-		<div class="testpassed"><p>Shop::newOrderFromCart – item without subscription_method – correct</p></div>
+		<div class="testpassed"><p>SuperShop::newOrderFromCart – item without subscription_method – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::newOrderFromCart – item without subscription_method – error</p></div>
+		<div class="testfailed"><p>SuperShop::newOrderFromCart – item without subscription_method – error</p></div>
 		<? endif; ?>
 
 		<?
@@ -399,9 +399,9 @@ $SC = new SuperShop();
 			session()->value("test_item_subscribed_callback") &&
 			$order["id"]
 			): ?>
-		<div class="testpassed"><p>Shop::newOrderFromCart – item with subscription_method – correct</p></div>
+		<div class="testpassed"><p>SuperShop::newOrderFromCart – item with subscription_method – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::newOrderFromCart – item with subscription_method – error</p></div>
+		<div class="testfailed"><p>SuperShop::newOrderFromCart – item with subscription_method – error</p></div>
 		<? endif; ?>
 
 
@@ -417,9 +417,9 @@ $SC = new SuperShop();
 			isset($cart["cart_reference"]) &&
 			$order == false
 		): ?>
-		<div class="testpassed"><p>Shop::newOrderFromCart – empty cart – should return false – correct</p></div>
+		<div class="testpassed"><p>SuperShop::newOrderFromCart – empty cart – should return false – correct</p></div>
 		<? else: ?>
-		<div class="testfailed"><p>Shop::newOrderFromCart – empty cart – should return false – error</p></div>
+		<div class="testfailed"><p>SuperShop::newOrderFromCart – empty cart – should return false – error</p></div>
 		<? endif; ?>
 
 		<?
