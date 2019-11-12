@@ -5,7 +5,140 @@ $UC = new SuperUser();
 $query = new Query();
 $IC = new Items();
 $SC = new SuperShop();
+
+function createTestItem($_options = false) {
+
+	$IC = new Items();
+
+	$itemtype = "tests";
+	$item_name = "Test item";
+
+	if($_options !== false) {
+		foreach($_options as $_option => $_value) {
+			switch($_option) {
+				case "itemtype"            : $itemtype              = $_value; break;
+				case "item_name"           : $item_name             = $_value; break;
+				case "price"               : $price                 = $_value; break;
+			}
+		}
+	}
+	
+	// create test item
+	$model = $IC->TypeObject($itemtype);
+	$_POST["name"] = $item_name;
+
+	$item = $model->save(array("save"));
+	$item_id = $item["id"];
+	unset($_POST);
+
+	if($item_id) {
+
+		if(isset($price) && $price) {
+			// add price to membership item
+			$_POST["item_price"] = $price;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = "default";
+			$item_price = $model->addPrice(array("addPrice", $item_id));
+			unset($_POST);
+
+		}
+
+		return $item_id; 
+	}
+
+	return false;
+}
+
+function deleteTestItem($item_id) {
+	$IC = new Items();
+	$item = $IC->getItem(["id" => $item_id]);
+	$itemtype = $item["itemtype"];
+	$model = $IC->TypeObject($itemtype);
+
+	
+	return $model->delete(["delete",$item_id]);	
+	
+}
+
+function createTestUser($_options = false) {
+	$query = new Query();
+	include_once("classes/users/superuser.class.php");
+	$UC = new SuperUser();
+
+	$user_group_id = 2;
+	$nickname = "test user";
+	$firstname = "Tester";
+	$lastname = "Testerson";
+	$status = 1;
+	$created_at = "2019-01-01 00:00:00";
+	$email = "test.parentnode@gmail.com";
+	$membership = false;
+
+	if($_options !== false) {
+		foreach($_options as $_option => $_value) {
+			switch($_option) {
+				case "user_group_id"        : $user_group_id              = $_value; break;
+				case "nickname"             : $nickname                   = $_value; break;
+				case "firstname"            : $firstname                  = $_value; break;
+				case "lastname"             : $lastname                   = $_value; break;
+				case "status"               : $status                     = $_value; break;
+				case "created_at"           : $created_at                 = $_value; break;
+				case "email"                : $email                      = $_value; break;
+				case "membership"           : $membership                 = $_value; break;
+			}
+		}
+	}
+
+	$_POST["user_group_id"] = $user_group_id;
+	$_POST["nickname"] = $nickname;
+	$_POST["firstname"] = $firstname;
+	$_POST["lastname"] = $lastname;
+	$_POST["status"] = $status;
+	$_POST["created_at"] = $created_at;
+
+	// create test user
+	$user_id = $UC->save(["save"])["item_id"];
+	unset($_POST);
+
+	if($user_id) {
+
+		$_POST["email"] = $email;
+		$UC->updateEmail(["updateEmail", $user_id]);
+
+		return $user_id;
+	}
+
+	return false;
+}
+
+function deleteTestUser($user_id) {
+	$query = new Query();
+
+	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
+	if($query->sql($sql)) {
+		return true;
+	}
+
+	return false;
+}
+
+function deleteTestOrder($order_id) {
+	$query = new Query();
+
+	$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
+	if($query->sql($sql)) {
+		
+		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+		if($query->sql($sql)) {
+			return true;
+		}
+	}	
+
+	return false;
+}
 ?>
+
 
 <div class="scene i:scene tests">
 	<h1>SuperShop</h1>	
@@ -190,7 +323,7 @@ $SC = new SuperShop();
 		$query->sql($sql);
 
 		?>
-	</div>
+		</div>
 
 	<div class="tests">
 		<h3>SuperShop::addToNewInternalCart</h3>
@@ -432,6 +565,9 @@ $SC = new SuperShop();
 		$membership_id = $membership["id"];
 		$query = new Query();
 		
+		// delete subscription
+		$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id AND user_id = $user_id";
+		$query->sql($sql);
 		// delete item
 		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
 		$query->sql($sql);
@@ -439,7 +575,7 @@ $SC = new SuperShop();
 		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
 		$query->sql($sql);
 		// delete order
-		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
 		$query->sql($sql);
 		// delete test user
 		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
@@ -623,6 +759,10 @@ $SC = new SuperShop();
 		$item_id = $item["id"];
 		$membership_id = $membership["id"];
 		$query = new Query();
+
+
+
+		
 
 		// delete item
 		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
