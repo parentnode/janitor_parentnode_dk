@@ -840,7 +840,6 @@ function deleteTestOrder($order_id) {
 		(function() {
 				
 			// ARRANGE
-			$query = new Query();
 			$SC = new SuperShop();
 
 			$test_item_id = createTestItem(["price" => 400]);
