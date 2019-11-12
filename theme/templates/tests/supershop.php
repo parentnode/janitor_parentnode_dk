@@ -690,4 +690,51 @@ $SC = new SuperShop();
 
 	</div>
 
+
+	<div class="tests">
+		<h3>SuperShop::cancelOrder</h3>
+
+		<? 	
+
+		if(1 && "cancel order – ordered item with order_cancelled callback – return true, order status 3, make order_cancelled callback")
+		(function() {
+				
+			// ARRANGE
+			$query = new Query();
+			$SC = new SuperShop();
+
+			$test_item_id = createTestItem(["price" => 400]);
+			$test_user_id = createTestUser();
+
+			$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id]);
+			$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+			
+			
+			// ACT
+			$result = $SC->cancelOrder(["cancelOrder", $order["id"], $test_user_id]);
+			$order = $SC->getOrders(["order_id" => $order["id"]]);
+			
+			// ASSERT 
+			if(
+				$result &&
+				session()->value("test_item_order_cancelled_callback") &&
+				$order["status"] == 3
+				): ?>
+			<div class="testpassed"><p>SuperShop::cancelOrder – ordered item with order_cancelled callback – return true, order status 3, make order_cancelled callback – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperShop::cancelOrder – ordered item with order_cancelled callback – return true, order status 3, make order_cancelled callback – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+			deleteTestItem($test_item_id);
+			deleteTestOrder($order["id"]);
+			deleteTestUser($test_user_id);
+
+			// clear session
+			session()->reset("test_item_order_cancelled");
+		})();
+		?>
+
+	</div>
+
 </div>
