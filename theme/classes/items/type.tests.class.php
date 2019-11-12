@@ -236,6 +236,10 @@ class TypeTests extends Itemtype {
 		session()->value("test_item_subscription_renewed_callback", true);
 	}
 
+	function order_cancelled($order_item, $order) {
+		session()->value("test_item_order_cancelled_callback", true);
+	}
+
 	// Do I really want this to work for all users
 	function unsubscribed($subscription) {
 		global $page;
