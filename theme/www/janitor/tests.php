@@ -30,7 +30,7 @@ if(is_array($action) && count($action)) {
 		include_once("classes/helpers/pdf.class.php");
 		$PC = new PDF();
 
-		$PC->create(SITE_URL."/tests/pdf-template", $file);
+		$PC->create(SITE_URL."/tests/pdf-template", $file, ["delay" => 4000]);
 
 		if(file_exists($file)) {
 
