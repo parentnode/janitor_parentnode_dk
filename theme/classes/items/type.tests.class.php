@@ -189,15 +189,19 @@ class TypeTests extends Itemtype {
 
 		include_once("classes/shop/supersubscription.class.php");
 		$SuperSubscriptionClass = new SuperSubscription();
+		$IC = new Items();
 
-		// order item can be subscribed to
-		if(SITE_SUBSCRIPTIONS && $order_item["subscription_method"]) {
+		$item = $IC->getItem(["id" => $order_item["item_id"], "extend" => ["subscription_method" => true]]);
+		$item_id = $order_item["item_id"];
+
+
+		// item can be subscribed to
+		if(SITE_SUBSCRIPTIONS && isset($item["subscription_method"]) && $item["subscription_method"]) {
 			
-			$order_item_item_id = $order_item["item_id"];
 			$order_id = $order["id"];
 			$user_id = $order["user_id"];
 			
-			$subscription = $SuperSubscriptionClass->getSubscriptions(array("user_id" => $user_id, "item_id" => $order_item_item_id));
+			$subscription = $SuperSubscriptionClass->getSubscriptions(array("user_id" => $user_id, "item_id" => $item_id));
 
 			// user already subscribes to item
 			if($subscription) {
@@ -205,7 +209,7 @@ class TypeTests extends Itemtype {
 				// update existing subscription
 				// makes callback to 'subscribed' if item_id changes
 				$_POST["order_id"] = $order["id"];
-				$_POST["item_id"] = $order_item_item_id;
+				$_POST["item_id"] = $item_id;
 				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $subscription["id"]]);
 				unset($_POST);
 
@@ -214,7 +218,7 @@ class TypeTests extends Itemtype {
 			else {
 				// add new subscription
 				// makes callback to 'subscribed'
-				$_POST["item_id"] = $order_item_item_id;
+				$_POST["item_id"] = $item_id;
 				$_POST["user_id"] = $user_id;
 				$_POST["order_id"] = $order_id;
 				$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
@@ -230,6 +234,10 @@ class TypeTests extends Itemtype {
 	
 	function subscription_renewed($subscription) {
 		session()->value("test_item_subscription_renewed_callback", true);
+	}
+
+	function order_cancelled($order_item, $order) {
+		session()->value("test_item_order_cancelled_callback", true);
 	}
 
 	// Do I really want this to work for all users

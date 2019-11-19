@@ -74,7 +74,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template to admin with system variables only"):?>
+	<? if(0 && "custom html template to admin with system variables only - should send mails with unfilled placeholders"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with system variables only</h3>
 		<? if(mailer()->send([
@@ -244,7 +244,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template with custom variables"):?>
+	<? if(1 && "custom html template with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - custom html template with custom variables</h3>
 		<? if(mailer()->sendBulk([
