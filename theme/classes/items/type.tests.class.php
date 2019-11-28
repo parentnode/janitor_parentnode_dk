@@ -488,6 +488,289 @@ class TypeTests extends Itemtype {
 
 		return $csrf;
 	}
+
+
+	// cleanup function
+	function cleanUp($_options) {
+		$query = new Query();
+		include_once("classes/shop/supershop.class.php");
+	
+		$SC = new SuperShop();
+		$IC = new Items();
+	
+		$user_id = false;
+		$item_id = false;
+		$currency_id = false;
+		
+		foreach($_options as $_option => $_value) {
+			switch($_option) {
+				case "item_id"            : $item_id              = $_value; break;
+				case "user_id"            : $user_id              = $_value; break;
+				case "currency_id"        : $currency_id          = $_value; break;
+			}
+		}
+			
+	
+		if($user_id) {
+	
+			// delete member
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE user_id = $user_id";
+			$query->sql($sql);
+			
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE user_id = $user_id";
+			$query->sql($sql);
+	
+			// delete carts
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE user_id = $user_id";
+			$query->sql($sql);
+	
+			// delete orders and cancelled orders
+			$orders = $SC->getOrders(["user_id" => $user_id]);
+			if($orders) {
+	
+				foreach($orders as $order) {
+	
+					// delete cancelled orders
+					$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = ".$order["id"];
+					$query->sql($sql);
+					
+				}
+				
+				// delete orders
+				$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
+				$query->sql($sql);
+	
+			}
+	
+			if($user_id != session()->value("user_id")) {
+
+				// delete user
+				$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
+				$query->sql($sql);
+			}
+		}
+	
+		if($item_id) {
+	
+			$item = $IC->getItem(["id" => $item_id]);
+			$itemtype = $item["itemtype"];
+			$model_item = $IC->TypeObject($itemtype);
+	
+			// delete subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id";
+			$query->sql($sql);
+	
+			$model_item->delete(["delete",$item_id]);	
+		}
+
+		if($currency_id) {
+
+			$sql = "DELETE FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
+			$query->sql($sql);
+		}
+	
+	
+		// check that everything was deleted
+		$sql = "SELECT * FROM ".SITE_DB.".items WHERE id = $item_id";
+		$remaining_items = $query->sql($sql); 
+	
+		if($user_id != session()->value("user_id")) {
+			$sql = "SELECT * FROM ".SITE_DB.".users WHERE id = $user_id";
+			$remaining_users = $query->sql($sql);
+		}
+		else {
+			$remaining_users = false;
+		}
+
+		$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
+		$remaining_orders = $query->sql($sql); 
+		
+		$sql = "SELECT * FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
+		$remaining_currencies = $query->sql($sql);
+		
+		if(!$remaining_items && !$remaining_orders && !$remaining_users && !$remaining_currencies) {
+	
+			return true;
+		}
+	
+		print "Incomplete cleanup";
+		return false;
+	
+	}
+
+	function createTestItem($_options = false) {
+
+		$IC = new Items();
+		$query = new Query();
+	
+		$itemtype = "tests";
+		$item_name = "Test item";
+		$status = 1;
+	
+		if($_options !== false) {
+			foreach($_options as $_option => $_value) {
+				switch($_option) {
+					case "itemtype"            : $itemtype              = $_value; break;
+					case "item_name"           : $item_name             = $_value; break;
+
+					case "price"               : $price                 = $_value; break;
+					case "prices"              : $prices                = $_value; break;
+
+					case "subscription_method" : $subscription_method   = $_value; break;
+					case "status" 			   : $status                = $_value; break;
+				}
+			}
+		}
+		
+		// create test item
+		$model = $IC->TypeObject($itemtype);
+		$_POST["name"] = $item_name;
+	
+		$item = $model->save(array("save"));
+		$item_id = $item["id"];
+		unset($_POST);
+	
+		if($item_id) {
+	
+			if(isset($price) && $price) {
+				// add price 
+				$_POST["item_price"] = $price;
+				$_POST["item_price_currency"] = "DKK";
+				$_POST["item_price_vatrate"] = 2;
+				$_POST["item_price_type"] = 1;
+				$item_price = $model->addPrice(array("addPrice", $item_id));
+				unset($_POST);
+	
+			}
+
+			if(isset($prices) && $prices && is_array($prices)) {
+				foreach($prices as $price_type => $_options) {
+
+					$price = 100;
+					$currency = "DKK";
+					$vatrate = 2;
+					$quantity = false;
+
+					// get price_type_id from price_type name
+					$sql = "SELECT id FROM ".UT_PRICE_TYPES." WHERE name = '$price_type'";
+					if ($query->sql($sql)) {
+						
+						$price_type_id = $query->result(0, "id");
+					} 
+
+					foreach($_options as $_option => $_value) {
+
+						switch($_option) {
+		
+							case "price"               : $price                 = $_value;   break;
+							case "currency"            : $currency              = $_value;   break;
+							case "vatrate"             : $vatrate               = $_value;   break;
+							case "quantity"            : $quantity              = $_value;   break;
+						}					
+
+					}
+
+
+					$_POST["item_price"] = $price;
+					$_POST["item_price_currency"] = $currency;
+					$_POST["item_price_vatrate"] = $vatrate;
+					$_POST["item_price_type"] = $price_type_id;
+					$_POST["item_price_quantity"] = $quantity;
+					$item_price = $model->addPrice(array("addPrice", $item_id));
+					unset($_POST);
+				}
+
+			}
+	
+			if(isset($subscription_method) && preg_match("/[1-3]/", $subscription_method)) {
+				// add subscription method
+				$_POST["item_subscription_method"] = $subscription_method;
+				$model->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+				unset($_POST);
+			}
+
+			if($model->status(["status", $item_id, $status])) {
+				
+				return $item_id; 
+			}
+	
+		}
+	
+		return false;
+	}
+	
+	function createTestUser($_options = false) {
+		$query = new Query();
+		include_once("classes/users/superuser.class.php");
+		$UC = new SuperUser();
+	
+		$user_group_id = 2;
+		$nickname = "test user";
+		$firstname = "Tester";
+		$lastname = "Testerson";
+		$status = 1;
+		$created_at = "2019-01-01 00:00:00";
+		$email = "test.parentnode@gmail.com";
+		$membership = false;
+	
+		if($_options !== false) {
+			foreach($_options as $_option => $_value) {
+				switch($_option) {
+					case "user_group_id"        : $user_group_id              = $_value; break;
+					case "nickname"             : $nickname                   = $_value; break;
+					case "firstname"            : $firstname                  = $_value; break;
+					case "lastname"             : $lastname                   = $_value; break;
+					case "status"               : $status                     = $_value; break;
+					case "created_at"           : $created_at                 = $_value; break;
+					case "email"                : $email                      = $_value; break;
+					case "membership"           : $membership                 = $_value; break;
+				}
+			}
+		}
+	
+		$_POST["user_group_id"] = $user_group_id;
+		$_POST["nickname"] = $nickname;
+		$_POST["firstname"] = $firstname;
+		$_POST["lastname"] = $lastname;
+		$_POST["status"] = $status;
+		$_POST["created_at"] = $created_at;
+	
+		// create test user
+		$user_id = $UC->save(["save"])["item_id"];
+		unset($_POST);
+	
+		if($user_id) {
+	
+			$_POST["email"] = $email;
+			$UC->updateEmail(["updateEmail", $user_id]);
+	
+			return $user_id;
+		}
+	
+		return false;
+	}
+
+	function createTestCurrency() {
+		$query = new Query();
+
+		$abbreviation = "XXX";
+		$id = $abbreviation;
+		$name = "Test currency";
+		$abbreviation_position = "after";
+		$decimals = 2;
+		$decimal_separator = ",";
+		$grouing_separator = ".";
+
+
+		$sql = "INSERT INTO ".UT_CURRENCIES." (id, name, abbreviation, abbreviation_position, decimals, decimal_separator, grouping_separator) VALUES ('$id', '$name', '$abbreviation', '$abbreviation_position', $decimals, '$decimal_separator', '$grouing_separator')";
+		if ($query->sql($sql)) {
+			 return $id;
+		}
+
+		return false;
+	} 
+	
 }
 
 ?>
