@@ -48,7 +48,7 @@ function createTestItem($_options = false) {
 			$_POST["item_price"] = $price;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$model->addPrice(array("addPrice", $item_id));
 			unset($_POST);
 		}
@@ -461,7 +461,7 @@ if($query->sql($sql)) {
 		$_POST["item_price"] = 100;
 		$_POST["item_price_currency"] = "DKK";
 		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
+		$_POST["item_price_type"] = 1;
 		$price = $model_tests->addPrice(array("addPrice", $item_id));
 		unset($_POST);
 		
@@ -661,7 +661,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -754,7 +754,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -842,7 +842,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -930,7 +930,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1016,7 +1016,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1043,7 +1043,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
 
@@ -1122,7 +1122,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1244,7 +1244,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
 
@@ -1341,7 +1341,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1368,7 +1368,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
 
@@ -1459,7 +1459,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1474,7 +1474,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
 
@@ -1591,7 +1591,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_2_price = $model_tests->addPrice(array("addPrice", $test_item_2_id));
 			unset($_POST);
 
@@ -1683,7 +1683,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1779,7 +1779,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1869,7 +1869,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -1957,7 +1957,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -2052,7 +2052,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 
@@ -2139,7 +2139,7 @@ if($query->sql($sql)) {
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$test_item_1_price = $model_tests->addPrice(array("addPrice", $test_item_1_id));
 			unset($_POST);
 

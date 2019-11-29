@@ -31,7 +31,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -114,7 +114,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -169,7 +169,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -224,7 +224,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -513,7 +513,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -674,7 +674,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -800,7 +800,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -907,7 +907,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -1017,7 +1017,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 	
@@ -1037,7 +1037,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 	
@@ -1171,7 +1171,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 	
@@ -1191,7 +1191,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 	
@@ -1297,7 +1297,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 	
@@ -1353,7 +1353,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 	
@@ -1373,7 +1373,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 	
@@ -1486,7 +1486,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 
@@ -1609,7 +1609,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 
@@ -1688,7 +1688,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 			unset($_POST);
 	
@@ -1898,7 +1898,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
@@ -1929,7 +1929,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 	
@@ -2018,7 +2018,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
@@ -2045,7 +2045,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 			
@@ -2273,7 +2273,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
@@ -2292,7 +2292,7 @@
 			$_POST["item_price"] = 300;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 
@@ -2391,7 +2391,7 @@
 			$_POST["item_price"] = 300;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
@@ -2420,7 +2420,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 	
@@ -2500,7 +2500,7 @@
 			$_POST["item_price"] = 100;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
 			unset($_POST);
 
@@ -2519,7 +2519,7 @@
 			$_POST["item_price"] = 300;
 			$_POST["item_price_currency"] = "DKK";
 			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_type"] = 1;
 			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
 			unset($_POST);
 

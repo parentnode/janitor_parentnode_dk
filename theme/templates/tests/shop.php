@@ -1389,79 +1389,140 @@ function deleteTestCart($cart_reference) {
 	<div class="tests addToNewInternalCart">
 		<h3>Shop::addToNewInternalCart</h3>
 
-		<? 	// addToNewInternalCart
-			// ARRANGE
+		<? 
+		if(1 && "addToNewInternalCart – add test item – return cart with test item") {
 
-		// create test item
-		$model_tests = $IC->typeObject("tests");
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		$item_id = $item["id"];
-		
-		// add price to test item
-		$_POST["item_price"] = 100;
-		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = 1;
-		$_POST["item_price_quantity"] = null;
-		$model_tests->addPrice(["addPrice", $item_id]);
-		unset($_POST);
-		
-		?>
-		<? 	// ACT 
-		$cart = $SC->addToNewInternalCart($item_id);
-		$cart_id = $cart["id"];
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart &&
-			$cart["items"][0]["item_id"] == $item_id &&
-			$cart["user_id"] == session()->value("user_id")
-			): ?>
-		<div class="testpassed"><p>Shop::addToNewInternalCart – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>Shop::addToNewInternalCart – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
 
-		// delete test item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
-		// delete cart
-		$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
-		$query->sql($sql);
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				
+				
+				// ASSERT 
+				if(
+					$cart &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["user_id"] == session()->value("user_id")
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item – return cart with test item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item – return cart with test item – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $cart["user_id"]]);
+	
+			})();
 
-		?>
+		}
 
-		<? 	// addToNewInternalCart – item has no price (should return false)
-			// ARRANGE
+		if(1 && "addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2)") {
 
-		// create test item
-		$model_tests = $IC->typeObject("tests");
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		$item_id = $item["id"];
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
 
-		?>
-		<? 	// ACT 
-		$cart = $SC->addToNewInternalCart($item_id);
-		$cart_id = $cart["id"];	
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart === false
-			): ?>
-		<div class="testpassed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>Shop::addToNewInternalCart – item has no price (should return false, no cart created) – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
-		// delete test item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["quantity" => 2]);
+				
+				
+				// ASSERT 
+				if(
+					$cart
+					&& $cart["items"][0]["item_id"] == $test_item_id
+					&& $cart["items"][0]["quantity"] == 2
+					&& $cart["user_id"] == session()->value("user_id")
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2) – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2) – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $cart["user_id"]]);
+	
+			})();
 
+		}
+
+		if(1 && "addToNewInternalCart – add test item without price – return false") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+
+				$test_item_id = $model_tests->createTestItem();
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				
+				
+				// ASSERT 
+				if(
+					$cart == false
+					&& $test_item_id
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item without price – return false – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item without price – return false – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+	
+			})();
+
+		}
+
+		if(1 && "addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["custom_name" => "Test item with custom name", "custom_price" => 50]);
+				
+				
+				// ASSERT 
+				if(
+					$cart
+					&& $cart["items"][0]["item_id"] == $test_item_id
+					&& $cart["user_id"] == session()->value("user_id")
+					&& $cart["items"][0]["custom_price"] == 50
+					&& $cart["items"][0]["custom_name"] == "Test item with custom name"
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $cart["user_id"]]);
+	
+			})();
+
+		}
 		?>
 
 	</div>
