@@ -690,19 +690,19 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 				</div>
 			</div>
 
-			<div class="function" id="HTML::outout">
+			<div class="function" id="HTML::output">
 				<div class="header">
-					<h3>HTML::outout</h3>
+					<h3>HTML::output</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">HTML::outout</dd>
+							<dd class="name">HTML::output</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">String</span> = 
-								HTML::outout(
+								HTML::output(
 									<span class="type">String</span> <span class="var">$name</span> 
 									[, <span class="type">Array</span> <span class="var">$_options</span> ]
 								);
