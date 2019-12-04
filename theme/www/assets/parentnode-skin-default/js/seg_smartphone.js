@@ -1,6 +1,6 @@
 /*
 MIT license, 2019 parentNode.dk
-asset-builder @ 2019-10-13 18:58:25
+asset-builder @ 2019-11-13 02:19:48
 */
 
 /*seg_smartphone_include.js*/
@@ -758,7 +758,7 @@ Util.clickableElement = u.ce = function(node, _options) {
 				if(fun(node.preClicked)) {
 					node.preClicked();
 				}
-				if(event && (event.metaKey || event.ctrlKey)) {
+				if(event && (event.metaKey || event.ctrlKey || (this._a && this._a.target))) {
 					window.open(this.url);
 				}
 				else {
@@ -4115,17 +4115,27 @@ Util.History = u.h = new function() {
 	this.is_listening = false;
 	this.navigate = function(url, node, silent) {
 		silent = silent || false;
-		if(this.popstate) {
-			history.pushState({}, url, url);
-			if(!silent) {
-				this.callback(url);
+		if((!url.match(/^http[s]?\:\/\//) || url.match(document.domain)) && (!node || !node._a || !node._a.target)) {
+			if(this.popstate) {
+				history.pushState({}, url, url);
+				if(!silent) {
+					this.callback(url);
+				}
+			}
+			else {
+				if(silent) {
+					this.next_hash_is_silent = true;
+				}
+				location.hash = u.h.getCleanUrl(url);
 			}
 		}
 		else {
-			if(silent) {
-				this.next_hash_is_silent = true;
+			if(!node || !node._a || !node._a.target) {
+				location.href = url;
 			}
-			location.hash = u.h.getCleanUrl(url);
+			else {
+				window.open(this.url);
+			}
 		}
 	}
 	this.callback = function(url) {
@@ -4215,7 +4225,7 @@ Util.History = u.h = new function() {
 		this.trail.push({"url":url, "node":node});
 	}
 	this.getCleanUrl = function(string, levels) {
-		string = string.replace(location.protocol+"//"+document.domain, "").match(/[^#$]+/)[0];
+		string = string.replace(location.protocol+"//"+document.domain, "") ? string.replace(location.protocol+"//"+document.domain, "").match(/[^#$]+/)[0] : "/";
 		if(!levels) {
 			return string;
 		}
@@ -4353,76 +4363,6 @@ u.txt["assign"] = function(obj) {
 
 
 /*u-basics.js*/
-u.smartphoneSwitch = new function() {
-	this.state = 0;
-	this.init = function(node) {
-		this.callback_node = node;
-		this.event_id = u.e.addWindowEvent(this, "resize", this.resized);
-		this.resized();
-	}
-	this.resized = function() {
-		if(u.browserW() < 500 && !this.state) {
-			this.switchOn();
-		}
-		else if(u.browserW() > 500 && this.state) {
-			this.switchOff();
-		}
-	}
-	this.switchOn = function() {
-		if(!this.panel) {
-			this.state = true;
-			this.panel = u.ae(document.body, "div", {"id":"smartphone_switch"});
-			u.ass(this.panel, {
-				opacity: 0
-			});
-			u.ae(this.panel, "h1", {html:u.stringOr(u.txt["smartphone-switch-headline"], "Hello curious")});
-			if(u.txt["smartphone-switch-text"].length) {
-				for(i = 0; i < u.txt["smartphone-switch-text"].length; i++) {
-					u.ae(this.panel, "p", {html:u.txt["smartphone-switch-text"][i]});
-				}
-			}
-			var ul_actions = u.ae(this.panel, "ul", {class:"actions"});
-			var li; 
-			li = u.ae(ul_actions, "li", {class:"hide"});
-			var bn_hide = u.ae(li, "a", {class:"hide button", html:u.txt["smartphone-switch-bn-hide"]});
-			li = u.ae(ul_actions, "li", {class:"switch"});
-			var bn_switch = u.ae(li, "a", {class:"switch button primary", html:u.txt["smartphone-switch-bn-switch"]});
-			u.e.click(bn_switch);
-			bn_switch.clicked = function() {
-				u.saveCookie("smartphoneSwitch", "on");
-				location.href = location.href.replace(/[&]segment\=desktop|segment\=desktop[&]?/, "") + (location.href.match(/\?/) ? "&" : "?") + "segment=smartphone";
-			}
-			u.e.click(bn_hide);
-			bn_hide.clicked = function() {
-				u.e.removeWindowEvent(u.smartphoneSwitch, "resize", u.smartphoneSwitch.event_id);
-				u.smartphoneSwitch.switchOff();
-			}
-			u.a.transition(this.panel, "all 0.5s ease-in-out");
-			u.ass(this.panel, {
-				opacity: 1
-			});
-			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOn) == "function") {
-				this.callback_node.smartphoneSwitchedOn();
-			}
-		}
-	}
-	this.switchOff = function() {
-		if(this.panel) {
-			this.state = false;
-			this.panel.transitioned = function() {
-				this.parentNode.removeChild(this);
-				delete u.smartphoneSwitch.panel;
-			}
-			u.a.transition(this.panel, "all 0.5s ease-in-out");
-			u.ass(this.panel, {
-				opacity: 0
-			});
-			if(this.callback_node && typeof(this.callback_node.smartphoneSwitchedOff) == "function") {
-				this.callback_node.smartphoneSwitchedOff();
-			}
-		}
-	}
-}
 u.showScene = function(scene) {
 	var i, node;
 	var nodes = u.cn(scene);
@@ -4461,16 +4401,39 @@ u.showScene = function(scene) {
 	}
 }
 u._stepA1 = function() {
+	var svg_icon = u.qs("svg", this);
+	if(svg_icon) {
+		this.removeChild(svg_icon);
+	}
 	this.innerHTML = this.innerHTML.replace(/[ ]?<br[ \/]?>[ ]?/, " <br /> ");
 	this.innerHTML = '<span class="word">'+this.innerHTML.split(" ").join('</span> <span class="word">')+'</span>'; 
 	var word_spans = u.qsa("span.word", this);
-	var i, span;
+	var i, span, letters, spanned_word;
 	for(i = 0; span = word_spans[i]; i++) {
 		if(span.innerHTML.match(/<br[ \/]?>/)) {
 			span.parentNode.replaceChild(document.createElement("br"), span);
 		}
 		else {
-			span.innerHTML = "<span>"+span.innerHTML.split("").join("</span><span>")+"</span>";
+			if(span.innerHTML.match(/&[a-zA-Z0-9#]+;/)) {
+				letters = span.innerHTML.split("");
+				span.innerHTML = "";
+				for(j = 0; j < letters.length; j++) {
+					if(letters[j] === "&") {
+						spanned_word = letters[j];
+						while(letters[++j] !== ";") {
+							spanned_word += letters[j];
+						}
+						spanned_word += letters[j];
+						span.innerHTML += "<span>" + spanned_word + "</span>";
+					}
+					else {
+						span.innerHTML += "<span>" + letters[j] + "</span>";
+					}
+				}
+			}
+			else {
+				span.innerHTML = "<span>"+span.innerHTML.split("").join("</span><span>")+"</span>";
+			}
 		}
 	}
 	this.spans = u.qsa("span:not(.word)", this);
@@ -4499,6 +4462,9 @@ u._stepA1 = function() {
 				});
 			}
 		}
+	}
+	if(svg_icon) {
+		this.appendChild(svg_icon);
 	}
 }
 u._stepA2 = function() {
@@ -4541,6 +4507,154 @@ u.txt["smartphone-switch-bn-hide"] = "Hide";
 u.txt["smartphone-switch-bn-switch"] = "Go to Smartphone version";
 
 
+/*beta-u-fontsready.js*/
+u.fontsReady = function(node, fonts, _options) {
+	var callback_loaded = "fontsLoaded";
+	var callback_timeout = "fontsNotLoaded";
+	var max_time = 3000;
+	if(obj(_options)) {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "callback"					: callback_loaded		= _options[_argument]; break;
+				case "timeout"					: callback_timeout		= _options[_argument]; break;
+				case "max"						: max_time				= _options[_argument]; break;
+			}
+		}
+	}
+	window["_man_fonts_"] = window["_man_fonts_"] || {};
+	window["_man_fonts_"].fontApi = document.fonts && fun(document.fonts.check) ? true : false;
+	window["_man_fonts_"].fonts = window["_man_fonts_"].fonts || {};
+	var font, node, i;
+	if(typeof(fonts.length) == "undefined") {
+		font = fonts;
+		fonts = new Array();
+		fonts.push(font);
+	}
+	var loadkey = u.randomString(8);
+	if(window["_man_fonts_"].fontApi) {
+		window["_man_fonts_"+loadkey] = {};
+	}
+	else {
+		window["_man_fonts_"+loadkey] = u.ae(document.body, "div");
+		window["_man_fonts_"+loadkey].basenodes = {};
+	}
+	window["_man_fonts_"+loadkey].nodes = [];
+	window["_man_fonts_"+loadkey].t_timeout = u.t.setTimer(window["_man_fonts_"+loadkey], "fontCheckTimeout", max_time);
+	window["_man_fonts_"+loadkey].loadkey = loadkey;
+	window["_man_fonts_"+loadkey].callback_node = node;
+	window["_man_fonts_"+loadkey].callback_loaded = callback_loaded;
+	window["_man_fonts_"+loadkey].callback_timeout = callback_timeout;
+	for(i = 0; i < fonts.length; i++) {
+		font = fonts[i];
+		font.style = font.style || "normal";
+		font.weight = font.weight || "400";
+		font.size = font.size || "16px";
+		font.status = "waiting";
+		font.id = u.normalize(font.family+font.style+font.weight);
+		if(!window["_man_fonts_"].fonts[font.id]) {
+			window["_man_fonts_"].fonts[font.id] = font;
+		}
+		if(window["_man_fonts_"].fontApi) {
+			node = {};
+		}
+		else {
+			if(!window["_man_fonts_"+loadkey].basenodes[u.normalize(font.style+font.weight)]) {
+				window["_man_fonts_"+loadkey].basenodes[u.normalize(font.style+font.weight)] = u.ae(window["_man_fonts_"+loadkey], "span", {"html":"I'm waiting for your fonts to load!","style":"font-family: Times !important; font-style: "+font.style+" !important; font-weight: "+font.weight+" !important; font-size: "+font.size+" !important; line-height: 1em !important; opacity: 0 !important;"});
+			}
+			node = u.ae(window["_man_fonts_"+loadkey], "span", {"html":"I'm waiting for your fonts to load!","style":"font-family: '"+font.family+"', Times !important; font-style: "+font.style+" !important; font-weight: "+font.weight+" !important; font-size: "+font.size+" !important; line-height: 1em !important; opacity: 0 !important;"});
+		}
+		node.font_size = font.size;
+		node.font_family = font.family;
+		node.font_weight = font.weight;
+		node.font_style = font.style;
+		node.font_id = font.id;
+		node.loadkey = loadkey;
+		window["_man_fonts_"+loadkey].nodes.push(node);
+	}
+	window["_man_fonts_"+loadkey].checkFontsAPI = function() {
+		var i, node, font_string;
+		for(i = 0; i < this.nodes.length; i++) {
+			node = this.nodes[i];
+			if(window["_man_fonts_"].fonts[node.font_id] && window["_man_fonts_"].fonts[node.font_id].status == "waiting") {
+				font_string = node.font_style + " " + node.font_weight + " " + node.font_size + " " + node.font_family;
+				document.fonts.load(font_string).then(function(fontFaceSetEvent) {
+					if(fontFaceSetEvent && fontFaceSetEvent.length && fontFaceSetEvent[0].status == "loaded") {
+						window["_man_fonts_"].fonts[this.font_id].status = "loaded";
+					}
+					else {
+						window["_man_fonts_"].fonts[this.font_id].status = "failed";
+					}
+					if(window["_man_fonts_"+this.loadkey] && fun(window["_man_fonts_"+this.loadkey].checkFontsStatus)) {
+						window["_man_fonts_"+this.loadkey].checkFontsStatus();
+					}
+				}.bind(node));
+			}
+		}
+		if(fun(this.checkFontsStatus)) {
+			this.checkFontsStatus();
+		}
+	}
+	window["_man_fonts_"+loadkey].checkFontsFallback = function() {
+		var basenode, i, node;
+		for(i = 0; i < this.nodes.length; i++) {
+			node = this.nodes[i];
+			basenode = this.basenodes[u.normalize(node.font_style+node.font_weight)];
+			if(node.offsetWidth != basenode.offsetWidth || node.offsetHeight != basenode.offsetHeight) {
+				window["_man_fonts_"].fonts[node.font_id].status = "loaded";
+			}
+		}
+		this.t_fallback = u.t.setTimer(this, "checkFontsFallback", 30);
+		if(fun(this.checkFontsStatus)) {
+			this.checkFontsStatus();
+		}
+	}
+	window["_man_fonts_"+loadkey].fontCheckTimeout = function(event) {
+		u.t.resetTimer(this.t_fallback);
+		delete window["_man_fonts_"+this.loadkey];
+		if(this.parentNode) {
+			this.parentNode.removeChild(this);
+		}
+		if(fun(this.callback_node[this.callback_timeout])) {
+			this.callback_node[this.callback_timeout](this.nodes);
+		}
+		else if(fun(this.callback_node[this.callback_loaded])) {
+			this.callback_node[this.callback_loaded](this.nodes);
+		}
+	}
+	window["_man_fonts_"+loadkey].checkFontsStatus = function(event) {
+		var i, node;
+		for(i = 0; i < this.nodes.length; i++) {
+			node = this.nodes[i];
+			if(window["_man_fonts_"].fonts[node.font_id].status == "waiting") {
+				return;
+			}
+		}
+		u.t.resetTimer(this.t_timeout);
+		u.t.resetTimer(this.t_fallback);
+		delete window["_man_fonts_"+this.loadkey];
+		if(this.parentNode) {
+			this.parentNode.removeChild(this);
+		}
+		if(fun(this.callback_node[this.callback_loaded])) {
+			if(this.fontApi) {
+				this.callback_node[this.callback_loaded](this.nodes);
+			}
+			else {
+				setTimeout(function() {
+					this.callback_node[this.callback_loaded](this.nodes); 
+				}.bind(this), 250);
+			}
+		}
+	}
+	if(window["_man_fonts_"].fontApi) {
+		window["_man_fonts_"+loadkey].checkFontsAPI();
+	}
+	else {
+		window["_man_fonts_"+loadkey].checkFontsFallback();
+	}
+}
+
 /*u-form-custom.js*/
 u.f.fixFieldHTML = function(field) {
 	if(field.indicator && field.label) {
@@ -4549,19 +4663,17 @@ u.f.fixFieldHTML = function(field) {
 }
 
 /*i-page.js*/
-u.bug_console_only = true;
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
-		window.page = page;
 		u.bug_force = true;
 		u.bug("This site is built using the combined powers of body, mind and spirit. Well, and also Manipulator, Janitor and Detector");
-		u.bug("Visit https://parentnode.dk for more information");
+		if(document.domain !== "parentnode.dk") {
+			u.bug("Visit https://parentnode.dk for more information");
+		}
 		u.bug_force = false;
 		page.hN = u.qs("#header");
 		page.hN.service = u.qs(".servicenavigation", page.hN);
 		u.e.drag(page.hN, page.hN);
-		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
-		page.logo.url = '/';
 		page.cN = u.qs("#content", page);
 		page.nN = u.qs("#navigation", page);
 		page.nN = u.ie(page.hN, page.nN);
@@ -4610,8 +4722,21 @@ Util.Objects["page"] = new function() {
 			}
 		}
 		page.orientationchanged = function() {
-			if(page.cN && page.cN.scene && typeof(page.cN.scene.orientationchanged) == "function") {
-				page.cN.scene.orientationchanged();
+			if(this.cN && this.cN.scene && typeof(this.cN.scene.orientationchanged) == "function") {
+				this.cN.scene.orientationchanged();
+			}
+		}
+		page.preload = function() {
+			if(fun(u.pagePreloader)) {
+				u.pagePreloader();
+			}
+			else {
+				u.fontsReady(this, [
+					{"family":"OpenSans", "weight":"normal", "style":"normal"},
+					{"family":"OpenSans", "weight":"bold", "style":"normal"},
+					{"family":"OpenSans", "weight":"normal", "style":"italic"},
+					{"family":"PT Serif", "weight":"normal", "style":"normal"}
+				], {"callback": "ready"});
 			}
 		}
 		page.ready = function() {
@@ -4620,11 +4745,10 @@ Util.Objects["page"] = new function() {
 				u.e.addWindowEvent(this, "resize", this.resized);
 				u.e.addWindowEvent(this, "scroll", this.scrolled);
 				u.e.addWindowEvent(this, "orientationchange", this.orientationchanged);
-				if(typeof(u.notifier) == "function") {
+				if(fun(u.notifier)) {
 					u.notifier(this);
 				}
 				if(u.getCookie("smartphoneSwitch") == "on") {
-					console.log("Back to desktop")
 					var bn_switch = u.ae(document.body, "div", {id:"desktop_switch", html:"Back to desktop"});
 					u.ce(bn_switch);
 					bn_switch.clicked = function() {
@@ -4632,8 +4756,13 @@ Util.Objects["page"] = new function() {
 						location.href = location.href.replace(/[&]segment\=smartphone|segment\=smartphone[&]?/, "") + (location.href.match(/\?/) ? "&" : "?") + "segment=desktop";
 					}
 				}
+				this.initHeader();
 				this.initNavigation();
 				this.resized();
+				if(!fun(this.cN.scene.revealPage)) {
+					this.revealPage();
+				}
+				this.cN.scene.ready();
 			}
 		}
 		page.acceptCookies = function() {
@@ -4660,6 +4789,10 @@ Util.Objects["page"] = new function() {
 					});
 				}
 			}
+		}
+		page.initHeader = function() {
+			this.logo = u.ie(this.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
+			this.logo.url = '/';
 		}
 		page.initNavigation = function() {
 			this.nN.list = u.qs("ul.navigation", this.nN);
@@ -4737,6 +4870,7 @@ Util.Objects["page"] = new function() {
 				}
 				u.e.drag(this.nN.nav, this.nN, {"strict":false, "elastica":200, "vertical_lock":true, "overflow":"scroll"});
 			}
+			var i, node;
 			if(page.fN.service) {
 				nodes = u.qsa("li", page.fN.service);
 				for(i = 0; node = nodes[i]; i++) {
@@ -4784,8 +4918,26 @@ Util.Objects["page"] = new function() {
 					"opacity":1
 				});
 			}
+			if(fun(u.logoInjected)) {
+				u.logoInjected();
+			}
 		}
-		page.ready();
+		page.revealPage = function() {
+			u.a.transition(page.hN, "all 0.3s ease-in");
+			u.ass(page.hN, {
+				"opacity":1
+			});
+			u.a.transition(page.nN, "all 0.3s ease-in");
+			u.ass(page.nN, {
+				"opacity":1
+			});
+			u.a.transition(page.fN, "all 0.3s ease-in");
+			u.ass(page.fN, {
+				"opacity":1
+			});
+			this.acceptCookies();
+		}
+		page.preload();
 	}
 }
 u.e.addDOMReadyEvent(u.init);
@@ -4801,12 +4953,9 @@ Util.Objects["login"] = new function() {
 		scene.ready = function() {
 			this._form = u.qs("form", this);
 			u.f.init(this._form);
-			page.cN.scene = this;
 			u.showScene(this);
-			page.acceptCookies();
-			page.resized();
 		}
-		scene.ready();
+		page.cN.scene = scene;
 	}
 }
 
@@ -4815,17 +4964,13 @@ Util.Objects["login"] = new function() {
 Util.Objects["scene"] = new function() {
 	this.init = function(scene) {
 		scene.resized = function() {
-			this.offsetHeight;
 		}
 		scene.scrolled = function() {
 		}
 		scene.ready = function() {
-			page.cN.scene = this;
 			u.showScene(this);
-			page.acceptCookies();
-			page.resized();
 		}
-		scene.ready();
+		page.cN.scene = scene;
 	}
 }
 

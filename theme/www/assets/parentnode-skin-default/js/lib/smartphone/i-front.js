@@ -1,4 +1,4 @@
-Util.Objects["newsletter"] = new function() {
+Util.Objects["front"] = new function() {
 	this.init = function(scene) {
 		// u.bug("scene init:", scene);
 
@@ -13,9 +13,6 @@ Util.Objects["newsletter"] = new function() {
 		scene.ready = function() {
 			// u.bug("scene.ready:", this);
 
-			this._form = u.qs("form", this);
-			u.f.init(this._form);
-
 			u.showScene(this);
 
 		}
@@ -24,5 +21,4 @@ Util.Objects["newsletter"] = new function() {
 		page.cN.scene = scene;
 
 	}
-
 }
