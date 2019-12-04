@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2019-10-28 17:14:28
+asset-builder @ 2019-12-04 15:08:43
 */
 
 /*seg_tablet_light_include.css*/
@@ -7,7 +7,7 @@ asset-builder @ 2019-10-28 17:14:28
 /*seg_tablet_light.css*/
 /*
 MIT license, 2002-2019 parentNode.dk
-asset-builder @ 2019-10-13 18:58:25
+asset-builder @ 2019-11-13 02:19:48
 */
 @font-face {
 	font-family: 'OpenSans';
@@ -354,6 +354,8 @@ div.field.focus div.hint {display: block;}
 #content .scene .usedby ul li.peoplegroup {background-image: url(../assets/parentnode-skin-default/img/logos/peoplegroup.png);}
 #content .scene .usedby ul li.lsb {background-image: url(../assets/parentnode-skin-default/img/logos/lsb.png);}
 #content .scene .usedby ul li.punkt1 {background-image: url(../assets/parentnode-skin-default/img/logos/punkt1.png);}
+#content .scene .usedby ul li.greenspeak {background-image: url(../assets/parentnode-skin-default/img/logos/greenspeak.png);}
+#content .scene .usedby ul li.kbhff {background-image: url(../assets/parentnode-skin-default/img/logos/kbhff.png);}
 
 
 /*s-documentation.css*/
