@@ -1,16 +1,12 @@
-// can be removed after updating to next version of Manipulator
-u.bug_console_only = true;
-
 Util.Objects["page"] = new function() {
 	this.init = function(page) {
-
-		window.page = page;
 
 		// show parentnode comment in console
 		u.bug_force = true;
 		u.bug("This site is built using the combined powers of body, mind and spirit. Well, and also Manipulator, Janitor and Detector");
-		u.bug("Visit https://parentnode.dk for more information");
-//		u.bug("Free lunch for new contributers ;-)");
+		if(document.domain !== "parentnode.dk") {
+			u.bug("Visit https://parentnode.dk for more information");
+		}
 		u.bug_force = false;
 
 
@@ -18,11 +14,6 @@ Util.Objects["page"] = new function() {
 		page.hN = u.qs("#header");
 		page.hN.service = u.qs(".servicenavigation", page.hN);
 		u.e.drag(page.hN, page.hN);
-
-
-		// add logo to navigation
-		page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
-		page.logo.url = '/';
 
 
 		// content reference
@@ -42,7 +33,7 @@ Util.Objects["page"] = new function() {
 
 		// global resize handler
 		page.resized = function() {
-//			u.bug("page resized");
+			// u.bug("page resized");
 
 			this.browser_h = u.browserH();
 			this.browser_w = u.browserW();
@@ -116,16 +107,34 @@ Util.Objects["page"] = new function() {
 		page.orientationchanged = function() {
 
 			// forward scroll event to current scene
-			if(page.cN && page.cN.scene && typeof(page.cN.scene.orientationchanged) == "function") {
-				page.cN.scene.orientationchanged();
+			if(this.cN && this.cN.scene && typeof(this.cN.scene.orientationchanged) == "function") {
+				this.cN.scene.orientationchanged();
 			}
 		}
 
+		// Preload page assets
+		page.preload = function() {
 
+			// Local pagePreloader
+			if(fun(u.pagePreloader)) {
+				u.pagePreloader();
+			}
+			else {
+
+				// preload fonts
+				u.fontsReady(this, [
+					{"family":"OpenSans", "weight":"normal", "style":"normal"},
+					{"family":"OpenSans", "weight":"bold", "style":"normal"},
+					{"family":"OpenSans", "weight":"normal", "style":"italic"},
+					{"family":"PT Serif", "weight":"normal", "style":"normal"}
+				], {"callback": "ready"});
+
+			}
+		}
 
 		// Page is ready - called from several places, evaluates when page is ready to be shown
 		page.ready = function() {
-//			u.bug("page ready");
+			// u.bug("page ready");
 
 			// page is ready to be shown - only initalize if not already shown
 			if(!this.is_ready) {
@@ -141,11 +150,10 @@ Util.Objects["page"] = new function() {
 				u.e.addWindowEvent(this, "orientationchange", this.orientationchanged);
 
 
-				if(typeof(u.notifier) == "function") {
+				if(fun(u.notifier)) {
 					u.notifier(this);
 				}
 				if(u.getCookie("smartphoneSwitch") == "on") {
-					console.log("Back to desktop")
 					var bn_switch = u.ae(document.body, "div", {id:"desktop_switch", html:"Back to desktop"});
 					u.ce(bn_switch);
 					bn_switch.clicked = function() {
@@ -154,10 +162,18 @@ Util.Objects["page"] = new function() {
 					}
 				}
 
+				this.initHeader();
 
 				this.initNavigation();
 
 				this.resized();
+
+				// Start showing the page
+				if(!fun(this.cN.scene.revealPage)) {
+					this.revealPage();
+				}
+
+				this.cN.scene.ready();
 
 			}
 		}
@@ -199,6 +215,16 @@ Util.Objects["page"] = new function() {
 				}
 
 			}
+
+		}
+
+
+		// initialize header elements
+		page.initHeader = function() {
+
+			// add logo to navigation
+			this.logo = u.ie(this.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
+			this.logo.url = '/';
 
 		}
 
@@ -327,6 +353,8 @@ Util.Objects["page"] = new function() {
 			}
 
 
+			var i, node;
+
 			// append footer servicenavigation to header servicenavigation
 			if(page.fN.service) {
 				nodes = u.qsa("li", page.fN.service);
@@ -395,11 +423,39 @@ Util.Objects["page"] = new function() {
 					"opacity":1
 				});
 			}
+
+			if(fun(u.logoInjected)) {
+				u.logoInjected();
+			}
 		}
 
 
-		// ready to start page builing process
-		page.ready();
+		// Show page elements (header, navigation, footer)
+		page.revealPage = function() {
+			// u.bug("page.revealPage");
+
+			u.a.transition(page.hN, "all 0.3s ease-in");
+			u.ass(page.hN, {
+				"opacity":1
+			});
+
+			u.a.transition(page.nN, "all 0.3s ease-in");
+			u.ass(page.nN, {
+				"opacity":1
+			});
+
+			u.a.transition(page.fN, "all 0.3s ease-in");
+			u.ass(page.fN, {
+				"opacity":1
+			});
+
+			// accept cookies?
+			this.acceptCookies();
+
+		}
+
+		// ready to start page preload process
+		page.preload();
 
 	}
 }

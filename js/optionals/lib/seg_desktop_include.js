@@ -4,6 +4,8 @@ document.write('<script type="text/javascript" src="/js/manipulator/merged/seg_d
 document.write('<script type="text/javascript" src="/js/lib/u-basics.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/u-settings.js"></script>');
 
+// Include BETA modules separately
+document.write('<script type="text/javascript" src="/js/manipulator/src/beta-u-fontsready.js"></script>');
 document.write('<script type="text/javascript" src="/js/manipulator/src/beta-u-smartphoneswitch.js"></script>');
 document.write('<script type="text/javascript" src="/js/manipulator/src/beta-u-notifier.js"></script>');
 
@@ -27,7 +29,6 @@ document.write('<script type="text/javascript" src="/js/lib/desktop/i-dynamic-va
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-article_mini_list.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-comments.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-documentation.js"></script>');
-document.write('<script type="text/javascript" src="/js/lib/desktop/i-generic.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-newsletter.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-pagination.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-qnas.js"></script>');
