@@ -1684,6 +1684,73 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
+		if(1 && "newOrderFromCart – pass cart and order_comment method – return order with comment") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new Shop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = $model_tests->createTestUser();
+				$item_id = $model_tests->createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				// print_r($cart);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$_POST["order_comment"] = "Testing order comment";
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
+				unset($_POST);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["comment"] == "Testing order comment" &&
+					$order["items"] &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>Shop::newOrderFromCart – pass cart and order_comment – return order with comment – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::newOrderFromCart – pass cart and order_comment – return order with comment – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
 		if(1 && "newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback") {
 
 			(function() {
