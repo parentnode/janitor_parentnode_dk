@@ -38,7 +38,7 @@ function createTestItem($_options = false) {
 	// $_POST["item_price"] = 100;
 	// $_POST["item_price_currency"] = "DKK";
 	// $_POST["item_price_vatrate"] = 1;
-	// $_POST["item_price_type"] = "default";
+	// $_POST["item_price_type"] = 1;
 	// $membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
 	// unset($_POST);
 
@@ -141,7 +141,7 @@ function addTestMembership($user_id) {
 	$_POST["item_price"] = 100;
 	$_POST["item_price_currency"] = "DKK";
 	$_POST["item_price_vatrate"] = 1;
-	$_POST["item_price_type"] = "default";
+	$_POST["item_price_type"] = 1;
 	$membership_item_price = $model->addPrice(array("addPrice", $membership_item_id));
 	unset($_POST);
 

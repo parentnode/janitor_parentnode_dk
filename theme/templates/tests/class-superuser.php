@@ -505,7 +505,7 @@ skip_cleanup:
 		$_POST["item_price"] = 100;
 		$_POST["item_price_currency"] = "DKK";
 		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
+		$_POST["item_price_type"] = 1;
 		$_POST["item_price_quantity"] = 1;
 		$price = $model->addPrice(["addPrice", $item_id]);
 		unset($_POST);

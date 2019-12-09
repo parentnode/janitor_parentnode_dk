@@ -6,6 +6,9 @@ $query = new Query();
 $IC = new Items();
 $SC = new SuperShop();
 
+
+
+
 function createTestItem($_options = false) {
 
 	$IC = new Items();
@@ -19,6 +22,7 @@ function createTestItem($_options = false) {
 				case "itemtype"            : $itemtype              = $_value; break;
 				case "item_name"           : $item_name             = $_value; break;
 				case "price"               : $price                 = $_value; break;
+				case "subscription_method" : $subscription_method   = $_value; break;
 			}
 		}
 	}
@@ -37,11 +41,18 @@ function createTestItem($_options = false) {
 			// add price to membership item
 			$_POST["item_price"] = $price;
 			$_POST["item_price_currency"] = "DKK";
-			$_POST["item_price_vatrate"] = 1;
-			$_POST["item_price_type"] = "default";
+			$_POST["item_price_vatrate"] = 2;
+			$_POST["item_price_type"] = 1;
 			$item_price = $model->addPrice(array("addPrice", $item_id));
 			unset($_POST);
 
+		}
+
+		if(isset($subscription_method) && preg_match("/[1-3]/", $subscription_method)) {
+			// add subscription method to second membership item
+			$_POST["item_subscription_method"] = $subscription_method;
+			$model->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+			unset($_POST);
 		}
 
 		return $item_id; 
@@ -137,6 +148,8 @@ function deleteTestOrder($order_id) {
 
 	return false;
 }
+
+
 ?>
 
 
@@ -147,445 +160,609 @@ function deleteTestOrder($order_id) {
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
-		
-		<h3>SuperShop::addToCart()</h3>
-
-		<?
-		// SETUP
-
-		$model_tests = $IC->typeObject("tests");
-		// create test item
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		// print_r($item);
-		unset($_POST);
-		// create test membership item
-		$model_tests_membership = $IC->TypeObject("membership");
-		$_POST["name"] = "Membership Test item";
-		$membership = $model_tests_membership->save(array("save"));
-		// print_r($membership);
-		unset($_POST);
-
-		$cart = $SC->addCart(["addCart"]);
-		// print_r($cart);
-		$cart_reference = $cart["cart_reference"];
-
-		?>
-		
-
-		<?
-		// ADD ITEM WITHOUT PRICE
-		
-		$_POST["item_id"] = $item["item_id"];
-		$_POST["quantity"] = 1;
-		
-		$result = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-		
-		if(
-			$result === false &&
-			$cart &&
-			!$cart["items"]
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToCart(), adding item without price (should return false) - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToCart(), adding item without price (should return false) - error</p></div>
-		
-		<? endif; 
-		
-		// goto cleanup;
-		?>
-
-		<?
-		// add prices to test item and membership item	
-		$_POST["item_price"] = 100;
-		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
-		$_POST["item_price_quantity"] = null;
-
-		$model_tests_membership->addPrice(["addPrice", $membership["item_id"]]);
-		$model_tests->addPrice(["addPrice", $item["item_id"]]);
-		unset($_POST);
-		?>
-		
-		
-		<?
-		// ADD TWO DIFFERENT ITEMTYPES
-		$cart = $SC->emptyCart(["emptyCart", $cart_reference]);
-		
-		$_POST["item_id"] = $membership["item_id"];
-		$_POST["quantity"] = 1;
-		
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-		
-		
-		$_POST["item_id"] = $item["item_id"];
-		$_POST["quantity"] = 1;
-
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-
-		// debug(["cart with two different itemtypes", $cart]);
-		
-		if(
-			$cart &&
-			$cart["id"] &&
-			$cart["cart_reference"] &&
-			$cart["country"] &&
-			$cart["currency"] &&
-			$cart["items"] &&
-			$cart["items"][1]["item_id"] == $item["item_id"] &&
-			$cart["items"][0]["item_id"] == $membership["item_id"] &&
-			$cart["items"][0]["quantity"] == 1 &&
-			$cart["items"][1]["quantity"] == 1 &&
-			$cart["items"][0]["id"] &&
-			$cart["items"][1]["id"] &&
-			$cart["items"][0]["cart_id"] &&
-			$cart["items"][1]["cart_id"] &&
-			count($cart["items"]) == 2
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToCart(), adding two different itemtypes to cart - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToCart(), adding two different itemtypes to cart - error</p></div>
-		<? endif; 
-		// goto cleanup;
-		?>
-
-		<?
-		// ADD ALREADY EXISTING ITEM
-		
-		$cart = $SC->emptyCart(["emptyCart", $cart_reference]);
-		
-		$_POST["item_id"] = $membership["item_id"];
-		$_POST["quantity"] = 1;
-		
-		
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-		
-		// debug(["added already exisitng item to cart", $cart]);
-		if(
-			$cart &&
-			$cart["items"] &&
-			$cart["items"][0]["quantity"] == 2 &&
-			$cart["items"][0]["item_id"] == $membership["item_id"] &&
-			count($cart["items"]) == 1 &&
-			$cart["id"] &&
-			$cart["cart_reference"] &&
-			$cart["country"] &&
-			$cart["currency"]
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToCart(), adding item that already exists in cart - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToCart(), adding item that already exists in cart - error</p></div>
-		<? endif; 
-
-		// goto cleanup;
-		?>
-
-		<? 
-		// ADD ITEM TO NON-EXISTING CART
-		$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
-		$cart = false;
-
-		$_POST["item_id"] = $item["item_id"];
-		$_POST["quantity"] = 1;
-		
-		$cart = $SC->addToCart(["addToCart"]);
-		unset($_POST);
-
-
-		if(
-			$cart === false
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToCart(), adding item to non-existing cart (should return false) - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToCart(), adding item to non-existing cart (should return false) - error</p></div>
-		<? endif; ?>
-
-		<?
-		// // CLEAN UP
-		// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
-		// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
-		
-		// DELETE TEST ITEMS
-		$item_id = $item["id"];
-		$membership_id = $membership["id"];
-		$query = new Query();
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
-		// delete membership
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
-		$query->sql($sql);
-
-		?>
-		</div>
-
-	<div class="tests">
+	<div class="tests addToNewInternalCart">
 		<h3>SuperShop::addToNewInternalCart</h3>
 
-		<? 	// addToNewInternalCart
-			// ARRANGE
+		<? 
+		if(1 && "addToNewInternalCart – add test item – return cart with test item") {
 
-		// create test item
-		$model_tests = $IC->typeObject("tests");
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		$item_id = $item["id"];
-		
-		// add price to test item
-		$_POST["item_price"] = 100;
-		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
-		$_POST["item_price_quantity"] = null;
-		$model_tests->addPrice(["addPrice", $item_id]);
-		unset($_POST);
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new SuperShop();
 
-		$user_id = session()->value("user_id");
-		
-		?>
-		<? 	// ACT 
-		$cart = $SC->addToNewInternalCart($item_id, ["user_id" => $user_id]);
-		$cart_id = $cart["id"];
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart &&
-			$cart["items"][0]["item_id"] == $item_id &&
-			$cart["user_id"] == session()->value("user_id")
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToNewInternalCart – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToNewInternalCart – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+				
 
-		// delete test item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id]);
+				
+				
+				// ASSERT 
+				if(
+					$cart &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["user_id"] == $test_user_id
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item – return cart with test item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item – return cart with test item – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $test_user_id]);
+	
+			})();
 
-		// delete cart
-		$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
-		$query->sql($sql);
+		}
 
-		?>
+		if(1 && "addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2)") {
 
-		<? 	// addToNewInternalCart – item has no price (should return false)
-			// ARRANGE
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new SuperShop();
 
-		// create test item
-		$model_tests = $IC->typeObject("tests");
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		$item_id = $item["id"];
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
 
-		$user_id = session()->value("user_id");
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "quantity" => 2]);
+				
+				
+				// ASSERT 
+				if(
+					$cart
+					&& $cart["items"][0]["item_id"] == $test_item_id
+					&& $cart["items"][0]["quantity"] == 2
+					&& $cart["user_id"] == $test_user_id
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2) – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2) – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $test_user_id]);
+	
+			})();
 
-		?>
-		<? 	// ACT 
-		$cart = $SC->addToNewInternalCart($item_id, ["user_id" => $user_id]);
-		$cart_id = $cart["id"];	
-		?>
-		<? 	// ASSERT 
-		if(
-			$cart === false
-			): ?>
-		<div class="testpassed"><p>SuperShop::addToNewInternalCart – item has no price (should return false, no cart created) – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::addToNewInternalCart – item has no price (should return false, no cart created) – error</p></div>
-		<? endif; ?>
-		<? 	// CLEAN UP
+		}
 
-		// delete test item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
+		if(1 && "addToNewInternalCart – add test item without price – return false") {
 
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new SuperShop();
+
+				$test_item_id = $model_tests->createTestItem();
+				$test_user_id = $model_tests->createTestUser();
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id]);
+				
+				
+				// ASSERT 
+				if(
+					$cart == false
+					&& $test_item_id
+					&& $test_user_id
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item without price – return false – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item without price – return false – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $test_user_id]);
+	
+			})();
+
+		}
+
+		if(1 && "addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new SuperShop();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_name" => "Test item with custom name", "custom_price" => 50]);
+				
+				
+				// ASSERT 
+				if(
+					$cart
+					&& $cart["items"][0]["item_id"] == $test_item_id
+					&& $cart["user_id"] == $test_user_id
+					&& $cart["items"][0]["custom_price"] == 50
+					&& $cart["items"][0]["custom_name"] == "Test item with custom name"
+					): ?>
+				<div class="testpassed"><p>Shop::addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "user_id" => $test_user_id]);
+	
+			})();
+
+		}
 		?>
 
 	</div>
 
-	<div class="tests">
+	<div class="tests newOrderFromCart">
 		<h3>SuperShop::newOrderFromCart()</h3>
 
 		<?
-		// SETUP
-
-		// add test user
-		$_POST["nickname"] = "test.parentnode@gmail.com";
-		$_POST["user_group_id"] = 3;
-		$user = $UC->save(["save"]);
-		$user_id = $user["item_id"];
-		unset($_POST);
-
-		// create test item
-		$model_tests = $IC->typeObject("tests");
-		$_POST["name"] = "Test item";
-		$item = $model_tests->save(array("save"));
-		// print_r($item);
-		unset($_POST);
-
-		// create test membership item
-		$model_tests_membership = $IC->TypeObject("membership");
-		$_POST["name"] = "Membership Test item";
-		$membership = $model_tests_membership->save(array("save"));
-		// print_r($membership);
-		unset($_POST);
-
-
-		// add prices to test items
-		$_POST["item_price"] = 100;
-		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
-		$_POST["item_price_quantity"] = null;
-
-		$model_tests_membership->addPrice(["addPrice", $membership["item_id"]]);
-		$model_tests->addPrice(["addPrice", $item["item_id"]]);
-		unset($_POST);
-
-		// add test item to cart
-		$_POST["user_id"] = $user_id;
-		$cart = $SC->addCart(["addCart"]);
-		// print_r($cart);
-		$cart_id = $cart["id"];
-		$cart_reference = $cart["cart_reference"];
-		unset($_POST);
 		
-		$_POST["item_id"] = $item["item_id"];
-		$_POST["quantity"] = 1;		
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-		?>
+		if(1 && "newOrderFromCart – empty cart – return false") {
 
-		<?
-		// NEW ORDER FROM CART - ITEM WITHOUT SUBSCRIPTION METHOD
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+
+				// add cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart_reference]);
+
+				// ASSERT
+				if(
+					$cart && 
+					isset($cart_reference) &&
+					$order == false
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – empty cart – return false – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – empty cart – return false – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id]);
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – item without subscription method – return order, 'ordered'-callback, no 'subscribed'-callback") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				// print_r($cart);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – item without subscription_method – return order, 'ordered'-callback, no 'subscribed'-callback – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – item without subscription_method – return order, 'ordered'-callback, no 'subscribed'-callback – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100, "subscription_method" => 1]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				// print_r($cart);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – cart_item with custom price – return order with custom price") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["total_price"] == 50 &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – cart_item with custom price – return order with custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – cart_item with custom price – return order with custom price – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – cart_item with custom name – return order with custom name") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_name"] = "Testing custom name";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["name"] == "Testing custom name" &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – cart_item with custom name – return order with custom name – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – cart_item with custom name – return order with custom name – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – cart_item with custom name and custom price – return order with custom name and custom price") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = 50;
+				$_POST["custom_name"] = "Testing custom name";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["total_price"] == 50 &&
+					$order["items"][0]["name"] == "Testing custom name" &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – cart_item with custom name and custom price – return order with custom name and custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – cart_item with custom name and custom price – return order with custom name and custom price – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – add item (1x standard price, 2x custom_price, 1x custom_price/custom_name, 1 custom_name– return order with correct prices and quantities ") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = createTestUser();
+				$item_id = createTestItem(["price" => 100]);
+
+				// add cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 2;		
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = 50;
+				$_POST["custom_name"] = "Testing custom name and custom price";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_name"] = "Testing only custom name";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					count($order["items"]) == 4 &&
+					$order["items"][0]["quantity"] == 1 &&
+					$order["items"][0]["total_price"] == 100 &&
+					$order["items"][0]["name"] == "Test item" &&
+					$order["items"][1]["quantity"] == 2 &&
+					$order["items"][1]["total_price"] == 100 &&
+					$order["items"][1]["name"] == "Test item" &&
+					$order["items"][2]["quantity"] == 1 &&
+					$order["items"][2]["total_price"] == 50 &&
+					$order["items"][2]["name"] == "Testing custom name and custom price" &&
+					$order["items"][3]["quantity"] == 1 &&
+					$order["items"][3]["total_price"] == 100 &&
+					$order["items"][3]["name"] == "Testing only custom name" &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – add item (1x standard price, 2x custom_price, 1x custom_price/custom_name, 1 custom_name – return order with correct prices and quantities – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – add item (1x standard price, 2x custom_price, 1x custom_price/custom_name, 1 custom_name – return order with correct prices and quantities – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+			})();
+		}
+
+
 		
-		session()->reset("test_item_ordered_callback");
-
-		// print_r($cart);
-		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
-		$order_id = $order["id"];
-		// print_r($order);
-		// debug($_SESSION);
-
-		if(
-			$order &&
-			$order["items"] &&
-			$order["status"] == 0 &&
-			$order["payment_status"] == 0 &&
-			$order["shipping_status"] == 0 &&
-			$order["user_id"] &&
-			$order["currency"] &&
-			$order["country"] &&
-			session()->value("test_item_ordered_callback") &&
-			$order["id"]
-			): ?>
-		<div class="testpassed"><p>SuperShop::newOrderFromCart – item without subscription_method – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::newOrderFromCart – item without subscription_method – error</p></div>
-		<? endif; ?>
-
-		<?
-		// NEW ORDER FROM CART - ITEM WITH SUBSCRIPTION METHOD
 		
-		session()->reset("test_item_ordered_callback");
-		session()->reset("test_item_subscribed_callback");
-
-		// add subscription method to test item
-		$_POST["item_subscription_method"] = 1;
-		$model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item["item_id"]));
-		unset($_POST);
-
-		// add test item to cart
-		$_POST["user_id"] = $user_id;
-		$cart = $SC->addCart(["addCart"]);
-		$cart_id = $cart["id"];
-		$cart_reference = $cart["cart_reference"];
-		unset($_POST);
-		
-		$_POST["item_id"] = $item["item_id"];
-		$_POST["quantity"] = 1;		
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
-		
-		// print_r($cart);
-		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
-		$order_id = $order["id"];
-		// print_r($order);
-		// debug($_SESSION);
-
-		if(
-			$order &&
-			$order["items"] &&
-			$order["status"] == 0 &&
-			$order["payment_status"] == 0 &&
-			$order["shipping_status"] == 0 &&
-			$order["user_id"] &&
-			$order["currency"] &&
-			$order["country"] &&
-			session()->value("test_item_ordered_callback") &&
-			session()->value("test_item_subscribed_callback") &&
-			$order["id"]
-			): ?>
-		<div class="testpassed"><p>SuperShop::newOrderFromCart – item with subscription_method – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::newOrderFromCart – item with subscription_method – error</p></div>
-		<? endif; ?>
-
-
-		<?
-		// NEW ORDER FROM CART - EMPTY CART
-
-		$SC->emptyCart(["emptyCart"]);
-		session()->reset("test_item_ordered_callback");
-
-		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
-		if(
-			$cart && 
-			isset($cart["cart_reference"]) &&
-			$order == false
-		): ?>
-		<div class="testpassed"><p>SuperShop::newOrderFromCart – empty cart – should return false – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperShop::newOrderFromCart – empty cart – should return false – error</p></div>
-		<? endif; ?>
-
-		<?
-		// // CLEAN UP
-		// $model->delete(array("membership/delete/".$item_with_price["item_id"]));
-		// $model->delete(array("membership/delete/".$item_without_price["item_id"]));
-		
-		// DELETE TEST ITEMS
-		$item_id = $item["id"];
-		$membership_id = $membership["id"];
-		$query = new Query();
-		
-		// delete subscription
-		$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id AND user_id = $user_id";
-		$query->sql($sql);
-		// delete item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $item_id";
-		$query->sql($sql);
-		// delete membership
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_id";
-		$query->sql($sql);
-		// delete order
-		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
-		$query->sql($sql);
-		// delete test user
-		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
-		$query->sql($sql);
-
 		?>
 
 	</div>
 
-	<div class="tests">
+	<div class="tests getUnpaidOrders">
 		<h3>SuperShop::getUnpaidOrders</h3>
 		<?
 		// add test user
@@ -604,7 +781,7 @@ function deleteTestOrder($order_id) {
 		$_POST["item_price"] = 100;
 		$_POST["item_price_currency"] = "DKK";
 		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = "default";
+		$_POST["item_price_type"] = 1;
 		$_POST["item_price_quantity"] = 1;
 		$price = $model->addPrice(["addPrice", $item_id]);
 		unset($_POST);
@@ -756,7 +933,7 @@ function deleteTestOrder($order_id) {
 
 			// delete user, order, item
 
-		$item_id = $item["id"];
+		// $item_id = $item["id"];
 		$membership_id = $membership["id"];
 		$query = new Query();
 
@@ -783,7 +960,8 @@ function deleteTestOrder($order_id) {
 		?>
 		
 	</div> 
-	<div class="tests">
+	
+	<div class="tests addCart">
 		<h3>SuperShop::addCart</h3>
 
 		<? 	
@@ -830,8 +1008,7 @@ function deleteTestOrder($order_id) {
 
 	</div>
 
-
-	<div class="tests">
+	<div class="tests cancelOrder">
 		<h3>SuperShop::cancelOrder</h3>
 
 		<? 	
@@ -841,6 +1018,9 @@ function deleteTestOrder($order_id) {
 				
 			// ARRANGE
 			$SC = new SuperShop();
+			$IC = new Items();
+
+			$model_tests = $IC->typeObject("tests");
 
 			$test_item_id = createTestItem(["price" => 400]);
 			$test_user_id = createTestUser();
@@ -865,14 +1045,627 @@ function deleteTestOrder($order_id) {
 			<? endif; 
 			
 			// CLEAN UP
-			deleteTestItem($test_item_id);
-			deleteTestOrder($order["id"]);
-			deleteTestUser($test_user_id);
+			$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
 
 			// clear session
 			session()->reset("test_item_order_cancelled");
 		})();
 		?>
+
+	</div>
+
+	<div class="tests addToCart">
+		
+		<h3>SuperShop::addToCart()</h3>
+
+		<?
+
+		if(1 && "addToCart – add item without price – return false") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+				
+				$test_item_id = createTestItem();
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$result = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$result === false &&
+					$cart &&
+					!$cart["items"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add item without price – return false – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add item without price – return false – error</p></div>
+				
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add two different itemtypes to cart – return cart") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+				$membership_item_id = createTestItem(["itemtype" => "membership", "price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $membership_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					$cart["id"] &&
+					$cart["cart_reference"] &&
+					$cart["country"] &&
+					$cart["currency"] &&
+					$cart["items"] &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][1]["item_id"] == $membership_item_id &&
+					$cart["items"][0]["quantity"] == 1 &&
+					$cart["items"][1]["quantity"] == 1 &&
+					$cart["items"][0]["id"] &&
+					$cart["items"][1]["id"] &&
+					$cart["items"][0]["cart_id"] &&
+					$cart["items"][1]["cart_id"] &&
+					count($cart["items"]) == 2
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add two different itemtypes to cart – return cart – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add two different itemtypes to cart – return cart – error</p></div>
+				
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["item_id" => $membership_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add item that already exists in cart – return cart with updated quantity") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					$cart["items"] &&
+					$cart["items"][0]["quantity"] == 2 &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					count($cart["items"]) == 1 &&
+					$cart["id"] &&
+					$cart["cart_reference"] &&
+					$cart["country"] &&
+					$cart["currency"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add item that already exists in cart – return cart with updated quantity – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add item that already exists in cart – return cart with updated quantity – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add item to non-existing cart – return false") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = false;
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				
+				$cart = $SC->addToCart(["addToCart"]);
+				unset($_POST);
+
+				if(
+					$cart === false
+				): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add item to non-existing cart – return false – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add item to non-existing cart – return false – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add item with custom_name and custom_price – return cart") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][0]["custom_name"] == "Test item with special price" &&
+					$cart["items"][0]["custom_price"] == 50
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add item with custom_name and custom_price – return cart – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add item with custom_name and custom_price – return cart – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items ") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][1]["item_id"] == $test_item_id &&
+					$cart["items"][0]["custom_price"] == 50 &&
+					count($cart["items"]) == 2
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items  – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items  – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add the same item five times (2x standard price, 1x custom price A, 2x custom price B), in mixed order – return cart with separated items, with correct quantities ") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 75;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+	
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 75;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					count($cart["items"]) == 3 &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][1]["item_id"] == $test_item_id &&
+					$cart["items"][2]["item_id"] == $test_item_id &&
+					$cart["items"][0]["custom_price"] == 50 &&
+					!isset($cart["items"][1]["custom_price"]) &&
+					$cart["items"][2]["custom_price"] == 75 &&
+					$cart["items"][0]["quantity"] == 1 &&
+					$cart["items"][1]["quantity"] == 2 &&
+					$cart["items"][2]["quantity"] == 2 
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add the same item five times (2x standard price, 1x custom price A, 2x custom price B), in mixed order – return cart with separated items, with correct quantities – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add the same item five times (2x standard price, 1x custom price A, 2x custom price B), in mixed order – return cart with separated items, with correct quantities – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add the same item twice, one standard, and one with custom name – return cart with separated items") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				// ASSERT
+				if(
+					$cart &&
+					count($cart["items"]) == 2 &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][1]["item_id"] == $test_item_id &&
+					!isset($cart["items"][0]["custom_name"]) &&
+					$cart["items"][1]["custom_name"] == "AAA"
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add the same item twice, one standard, and one with custom name – return cart with separated items – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add the same item twice, one standard, and one with custom name – return cart with separated items – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add the same item five times (2x standard, 1x custom name AAA, 2x custom name BBB), in mixed order – return cart with separated items, with correct quantities ") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "BBB";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+	
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "BBB";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					count($cart["items"]) == 3 &&
+					$cart["items"][0]["custom_name"] == "AAA" &&
+					!isset($cart["items"][1]["custom_name"]) &&
+					$cart["items"][2]["custom_name"] == "BBB" &&
+					$cart["items"][0]["quantity"] == 1 &&
+					$cart["items"][1]["quantity"] == 2 &&
+					$cart["items"][2]["quantity"] == 2 &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][1]["item_id"] == $test_item_id &&
+					$cart["items"][2]["item_id"] == $test_item_id
+					
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – add the same item five times (2x standard, 1x custom name AAA, 2x custom name BBB), in mixed order – return cart with separated items, with correct quantities – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – add the same item five times (2x standard, 1x custom name AAA, 2x custom name BBB), in mixed order – return cart with separated items, with correct quantities – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+		if(1 && "addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "BBB";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_price"] = 75;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+				
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "BBB";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$_POST["custom_price"] = 75;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "AAA";
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "BBB";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_price"] = 50;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart &&
+					count($cart["items"]) == 8 &&
+					!isset($cart["items"][0]["custom_name"]) &&
+					$cart["items"][0]["item_id"] == $test_item_id &&
+					$cart["items"][0]["quantity"] == 2 &&
+					$cart["items"][1]["item_id"] == $test_item_id &&
+					$cart["items"][1]["custom_name"] == "AAA" &&
+					$cart["items"][1]["quantity"] == 1 &&
+					$cart["items"][2]["item_id"] == $test_item_id &&
+					$cart["items"][2]["custom_name"] == "BBB" &&
+					$cart["items"][2]["quantity"] == 2 &&
+					$cart["items"][3]["item_id"] == $test_item_id &&
+					$cart["items"][3]["custom_price"] == 50 &&
+					$cart["items"][3]["quantity"] == 2 &&
+					$cart["items"][4]["item_id"] == $test_item_id &&
+					$cart["items"][4]["custom_price"] == 75 &&
+					$cart["items"][4]["quantity"] == 1 &&
+					$cart["items"][5]["item_id"] == $test_item_id &&
+					$cart["items"][5]["custom_price"] == 50 &&
+					$cart["items"][5]["custom_name"] == "AAA" &&
+					$cart["items"][5]["quantity"] == 2 &&
+					$cart["items"][6]["item_id"] == $test_item_id &&
+					$cart["items"][6]["custom_price"] == 50 &&
+					$cart["items"][6]["custom_name"] == "BBB" &&
+					$cart["items"][6]["quantity"] == 1 &&
+					$cart["items"][7]["item_id"] == $test_item_id &&
+					$cart["items"][7]["custom_name"] == "AAA" &&
+					$cart["items"][7]["custom_price"] == 75 &&
+					$cart["items"][7]["quantity"] == 1
+					
+					): ?>
+				<div class="testpassed"><p>SuperShop::addToCart() – addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::addToCart() – addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$SC->deleteCart(["deleteCart", $cart["id"], $cart_reference]);
+
+			})();
+		}
+
+
+		?>
+
+		
+
+		
 
 	</div>
 

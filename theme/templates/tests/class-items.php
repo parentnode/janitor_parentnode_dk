@@ -12,7 +12,14 @@ $post_model = $IC->typeObject("post");
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<div class="tests">
+	<?
+	function addTestPrices() {
+
+
+	}
+	?>
+
+	<div class="tests ratings">
 		<h3>Items ratings</h3>
 		<? 
 
@@ -88,7 +95,7 @@ $post_model = $IC->typeObject("post");
 		<? endif; ?>
 	</div>
 
-	<div class="tests">
+	<div class="tests pagination">
 		<h3>Items pagination</h3>
 		<?
 		$query = new Query();
@@ -374,6 +381,227 @@ $post_model = $IC->typeObject("post");
 	
 		?>
 		
+
+	</div>
+
+	<div class="tests getPrices">
+		<h3>Items::getPrices</h3>
+
+		<? 	
+
+		if(1 && "getPrices – pass price_id – return specific price") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$query = new Query();
+				
+				$model_tests = $IC->typeObject("tests");
+	
+				$test_item_id = $model_tests->createTestItem();
+	
+				// add price
+				$sql = "INSERT INTO ".UT_ITEMS_PRICES." VALUES(DEFAULT, $test_item_id, 100, 'DKK', 2, 1, 1)";
+				if($query->sql($sql)) {
+					
+					$price_id = $query->lastInsertId();
+				}
+	
+	
+				// ACT
+				$price = $IC->getPrices(["price_id" => $price_id]);
+				
+				// ASSERT 
+				if(
+					$price &&
+					$price["price"] == 100 &&
+					$price["currency"] == "DKK" &&
+					$price["quantity"] == 1 &&
+					$price["vatrate"] == 25 &&
+					$price["name"] == "default"
+				): ?>
+				<div class="testpassed"><p>Items::getPrices – pass price_id – return specific price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrices – pass price_id – return specific price – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+	
+			})();
+		}
+
+		if(1 && "getPrices – pass item_id, item has several prices – return prices") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$query = new Query();
+				
+				$model_tests = $IC->typeObject("tests");
+	
+				$test_item_id = $model_tests->createTestItem([
+					"prices" => [
+						"default" => [
+							"price" => 100
+						],
+						"offer" => [
+							"price" => 50
+						]
+					]
+				]);
+	
+				// ACT
+				$prices = $IC->getPrices(["item_id" => $test_item_id]);
+				
+				// ASSERT 
+				if(
+					$prices &&
+					count($prices) == 2 &&
+					$prices[0]["name"] == "offer" &&
+					$prices[1]["name"] == "default" &&
+					$prices[0]["price"] == "50" &&
+					$prices[1]["price"] == "100"
+				): ?>
+				<div class="testpassed"><p>Items::getPrices – pass item_id, item has several prices – return prices – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrices – pass item_id, item has several prices – return prices – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+	
+			})();
+		}
+
+		if(1 && "getPrices – pass item_id and currency, item has several prices – return price in specified currency") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$query = new Query();
+				
+				$model_tests = $IC->typeObject("tests");
+
+				$currency_id = $model_tests->createTestCurrency();
+	
+				$test_item_id = $model_tests->createTestItem([
+					"prices" => [
+						"default" => [
+							"price" => 100,
+							"currency" => "XXX"
+						],
+						"offer" => [
+							"price" => 50
+						]
+					]
+				]);
+	
+				// ACT
+				$prices = $IC->getPrices(["item_id" => $test_item_id, "currency" => "XXX"]);
+				
+				// ASSERT 
+				if(
+					$prices &&
+					count($prices) == 1 &&
+					$prices[0]["name"] == "default" &&
+					$prices[0]["price"] == 100 &&
+					$prices[0]["currency"] == "XXX"
+				): ?>
+				<div class="testpassed"><p>Items::getPrices – pass item_id and currency, item has several prices – return price in specified currency – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrices – pass item_id and currency, item has several prices – return price in specified currency – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id, "currency_id" => $currency_id]);
+	
+			})();
+		}
+
+		if(1 && "getPrices – pass nothing – return all prices") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$query = new Query();
+				
+				$model_tests = $IC->typeObject("tests");
+	
+				$test_item_id_1 = $model_tests->createTestItem([
+					"prices" => [
+						"default" => [
+							"price" => 100
+						],
+						"offer" => [
+							"price" => 50
+						]
+					]
+				]);
+
+				$test_item_id_2 = $model_tests->createTestItem([
+					"prices" => [
+						"default" => [
+							"price" => 200
+						],
+						"offer" => [
+							"price" => 75
+						]
+					]
+				]);
+
+	
+				// ACT
+				$prices = $IC->getPrices();
+				
+				// ASSERT 
+				if($prices)	{
+
+					foreach($prices as $price) {
+						if($price["item_id"] == $test_item_id_1 && $price["name"] == "default") {
+							$test_item_1_default = $price["price"];
+						}
+						else if($price["item_id"] == $test_item_id_1 && $price["name"] == "offer") {
+							$test_item_1_offer = $price["price"];
+						}
+						else if($price["item_id"] == $test_item_id_2 && $price["name"] == "default") {
+							$test_item_2_default = $price["price"];
+						}
+						else if($price["item_id"] == $test_item_id_2 && $price["name"] == "offer") {
+							$test_item_2_offer = $price["price"];
+						}
+					}
+				}
+
+				if(
+					$prices
+					&& $test_item_1_default == 100
+					&& $test_item_1_offer == 50
+					&& $test_item_2_default == 200
+					&& $test_item_2_offer == 75
+				): ?>
+				<div class="testpassed"><p>Items::getPrices – pass nothing – return all prices – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrices – pass nothing – return all prices – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id_1]);
+				$model_tests->cleanUp(["item_id" => $test_item_id_2]);
+	
+			})();
+		}
+
+		
+		
+
+
+		
+		?>
 
 	</div>
 
