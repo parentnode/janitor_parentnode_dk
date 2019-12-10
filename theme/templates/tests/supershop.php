@@ -14,13 +14,13 @@ function createTestItem($_options = false) {
 	$IC = new Items();
 
 	$itemtype = "tests";
-	$item_name = "Test item";
+	$name = "Test item";
 
 	if($_options !== false) {
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"            : $itemtype              = $_value; break;
-				case "item_name"           : $item_name             = $_value; break;
+				case "name"           : $name             = $_value; break;
 				case "price"               : $price                 = $_value; break;
 				case "subscription_method" : $subscription_method   = $_value; break;
 			}
@@ -29,7 +29,7 @@ function createTestItem($_options = false) {
 	
 	// create test item
 	$model = $IC->TypeObject($itemtype);
-	$_POST["name"] = $item_name;
+	$_POST["name"] = $name;
 
 	$item = $model->save(array("save"));
 	$item_id = $item["id"];

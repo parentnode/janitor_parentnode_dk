@@ -8,20 +8,20 @@ function createTestItem($_options = false) {
 	$IC = new Items();
 
 	$itemtype = "tests";
-	$item_name = "Test item";
+	$name = "Test item";
 
 	if($_options !== false) {
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"            : $itemtype              = $_value; break;
-				case "item_name"           : $item_name             = $_value; break;
+				case "name"           : $name             = $_value; break;
 			}
 		}
 	}
 	
 	// create test item
 	$model = $IC->TypeObject($itemtype);
-	$_POST["name"] = $item_name;
+	$_POST["name"] = $name;
 
 	if($itemtype == "message") {
 		
@@ -314,7 +314,7 @@ function deleteTestMailingList($maillist_id) {
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 1: G'day! This should be gibberish: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 1: G'day! This should be gibberish: {TEST_VALUE}"]);
 				$test_user_id = createTestUser();
 				
 				// ACT
@@ -382,7 +382,7 @@ function deleteTestMailingList($maillist_id) {
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 2: Bonjour recipient 1 and recipient 2! This should be gibberish: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 2: Bonjour recipient 1 and recipient 2! This should be gibberish: {TEST_VALUE}"]);
 
 				
 				// ACT
@@ -418,7 +418,7 @@ function deleteTestMailingList($maillist_id) {
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 3: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 3: {TEST_VALUE}"]);
 
 				// ACT
 				$recipients = $message_model->sendMessage([
@@ -455,7 +455,7 @@ function deleteTestMailingList($maillist_id) {
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 4: {TEST_VALUE} {TEST_VALUE_2}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 4: {TEST_VALUE} {TEST_VALUE_2}"]);
 
 				// ACT
 				$recipients = $message_model->sendMessage([
@@ -492,7 +492,7 @@ function deleteTestMailingList($maillist_id) {
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 5: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 5: {TEST_VALUE}"]);
 
 				// ACT
 				$recipients = $message_model->sendMessage([
@@ -539,7 +539,7 @@ function deleteTestMailingList($maillist_id) {
 				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
 				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 6: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 6: {TEST_VALUE}"]);
 				$test_user_id_1 = createTestUser();
 				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
 
@@ -591,7 +591,7 @@ function deleteTestMailingList($maillist_id) {
 				include_once("classes/shop/supershop.class.php");
 				$SC = new SuperShop;
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 7: {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 7: {TEST_VALUE}"]);
 				$test_user_id = createTestUser([
 					"nickname" => "This is the correct nickname",
 					"firstname" => "Tester (correct)",
@@ -645,7 +645,7 @@ function deleteTestMailingList($maillist_id) {
 				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
 				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 8: Hey! {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 8: Hey! {TEST_VALUE}"]);
 				$test_user_id_1 = createTestUser();
 				$test_membership_1 = addTestMembership($test_user_id_1);
 				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
@@ -720,7 +720,7 @@ function deleteTestMailingList($maillist_id) {
 				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
 				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 9: Hola! {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 9: Hola! {TEST_VALUE}"]);
 				$test_user_id_1 = createTestUser();
 				$test_membership_1 = addTestMembership($test_user_id_1);
 				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
@@ -793,7 +793,7 @@ function deleteTestMailingList($maillist_id) {
 				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
 				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "item_name" => "Test message 10: Ciao! {TEST_VALUE}"]);
+				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 10: Ciao! {TEST_VALUE}"]);
 				$test_user_id_1 = createTestUser();
 				$test_membership_1 = addTestMembership($test_user_id_1);
 				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);

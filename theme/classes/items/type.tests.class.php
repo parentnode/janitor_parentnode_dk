@@ -605,14 +605,14 @@ class TypeTests extends Itemtype {
 		$query = new Query();
 	
 		$itemtype = "tests";
-		$item_name = "Test item";
+		$name = "Test item";
 		$status = 1;
 	
 		if($_options !== false) {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
 					case "itemtype"            : $itemtype              = $_value; break;
-					case "item_name"           : $item_name             = $_value; break;
+					case "name"           : $name             = $_value; break;
 
 					case "price"               : $price                 = $_value; break;
 					case "prices"              : $prices                = $_value; break;
@@ -625,11 +625,13 @@ class TypeTests extends Itemtype {
 		
 		// create test item
 		$model = $IC->TypeObject($itemtype);
-		$_POST["name"] = $item_name;
+		$_POST["name"] = $name;
 	
 		$item = $model->save(array("save"));
 		$item_id = $item["id"];
 		unset($_POST);
+	
+	
 	
 		if($item_id) {
 	
@@ -690,9 +692,11 @@ class TypeTests extends Itemtype {
 				unset($_POST);
 			}
 
+
 			if($model->status(["status", $item_id, $status])) {
-				
+
 				return $item_id; 
+
 			}
 	
 		}

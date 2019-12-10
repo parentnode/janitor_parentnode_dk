@@ -33,13 +33,13 @@ function createTestItem($_options = false) {
 	$IC = new Items();
 
 	$itemtype = "tests";
-	$item_name = "Test item";
+	$name = "Test item";
 
 	if($_options !== false) {
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"            : $itemtype              = $_value; break;
-				case "item_name"           : $item_name             = $_value; break;
+				case "name"           : $name             = $_value; break;
 				case "price"               : $price                 = $_value; break;
 			}
 		}
@@ -47,7 +47,7 @@ function createTestItem($_options = false) {
 	
 	// create test item
 	$model = $IC->TypeObject($itemtype);
-	$_POST["name"] = $item_name;
+	$_POST["name"] = $name;
 
 	$item = $model->save(array("save"));
 	$item_id = $item["id"];
@@ -397,7 +397,7 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
@@ -456,7 +456,7 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
@@ -515,13 +515,13 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
 				$membership_item_id_2 = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership-2",
+					"name" => "test-membership-2",
 					"subscription_method" => 2
 				]);
 
@@ -579,7 +579,7 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
@@ -633,7 +633,7 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
@@ -695,7 +695,7 @@ function deleteTestCart($cart_reference) {
 
 				$membership_item_id = $model_tests->createTestItem([
 					"itemtype" => "membership",
-					"item_name" => "test-membership",
+					"name" => "test-membership",
 					"subscription_method" => 2
 				]);
 
