@@ -12,387 +12,1470 @@ $post_model = $IC->typeObject("post");
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
-	<?
-	function addTestPrices() {
-
-
-	}
-	?>
 
 	<div class="tests ratings">
-		<h3>Items ratings</h3>
+		<h3>Items->getItems</h3>
+
+		<? 
+		
+		if(1 && "getItems by rating") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+	
+				$test_item_1 = $model_tests->createTestItem(["name" => "Test item 1 - I should be third"]);
+
+				unset($_POST);
+				$_POST["item_rating"] = 5;
+				$model_tests->addRating(array("addRating", $test_item_1));
+				$model_tests->addRating(array("addRating", $test_item_1));
+				$model_tests->addRating(array("addRating", $test_item_1));
+				$model_tests->addRating(array("addRating", $test_item_1));
+				$model_tests->addRating(array("addRating", $test_item_1));
+				unset($_POST);
+
+
+
+				$test_item_2 = $model_tests->createTestItem(["name" => "Test item 2 - I should be fourth"]);
+
+				unset($_POST);
+				$_POST["item_rating"] = 2;
+				$model_tests->addRating(array("addRating", $test_item_2));
+				unset($_POST);
+
+
+
+				$test_item_3 = $model_tests->createTestItem(["name" => "Test item 3 - I should be first"]);
+
+				unset($_POST);
+				$_POST["item_rating"] = 9;
+				$model_tests->addRating(array("addRating", $test_item_3));
+				$_POST["item_rating"] = 7;
+				$model_tests->addRating(array("addRating", $test_item_3));
+				unset($_POST);
+
+
+
+				$test_item_4 = $model_tests->createTestItem(["name" => "Test item 4 - I should be second"]);
+
+				unset($_POST);
+				$_POST["item_rating"] = 8;
+				$model_tests->addRating(array("addRating", $test_item_4));
+				$_POST["item_rating"] = 11;
+				$model_tests->addRating(array("addRating", $test_item_4));
+				$_POST["item_rating"] = 1;
+				$model_tests->addRating(array("addRating", $test_item_4));
+				$_POST["item_rating"] = 6;
+				$model_tests->addRating(array("addRating", $test_item_4));
+				$_POST["item_rating"] = 6;
+				unset($_POST);
+
+
+				// Get items by rating
+				$items = $IC->getItems(array("itemtype" => "tests", "order" => "rating DESC", "limit" => 4, "extend" => ["ratings" => true]));
+
+				// debug([$items]);
+				if($items && count($items) === 4 &&
+					preg_match("/first/", $items[0]["name"]) &&
+					preg_match("/second/", $items[1]["name"]) &&
+					preg_match("/third/", $items[2]["name"]) &&
+					preg_match("/fourth/", $items[3]["name"])
+				): ?>
+				<div class="testpassed"><p>Items::getItems ordered by ratings - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getItems ordered by ratings - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		?>
+
+	</div>
+
+
+	<div class="tests getNext">
+		<h3>Items->getNext</h3>
 		<? 
 
 
-		// Delete your post items from janitor_parentnode_dk db to repeat test from scratch
+		if(1 && "getNext – invalid item_id") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				// Create 5 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 5; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(5 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test invalid item_id
+				$test_items = $IC->getNext(0, [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC"
+				]);
 
 
-		$items = $IC->getItems(array("itemtype" => "post", "order" => "rating DESC", "limit" => 4, "extend" => ["ratings" => true]));
-		if(!$items) {
-
-			unset($_POST);
-			$_POST["name"] = "Test item 1 - I should be first";
-			$item = $post_model->save(array("save", "post"));
-			$item_id = $item["id"];
-
-			unset($_POST);
-			$_POST["item_rating"] = 5;
-			$post_model->addRating(array("addRating", $item_id));
-			$post_model->addRating(array("addRating", $item_id));
-			$post_model->addRating(array("addRating", $item_id));
-			$post_model->addRating(array("addRating", $item_id));
-			$post_model->addRating(array("addRating", $item_id));
-
-			
-			unset($_POST);
-			$_POST["name"] = "Test item 2 -  I should be fourth";
-			$item = $post_model->save(array("save", "post"));
-			$item_id = $item["id"];
-
-			unset($_POST);
-			$_POST["item_rating"] = 2;
-			$post_model->addRating(array("addRating", $item_id));
+				if(
+					!$test_items
+				): ?>
+				<div class="testpassed"><p>Items::getNext – invalid item_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getNext – invalid item_id – error</p></div>
+				<? endif;
 
 
-			unset($_POST);
-			$_POST["name"] = "Test item 3 - I should be third";
-			$item = $post_model->save(array("save", "post"));
-			$item_id = $item["id"];
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
 
-			unset($_POST);
-			$_POST["item_rating"] = 9;
-			$post_model->addRating(array("addRating", $item_id));
-			$_POST["item_rating"] = 7;
-			$post_model->addRating(array("addRating", $item_id));
+			})();
+
+		} 
+
+		if(1 && "getNext – valid item_id") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
 
 
-			unset($_POST);
-			$_POST["name"] = "Test item 4 - I should be second";
-			$item = $post_model->save(array("save", "post"));
-			$item_id = $item["id"];
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
 
-			unset($_POST);
-			$_POST["item_rating"] = 8;
-			$post_model->addRating(array("addRating", $item_id));
-			$_POST["item_rating"] = 11;
-			$post_model->addRating(array("addRating", $item_id));
-			$_POST["item_rating"] = 1;
-			$post_model->addRating(array("addRating", $item_id));
-			$_POST["item_rating"] = 6;
-			$post_model->addRating(array("addRating", $item_id));
-			$_POST["item_rating"] = 6;
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
 
-			$items = $IC->getItems(["itemtype" => "post", "order" => "rating DESC", "limit" => 4, "extend" => ["ratings" => true]]);
-			
-			// debug([$items, message()->getMessages()]);
-			message()->resetMessages();
+				$item = $IC->getItem(["sindex" => "item-0015-0005"]);
+
+				// Test ASC sorting
+				$test_items = $IC->getNext($item["id"], [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC"
+				]);
+
+
+				if(
+					$test_items &&
+					$test_items &&
+					count($test_items) === 3 &&
+
+					$test_items[0]["sindex"] === "item-0016-0004" &&
+					$test_items[1]["sindex"] === "item-0017-0003" &&
+					$test_items[2]["sindex"] === "item-0018-0002" &&
+
+					// Name should not exists
+					!isset($test_items[0]["name"]) &&
+					!isset($test_items[1]["name"]) &&
+					!isset($test_items[2]["name"]) &&
+
+					$test_items[0]["itemtype"] === "tests" &&
+					$test_items[1]["itemtype"] === "tests" &&
+					$test_items[2]["itemtype"] === "tests"
+
+				): ?>
+				<div class="testpassed"><p>Items::getNext – valid item_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getNext – valid item_id – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		} 
+
+		if(1 && "getNext – valid item_id – extended") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				$item = $IC->getItem(["sindex" => "item-0015-0005"]);
+
+				// Test ASC sorting
+				$test_items = $IC->getNext($item["id"], [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC",
+					"extend" => true
+				]);
+
+
+				if(
+					$test_items &&
+					$test_items &&
+					count($test_items) === 3 &&
+
+					$test_items[0]["sindex"] === "item-0016-0004" &&
+					$test_items[1]["sindex"] === "item-0017-0003" &&
+					$test_items[2]["sindex"] === "item-0018-0002" &&
+					$test_items[0]["name"] === "Item 0016 - 0004" &&
+					$test_items[1]["name"] === "Item 0017 - 0003" &&
+					$test_items[2]["name"] === "Item 0018 - 0002" &&
+
+					$test_items[0]["itemtype"] === "tests" &&
+					$test_items[1]["itemtype"] === "tests" &&
+					$test_items[2]["itemtype"] === "tests"
+
+				): ?>
+				<div class="testpassed"><p>Items::getNext – valid item_id – extended – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getNext – valid item_id – extended – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
 		}
-		
-		if("Your test condition"): ?>
-		<div class="testpassed"><p>#Class::method# - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>#Class::method# - error</p></div>
-		<? endif; ?>
+
+
+		?>
 	</div>
 
-	<div class="tests pagination">
-		<h3>Items pagination</h3>
-		<?
-		$query = new Query();
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE itemtype = 'tests'";
-		$query->sql($sql);
-		
-		$model_tests = $IC->typeObject("tests");
-		unset($_POST);
-		
-		$_POST["name"] = "Test item AAA";
-		$item = $model_tests->save(array("save", "tests"));
-		$item_id_A = $item["item_id"];
-		unset($_POST);
-		
-		$_POST["name"] = "Test item BBB";
-		$item = $model_tests->save(array("save", "tests"));
-		$item_id_B = $item["item_id"];
-		unset($_POST);
-		
-		$_POST["name"] = "Test item CCC";
-		$item = $model_tests->save(array("save", "tests"));
-		$item_id_C = $item["item_id"];
-		unset($_POST);
+
+	<div class="tests getPrev">
+		<h3>Items->getPrev</h3>
+		<? 
+
+
+		if(1 && "getPrev – invalid item_id") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				// Create 5 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 5; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(5 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test invalid item_id
+				$test_items = $IC->getPrev(0, [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC"
+				]);
+
+
+				if(
+					!$test_items
+				): ?>
+				<div class="testpassed"><p>Items::getPrev – invalid item_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrev – invalid item_id – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		} 
+
+		if(1 && "getPrev – valid item_id") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				$item = $IC->getItem(["sindex" => "item-0015-0005"]);
+
+				// Test ASC sorting
+				$test_items = $IC->getPrev($item["id"], [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC"
+				]);
+
+
+				if(
+					$test_items &&
+					$test_items &&
+					count($test_items) === 3 &&
+
+					$test_items[0]["sindex"] === "item-0012-0008" &&
+					$test_items[1]["sindex"] === "item-0013-0007" &&
+					$test_items[2]["sindex"] === "item-0014-0006" &&
+					// Name should not exists
+					!isset($test_items[0]["name"]) &&
+					!isset($test_items[1]["name"]) &&
+					!isset($test_items[2]["name"]) &&
+
+					$test_items[0]["itemtype"] === "tests" &&
+					$test_items[1]["itemtype"] === "tests" &&
+					$test_items[2]["itemtype"] === "tests"
+
+				): ?>
+				<div class="testpassed"><p>Items::getPrev – valid item_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrev – valid item_id – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		} 
+
+		if(1 && "getPrev – valid item_id – extended") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				$item = $IC->getItem(["sindex" => "item-0015-0005"]);
+
+				// Test ASC sorting
+				$test_items = $IC->getPrev($item["id"], [
+					"limit" => 3,
+					"itemtype" => "tests",
+					"order" => "sindex ASC",
+					"extend" => true
+				]);
+
+
+				if(
+					$test_items &&
+					$test_items &&
+					count($test_items) === 3 &&
+
+					$test_items[0]["sindex"] === "item-0012-0008" &&
+					$test_items[1]["sindex"] === "item-0013-0007" &&
+					$test_items[2]["sindex"] === "item-0014-0006" &&
+					$test_items[0]["name"] === "Item 0012 - 0008" &&
+					$test_items[1]["name"] === "Item 0013 - 0007" &&
+					$test_items[2]["name"] === "Item 0014 - 0006" &&
+
+					$test_items[0]["itemtype"] === "tests" &&
+					$test_items[1]["itemtype"] === "tests" &&
+					$test_items[2]["itemtype"] === "tests"
+
+				): ?>
+				<div class="testpassed"><p>Items::getPrev – valid item_id – extended – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getPrev – valid item_id – extended – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+
 		?>
-		
-		<? if(1 && "no start point"): ?>
+	</div>
 
-			<?
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "tests",
-					"order" => "sindex ASC")
-			));
-			?>
-			
-			<? if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 2 &&
-				$items["range_items"][0]["id"] == $item_id_A &&
-				$items["range_items"][1]["id"] == $item_id_B &&
-				$items["range_items"][0]["itemtype"] == "tests" &&
-				$items["next"] && 
-				count($items["next"]) == 1 &&
-				$items["next"][0]["id"] == $item_id_C &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] &&
-				$items["last_sindex"] &&
-				$items["total"] == 3
-				
+
+	<div class="tests paginate">
+		<h3>Items->paginate</h3>
+		<? 
+
+
+		if(1 && "paginate – no start point, order ASC and DESC") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test ASC sorting
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					]
+				]);
+
+				// Test DESC sorting
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					]
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0001-0019" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0002-0018" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0003-0017" &&
+
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0004-0016" &&
+
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+					!$test_items_1["prev"] &&
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 1 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0020-0000" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0019-0001" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0018-0002" &&
+
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0017-0003" &&
+
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+					!$test_items_2["prev"] &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 1 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+
 				): ?>
-			<div class="testpassed"><p>Items::paginate – no start point – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – no start point – error</p></div>
-			<? endif;?>
-		<? endif; ?>
+				<div class="testpassed"><p>Items::paginate – no start point order ASC and DESC – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – no start point order ASC and DESC – error</p></div>
+				<? endif;
 
-		<? if(1 && "start from item with specified sindex"): ?>
-			<?
-			$sindex = "test-item-aaa";
-			
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "tests",
-					"order" => "sindex ASC"),
-				"sindex" => $sindex
-			));
-		
-			?>
-			
-			<? if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 2 &&
-				$items["range_items"][0]["id"] == $item_id_A &&
-				$items["range_items"][1]["id"] == $item_id_B &&
-				$items["range_items"][0]["itemtype"] == "tests" &&
-				$items["next"] && 
-				count($items["next"]) == 1 &&
-				$items["next"][0]["id"] == $item_id_C &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] &&
-				$items["last_sindex"] &&
-				$items["total"] == 3
-				
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		} 
+
+		if(1 && "paginate – no start point, order ASC and DESC – extended") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test ASC sorting
+				$test_items = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC",
+						"extend" => true
+					]
+				]);
+
+
+				// debug([$test_items]);
+
+				if(
+					$test_items &&
+					$test_items["range_items"] &&
+					count($test_items["range_items"]) === 3 &&
+
+					$test_items["range_items"][0]["name"] === "Item 0001 - 0019" &&
+					$test_items["range_items"][1]["name"] === "Item 0002 - 0018" &&
+					$test_items["range_items"][2]["name"] === "Item 0003 - 0017" &&
+
+					$test_items["next"] &&
+					isset($test_items["next"]["name"]) &&
+					$test_items["next"]["name"] === "Item 0004 - 0016"
+
 				): ?>
-			<div class="testpassed"><p>Items::paginate – start from item with specified sindex – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – start from item with specified sindex – error</p></div>
-			<? endif;?>
-		<? endif; ?>
+				<div class="testpassed"><p>Items::paginate – no start point order ASC and DESC – extended – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – no start point order ASC and DESC – extended – error</p></div>
+				<? endif;
 
-		<? if(1 && "direction = 'next': start from item subsequent to item with specified sindex"): ?>
-			<?
-			
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "tests",
-					"order" => "sindex ASC"),
-				"sindex" => $sindex,
-				"direction" => "next"
-			));
-			?>
-			
-			<? if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 2 &&
-				$items["range_items"][0]["id"] == $item_id_B &&
-				$items["range_items"][1]["id"] == $item_id_C &&
-				$items["range_items"][0]["itemtype"] == "tests" &&
-				$items["prev"] && 
-				count($items["prev"]) == 1 &&
-				$items["prev"][0]["id"] == $item_id_A &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] &&
-				$items["last_sindex"] &&
-				$items["total"] == 3
-				
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+		if(1 && "paginate - start with sindex, order ASC and DESC") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					],
+					"sindex" => "Item-0015-0005"
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					],
+					"sindex" => "Item-0015-0005"
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0015-0005" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0016-0004" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0017-0003" &&
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0018-0002" &&
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0014-0006" &&
+					// Name should not exists
+					!isset($test_items_1["prev"]["name"]) &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 5 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0015-0005" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0014-0006" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0013-0007" &&
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0012-0008" &&
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0016-0004" &&
+					// Name should not exists
+					!isset($test_items_2["prev"]["name"]) &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 2 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+
 				): ?>
-			<div class="testpassed"><p>Items::paginate – direction = 'next' – start from item subsequent to item with specified sindex – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – direction = 'next' – start from item subsequent to item with specified sindex – error</p></div>
-			<? endif;?>
-		<? endif; ?>
+				<div class="testpassed"><p>Items::paginate – start with sindex, order ASC and DESC – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – start with sindex, order ASC and DESC – error</p></div>
+				<? endif;
 
-		<? if(1 && "direction = 'prev': show items before item with specified sindex"): ?>
-			<?
-			$sindex = "test-item-bbb";
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "tests",
-					"order" => "sindex ASC"),
-				"sindex" => $sindex,
-				"direction" => "prev"
-			));
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
 
-			?>
-			
-			<? if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 1 &&
-				$items["range_items"][0]["id"] == $item_id_A &&
-				$items["range_items"][0]["itemtype"] == "tests" &&
-				$items["next"] && 
-				count($items["next"]) == 2 &&
-				$items["next"][0]["id"] == $item_id_B &&
-				$items["next"][1]["id"] == $item_id_C &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] &&
-				$items["last_sindex"] &&
-				$items["total"] == 3
-				
+			})();
+
+		}
+
+		if(1 && "paginate - start with sindex, order ASC and DESC - extended") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC",
+						"extend" => true
+					],
+					"sindex" => "Item-0015-0005"
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC",
+						"extend" => true
+					],
+					"sindex" => "Item-0015-0005"
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0015-0005" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0016-0004" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0017-0003" &&
+					$test_items_1["range_items"][0]["name"] === "Item 0015 - 0005" &&
+					$test_items_1["range_items"][1]["name"] === "Item 0016 - 0004" &&
+					$test_items_1["range_items"][2]["name"] === "Item 0017 - 0003" &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0018-0002" &&
+					$test_items_1["next"]["name"] === "Item 0018 - 0002" &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0014-0006" &&
+					$test_items_1["prev"]["name"] === "Item 0014 - 0006" &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 5 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0015-0005" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0014-0006" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0013-0007" &&
+					$test_items_2["range_items"][0]["name"] === "Item 0015 - 0005" &&
+					$test_items_2["range_items"][1]["name"] === "Item 0014 - 0006" &&
+					$test_items_2["range_items"][2]["name"] === "Item 0013 - 0007" &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0012-0008" &&
+					$test_items_2["next"]["name"] === "Item 0012 - 0008" &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0016-0004" &&
+					$test_items_2["prev"]["name"] === "Item 0016 - 0004" &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 2 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+
 				): ?>
-			<div class="testpassed"><p>Items::paginate – direction = 'prev' – show items before item with specified sindex – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – direction = 'prev' – show items before item with specified sindex – error</p></div>
-			<? endif;?>
-		
-		<? endif; ?>
+				<div class="testpassed"><p>Items::paginate – start with sindex, order ASC and DESC - extended – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – start with sindex, order ASC and DESC - extended – error</p></div>
+				<? endif;
 
-		<? if(1 && "sort items by descending ratings, show items before item with specified sindex"): ?>
-			<?
-			$sindex = "test-item-3-i-should-be-third";
-			
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "post",
-					"order" => "rating DESC", 
-					"extend" => array(
-						"ratings" => true
-					)),
-				"sindex" => $sindex,
-				"direction" => "prev"
-			));
-			if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 2 &&
-				$items["range_items"][0]["total_rating"] == 26 &&
-				$items["range_items"][0]["sindex"] == "test-item-4-i-should-be-second" &&
-				$items["range_items"][0]["ratings"] &&
-				$items["range_items"][1]["total_rating"] == 25 &&
-				$items["range_items"][1]["sindex"] == "test-item-1-i-should-be-first" &&
-				$items["range_items"][0]["itemtype"] == "post" &&
-				$items["next"] && 
-				count($items["next"]) == 2 &&
-				$items["next"][0]["sindex"] == "test-item-3-i-should-be-third" &&
-				$items["next"][0]["total_rating"] == 16 &&
-				$items["next"][1]["sindex"] == "test-item-2-i-should-be-fourth" &&
-				$items["next"][1]["total_rating"] = 2 &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] == "test-item-4-i-should-be-second" &&
-				$items["last_sindex"] ==  "test-item-1-i-should-be-first" &&
-				$items["total"] == 4
-				
-			): ?>
-			<div class="testpassed"><p>Items::paginate - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate - error</p></div>
-			<? endif;?>
-		<? endif; ?>
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
 
-		<? if(1 && "sort items by descending ratings, start from item subsequent to item with specified sindex"): ?>
-			<?
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "post",
-					"order" => "rating DESC", 
-					"extend" => array(
-						"ratings" => true
-					)),
-				"sindex" => "test-item-3-i-should-be-third",
-				"direction" => "next"
-			));
-			if(
-				$items &&
-				$items["range_items"] &&
-				count($items["range_items"]) == 1 &&
-				$items["range_items"][0]["total_rating"] == 2 &&
-				$items["range_items"][0]["sindex"] == "test-item-2-i-should-be-fourth" &&
-				$items["range_items"][0]["ratings"] &&
-				$items["range_items"][0]["itemtype"] == "post" &&
-				$items["prev"] && 
-				count($items["prev"]) == 2 &&
-				$items["prev"][0]["sindex"] == "test-item-1-i-should-be-first" &&
-				$items["prev"][0]["total_rating"] == 25 &&
-				$items["prev"][1]["sindex"] == "test-item-3-i-should-be-third" &&
-				$items["prev"][1]["total_rating"] == 16 &&
-				$items["first_id"] &&
-				$items["last_id"] &&
-				$items["first_sindex"] == "test-item-2-i-should-be-fourth" &&
-				$items["last_sindex"] ==  "test-item-2-i-should-be-fourth" &&
-				$items["total"] == 4
-				
-			): ?>
-			<div class="testpassed"><p>Items::paginate – sort items by descending ratings, start from item subsequent to item with specified sindex – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – sort items by descending ratings, start from item subsequent to item with specified sindex – error</p></div>
-			<? endif;?>
-		<? endif; ?>
+			})();
 
-		<? if(1 && "itemtype doesn't exist – return empty array"): ?>
-			<?	
-			$items = $IC->paginate(array(
-				"limit" => 2, 
-				"pattern" => array(
-					"itemtype" => "membership",
-					"order" => "rating DESC", 
-					"extend" => array(
-						"ratings" => true
-					))
-			));
-			if(
-				$items &&
-				$items["range_items"] == [] &&
-				empty($items["range_items"]) &&
-				$items["total"] == 0
-			): ?>
-			<div class="testpassed"><p>Items::paginate – itemtype doesn't exist – return empty array – correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>Items::paginate – itemtype doesn't exist – return empty array – error</p></div>
-			<? endif; ?>
-		<? endif; ?>
+		}
 
-		<? // CLEAN UP
+		if(1 && "paginate – start with sindex, order ASC and DESC, direction prev") {
 
-		// delete posts item
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE sindex IN('test-item-1-i-should-be-first', 'test-item-2-i-should-be-fourth', 'test-item-3-i-should-be-third', 'test-item-4-i-should-be-second', 'test-item-aaa', 'test-item-bbb', 'test-item-ccc')";
-		$query->sql($sql);	
-	
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test ASC sorting
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					],
+					"sindex" => "Item-0015-0005",
+					"direction" => "prev"
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					],
+					"sindex" => "Item-0015-0005",
+					"direction" => "prev"
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0013-0007" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0014-0006" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0016-0004" &&
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0012-0008" &&
+					// Name should not exists
+					!isset($test_items_1["prev"]["name"]) &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 5 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0017-0003" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0016-0004" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0014-0006" &&
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0018-0002" &&
+					// Name should not exists
+					!isset($test_items_2["prev"]["name"]) &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 2 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+				): ?>
+				<div class="testpassed"><p>Items::paginate – no start point order ASC and DESC, direction prev – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – no start point order ASC and DESC, direction prev – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+		if(1 && "paginate - start with sindex, order ASC and DESC, NOT including index item") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					],
+					"sindex" => "Item-0015-0005",
+					"include" => false
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					],
+					"sindex" => "Item-0015-0005",
+					"include" => false
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0016-0004" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0017-0003" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0018-0002" &&
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0019-0001" &&
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_1["prev"]["name"]) &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 6 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0014-0006" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0013-0007" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0012-0008" &&
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0011-0009" &&
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_2["prev"]["name"]) &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 3 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+
+				): ?>
+				<div class="testpassed"><p>Items::paginate – start with sindex, order ASC and DESC, NOT including index item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – start with sindex, order ASC and DESC, NOT including index item – error</p></div>
+				<? endif;
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+		if(1 && "paginate – start with sindex, order ASC and DESC, NOT including index item, direction prev") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+				// Test ASC sorting
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					],
+					"sindex" => "Item-0015-0005",
+					"include" => false,
+					"direction" => "prev"
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					],
+					"sindex" => "Item-0015-0005",
+					"include" => false,
+					"direction" => "prev"
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0012-0008" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0013-0007" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0014-0006" &&
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0011-0009" &&
+					// Name should not exists
+					!isset($test_items_1["prev"]["name"]) &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 4 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0018-0002" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0017-0003" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0016-0004" &&
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0019-0001" &&
+					// Name should not exists
+					!isset($test_items_2["prev"]["name"]) &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 1 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+				): ?>
+				<div class="testpassed"><p>Items::paginate – no start point order ASC and DESC, NOT including index item, direction prev – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – no start point order ASC and DESC, NOT including index item, direction prev – error</p></div>
+				<? endif;
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+		if(1 && "paginate - start with page 2, order ASC and DESC") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				// Create 20 items for test (creating items takes time, so limit count)
+				for($i = 0; $i < 20; $i++) {
+					$model_tests->createTestItem(["name" => "Item " . str_pad(20 - $i, 4, "0", STR_PAD_LEFT) . " - ".str_pad($i, 4, "0", STR_PAD_LEFT)]);
+				}
+
+
+				$test_items_1 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex ASC"
+					],
+					"page" => 2
+				]);
+
+				$test_items_2 = $IC->paginate([
+					"limit" => 3,
+					"pattern" => [
+						"itemtype" => "tests",
+						"order" => "sindex DESC"
+					],
+					"page" => 2
+				]);
+
+
+				// debug([$test_items_1, $test_items_2]);
+
+				if(
+					$test_items_1 &&
+					$test_items_1["range_items"] &&
+					count($test_items_1["range_items"]) === 3 &&
+
+					$test_items_1["range_items"][0]["sindex"] === "item-0004-0016" &&
+					$test_items_1["range_items"][1]["sindex"] === "item-0005-0015" &&
+					$test_items_1["range_items"][2]["sindex"] === "item-0006-0014" &&
+					// Name should not exists
+					!isset($test_items_1["range_items"][0]["name"]) &&
+					!isset($test_items_1["range_items"][1]["name"]) &&
+					!isset($test_items_1["range_items"][2]["name"]) &&
+
+					$test_items_1["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_1["range_items"][2]["itemtype"] === "tests" &&
+
+
+					$test_items_1["next"] &&
+					isset($test_items_1["next"]["sindex"]) &&
+					$test_items_1["next"]["sindex"] === "item-0007-0013" &&
+					// Name should not exists
+					!isset($test_items_1["next"]["name"]) &&
+
+					$test_items_1["prev"] &&
+					isset($test_items_1["prev"]["sindex"]) &&
+					$test_items_1["prev"]["sindex"] === "item-0003-0017" &&
+					// Name should not exists
+					!isset($test_items_1["prev"]["name"]) &&
+
+
+					$test_items_1["first_id"] === $test_items_1["range_items"][0]["id"] &&
+					$test_items_1["last_id"] === $test_items_1["range_items"][2]["id"] &&
+
+					$test_items_1["first_sindex"] === $test_items_1["range_items"][0]["sindex"] &&
+					$test_items_1["last_sindex"] === $test_items_1["range_items"][2]["sindex"] &&
+
+					$test_items_1["total"] === 20 &&
+
+					isset($test_items_1["current_page"]) &&
+					$test_items_1["current_page"] === 2 &&
+
+					isset($test_items_1["page_count"]) &&
+					$test_items_1["page_count"] === 7 &&
+
+
+
+					$test_items_2 &&
+					$test_items_2["range_items"] &&
+					count($test_items_2["range_items"]) === 3 &&
+
+					$test_items_2["range_items"][0]["sindex"] === "item-0017-0003" &&
+					$test_items_2["range_items"][1]["sindex"] === "item-0016-0004" &&
+					$test_items_2["range_items"][2]["sindex"] === "item-0015-0005" &&
+					// Name should not exists
+					!isset($test_items_2["range_items"][0]["name"]) &&
+					!isset($test_items_2["range_items"][1]["name"]) &&
+					!isset($test_items_2["range_items"][2]["name"]) &&
+
+					$test_items_2["range_items"][0]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][1]["itemtype"] === "tests" &&
+					$test_items_2["range_items"][2]["itemtype"] === "tests" &&
+
+					$test_items_2["next"] &&
+					isset($test_items_2["next"]["sindex"]) &&
+					$test_items_2["next"]["sindex"] === "item-0014-0006" &&
+					// Name should not exists
+					!isset($test_items_2["next"]["name"]) &&
+
+					$test_items_2["prev"] &&
+					isset($test_items_2["prev"]["sindex"]) &&
+					$test_items_2["prev"]["sindex"] === "item-0018-0002" &&
+					// Name should not exists
+					!isset($test_items_2["prev"]["name"]) &&
+
+					$test_items_2["first_id"] === $test_items_2["range_items"][0]["id"] &&
+					$test_items_2["last_id"] === $test_items_2["range_items"][2]["id"] &&
+
+					$test_items_2["first_sindex"] === $test_items_2["range_items"][0]["sindex"] &&
+					$test_items_2["last_sindex"] === $test_items_2["range_items"][2]["sindex"] &&
+
+					$test_items_2["total"] === 20 &&
+
+					isset($test_items_2["current_page"]) &&
+					$test_items_2["current_page"] === 2 &&
+
+					isset($test_items_2["page_count"]) &&
+					$test_items_2["page_count"] === 7
+
+				): ?>
+				<div class="testpassed"><p>Items::paginate – start with sindex, order ASC and DESC, NOT including index item – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::paginate – start with sindex, order ASC and DESC, NOT including index item – error</p></div>
+				<? endif;
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+			})();
+
+		}
+
+
 		?>
-		
-
 	</div>
 
 	<div class="tests getPrices">
 		<h3>Items::getPrices</h3>
+		<? 
 
-		<? 	
 
 		if(1 && "getPrices – pass price_id – return specific price") {
 
 			(function() {
-					
+
 				// ARRANGE
 				$IC = new Items();
 				$query = new Query();
@@ -435,11 +1518,9 @@ $post_model = $IC->typeObject("post");
 		if(1 && "getPrices – pass item_id, item has several prices – return prices") {
 
 			(function() {
-					
+
 				// ARRANGE
 				$IC = new Items();
-				$query = new Query();
-				
 				$model_tests = $IC->typeObject("tests");
 	
 				$test_item_id = $model_tests->createTestItem([
@@ -596,13 +1677,8 @@ $post_model = $IC->typeObject("post");
 			})();
 		}
 
-		
-		
 
-
-		
 		?>
-
 	</div>
 
 </div>
