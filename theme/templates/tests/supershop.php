@@ -545,6 +545,66 @@ function deleteTestOrder($order_id) {
 			})();
 		}
 
+		if(0 && "newOrderFromCart – item with subscription method, subscription already exists – return order, 'ordered'-callback, 'subscribed'-callback") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new SuperShop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = $model_tests->createTestUser([""]);
+				$item_id = createTestItem(["price" => 100, "subscription_method" => 1]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				// print_r($cart);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+				$order_id = $order["id"];
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>SuperShop::newOrderFromCart – item with subscription method, subscription already exists – return order, 'ordered'-callback, 'subscribed'-callback – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperShop::newOrderFromCart – item with subscription method, subscription already exists – return order, 'ordered'-callback, 'subscribed'-callback – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+				
+				
+			})();
+		}
+
 		if(1 && "newOrderFromCart – cart_item with custom price – return order with custom price") {
 
 			(function() {

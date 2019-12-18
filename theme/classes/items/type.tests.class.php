@@ -194,6 +194,7 @@ class TypeTests extends Itemtype {
 		$item = $IC->getItem(["id" => $order_item["item_id"], "extend" => ["subscription_method" => true]]);
 		$item_id = $order_item["item_id"];
 
+		$custom_price = isset($order_item["custom_price"]) ? $order_item["custom_price"] : false;
 
 		// item can be subscribed to
 		if(SITE_SUBSCRIPTIONS && isset($item["subscription_method"]) && $item["subscription_method"]) {
@@ -210,6 +211,7 @@ class TypeTests extends Itemtype {
 				// makes callback to 'subscribed' if item_id changes
 				$_POST["order_id"] = $order["id"];
 				$_POST["item_id"] = $item_id;
+				$_POST["custom_price"] = $custom_price;
 				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $subscription["id"]]);
 				unset($_POST);
 
@@ -221,6 +223,7 @@ class TypeTests extends Itemtype {
 				$_POST["item_id"] = $item_id;
 				$_POST["user_id"] = $user_id;
 				$_POST["order_id"] = $order_id;
+				$_POST["custom_price"] = $custom_price;
 				$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 				unset($_POST);
 
@@ -713,18 +716,24 @@ class TypeTests extends Itemtype {
 		$created_at = "2019-01-01 00:00:00";
 		$email = "test.parentnode@gmail.com";
 		$membership = false;
+		$subscribed_item_id = false;
+		$subscription_expires_at = false;
+		$subscription_custom_price = false;
 	
 		if($_options !== false) {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
-					case "user_group_id"        : $user_group_id              = $_value; break;
-					case "nickname"             : $nickname                   = $_value; break;
-					case "firstname"            : $firstname                  = $_value; break;
-					case "lastname"             : $lastname                   = $_value; break;
-					case "status"               : $status                     = $_value; break;
-					case "created_at"           : $created_at                 = $_value; break;
-					case "email"                : $email                      = $_value; break;
-					case "membership"           : $membership                 = $_value; break;
+					case "user_group_id"                  : $user_group_id                         = $_value; break;
+					case "nickname"                       : $nickname                              = $_value; break;
+					case "firstname"                      : $firstname                             = $_value; break;
+					case "lastname"                       : $lastname                              = $_value; break;
+					case "status"                         : $status                                = $_value; break;
+					case "created_at"                     : $created_at                            = $_value; break;
+					case "email"                          : $email                                 = $_value; break;
+					case "membership"                     : $membership                            = $_value; break;
+					case "subscribed_item_id"             : $subscribed_item_id                    = $_value; break;
+					case "subscription_expires_at"        : $subscription_expires_at               = $_value; break;
+					case "subscription_custom_price"      : $subscription_custom_price             = $_value; break;
 				}
 			}
 		}
@@ -744,6 +753,21 @@ class TypeTests extends Itemtype {
 	
 			$_POST["email"] = $email;
 			$UC->updateEmail(["updateEmail", $user_id]);
+
+			if($subscribed_item_id)	{
+				$SC = new SuperShop();
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+
+				$added_item_cart = $SC->addToNewInternalCart($subscribed_item_id, ["user_id" => $user_id, "custom_price" => $subscription_custom_price]);
+				$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart["id"], $added_item_cart["cart_reference"]]);
+				$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $user_id, "item_id" => $subscribed_item_id]);
+			}
+	
+			if($subscription_expires_at) {
+				$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$subscription_expires_at."' WHERE id = ".$added_subscription["id"];
+				$query->sql($sql);
+			}
 	
 			return $user_id;
 		}
