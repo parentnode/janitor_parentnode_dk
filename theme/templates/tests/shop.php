@@ -203,7 +203,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 100
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price – return default price – correct</p></div>
 				<? else: ?>
@@ -244,7 +244,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 50
-					&& $price["name"] == "offer"
+					&& $price["type"] == "offer"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and cheaper offer price – return offer price – correct</p></div>
 				<? else: ?>
@@ -285,7 +285,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 100
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and more expensive offer price – return default price – correct</p></div>
 				<? else: ?>
@@ -327,7 +327,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 80
-					&& $price["name"] == "bulk"
+					&& $price["type"] == "bulk"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and bulk price with minimum quantity 3, get price for 3 items – return bulk price – correct</p></div>
 				<? else: ?>
@@ -369,7 +369,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 100
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and bulk price with minimum quantity 3, get price for 2 items – return default price – correct</p></div>
 				<? else: ?>
@@ -427,7 +427,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 75
-					&& $price["name"] == "test-membership"
+					&& $price["type"] == "test-membership"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and cheaper membership price, user has matching membership – return membership price – correct</p></div>
 				<? else: ?>
@@ -486,7 +486,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 75
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and more expensive membership price, user has matching membership – return membership price – correct</p></div>
 				<? else: ?>
@@ -551,7 +551,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 100
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and cheaper membership price, user has different membership – return default price – correct</p></div>
 				<? else: ?>
@@ -604,7 +604,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 100
-					&& $price["name"] == "default"
+					&& $price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and membership price, user has no membership – return default price – correct</p></div>
 				<? else: ?>
@@ -666,7 +666,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$price
 					&& $price["price"] == 50
-					&& $price["name"] == "offer"
+					&& $price["type"] == "offer"
 				): ?>
 				<div class="testpassed"><p>Shop::getPrice – item with default price and cheaper membership price and even cheaper offer price, user has matching membership – return offer price – correct</p></div>
 				<? else: ?>

@@ -419,7 +419,7 @@ $post_model = $IC->typeObject("post");
 					$price["currency"] == "DKK" &&
 					$price["quantity"] == 1 &&
 					$price["vatrate"] == 25 &&
-					$price["name"] == "default"
+					$price["type"] == "default"
 				): ?>
 				<div class="testpassed"><p>Items::getPrices – pass price_id – return specific price – correct</p></div>
 				<? else: ?>
@@ -562,16 +562,16 @@ $post_model = $IC->typeObject("post");
 				if($prices)	{
 
 					foreach($prices as $price) {
-						if($price["item_id"] == $test_item_id_1 && $price["name"] == "default") {
+						if($price["item_id"] == $test_item_id_1 && $price["type"] == "default") {
 							$test_item_1_default = $price["price"];
 						}
-						else if($price["item_id"] == $test_item_id_1 && $price["name"] == "offer") {
+						else if($price["item_id"] == $test_item_id_1 && $price["type"] == "offer") {
 							$test_item_1_offer = $price["price"];
 						}
-						else if($price["item_id"] == $test_item_id_2 && $price["name"] == "default") {
+						else if($price["item_id"] == $test_item_id_2 && $price["type"] == "default") {
 							$test_item_2_default = $price["price"];
 						}
-						else if($price["item_id"] == $test_item_id_2 && $price["name"] == "offer") {
+						else if($price["item_id"] == $test_item_id_2 && $price["type"] == "offer") {
 							$test_item_2_offer = $price["price"];
 						}
 					}
