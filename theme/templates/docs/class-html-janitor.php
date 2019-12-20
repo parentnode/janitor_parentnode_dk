@@ -11,21 +11,21 @@
 		</div>
 		<div class="body">
 
-			<div class="function" id="JanitorHTML::jsMedia">
+			<div class="function" id="JanitorHTML::editActions">
 				<div class="header">
-					<h3>JanitorHTML::jsMedia</h3>
+					<h3>JanitorHTML::editActions</h3>
 				</div>
 				<div class="body">
 					<div class="definition">
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">JanitorHTML::jsMedia</dd>
+							<dd class="name">JanitorHTML::editActions</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">_returntype_</span> = 
-								JanitorHTML::jsMedia(
-									<span class="type">String</span> <span class="var">format</span> 
-									[, <span class="type">Mixed</span> <span class="var">timestamp</span> ]
+							<dd class="syntax"><span class="type">String</span> = 
+								JanitorHTML::editActions(
+									<span class="type">Array</span> <span class="var">$item</span> 
+									[, <span class="type">Array</span> <span class="var">$_options</span> ]
 								);
 							</dd>
 						</dl>
@@ -34,8 +34,13 @@
 					<div class="description">
 						<h4>Description</h4>
 						<p>
-							Provide media info as classVars string. It will get first media element from item, or
-							first of <span class="var">variant</span> from item, if variant is specified.
+							This method returns an HTML snippet string, with a <span class"htmltag">ul.actions</span> 
+							containing the default actions for an <em>edit</em> form.
+						</p>
+						<p>
+							This method requires the presence of a global <span class="var">$model</span> instance
+							to be available. This is the case for default edit views, where the instance of the current
+							itemtype class would be available in <span class="var">$model</span>.
 						</p>
 					</div>
 
@@ -46,30 +51,33 @@
 							<dt><span class="var">$item</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">Array</span> Item data array, with <span class="var">mediae</span> index populated
+									<span class="type">Array</span> Item data array representing the item currently being edited.
 								</div>
 							</dd>
-							<dt><span class="var">$variant</span></dt>
+							<dt><span class="var">$_options</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">String</span> Optional variant to match when finding media
+									<span class="type">Array</span> Optional settings.
 								</div>
+								<p>No settings defined at this point</p>
 							</dd>
 						</dl>
 					</div>
 
 					<div class="return">
 						<h4>Return values</h4>
-						<p><span class="type">String</span> classVars string with media info, empty string en error</p>
+						<p><span class="type">String</span> String with HTML snippet of actions list for edit templates.</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$JML->jsMedia($item, "mediae");</code>
-							<p>Might return something like:</p>
-							<code> format:jpg variant:mediae-xyzdefgh</code>
+							<code>$JML->editActions($item);</code>
+							<p>Returns a string similar to:</p>
+							<code>&lt;ul class=&quot;actions&quot;&gt;
+	&lt;li class=&quot;save&quot;&gt;&lt;input value=&quot;Update&quot; type=&quot;submit&quot; class=&quot;button primary key:s&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;</code>
 						</div>
 					</div>
 
@@ -84,94 +92,7 @@
 						<div class="janitor">
 							<h5>Janitor</h5>
 							<ul>
-								<li>Items::getFirstMedia</li>
-							</ul>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-
-			<div class="function" id="JanitorHTML::jsData">
-				<div class="header">
-					<h3>JanitorHTML::jsData</h3>
-				</div>
-				<div class="body">
-					<div class="definition">
-						<h4>Definition</h4>
-						<dl class="definition">
-							<dt class="name">Name</dt>
-							<dd class="name">JanitorHTML::jsData</dd>
-							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">String</span> = 
-								JanitorHTML::jsData(
-									<span class="type">Array</span> <span class="var">$_options</span> 
-								);
-							</dd>
-						</dl>
-					</div>
-
-					<div class="description">
-						<h4>Description</h4>
-						<p>Create data attributes with backend endpoints for JavaScript interfaces.</p>
-					</div>
-
-					<div class="parameters">
-						<h4>Parameters</h4>
-
-						<dl class="parameters">
-							<dt><span class="var">$_options</span></dt>
-							<dd>
-								<div class="summary">
-									<span class="type">Array</span> Array of endpoint areas to include
-								</div>
-								<div class="details">
-									<h5>Available endpoint areas</h5>
-									<dl class="options">
-										<dt><span class="value">order</span></dt>
-										<dd>Endpoint for updating item order</dd>
-										<dt><span class="value">tags</span></dt>
-										<dd>Endpoint for getting, adding and removing tags</dd>
-										<dt><span class="value">media</span></dt>
-										<dd>Endpoint for deleting media and updating media name and order</dd>
-										<dt><span class="value">comments</span></dt>
-										<dd>Endpoint for updating or deleting comments</dd>
-										<dt><span class="value">prices</span></dt>
-										<dd>Endpoint for deleting prices</dd>
-										<dt><span class="value">qna</span></dt>
-										<dd>Endpoint for updating or deleting QnA's</dd>
-									</dl>
-								</div>
-							</dd>
-						</dl>
-					</div>
-
-					<div class="return">
-						<h4>Return values</h4>
-						<p><span class="type">String</span> String of data attributes with all the endpoint related to specifed areas – or all areas if none are defined. Will always add a csrf-token data attribute.</p>
-					</div>
-
-					<div class="examples">
-						<h4>Examples</h4>
-						<p>No examples</p>
-					</div>
-
-					<div class="dependencies">
-						<h4>Dependencies</h4>
-
-						<div class="php">
-							<h5>PHP</h5>
-							<ul>
-								<li>array_search</li>
-							</ul>
-						</div>
-
-						<div class="janitor">
-							<h5>Janitor</h5>
-							<ul>
-								<li>Session::value</li>
-								<li>Page::validPath</li>
+								<li>HTML::submit</li>
 							</ul>
 						</div>
 
