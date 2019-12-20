@@ -4,21 +4,31 @@ global $IC;
 global $model;
 global $itemtype;
 
-$sindex = isset($action[1]) ? $action[1] : false;
-$limit = 100;
+$sindex = false;
+$page = false;
 
-$items = $IC->paginate(array(
+if(count($action) == 3 && $action[1] == "page") {
+	$page = $action[2];
+}
+else if(count($action) == 2) {
+	$sindex = $action[1];
+}
+
+$limit = 2;
+
+$items = $IC->paginate([
 	"limit" => $limit, 
 	"pattern" => array(
 		"itemtype" => $itemtype, 
 		"order" => "status DESC, position ASC", 
-		"extend" => array(
+		"extend" => [
 			"tags" => true, 
 			"mediae" => true
-		)
+		]
 	),
-	"sindex" => $sindex
-));
+	"sindex" => $sindex,
+	"page" => $page
+]);
 
 ?>
 
@@ -29,11 +39,11 @@ $items = $IC->paginate(array(
 		<?= $JML->listNew(array("label" => "New test")) ?>
 	</ul>
 
-	<div class="all_items i:defaultList taggable filters sortable images width:100"<?= $JML->jsData(["order", "tags", "search"]) ?>>
+	<div class="all_items i:defaultList taggable filters sortable images width:100"<?= $HTML->jsData(["order", "tags", "search"]) ?>>
 <?		if($items && $items["range_items"]): ?>
 		<ul class="items">
 <?			foreach($items["range_items"] as $item):?>
-			<li class="item item_id:<?= $item["id"] ?><?= $JML->jsMedia($item, "mediae") ?>">
+			<li class="item item_id:<?= $item["id"] ?><?= $HTML->jsMedia($item, "mediae") ?>">
 				<h3><?= strip_tags($item["name"]) ?></h3>
 
 				<?= $JML->tagList($item["tags"]) ?>
@@ -42,25 +52,11 @@ $items = $IC->paginate(array(
 			 </li>
 <?			endforeach; ?>
 		</ul>
-		
-		<? if($items["next"] || $items["prev"]): ?>
-		<div class="pagination">
-			<ul>
-				<? if($items["prev"]): ?>
-				<li class="previous"><a href="/janitor/tests/list/<?= $items["prev"][0]["sindex"] ?>">Previous</a></li>
-				<? else: ?>
-				<li class="previous"><a class="disabled">Previous</a></li>
-				<? endif; ?>
-				<li><?= ceil($items["total"] / $limit) ?> pages</li>
-				<? if($items["next"]): ?>
-					<li class="next"><a href="/janitor/tests/list/<?= $items["next"][0]["sindex"] ?>">Next</a></li>
-				<? else: ?>	
-				<li class="next"><a class="disabled">Next</a></li>
-				<? endif; ?>
-			</ul>
-		</div>
-		<? endif; ?>
-		
+
+
+		<?= $HTML->pagination($items, ["base_url" => "/janitor/tests/list"]) ?>
+
+
 <?		else: ?>
 		<p>No test items.</p>
 <?		endif; ?>
