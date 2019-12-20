@@ -543,6 +543,49 @@ if($query->sql($sql)) {
 	?>
 
 	<div class="tests">
+		<h3>SuperSubscription::addSubscription</h3>	
+		
+		<? if(1 && "addSubscription – order item has custom price – return subscription with custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+				$SC = new SuperShop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 50]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				
+				// ASSERT
+				if(
+					$subscription
+					&& $subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>SuperSubscription::addSubscription – order item has custom price – return subscription with custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperSubscription::addSubscription – order item has custom price – return subscription with custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif; ?>
+
+	</div>
+
+	<div class="tests">
 		<h3>SuperSubscription::renewSubscriptions</h3>	
 
 		<? if(1 && "renewSubscriptions – renew all – return true") {
@@ -586,7 +629,8 @@ if($query->sql($sql)) {
 
 		} ?>
 
-		<? if(1 && "renewSubscriptions – renew subscriptions for specific user – return true"):
+		<? 
+		if(1 && "renewSubscriptions – renew subscriptions for specific user – return true"):
 			
 			(function() {
 
@@ -622,7 +666,53 @@ if($query->sql($sql)) {
 
 			})();
 
-		endif; ?>
+		endif; 
+		
+		if(1 && "renewSubscriptions – renew subscription with custom price – return true, renewed subscription has custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 2, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => 50]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$result = $SuperSubscriptionClass->renewSubscriptions(["renewSubscriptions", $test_user_id]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]); 
+
+
+				// ASSERT
+				if(
+					$result
+					&& $subscription
+					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
+					&& $subscription["custom_price"] == 50
+
+				):?>
+				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price – return true, renewed subscription has custom price – correct</p></div>
+				<? else: 
+					
+				?>
+				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price – return true, renewed subscription has custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif; 
+		
+		?>
+
+		
 		
 	</div>
 
@@ -2206,6 +2296,138 @@ if($query->sql($sql)) {
 		};
 		updateSubscription_changeExpiryDateSendRenewFlagToMonthlySubscription_returnRenewedSubscriptionCallbackRenewed();
 		?>
+		<? 
+		
+		if(1 && "updateSubscription – add custom price – return subscription with custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+				$SC = new SuperShop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+				$existing_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = 50;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>SuperSubscription::updateSubscription – add custom price – return subscription with custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperSubscription::updateSubscription – add custom price – return subscription with custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif; 
+
+		if(1 && "updateSubscription – change custom price – return subscription with changed custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+				$SC = new SuperShop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 75]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+				$existing_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = 50;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $existing_subscription["custom_price"] == 75
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>SuperSubscription::updateSubscription – change custom price – return subscription with changed custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperSubscription::updateSubscription – change custom price – return subscription with changed custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+
+		if(1 && "updateSubscription – delete custom price (set to false) – return subscription without custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+				$SC = new SuperShop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 75]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+				$existing_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = false;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $existing_subscription["custom_price"] == 75
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == false
+				):?>
+				<div class="testpassed"><p>SuperSubscription::updateSubscription – delete custom price (set to false) – return subscription without custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperSubscription::updateSubscription – delete custom price (set to false) – return subscription without custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+		
+		?>
+
 		<?
 		// This test isn't written yet, as it is waiting for different payment methods to be actually used by the system
 		function updateSubscription_changePaymentMethod_returnUpdatedSubscription(){};

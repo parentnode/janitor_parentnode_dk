@@ -2,7 +2,11 @@
 	<h1>Member</h1>	
 	<h2>Testing Member class</h2>
 	<ul class="actions">
-		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
+		
+
+use Psr\Log\NullLogger;
+
+<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
 	<div class="tests">
@@ -133,7 +137,7 @@
 			$query->sql($sql);
 			
 		}
-		// addNewMembership_noUserIdSent_returnFalse();
+		addNewMembership_noUserIdSent_returnFalse();
 		?>
 		<? function addNewMembership_invalidUserIdSent_returnFalse() {
 			// addNewMembership – invalid user_id in $action – should return false
@@ -188,7 +192,7 @@
 			$query->sql($sql);
 			
 		}
-		// addNewMembership_invalidUserIdSent_returnFalse();
+		addNewMembership_invalidUserIdSent_returnFalse();
 		?>
 		<? function addNewMembership_validButNonexistingUserId_returnFalse() {
 			// addNewMembership – valid but non-existing user_id in $action – should return false
@@ -242,7 +246,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
 			$query->sql($sql);
 		}
-		// addNewMembership_validButNonexistingUserId_returnFalse();
+		addNewMembership_validButNonexistingUserId_returnFalse();
 		?>
 		
 	</div>
@@ -1525,6 +1529,119 @@
 
 		}
 		upgradeMembership_existingMembershipHasNoSubscription_returnFalse();
+		?>
+		<? 	
+		function upgradeMembership_existingMembershipHasNoExpiry_returnTrue() {
+			
+			// upgradeMembership – existing membership has no expiry – should return true, new expiry date based on current date
+			
+			// ARRANGE
+			$MC = new Member();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new Shop();
+			$SubscriptionClass = new Subscription();
+			
+			// create first test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item 1";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add subscription method to first membership item (never expires)
+			$_POST["item_subscription_method"] = 3;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+			
+			// add price to first membership item
+			$_POST["item_price"] = 0;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+
+			// create second test membership item
+			$_POST["name"] = "Membership Test item 2";
+			$membership_item_2 = $model_membership->save(array("save"));
+			$membership_item_2_id = $membership_item_2["id"];
+			unset($_POST);
+
+			// add subscription method to second membership item (monthly)
+			$_POST["item_subscription_method"] = 1;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+			unset($_POST);
+			
+			// add price to second membership item
+			$_POST["item_price"] = 300;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
+			unset($_POST);
+
+			// create cart and order for first membership item 
+			// TypeMembership::ordered will call Member::addMembership 
+			$cart = $SC->addToNewInternalCart($membership_item_1_id);
+			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+			$existing_membership = $MC->getMembership();
+			$existing_membership_id = $existing_membership["id"];
+	
+			// ACT 
+			$_POST["item_id"] = $membership_item_2_id;
+			$upgrade_success = $MC->upgradeMembership(["upgradeMembership"]);
+			unset($_POST);
+
+			$upgraded_membership = $MC->getMembership();
+			$today_next_month = date("Y-m-d", strtotime("+1 month", time()));
+
+			// ASSERT 
+			if(
+				$existing_membership
+				&& $upgraded_membership
+				&& $existing_membership["subscription_id"] == $upgraded_membership["subscription_id"]
+				&& $existing_membership["expires_at"] === NULL
+				&& $upgraded_membership["expires_at"] == $today_next_month." 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Member::upgradeMembership – existing membership has no expiry date – should return true, new expiry date based on current date – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Member::upgradeMembership – existing membership has no expiry date – should return true, new expiry date based on current date – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+			// delete membership
+			$existing_membership_id = $existing_membership["id"];
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
+			$query->sql($sql);
+
+			// delete membership item 1 subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_1_id";
+			$query->sql($sql);
+	
+			// delete membership item 1
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_1_id";
+			$query->sql($sql);
+
+			// delete membership 1 order
+			$existing_membership_order_no = $existing_membership_order["order_no"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$existing_membership_order_no'";
+			$query->sql($sql);
+			
+			// delete membership item 2 subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id";
+			$query->sql($sql);
+			
+			// delete membership item 2
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_2_id";
+			$query->sql($sql);
+			
+			// delete membership 2 order
+			$upgraded_membership_order_no = $upgraded_membership["order"]["order_no"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
+			$query->sql($sql);
+		}
+		upgradeMembership_existingMembershipHasNoExpiry_returnTrue();
 		?>
 	</div>
 

@@ -356,6 +356,49 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 	?>
 
 	<div class="tests">
+		<h3>Subscription::addSubscription</h3>	
+		
+		<? if(1 && "addSubscription – order item has custom price – return subscription with custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				$SubscriptionClass = new Subscription();
+				$SC = new Shop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = session()->value("user_id");
+
+				// ACT
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 50]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+				$subscription = $SubscriptionClass->getSubscriptions(["item_id" => $test_item_id]);
+
+				
+				// ASSERT
+				if(
+					$subscription
+					&& $subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>Subscription::addSubscription – order item has custom price – return subscription with custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Subscription::addSubscription – order item has custom price – return subscription with custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif; ?>
+
+	</div>
+
+
+	<div class="tests">
 		<h3>updateSubscription</h3>		
 		
 		<? 	
@@ -1586,6 +1629,136 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		}
 		updateSubscription_changeExpiryDateOfEternalSubscription_returnUpdatedSubscription();
 		?>
+
+<? 
+		
+		if(1 && "updateSubscription – add custom price – return subscription with custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				$SubscriptionClass = new Subscription();
+				$SC = new Shop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+				$existing_subscription = $SubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = 50;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>Subscription::updateSubscription – add custom price – return subscription with custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Subscription::updateSubscription – add custom price – return subscription with custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif; 
+
+		if(1 && "updateSubscription – change custom price – return subscription with changed custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				$SubscriptionClass = new Subscription();
+				$SC = new Shop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 75]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+				$existing_subscription = $SubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = 50;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $existing_subscription["custom_price"] == 75
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == 50
+				):?>
+				<div class="testpassed"><p>Subscription::updateSubscription – change custom price – return subscription with changed custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Subscription::updateSubscription – change custom price – return subscription with changed custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+
+		if(1 && "updateSubscription – delete custom price (set to false) – return subscription without custom price"):
+			
+			(function() {
+
+				// ARRANGE
+				$SubscriptionClass = new Subscription();
+				$SC = new Shop();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 1, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser();
+
+				$cart = $SC->addToNewInternalCart($test_item_id, ["user_id" => $test_user_id, "custom_price" => 75]);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+				$existing_subscription = $SubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$_POST["custom_price"] = false;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$existing_subscription
+					&& $existing_subscription["custom_price"] == 75
+					&& $updated_subscription
+					&& $updated_subscription["custom_price"] == false
+				):?>
+				<div class="testpassed"><p>Subscription::updateSubscription – delete custom price (set to false) – return subscription without custom price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Subscription::updateSubscription – delete custom price (set to false) – return subscription without custom price – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+		
+		?>
+
 		<? 	
 		// This test has been disabled for now. It fails due to sql not being in 'strict mode'. 
 		// See associated trello card: https://trello.com/c/50TBY01A  
