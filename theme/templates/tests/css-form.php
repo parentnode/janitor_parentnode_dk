@@ -61,6 +61,7 @@ u.o["testForm"] = new function() {
 
 				<?= $model->input("v_integer", array("value" => $item["v_integer"])) ?>
 				<?= $model->input("v_number", array("value" => $item["v_number"])) ?>
+				<?= $model->input("v_range", array("value" => $item["v_range"])) ?>
 
 				<?= $model->input("v_email", array("value" => $item["v_email"])) ?>
 				<?= $model->input("v_tel", array("value" => $item["v_tel"])) ?>

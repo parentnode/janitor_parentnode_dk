@@ -106,6 +106,17 @@ class TypeTests extends Itemtype {
 			"error_message" => "Must be Number"
 		));
 
+		$this->addToModel("v_range", array(
+			"type" => "range",
+			"label" => "Range",
+			"required" => true,
+			"min" => 10,
+			"max" => 100,
+			"step" => 5,
+			"hint_message" => "Type range",
+			"error_message" => "Must be within range"
+		));
+
 		$this->addToModel("v_checkbox", array(
 			"type" => "checkbox",
 			"label" => "Checkbox",
@@ -362,6 +373,16 @@ class TypeTests extends Itemtype {
 		$this->getPostedEntities();
 		if($this->validateList(array("v_number"))) {
 			message()->addMessage("Number ok");
+			return true;
+		}
+		return false;
+	}
+
+	function rangeValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("v_range"))) {
+			message()->addMessage("Range ok");
 			return true;
 		}
 		return false;

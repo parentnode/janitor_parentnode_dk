@@ -14,6 +14,7 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `v_date` date NULL DEFAULT NULL,
   `v_integer` int(11) DEFAULT NULL,
   `v_number` varchar(100) DEFAULT NULL,
+  `v_range` int(11) DEFAULT NULL,
 
   `v_checkbox` varchar(100) DEFAULT NULL,
   `v_radiobuttons` varchar(100) DEFAULT NULL,
