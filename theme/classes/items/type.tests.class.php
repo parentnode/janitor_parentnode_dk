@@ -434,66 +434,18 @@ class TypeTests extends Itemtype {
 
 
 	// ADDITIONAL TEST FUNCTIONS
-	function testPath($path, $allowed) {
-		global $page;
-		$result = $page->validatePath($path);
-		if(($result && $allowed) || (!$result && !$allowed)) {
-			print '<div class="testpassed">'.$path."</div>\n";
-		}
-		else {
-			print '<div class="testfailed">'.$path."</div>\n";
-		}
-	}
-
-
-	// test item status
-	function testStatus($expected) {
-		global $test_item_id;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if($compare_item["status"] == $expected) {
-			print '<div class="testpassed">Status ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Status error</div>'."\n";
-		}
-	}
-
-	// test item name
-	function testExistence($expected) {
-		global $test_item_id;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if(($compare_item && $expected) || (!$compare_item && !$expected)) {
-			print '<div class="testpassed">Existence ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Existence error</div>'."\n";
-		}
-	}
-
-	// test item name
-	function testName($expected) {
-		global $test_item_id;
-		global $test_item_name;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if($compare_item["name"] == $expected) {
-			print '<div class="testpassed">Name ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Name error</div>'."\n";
-		}
-	}
 
 	// get cookie from result
 	function getCookie($result) {
 
 		preg_match_all("/Set\-Cookie: (.+);/", $result["header"], $cookie_match);
-		$cookie = $cookie_match[1][count($cookie_match[1])-1];
+		if($cookie_match && count($cookie_match) >= 2 && isset($cookie_match[1][count($cookie_match[1])-1])) {
+			$cookie = $cookie_match[1][count($cookie_match[1])-1];
+		}
+		else {
+			$cookie = "";
+		}
+		// debug([$cookie_match, $result["header"]]);
 
 		return $cookie;
 	}
