@@ -283,6 +283,175 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 				</div>
 			</div>
 
+			<div class="function" id="HTML::jsMedia">
+				<div class="header">
+					<h3>HTML::jsMedia</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">HTML::jsMedia</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">String</span> = 
+								HTML::jsMedia(
+									<span class="type">Array</span> <span class="var">$item</span> 
+									[, <span class="type">String</span> <span class="var">$variant</span> ]
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>
+							Provide media info as classVars string. It will get first media element from item, or
+							first of <span class="var">variant</span> from item, if variant is specified.
+						</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$item</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Array</span> Item data array, with <span class="var">mediae</span> index populated
+								</div>
+							</dd>
+							<dt><span class="var">$variant</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">String</span> Optional variant to match when finding media
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">String</span> classVars string with media info, empty string en error</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+
+						<div class="example">
+							<code>$JML->jsMedia($item, "mediae");</code>
+							<p>Might return something like:</p>
+							<code> format:jpg variant:mediae-xyzdefgh</code>
+						</div>
+					</div>
+
+					<div class="dependencies">
+						<h4>Dependencies</h4>
+
+						<div class="php">
+							<h5>PHP</h5>
+							<p>None</p>
+						</div>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Items::getFirstMedia</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="function" id="HTML::jsData">
+				<div class="header">
+					<h3>HTML::jsData</h3>
+				</div>
+				<div class="body">
+					<div class="definition">
+						<h4>Definition</h4>
+						<dl class="definition">
+							<dt class="name">Name</dt>
+							<dd class="name">HTML::jsData</dd>
+							<dt class="syntax">Syntax</dt>
+							<dd class="syntax"><span class="type">String</span> = 
+								HTML::jsData(
+									<span class="type">Array</span> <span class="var">$_filter</span> 
+								);
+							</dd>
+						</dl>
+					</div>
+
+					<div class="description">
+						<h4>Description</h4>
+						<p>Create a data attributes string with backend endpoints for JavaScript interfaces.</p>
+					</div>
+
+					<div class="parameters">
+						<h4>Parameters</h4>
+
+						<dl class="parameters">
+							<dt><span class="var">$_filter</span></dt>
+							<dd>
+								<div class="summary">
+									<span class="type">Array</span> Array of endpoint areas to include
+								</div>
+								<div class="details">
+									<h5>Available endpoint areas</h5>
+									<dl class="options">
+										<dt><span class="value">order</span></dt>
+										<dd>Endpoint for updating item order</dd>
+										<dt><span class="value">tags</span></dt>
+										<dd>Endpoint for getting, adding and removing tags</dd>
+										<dt><span class="value">media</span></dt>
+										<dd>Endpoint for deleting media and updating media name and order</dd>
+										<dt><span class="value">comments</span></dt>
+										<dd>Endpoint for updating or deleting comments</dd>
+										<dt><span class="value">prices</span></dt>
+										<dd>Endpoint for deleting prices</dd>
+										<dt><span class="value">qna</span></dt>
+										<dd>Endpoint for updating or deleting QnA's</dd>
+									</dl>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="return">
+						<h4>Return values</h4>
+						<p><span class="type">String</span> String of data attributes with all the endpoint related to specifed areas – or all areas if none are defined. Will always add a csrf-token data attribute.</p>
+					</div>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						<p>No examples</p>
+					</div>
+
+					<div class="dependencies">
+						<h4>Dependencies</h4>
+
+						<div class="php">
+							<h5>PHP</h5>
+							<ul>
+								<li>array_search</li>
+							</ul>
+						</div>
+
+						<div class="janitor">
+							<h5>Janitor</h5>
+							<ul>
+								<li>Session::value</li>
+								<li>Page::validPath</li>
+							</ul>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
 			<div class="function" id="HTML::formStart">
 				<div class="header">
 					<h3>HTML::formStart</h3>

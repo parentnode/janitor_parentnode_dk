@@ -1637,7 +1637,7 @@ $items = $IC->paginate(array(
 						<h4>Examples</h4>
 
 						<div class="example"><code>$IC = new Item();
-$item = $IC->getItem(array("sindex" => "item_name"));
+$item = $IC->getItem(array("sindex" => "test-name"));
 $tag = $IC->getTags(array("item" => $item[id]));</code>
 							<p>Get the tag based on item.</p>
 						</div>

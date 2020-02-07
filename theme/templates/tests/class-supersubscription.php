@@ -17,7 +17,7 @@ function createTestItem($_options = false) {
 	$IC = new Items();
 
 	$itemtype = "tests";
-	$item_name = "Test item";
+	$name = "Test item";
 	$price = false;
 	$subscription_method = false;
 
@@ -25,7 +25,7 @@ function createTestItem($_options = false) {
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"            : $itemtype              = $_value; break;
-				case "item_name"           : $item_name             = $_value; break;
+				case "name"           : $name             = $_value; break;
 				case "price"               : $price                 = $_value; break;
 				case "subscription_method" : $subscription_method   = $_value; break;
 			}
@@ -34,7 +34,7 @@ function createTestItem($_options = false) {
 	
 	// create test item
 	$model = $IC->TypeObject($itemtype);
-	$_POST["name"] = $item_name;
+	$_POST["name"] = $name;
 
 	$item = $model->save(array("save"));
 	unset($_POST);
@@ -587,9 +587,9 @@ if($query->sql($sql)) {
 
 	<div class="tests">
 		<h3>SuperSubscription::renewSubscriptions</h3>	
-		
-		<? if(1 && "renewSubscriptions – renew all – return true"):
-			
+
+		<? if(1 && "renewSubscriptions – renew all – return true") {
+
 			(function() {
 
 				// ARRANGE
@@ -627,7 +627,7 @@ if($query->sql($sql)) {
 
 			})();
 
-		endif; ?>
+		} ?>
 
 		<? 
 		if(1 && "renewSubscriptions – renew subscriptions for specific user – return true"):

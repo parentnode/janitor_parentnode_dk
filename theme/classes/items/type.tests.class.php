@@ -106,6 +106,17 @@ class TypeTests extends Itemtype {
 			"error_message" => "Must be Number"
 		));
 
+		$this->addToModel("v_range", array(
+			"type" => "range",
+			"label" => "Range",
+			"required" => true,
+			"min" => 10,
+			"max" => 100,
+			"step" => 5,
+			"hint_message" => "Type range",
+			"error_message" => "Must be within range"
+		));
+
 		$this->addToModel("v_checkbox", array(
 			"type" => "checkbox",
 			"label" => "Checkbox",
@@ -367,6 +378,16 @@ class TypeTests extends Itemtype {
 		return false;
 	}
 
+	function rangeValidation() {
+
+		$this->getPostedEntities();
+		if($this->validateList(array("v_range"))) {
+			message()->addMessage("Range ok");
+			return true;
+		}
+		return false;
+	}
+
 	function checkboxValidation() {
 
 		$this->getPostedEntities();
@@ -413,66 +434,18 @@ class TypeTests extends Itemtype {
 
 
 	// ADDITIONAL TEST FUNCTIONS
-	function testPath($path, $allowed) {
-		global $page;
-		$result = $page->validatePath($path);
-		if(($result && $allowed) || (!$result && !$allowed)) {
-			print '<div class="testpassed">'.$path."</div>\n";
-		}
-		else {
-			print '<div class="testfailed">'.$path."</div>\n";
-		}
-	}
-
-
-	// test item status
-	function testStatus($expected) {
-		global $test_item_id;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if($compare_item["status"] == $expected) {
-			print '<div class="testpassed">Status ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Status error</div>'."\n";
-		}
-	}
-
-	// test item name
-	function testExistence($expected) {
-		global $test_item_id;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if(($compare_item && $expected) || (!$compare_item && !$expected)) {
-			print '<div class="testpassed">Existence ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Existence error</div>'."\n";
-		}
-	}
-
-	// test item name
-	function testName($expected) {
-		global $test_item_id;
-		global $test_item_name;
-		$IC = new Items();
-
-		$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-		if($compare_item["name"] == $expected) {
-			print '<div class="testpassed">Name ok</div>'."\n";
-		}
-		else {
-			print '<div class="testfailed">Name error</div>'."\n";
-		}
-	}
 
 	// get cookie from result
 	function getCookie($result) {
 
 		preg_match_all("/Set\-Cookie: (.+);/", $result["header"], $cookie_match);
-		$cookie = $cookie_match[1][count($cookie_match[1])-1];
+		if($cookie_match && count($cookie_match) >= 2 && isset($cookie_match[1][count($cookie_match[1])-1])) {
+			$cookie = $cookie_match[1][count($cookie_match[1])-1];
+		}
+		else {
+			$cookie = "";
+		}
+		// debug([$cookie_match, $result["header"]]);
 
 		return $cookie;
 	}
@@ -507,13 +480,35 @@ class TypeTests extends Itemtype {
 		
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
+				case "itemtype"           : $itemtype             = $_value; break;
+
 				case "item_id"            : $item_id              = $_value; break;
 				case "user_id"            : $user_id              = $_value; break;
 				case "currency_id"        : $currency_id          = $_value; break;
+
 			}
 		}
-			
-	
+
+
+		// Delete by itemtype
+		if($itemtype) {
+
+			$items = $IC->getItems(["itemtype" => $itemtype]);
+			$model_item = $IC->typeObject($itemtype);
+			foreach($items as $item) {
+
+				// delete subscriptions
+				$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = ".$item["id"];
+				$query->sql($sql);
+
+				$model_item->delete(["delete", $item["id"]]);
+
+			}
+
+		}
+
+
+		// Delete by user_id
 		if($user_id) {
 	
 			// delete member
@@ -553,7 +548,8 @@ class TypeTests extends Itemtype {
 				$query->sql($sql);
 			}
 		}
-	
+
+		// Delete by item_id
 		if($item_id) {
 	
 			$item = $IC->getItem(["id" => $item_id]);
@@ -564,39 +560,73 @@ class TypeTests extends Itemtype {
 			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id";
 			$query->sql($sql);
 	
-			$model_item->delete(["delete",$item_id]);	
+			$model_item->delete(["delete",$item_id]);
 		}
 
+		// Delete by currency id
 		if($currency_id) {
 
 			$sql = "DELETE FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
 			$query->sql($sql);
 		}
-	
-	
-		// check that everything was deleted
-		$sql = "SELECT * FROM ".SITE_DB.".items WHERE id = $item_id";
-		$remaining_items = $query->sql($sql); 
-	
-		if($user_id != session()->value("user_id")) {
-			$sql = "SELECT * FROM ".SITE_DB.".users WHERE id = $user_id";
-			$remaining_users = $query->sql($sql);
+
+
+
+		// Cleanup check
+
+		// check that item was deleted
+		$remaining_itemtype_items = false;
+		if($item_id) {
+			$sql = "SELECT * FROM ".UT_ITEMS." WHERE itemtype = '$itemtype'";
+			$remaining_itemtype_items = $query->sql($sql); 
 		}
-		else {
-			$remaining_users = false;
+		
+
+
+		// check that item was deleted
+		$remaining_items = false;
+		if($item_id) {
+			$sql = "SELECT * FROM ".SITE_DB.".items WHERE id = $item_id";
+			$remaining_items = $query->sql($sql); 
 		}
 
-		$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
-		$remaining_orders = $query->sql($sql); 
-		
-		$sql = "SELECT * FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
-		$remaining_currencies = $query->sql($sql);
-		
-		if(!$remaining_items && !$remaining_orders && !$remaining_users && !$remaining_currencies) {
+
+		// Check that users and orders was deleted
+		$remaining_orders = false;
+		$remaining_users = false;
+		if($user_id) {
+
+			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $user_id";
+			$remaining_orders = $query->sql($sql); 
+
+			if($user_id != session()->value("user_id")) {
+				$sql = "SELECT * FROM ".SITE_DB.".users WHERE id = $user_id";
+				$remaining_users = $query->sql($sql);
+			}
+
+		}
+
+		// Check that currency was deleted
+		$remaining_currencies = false;
+		if($currency_id) {
+
+			$sql = "SELECT * FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
+			$remaining_currencies = $query->sql($sql);
+
+		}
+
+
+		if(
+			!$remaining_itemtype_items && 
+			!$remaining_items && 
+			!$remaining_orders && 
+			!$remaining_users && 
+			!$remaining_currencies
+		) {
 	
 			return true;
 		}
-	
+
 		print "Incomplete cleanup";
 		return false;
 	
@@ -608,14 +638,14 @@ class TypeTests extends Itemtype {
 		$query = new Query();
 	
 		$itemtype = "tests";
-		$item_name = "Test item";
+		$name = "Test item";
 		$status = 1;
 	
 		if($_options !== false) {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
 					case "itemtype"            : $itemtype              = $_value; break;
-					case "item_name"           : $item_name             = $_value; break;
+					case "name"           : $name             = $_value; break;
 
 					case "price"               : $price                 = $_value; break;
 					case "prices"              : $prices                = $_value; break;
@@ -628,11 +658,13 @@ class TypeTests extends Itemtype {
 		
 		// create test item
 		$model = $IC->TypeObject($itemtype);
-		$_POST["name"] = $item_name;
+		$_POST["name"] = $name;
 	
 		$item = $model->save(array("save"));
 		$item_id = $item["id"];
 		unset($_POST);
+	
+	
 	
 		if($item_id) {
 	
@@ -693,9 +725,11 @@ class TypeTests extends Itemtype {
 				unset($_POST);
 			}
 
+
 			if($model->status(["status", $item_id, $status])) {
-				
+
 				return $item_id; 
+
 			}
 	
 		}

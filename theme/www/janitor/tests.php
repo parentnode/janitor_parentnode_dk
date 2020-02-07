@@ -9,6 +9,9 @@ if(isset($read_access) && $read_access) {
 include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 
+set_time_limit(0);
+
+
 $action = $page->actions();
 $IC = new Items();
 $itemtype = "tests";
