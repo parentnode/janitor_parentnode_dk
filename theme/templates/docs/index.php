@@ -166,6 +166,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "status" => 1, "
 				<h3><a href="/docs/class-zipper">Zipper</a></h3>
 				<p>Zip helper class</p>
 			</li>
+			<li>
+				<h3><a href="/docs/class-qr-codes">QR Code Generator</a></h3>
+				<p>Qr code helper class</p>
+			</li>
 		</ul>
 
 		<h3>API</h3>
