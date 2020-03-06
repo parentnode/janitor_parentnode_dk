@@ -371,7 +371,6 @@ function deleteTestMailingList($maillist_id) {
 
 			})();
 
-
 		}
 
 		if(1 && "send message – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2") {
