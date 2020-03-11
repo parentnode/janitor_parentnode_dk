@@ -1,4 +1,69 @@
 <?
+global $backup_tags;
+
+function backup() {
+//A method to backup the existing database
+	global $backup;
+	include_once("classes/items/taglist.class.php");
+	$query = new Query();
+
+	$sql = "SELECT * FROM ".SITE_DB.".tags";
+	$backup["all_tags"] = false;
+	if($query->sql($sql)) {
+		$backup["all_tags"] = $query->results();
+
+		$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
+		$backup["all_taglist_tags"] = false;
+		if($query->sql($sql)) {
+			$backup["all_taglist_tags"] = $query->results();
+		}
+
+		$sql = "SELECT * FROM ".SITE_DB.".taggings";
+		$backup["all_item_tags"] = false;
+		if($query->sql($sql)) {
+			$backup["all_item_tags"] = $query->results();
+		}
+
+		$sql = "SELECT * FROM ".SITE_DB.".taglists";
+		$backup["all_taglists"] = false;
+		if($query->sql($sql)) {
+			$backup["all_taglists"] = $query->results();
+		}
+
+		$sql = "DELETE FROM ".SITE_DB.".tags";
+		$query->sql($sql);
+		$sql = "DELETE FROM ".SITE_DB.".taglists";
+		$query->sql($sql);
+	}
+
+}
+
+function restore() {
+// A method to restore the database existed before the testing 
+	global $backup;
+	include_once("classes/items/taglist.class.php");
+	$query = new Query();
+
+	if($backup["all_tags"]) {
+		foreach($backup["all_tags"] as $tag) {
+			$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
+			$query->sql($sql);
+		}
+		if($backup["all_taglist_tags"]) {
+			foreach($backup["all_taglist_tags"] as $tag) {
+				$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$tag["id"].", taglist_id = ".$tag["taglist_id"].", tag_id = ".$tag["tag_id"].", position = ".$tag["position"];
+				$query->sql($sql);
+			}
+		}
+		if($backup["all_item_tags"]) {
+			foreach($backup_tags["all_item_tags"] as $tag) {
+				$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
+				$query->sql($sql);
+			}
+		}
+	}
+
+}
 
 ?>
 
@@ -18,61 +83,44 @@
 			(function() {
 
 				// ARRANGE
-                $IC = new Items();
-                $model_tests = $IC->typeObject("tests");
-                $test_item_id = $model_tests->createTestItem();
-
-                include_once("classes/items/taglist.class.php");
-				
+				include_once("classes/items/taglist.class.php");
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".tags";
-				$all_tags = false;
-				if($query->sql($sql)) {
-					$all_tags = $query->results();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
+				backup();
+				$TC = new Taglist();
+				$no_tags = $TC->getAllTags();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taggings";
-					$all_item_tags = false;
-					if($query->sql($sql)) {
-						$all_item_tags = $query->results();
-					}
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(["addTag", $test_item_id]);
+				unset($_POST);
 
-					$sql = "DELETE FROM ".SITE_DB.".tags";
-					$query->sql($sql);
-				}
-
-                $_POST["tags"] = "test:tag1";
-                $model_tests->addTag(["addTag", $test_item_id]);
-                unset($_POST);
-
-                $_POST["tags"] = "test:tag2";
-                $model_tests->addTag(["addTag", $test_item_id]);
-                unset($_POST);
+				$_POST["tags"] = "test:tag2";
+				$model_tests->addTag(["addTag", $test_item_id]);
+				unset($_POST);
 
 				// $test_user_id = $model_tests->createTestUser();
 
 				// ACT
-				$TC = new Taglist();
-                $tags = $TC->getAllTags();
-                
+
+				$tags = $TC->getAllTags();
+
 				// ASSERT 
 				if(
-                    $tags
+					$no_tags === false
+					&& $tags
                     && count($tags) == 2
                     && $tags[0]["context"] == "test"
                     && $tags[0]["value"] == "tag1"
                     && $tags[1]["context"] == "test"
                     && $tags[1]["value"] == "tag2" 
 				): ?>
-				<div class="testpassed"><p>Taglist::getAllTags – No parameters are sent – Returns all the tags – correct</p></div>	
+				<div class="testpassed"><p>Taglist::getAllTags – Returns all the tags – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
-				<div class="testfailed"><p>Taglist::getAllTags – No parameters are sent – Returns all the tags – error</p></div>
+				<div class="testfailed"><p>Taglist::getAllTags – Returns all the tags – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
@@ -80,25 +128,7 @@
 				$sql = "DELETE FROM ".SITE_DB.".tags";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
-				if($all_tags) {
-					foreach($all_tags as $tag) {
-						$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$tag["id"].", taglist_id = ".$tag["taglist_id"].", tag_id = ".$tag["tag_id"].", position = ".$tag["position"];
-							$query->sql($sql);
-						}
-					}
-					if($all_item_tags) {
-						foreach($all_item_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -107,35 +137,15 @@
 	<div class="tests getTaglists">
 		<h3>Taglist::getTaglists</h3>
 		<? 
-		if(1 && "getTaglists – No parameters are sent – Returns all the taglists") { 
+		if(1 && "getTaglists – Returns all the taglists") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
-				// ARRANGE
-				//$IC = new Items();
-				//$model_tests = $IC->typeObject("tests");
-				//$test_item_id = $model_tests->createTestItem();
-
 				include_once("classes/items/taglist.class.php");
-				
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
-
-								// ACT
+				
+				backup();
 				$TC = new Taglist();
 				$no_taglists = $TC->getTaglists();
 
@@ -149,18 +159,18 @@
 
 				// ASSERT 
 				if(
-					$taglists
-					&& $no_taglists === false
+					$no_taglists === false
+					&& $taglists
 					&& count($taglists) == 2
 					&& $taglists[0]["name"] == "Test1"
 					&& $taglists[0]["handle"] == "test1"
 					&& $taglists[1]["name"] == "Test1"
 					&& $taglists[1]["handle"] == "test2" 
 				): ?>
-				<div class="testpassed"><p>Taglist::getTaglists – No parameters are sent – Returns all the taglists – correct</p></div>	
+				<div class="testpassed"><p>Taglist::getTaglists – Returns all the taglists – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
-				<div class="testfailed"><p>Taglist::getTaglists – No parameters are sent – Returns all the taglists – error</p></div>
+				<div class="testfailed"><p>Taglist::getTaglists – Returns all the taglists – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
@@ -168,19 +178,7 @@
 				$sql = "DELETE FROM ".SITE_DB.".taglists";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -195,24 +193,13 @@
 			(function() {
 
 				// ARRANGE
-
-                include_once("classes/items/taglist.class.php");
-				
+				include_once("classes/items/taglist.class.php");
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				
+				backup();
+				$TC = new Taglist();
+				$no_taglist1 = $TC->getTaglist(array("handle"=>"test1"));
+				$no_taglist2 = $TC->getTaglist(array("handle"=>"test1"));
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				$query->sql($sql);
@@ -221,7 +208,6 @@
 				$taglist_id = $query->lastInsertId();
 				
 				// ACT
-				$TC = new Taglist();
 				$taglist1 = $TC->getTaglist(array("handle"=>"test1"));
 				//print_r(count($taglist1));
 				$taglist2 = $TC->getTaglist(["taglist_id"=>$taglist_id]);
@@ -229,7 +215,9 @@
 
 				// ASSERT 
 				if(
-					$taglist1
+					$no_taglist1 === false
+					&& $no_taglist2 === false
+					&& $taglist1
 					&& $taglist2
                     && $taglist1["name"] == "Test1"
                     && $taglist1["handle"] == "test1"
@@ -247,19 +235,7 @@
 				$sql = "DELETE FROM ".SITE_DB.".taglists";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -274,53 +250,24 @@
 			(function() {
 
 				// ARRANGE
-
-				$IC = new Items();
-                $model_tests = $IC->typeObject("tests");
-                $test_item_id = $model_tests->createTestItem();
-
 				include_once("classes/items/taglist.class.php");
-				
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".tags";
-				$all_tags = false;
-				if($query->sql($sql)) {
-					$all_tags = $query->results();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
+				backup();
+				$TC = new Taglist();
+				$no_taglist_tag = $TC->addTaglistTag(["addTaglistTag", 200, 100]);
 
-					$sql = "SELECT * FROM ".SITE_DB.".taggings";
-					$all_item_tags = false;
-					if($query->sql($sql)) {
-						$all_item_tags = $query->results(); // basically the taggings table
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".tags";
-					$query->sql($sql);
-				}
-
-                $_POST["tags"] = "test:tag1";
+				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
 				unset($_POST);
 				//$sql = "SELECT id FROM ".SITE_DB.".tags"
 
-                $_POST["tags"] = "test:tag2";
+				$_POST["tags"] = "test:tag2";
 				$tag2 = $model_tests->addTag(["addTag", $test_item_id]);
-                unset($_POST);
-
-				//$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				unset($_POST);
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				if($query->sql($sql)) {
@@ -328,7 +275,6 @@
 				}
 
 				// ACT
-				$TC = new Taglist();
 				$TC->addTaglistTag(["addTaglistTag", $taglist_id, $tag1["tag_id"]]);
 				$TC->addTaglistTag(["addTaglistTag", $taglist_id, $tag2["tag_id"]]);
 
@@ -346,7 +292,8 @@
 
 				// ASSERT 
 				if(
-					$taglist_tags
+					$no_taglist_tag === false
+					&& $taglist_tags
 					&& count($taglist_tags) == 2
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -367,33 +314,7 @@
 				$sql = "DELETE FROM ".SITE_DB.".tags";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
-				if($all_tags) {
-					foreach($all_tags as $tag) {
-						$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
-						$query->sql($sql);
-					}
-
-					if($all_item_tags) {
-						foreach($all_item_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
-							$query->sql($sql);
-						}
-					}
-				}
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -409,42 +330,15 @@
 
 				// ARRANGE
 
-				$IC = new Items();
-                $model_tests = $IC->typeObject("tests");
-                $test_item_id = $model_tests->createTestItem();
-
 				include_once("classes/items/taglist.class.php");
-				
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".tags";
-				$all_tags = false;
-				if($query->sql($sql)) {
-					$all_tags = $query->results();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "SELECT * FROM ".SITE_DB.".taggings";
-					$all_item_tags = false;
-					if($query->sql($sql)) {
-						$all_item_tags = $query->results(); // basically the taggings table
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".tags";
-					$query->sql($sql);
-				}
-
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+				$no_taglist_tag = $TC->removeTaglistTag(["removeTaglistTag", 200, 100]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -476,7 +370,6 @@
 
 				// ACT
 				if($tags) {
-					$TC = new Taglist();
 					$TC->removeTaglistTag(["removeTaglistTag", $taglist_id, $tags[0]["id"]]);
 					$TC->removeTaglistTag(["removeTaglistTag", $taglist_id, $tags[1]["id"]]);
 
@@ -489,7 +382,8 @@
 
 				// ASSERT 
 				if(
-					$taglist_tags
+					!$no_taglist_tag
+					&& $remove_taglist_tags
 					&& count($taglist_tags) == 2
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -512,32 +406,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_tags) {
-					foreach($all_tags as $tag) {
-						$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
-						$query->sql($sql);
-					}
-
-					if($all_item_tags) {
-						foreach($all_item_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
-							$query->sql($sql);
-						}
-					}
-				}
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -554,23 +423,10 @@
 				// ARRANGE
 
 				include_once("classes/items/taglist.class.php");
-				
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				$all_taglist_tags = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
+				$no_taglist = $TC->updateTaglist(["updateTaglist", 200]);
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				if($query->sql($sql)) {
@@ -578,7 +434,6 @@
 					$sql = "SELECT * FROM ".SITE_DB.".taglists";
 					if($query->sql($sql)) {
 						$test_taglist = $query->results();
-						
 					}
 				}
 
@@ -589,8 +444,7 @@
 	
 					$_POST["handle"] = "testhandle";
 					//unset($_POST);
-	
-					$TC = new Taglist();
+
 					$TC->updateTaglist(["updateTaglist", $taglist_id]);
 					unset($_POST);
 
@@ -602,7 +456,8 @@
 
 				// ASSERT 
 				if(
-					$test_taglist
+					!$no_taglist
+					&& $test_taglist
 					&& count($test_taglist) == 1
 					&& $test_taglist[0]["name"] == "Test1"
 					&& $test_taglist[0]["handle"] == "test1"
@@ -623,18 +478,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -651,30 +495,16 @@
 				// ARRANGE
 
 				include_once("classes/items/taglist.class.php");
-				
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				$all_taglist_tags = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
+				$no_taglist = $TC->saveTaglist(["updateTaglist"]);
 
 				// ACT
 
 					$_POST["name"] = "testName";
 					//unset($_POST);
-	
-					$TC = new Taglist();
+
 					$taglist_id = $TC->saveTaglist(["saveTaglist"]);
 					unset($_POST);
 
@@ -685,7 +515,8 @@
 
 				// ASSERT 
 				if(
-					$taglist
+					!$no_taglist
+					&& $taglist
 					&& count($taglist) == 1
 					&& $taglist[0]["name"] == "testName"
 				): ?>
@@ -701,18 +532,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -729,23 +549,10 @@
 				// ARRANGE
 
 				include_once("classes/items/taglist.class.php");
-				
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				$all_taglist_tags = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
+				$no_taglist = $TC->deleteTaglist(["updateTaglist", 400]);
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'testDelete', handle = 'testdelete'";
 				$query->sql($sql);
@@ -756,7 +563,6 @@
 
 				// ACT
 
-					$TC = new Taglist();
 					$TC->deleteTaglist(["deleteTaglist", $taglist[0]["id"]]);
 
 					$sql = "SELECT * FROM ".SITE_DB.".taglists WHERE id = ".$taglist[0]["id"];
@@ -767,7 +573,8 @@
 
 				// ASSERT 
 				if(
-					$taglist
+					!$no_taglist
+					&& $taglist
 					&& count($taglist) == 1
 					&& $taglist[0]["name"] == "testDelete"
 					&& $taglist[0]["handle"] == "testdelete"
@@ -785,18 +592,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -812,42 +608,15 @@
 
 				// ARRANGE
 
-				$IC = new Items();
-                $model_tests = $IC->typeObject("tests");
-                $test_item_id = $model_tests->createTestItem();
-
 				include_once("classes/items/taglist.class.php");
-				
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".tags";
-				$all_tags = false;
-				if($query->sql($sql)) {
-					$all_tags = $query->results();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "SELECT * FROM ".SITE_DB.".taggings";
-					$all_item_tags = false;
-					if($query->sql($sql)) {
-						$all_item_tags = $query->results(); // basically the taggings table
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".tags";
-					$query->sql($sql);
-				}
-
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+				$no_taglist = $TC->duplicateTaglist(["removeTaglistTag", 200]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -892,7 +661,7 @@
 
 				// ASSERT 
 				if(
-					$taglist_tags
+					!$no_taglist
 					&& count($taglist_tags) == 2
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -919,32 +688,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_tags) {
-					foreach($all_tags as $tag) {
-						$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
-						$query->sql($sql);
-					}
-
-					if($all_item_tags) {
-						foreach($all_item_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
-							$query->sql($sql);
-						}
-					}
-				}
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
@@ -960,42 +704,15 @@
 
 				// ARRANGE
 
-				$IC = new Items();
-                $model_tests = $IC->typeObject("tests");
-                $test_item_id = $model_tests->createTestItem();
-
 				include_once("classes/items/taglist.class.php");
-				
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
-				$sql = "SELECT * FROM ".SITE_DB.".tags";
-				$all_tags = false;
-				if($query->sql($sql)) {
-					$all_tags = $query->results();
 
-					$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
-					$all_taglist_tags = false;
-					if($query->sql($sql)) {
-						$all_taglist_tags = $query->results();
-					}
-
-					$sql = "SELECT * FROM ".SITE_DB.".taggings";
-					$all_item_tags = false;
-					if($query->sql($sql)) {
-						$all_item_tags = $query->results(); // basically the taggings table
-					}
-
-					$sql = "DELETE FROM ".SITE_DB.".tags";
-					$query->sql($sql);
-				}
-
-				$sql = "SELECT * FROM ".SITE_DB.".taglists";
-				$all_taglists = false;
-				if($query->sql($sql)) {
-					$all_taglists = $query->results();
-
-					$sql = "DELETE FROM ".SITE_DB.".taglists";
-					$query->sql($sql);
-				}
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+				$no_order = $TC->updateOrder(["updateOrder", 200]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -1039,7 +756,6 @@
 
 				// ACT
 				if($tags) {
-					$TC = new Taglist();
 					$_POST["order"] = $tag3["tag_id"].", ".$tag2["tag_id"].", ".$tag1["tag_id"];
 					$updated = $TC->updateOrder(["updateOrder", $taglist_id]);
 
@@ -1052,7 +768,8 @@
 
 				// ASSERT 
 				if(
-					$updated
+					!$no_order
+					&& $updated
 					&& count($taglist_tags) == 3
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -1080,32 +797,7 @@
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
-				if($all_tags) {
-					foreach($all_tags as $tag) {
-						$sql = "INSERT INTO ".SITE_DB.".tags SET id = ".$tag["id"].", context = '".$tag["context"]."', value = '".$tag["value"]."', description = '".$tag["description"]."'";
-						$query->sql($sql);
-					}
-
-					if($all_item_tags) {
-						foreach($all_item_tags as $tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
-							$query->sql($sql);
-						}
-					}
-				}
-
-				if($all_taglists) {
-					foreach($all_taglists as $taglist) {
-						$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
-						$query->sql($sql);
-					}
-					if($all_taglist_tags) {
-						foreach($all_taglist_tags as $taglist_tag) {
-							$sql = "INSERT INTO ".SITE_DB.".taglist_tags SET id = ".$taglist_tag["id"].", taglist_id = ".$taglist_tag["taglist_id"].", tag_id = ".$taglist_tag["tag_id"].", position = ".$taglist_tag["position"];
-							$query->sql($sql);
-						}
-					}
-				}
+				restore();
 			})();
 		}
 		?>
