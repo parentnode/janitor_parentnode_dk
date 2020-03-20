@@ -1,5 +1,5 @@
 <?
-global $backup_tags;
+global $backup;
 
 function backup() {
 //A method to backup the existing database
@@ -24,17 +24,17 @@ function backup() {
 			$backup["all_item_tags"] = $query->results();
 		}
 
-		$sql = "SELECT * FROM ".SITE_DB.".taglists";
-		$backup["all_taglists"] = false;
-		if($query->sql($sql)) {
-			$backup["all_taglists"] = $query->results();
-		}
-
 		$sql = "DELETE FROM ".SITE_DB.".tags";
 		$query->sql($sql);
-		$sql = "DELETE FROM ".SITE_DB.".taglists";
-		$query->sql($sql);
 	}
+
+	$sql = "SELECT * FROM ".SITE_DB.".taglists";
+	$backup["all_taglists"] = false;
+	if($query->sql($sql)) {
+		$backup["all_taglists"] = $query->results();
+	}
+	$sql = "DELETE FROM ".SITE_DB.".taglists";
+	$query->sql($sql);
 
 }
 
@@ -43,6 +43,13 @@ function restore() {
 	global $backup;
 	include_once("classes/items/taglist.class.php");
 	$query = new Query();
+
+	if($backup["all_taglists"]) {
+		foreach($backup["all_taglists"] as $taglist) {
+			$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
+			$query->sql($sql);
+		}
+	}
 
 	if($backup["all_tags"]) {
 		foreach($backup["all_tags"] as $tag) {
@@ -56,7 +63,7 @@ function restore() {
 			}
 		}
 		if($backup["all_item_tags"]) {
-			foreach($backup_tags["all_item_tags"] as $tag) {
+			foreach($backup["all_item_tags"] as $tag) {
 				$sql = "INSERT INTO ".SITE_DB.".taggings SET id = ".$tag["id"].", item_id = ".$tag["item_id"].", tag_id = ".$tag["tag_id"];
 				$query->sql($sql);
 			}
