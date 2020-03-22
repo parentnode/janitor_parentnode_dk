@@ -1,6 +1,6 @@
 /*
-Manipulator v0.9.1 Copyright 2016 http://manipulator.parentnode.dk
-asset-builder @ 2020-01-09 14:03:48
+Manipulator v0.9.3 Copyright 2020 https://manipulator.parentnode.dk
+asset-builder @ 2020-03-22 21:29:26
 */
 
 /*seg_seo_include.js*/
