@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2020-03-22 21:29:26
+asset-builder @ 2020-03-22 22:07:52
 */
 
 /*seg_smartphone_include.css*/
@@ -468,7 +468,7 @@ div.field.correct div.error {display: none;}
 #content .scene.docsindex .files li h3 {font-size: 16px; padding: 0;}
 #content .scene.docsindex .files li p {font-size: 13px; color: #bbbbbb; padding: 0;}
 #content .scene.docsindex .search {padding-top: 15px;}
-#content .scene.docsindex .search.loading {background: transparent url(../../../img/gx_loader.gif) no-repeat 438px 68px;}
+#content .scene.docsindex .search.loading {background: transparent url(../assets/parentnode-skin-default/img/gx_loader.gif) no-repeat 438px 68px;}
 #content .scene.docsindex .search h2 {padding-bottom: 15px;}
 #content .scene.docsindex .search .results .function {padding: 15px 0 0; border-top: 1px solid #dedede; cursor: pointer;}
 #content .scene.docsindex .search .results .function .header h3 {padding-bottom: 5px;}
