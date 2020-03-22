@@ -496,6 +496,7 @@ class TypeTests extends Itemtype {
 		$user_id = false;
 		$item_id = false;
 		$currency_id = false;
+		$itemtype = false;
 		
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
