@@ -1,7 +1,7 @@
 <div class="scene i:scene tests front">
 	<h1>Janitor Unit tests</h1>
 	<h2>All purpose testing index</h2>
-	
+
 	<h3>Item classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("Itemtype", "/janitor/tests/class-itemtype", array("wrapper" => "li.itemtype")) ?>
@@ -11,6 +11,7 @@
 	<h3>Itemtypes classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("TypeMessage", "/janitor/tests/class-type-message", array("wrapper" => "li.type-message")) ?>
+		<?= $HTML->link("TypeTaglist", "/janitor/tests/class-type-taglist", array("wrapper" => "li.type-taglist")) ?>
 	</ul>
 
 	<h3>Shop classes</h3>

@@ -11018,8 +11018,8 @@ Util.Modules["taglist_tags"] = new function() {
 }
 
 
-/*i-form.js*/
-Util.Objects["generic"] = new function() {
+/*m-form.js*/
+Util.Modules["generic"] = new function() {
 	this.init = function(div) {
 	}
 }
