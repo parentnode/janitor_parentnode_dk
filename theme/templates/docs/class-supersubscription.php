@@ -291,6 +291,8 @@ $subscriptions = $SuperSubscriptionClass->getSubscriptions(["user_id"] => $user_
 										<dd><span class="type">String</span> Expiry date.</dd>
 										<dt><span class="value">subscription_renewal</span></dt>
 										<dd><span class="type">Boolean</span>, indicating whether the function call is a periodical renewal of the subscription. If passed, the subscription's expiry date will be recalculated (if it had an expiry date in the first place).</dd>
+										<dt><span class="value">switch_membership</span></dt>
+										<dd><span class="type">Boolean</span>, indicating whether the function call comes from the Member::switchMembership or SuperMember::switchMembership. If passed, the subscription's expiry date will be recalculated.</dd>
 										<dt><span class="value">order_id</span></dt>
 										<dd><span class="type">Integer</span> If passed without an item_id, the existing item must have price, and the existing subscription may not have an existing order – or the function returns <span class="value">false</span>.</dd>
 										<!-- <dt><span class="value">custom_price</span></dt>
