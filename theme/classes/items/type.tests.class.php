@@ -139,8 +139,18 @@ class TypeTests extends Itemtype {
 			"type" => "files",
 			"label" => "File",
 			"required" => true,
-			"hint_message" => "Type * files",
+			"hint_message" => "Type * file",
 			"error_message" => "File must be added"
+		));
+
+		$this->addToModel("single_media", array(
+			"type" => "files",
+			"label" => "Add media here",
+			"allowed_sizes" => "960x540",
+			"max" => 1,
+			"allowed_formats" => "png,jpg",
+			"hint_message" => "Add single image by dragging it here. PNG or JPG allowed in 960x540",
+			"error_message" => "Media does not fit requirements."
 		));
 
 		$this->addToModel("v_files", array(
@@ -151,6 +161,15 @@ class TypeTests extends Itemtype {
 			"max" => 20,
 			"hint_message" => "Type * files",
 			"error_message" => "Between 3 and 20 files must be added"
+		));
+
+		$this->addToModel("mediae", array(
+			"type" => "files",
+			"label" => "Add media here",
+			"max" => 20,
+			"allowed_formats" => "png,jpg,mp4",
+			"hint_message" => "Add images or videos here. Use png, jpg or mp4.",
+			"error_message" => "Media does not fit requirements."
 		));
 
 

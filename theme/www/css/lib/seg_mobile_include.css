@@ -1,9 +1,9 @@
 /* Skin */
-@import url(../../assets/parentnode-skin-default/css/seg_mobile.css);
+@import url(/assets/parentnode-skin-default/css/seg_mobile.css);
 
-@import url(../../assets/parentnode-skin-default/css/lib/mobile/s-form.css);
-@import url(../../assets/parentnode-skin-default/css/lib/mobile/s-used_by.css);
-@import url(../../assets/parentnode-skin-default/css/lib/mobile/s-documentation.css);
+@import url(/assets/parentnode-skin-default/css/optionals/lib/mobile/s-used_by.css);
+@import url(/assets/parentnode-skin-default/css/optionals/lib/mobile/s-documentation.css);
+
 /* Project */
 @import url(/css/lib/mobile/s-pages.css);
 @import url(/css/lib/mobile/s-colorscheme.css);

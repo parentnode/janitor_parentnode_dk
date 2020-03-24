@@ -826,7 +826,7 @@ use Psr\Log\NullLogger;
 			$query = new Query();
 			$IC = new Items();
 			$SC = new Shop();
-			$SubscriptionClass = new Subscription();
+			$SuperSubscriptionClass = new SuperSubscription();
 			
 			// create test membership item
 			$model_membership = $IC->TypeObject("membership");
@@ -852,6 +852,7 @@ use Psr\Log\NullLogger;
 			$added_membership_order = $MC->addNewMembership(["addNewMembership"]);
 			$added_membership = $MC->getMembership();
 			$added_membership_id = $added_membership["id"];
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
 			unset($_POST);
 			
 			// create another test membership item
@@ -877,8 +878,10 @@ use Psr\Log\NullLogger;
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
 			$order = $MC->switchMembership(["switchMembership"]);
-			$switched_membership = $MC->getMembership();
 			unset($_POST);
+			$switched_membership = $MC->getMembership();
+
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
 			
 			// ASSERT 
 			if(
@@ -889,6 +892,7 @@ use Psr\Log\NullLogger;
 				$switched_membership["subscription_id"] &&
 				$switched_membership != $added_membership &&
 				$order["items"][0]["item_id"] == $membership_item_2_id &&
+				$switched_membership_subscription["expires_at"] != $added_membership_subscription["expires_at"] &&
 				$switched_membership["order_id"] == $order["id"]
 				): ?>
 			<div class="testpassed"><p>Member::switchMembership – from one subscription to another subscription – correct</p></div>

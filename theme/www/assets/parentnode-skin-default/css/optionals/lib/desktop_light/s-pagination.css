@@ -1,0 +1,11 @@
+/* PAGINATION */
+#content .scene .pagination {margin: 0 70px; padding: 20px 0 0;}
+#content .scene .pagination ul {padding: 0; overflow: hidden;}
+#content .scene .pagination ul li {display: inline-block; padding-bottom: 15px;}
+#content .scene .pagination li.next {float: right; text-align: right;}
+#content .scene .pagination li.previous {float: left; text-align: left;}
+#content .scene .pagination .next a,
+#content .scene .pagination .previous a {background-color: #dedede; color: #333333; text-decoration: none; padding: 6px 12px; 
+	font-size: 14px; display: block;
+}
+#content .scene .pagination li.pages {display: none;}
