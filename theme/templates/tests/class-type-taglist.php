@@ -26,6 +26,10 @@ function backup() {
 
 		$sql = "DELETE FROM ".SITE_DB.".tags";
 		$query->sql($sql);
+		$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
+		$query->sql($sql);
+		$sql = "DELETE FROM ".SITE_DB.".taggings";
+		$query->sql($sql);
 	}
 
 	$sql = "SELECT * FROM ".SITE_DB.".taglists";
@@ -418,7 +422,7 @@ function restore() {
 		}
 		?>
 	</div>
-
+ 
 	<div class="tests updateTaglist">
 		<h3>Taglist::updateTaglist</h3>
 		<? 
