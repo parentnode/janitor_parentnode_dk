@@ -2029,6 +2029,7 @@
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
 			$added_membership_id = $added_membership["id"];
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
 
 			// create another test membership item
 			$_POST["name"] = "Membership Test item 2";
@@ -2057,6 +2058,8 @@
 			unset($_POST);
 			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+
 			// ASSERT 
 			if(
 				$switched_membership_order && 
@@ -2066,6 +2069,7 @@
 				$switched_membership["subscription_id"] &&
 				$switched_membership != $added_membership &&
 				$switched_membership_order["items"][0]["item_id"] == $membership_item_2_id &&
+				$switched_membership_subscription["expires_at"] != $added_membership_subscription["expires_at"] &&
 				$switched_membership["order_id"] == $switched_membership_order["id"]
 				): ?>
 			<div class="testpassed"><p>SuperMember::switchMembership – from one subscription to another subscription – correct</p></div>
