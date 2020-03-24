@@ -1873,6 +1873,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$current_timestamp = strtotime($current_time);
 			$calculated_timestamp = strtotime($calculated_time);
 			$time_diff = $calculated_timestamp - $current_timestamp;
+			
+			
 			if(
 				$current_time &&
 				$calculated_time &&
@@ -1951,6 +1953,15 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$current_timestamp = strtotime($current_time);
 			$calculated_timestamp = strtotime($calculated_time);
 			$time_diff = $calculated_timestamp - $current_timestamp;
+
+			// compensate for Dayligt Saving Time (shifts in March/October in the EU)
+			if(date("M") == "Mar") {
+				$time_diff += 3600;
+			}
+			if(date("M") == "Oct") {
+				$time_diff -= 3600;
+			}
+
 			if(
 				$current_time &&
 				$calculated_time &&
@@ -2053,6 +2064,18 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$current_timestamp = strtotime($current_time);
 			$calculated_timestamp = strtotime($calculated_time);
 			$time_diff = $calculated_timestamp - $current_timestamp;
+
+			// compensate for Daylight Saving Time (shift in last week of March and October)
+			$current_week = date("W");
+			$last_week_in_march = date("W", mktime(0, 0, 0, 4, 1))-1;
+			$last_week_in_october = date("W", mktime(0, 0, 0, 11, 1))-1;
+			if($current_week == $last_week_in_march ) {
+				$time_diff += 3600;
+			}
+			if($current_week == $last_week_in_october) {
+				$time_diff -= 3600;
+			}
+
 			if(
 				$current_time &&
 				$calculated_time &&
