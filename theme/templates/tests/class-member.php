@@ -934,6 +934,132 @@ use Psr\Log\NullLogger;
 		}
 		switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
 		?>
+		<? 	
+		function switchMembership_fromSubscriptionWithCustomPriceToSubscription_returnOrderUpdateSubscriptionUpdateMembership() {
+			
+			// switchMembership – from subscription with custom price to another subscription
+			
+			// ARRANGE
+			$MC = new Member();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new Shop();
+			$SuperSubscriptionClass = new SuperSubscription();
+			
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item 1";
+			$membership_item_1 = $model_membership->save(array("save"));
+			$membership_item_1_id = $membership_item_1["id"];
+			unset($_POST);
+
+			// add subscription method to first membership item
+			$_POST["item_subscription_method"] = 1;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_1_id));
+			unset($_POST);
+
+			// add price to first membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_1_price = $model_membership->addPrice(array("addPrice", $membership_item_1_id));
+			unset($_POST);
+
+			// create new membership with custom price
+			$cart = $SC->addToNewInternalCart($membership_item_1_id, ["custom_price" => 50]);
+			$cart_reference = $cart["cart_reference"];
+			$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
+			
+			$added_membership = $MC->getMembership();
+			$added_membership_order = $added_membership["order"];
+			$added_membership_id = $added_membership["id"];
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
+			unset($_POST);
+			
+			// create another test membership item
+			$_POST["name"] = "Membership Test item 2";
+			$membership_item_2 = $model_membership->save(array("save"));
+			$membership_item_2_id = $membership_item_2["id"];
+			unset($_POST);
+	
+			// add subscription method to second membership item
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_2_id));
+			unset($_POST);
+			
+			// add price to second membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_2_price = $model_membership->addPrice(array("addPrice", $membership_item_2_id));
+			unset($_POST);
+			
+			
+			// ACT 
+			$_POST["item_id"] = $membership_item_2_id;
+			$order = $MC->switchMembership(["switchMembership"]);
+			unset($_POST);
+			$switched_membership = $MC->getMembership();
+
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+			
+			// ASSERT 
+			if(
+				$order && 
+				$switched_membership &&
+				$switched_membership["id"] == $added_membership_id &&
+				$added_membership["subscription_id"] &&
+				$switched_membership["subscription_id"] &&
+				$switched_membership != $added_membership &&
+				$added_membership["order"]["items"][0]["total_price"] == 50 &&
+				$switched_membership["order"]["items"][0]["total_price"] == 100 &&
+				$order["items"][0]["item_id"] == $membership_item_2_id &&
+				$switched_membership_subscription["expires_at"] != $added_membership_subscription["expires_at"] &&
+				$added_membership_subscription["custom_price"] == 50 &&
+				empty($switched_membership_subscription["custom_price"]) &&
+				$switched_membership["order_id"] == $order["id"]
+				): ?>
+			<div class="testpassed"><p>Member::switchMembership – from subscription with custom price to another subscription – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Member::switchMembership – from subscription with custom price to another subscription – error</p></div>
+			<? endif; 
+			
+			// CLEAN UP
+			// delete membership
+			$added_membership_id = $added_membership["id"];
+			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
+			$query->sql($sql);
+			
+			// delete membership item 1 subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_1_id";
+			$query->sql($sql);
+			
+			// delete membership item 1
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_1_id";
+			$query->sql($sql);
+
+			// delete membership 1 order
+			$added_membership_order_id = $added_membership_order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$added_membership_order_id'";
+			$query->sql($sql);
+			
+			// delete membership item 2 subscription
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order["id"];
+			$query->sql($sql);
+			
+			// delete membership item 2
+			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_2_id";
+			$query->sql($sql);
+			
+			// delete order
+			$order_id = $order["id"];
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$order_id'";
+			$query->sql($sql);
+		}
+		switchMembership_fromSubscriptionWithCustomPriceToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
+		?>
 		<? 
 		function switchMembership_noMembershipExists_returnFalse() {
 			// switchMembership – no membership exists
