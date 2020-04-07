@@ -112,9 +112,7 @@ $email = $result["username"];
 						<div class="php">
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
-							<ul>
-								<li>none</li>
-							</ul>
+							<p>None</p>
 						</div>
 
 						<div class="janitor">
@@ -223,9 +221,7 @@ $unverified_usernames = $UC->getUnverifiedUsernames(["user_id" => $user_id]);
 						<div class="php">
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
-							<ul>
-								<li>none</li>
-							</ul>
+							<p>None</p>
 						</div>
 
 						<div class="janitor">
@@ -572,9 +568,7 @@ $verification_status = $UC->setVerificationStatus($username_id, $user_id, $verif
 						<div class="php">
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
-							<ul>
-								<li>none</li>
-							</ul>
+							<p>None</p>
 						</div>
 
 						<div class="janitor">
