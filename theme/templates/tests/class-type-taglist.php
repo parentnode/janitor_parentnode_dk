@@ -324,6 +324,9 @@ function restore() {
 
 				$sql = "DELETE FROM ".SITE_DB.".tags";
 				$query->sql($sql);
+
+				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
+				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 				restore();
 			})();
@@ -414,6 +417,9 @@ function restore() {
 				$query->sql($sql);
 
 				$sql = "DELETE FROM ".SITE_DB.".tags";
+				$query->sql($sql);
+
+				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
@@ -697,6 +703,9 @@ function restore() {
 
 				$sql = "DELETE FROM ".SITE_DB.".tags";
 				$query->sql($sql);
+
+				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
+				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
 				restore();
@@ -805,6 +814,9 @@ function restore() {
 				$query->sql($sql);
 
 				$sql = "DELETE FROM ".SITE_DB.".tags";
+				$query->sql($sql);
+
+				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
 				$query->sql($sql);
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 
