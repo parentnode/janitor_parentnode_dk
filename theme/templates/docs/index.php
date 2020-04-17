@@ -59,6 +59,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "status" => 1, "
 				<h3><a href="/docs/class-items">Items</a></h3>
 				<p>Querying items and item data</p>
 			</li>
+			<li>
+				<h3><a href="/docs/class-taglist">Taglist</a></h3>
+				<p>Creating, getting, querying and manipulatig taglists and taglist data</p>
+			</li>
 		</ul>
 
 		<h3>Shop classes</h3>

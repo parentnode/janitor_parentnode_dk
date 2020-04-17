@@ -545,6 +545,12 @@ $expiry_date = $SubscriptionClass->calculateSubscriptionExpiry("annually", $star
 							</ul>
 						</div>
 
+						<div class="janitor">
+							<!-- list janitor functions used by function -->
+							<h5>Janitor</h5>
+							<p>None</p>
+						</div>
+
 					</div>
 
 				</div>

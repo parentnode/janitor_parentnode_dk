@@ -851,7 +851,9 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 
 						<div class="janitor">
 							<h5>Janitor</h5>
-							<p>Page::validPath</p>
+							<ul>
+								<li>Page::validPath</li>
+							</ul>
 						</div>
 
 					</div>
