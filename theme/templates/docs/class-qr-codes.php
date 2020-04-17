@@ -47,7 +47,7 @@
 								</div>
 							</dd>
 							<dt><span class="var">$_options</span></dt>
-							<dd>
+							<!-->
 								<div class="summary">
 									<span class="type">Array|False</span>
 								</div>
@@ -61,17 +61,17 @@
 										<dd>size in px</dd>
 										<dt><span class="value">margin (Integer)</span></dt>
 										<dd>margin size in px</dd>
-										<dt><span class="value">foreground_color (Array)</span></dt>
-										<dd>rgba array, e.g. ["r" => 255, "g" => 255, "b" => 255, "a" => 0]</dd>
-										<dt><span class="value">background_color (Array)</span></dt>
-										<dd>rgba array</dd>
+										<!-- <dt><span class="value">foreground_color (Array)</span></dt> -->
+										<!-- <dd>rgba array, e.g. ["r" => 255, "g" => 255, "b" => 255, "a" => 0]</!--> -->
+										<!-- <dt><span class="value">background_color (Array)</span></dt> -->
+										<!-- <dd>rgba array</dd> -->
 										<dt><span class="value">output_file (String)</span></dt>
 										<dd>will save the QR code as the specified filename</dd>
 										<dt><span class="value">format (String)</span></dt>
 										<dd>png (default) or svg</dd>
 									</dl>
 								</div>
-							</dd>
+							</!-->
 							
 						</dl>
 					</div>
@@ -107,7 +107,7 @@
 							<h5>Janitor</h5>
 							<ul>
 								<li>QrCodesGateway::init_adapter</li>
-								<li>JanitorEndroidQrCodeGenerator::create</li>
+								<li>JanitorBaconQrCode::create</li>
 							</ul>
 						</div>
 
