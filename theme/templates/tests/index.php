@@ -6,12 +6,12 @@
 	<ul class="tests">
 		<?= $HTML->link("Itemtype", "/janitor/tests/class-itemtype", array("wrapper" => "li.itemtype")) ?>
 		<?= $HTML->link("Items", "/janitor/tests/class-items", array("wrapper" => "li.items")) ?>
+		<?= $HTML->link("Taglist", "/janitor/tests/class-taglist", array("wrapper" => "li.taglist")) ?>
 	</ul>
 
 	<h3>Itemtypes classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("TypeMessage", "/janitor/tests/class-type-message", array("wrapper" => "li.type-message")) ?>
-		<?= $HTML->link("TypeTaglist", "/janitor/tests/class-type-taglist", array("wrapper" => "li.type-taglist")) ?>
 	</ul>
 
 	<h3>Shop classes</h3>
