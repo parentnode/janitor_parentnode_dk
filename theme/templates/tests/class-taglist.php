@@ -48,6 +48,16 @@ function restore() {
 	include_once("classes/items/taglist.class.php");
 	$query = new Query();
 
+	// Clean up the noises created during testing
+	$sql = "DELETE FROM ".SITE_DB.".tags";
+	$query->sql($sql);
+	$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
+	$query->sql($sql);
+	$sql = "DELETE FROM ".SITE_DB.".taggings";
+	$query->sql($sql);
+	$sql = "DELETE FROM ".SITE_DB.".taglists";
+	$query->sql($sql); // Clean up done
+
 	if($backup["all_taglists"]) {
 		foreach($backup["all_taglists"] as $taglist) {
 			$sql = "INSERT INTO ".SITE_DB.".taglists SET id = ".$taglist["id"].", name = '".$taglist["name"]."', handle = '".$taglist["handle"]."'";
@@ -88,7 +98,41 @@ function restore() {
 	<div class="tests getAllTags">
 		<h3>Taglist::getAllTags</h3>
 		<? 
-		if(1 && "getAllTags – Returns all the tags") {
+		if(1 && "getAllTags – Returns false for no tag in the entire system") {
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/items/taglist.class.php");
+
+				backup();
+				$TC = new Taglist();
+				$no_tags = $TC->getAllTags();
+
+				// ASSERT 
+				if(
+					$no_tags === false 
+				): ?>
+				<div class="testpassed"><p>Taglist::getAllTags – Returns false for no tag in the entire system – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::getAllTags – Returns false for no tag in the entire system – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests getAllTags">
+		<h3>Taglist::getAllTags</h3>
+		<? 
+		if(1 && "getAllTags – Returns all the tags from the entire system") {
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -98,11 +142,9 @@ function restore() {
 				$IC = new Items();
 				$model_tests = $IC->typeObject("tests");
 				$test_item_id = $model_tests->createTestItem();
-				$query = new Query();
 
 				backup();
 				$TC = new Taglist();
-				$no_tags = $TC->getAllTags();
 
 				$_POST["tags"] = "test:tag1";
 				$model_tests->addTag(["addTag", $test_item_id]);
@@ -120,26 +162,23 @@ function restore() {
 
 				// ASSERT 
 				if(
-					$no_tags === false
-					&& $tags
+					$tags
                     && count($tags) == 2
                     && $tags[0]["context"] == "test"
                     && $tags[0]["value"] == "tag1"
                     && $tags[1]["context"] == "test"
                     && $tags[1]["value"] == "tag2" 
 				): ?>
-				<div class="testpassed"><p>Taglist::getAllTags – Returns all the tags – correct</p></div>	
+				<div class="testpassed"><p>Taglist::getAllTags – Returns all the tags from the entire system – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
-				<div class="testfailed"><p>Taglist::getAllTags – Returns all the tags – error</p></div>
+				<div class="testfailed"><p>Taglist::getAllTags – Returns all the tags from the entire system – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".tags";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+
 			})();
 		}
 		?>
@@ -148,7 +187,7 @@ function restore() {
 	<div class="tests getTaglists">
 		<h3>Taglist::getTaglists</h3>
 		<? 
-		if(1 && "getTaglists – Returns all the taglists") { 
+		if(1 && "getTaglists – Returns false for no taglist in the entire system") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -160,6 +199,38 @@ function restore() {
 				$TC = new Taglist();
 				$no_taglists = $TC->getTaglists();
 
+				// ASSERT 
+				if(
+					$no_taglists === false
+				): ?>
+				<div class="testpassed"><p>Taglist::getTaglists – Returns false for no taglist in the entire system – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::getTaglists – Returns false for no taglist in the entire system – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests getTaglists">
+		<h3>Taglist::getTaglists</h3>
+		<? 
+		if(1 && "getTaglists – Returns all the taglists from the entire system") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				include_once("classes/items/taglist.class.php");
+				$query = new Query();
+
+				backup();
+				$TC = new Taglist();
+
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				$query->sql($sql);
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test2'";
@@ -170,26 +241,58 @@ function restore() {
 
 				// ASSERT 
 				if(
-					$no_taglists === false
-					&& $taglists
+					$taglists
 					&& count($taglists) == 2
 					&& $taglists[0]["name"] == "Test1"
 					&& $taglists[0]["handle"] == "test1"
 					&& $taglists[1]["name"] == "Test1"
 					&& $taglists[1]["handle"] == "test2" 
 				): ?>
-				<div class="testpassed"><p>Taglist::getTaglists – Returns all the taglists – correct</p></div>	
+				<div class="testpassed"><p>Taglist::getTaglists – Returns all the taglists from the entire system – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
-				<div class="testfailed"><p>Taglist::getTaglists – Returns all the taglists – error</p></div>
+				<div class="testfailed"><p>Taglist::getTaglists – Returns all the taglists from the entire system – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests getTaglist">
+		<h3>Taglist::getTaglist</h3>
+		<? 
+		if(1 && "getTaglist – One taglist's id or handle is sent in the parameter – Returns false for non-existing taglist") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/items/taglist.class.php");
+				$query = new Query();
+
+				backup();
+				$TC = new Taglist();
+				$no_taglist1 = $TC->getTaglist(array("handle"=>"test1"));
+				$no_taglist2 = $TC->getTaglist(array("id"=>100));
+
+				// ASSERT 
+				if(
+					$no_taglist1 === false
+					&& $no_taglist2 === false
+				): ?>
+				<div class="testpassed"><p>Taglist::getTaglist – One taglist's id or handle is sent in the parameter – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::getTaglist – One taglist's id or handle is sent in the parameter – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -209,8 +312,6 @@ function restore() {
 				
 				backup();
 				$TC = new Taglist();
-				$no_taglist1 = $TC->getTaglist(array("handle"=>"test1"));
-				$no_taglist2 = $TC->getTaglist(array("handle"=>"test1"));
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				$query->sql($sql);
@@ -226,9 +327,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					$no_taglist1 === false
-					&& $no_taglist2 === false
-					&& $taglist1
+					$taglist1
 					&& $taglist2
                     && $taglist1["name"] == "Test1"
                     && $taglist1["handle"] == "test1"
@@ -242,11 +341,8 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -255,7 +351,80 @@ function restore() {
 	<div class="tests addTaglistTag">
 		<h3>Taglist::addTaglistTag</h3>
 		<? 
-		if(1 && "addTaglistTag – An array of parameters is sent – Returns true when the corresponding tag is added to the corresponding taglist") { 
+		if(1 && "addTaglistTag – An array of parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/items/taglist.class.php");
+
+				backup();
+				$TC = new Taglist();
+				$no_taglist = $TC->addTaglistTag(["addTaglistTag", 200, 100]);
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::addTaglistTag – An array of parameters is sent – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::addTaglistTag – An array of parameters is sent – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests addTaglistTag">
+		<h3>Taglist::addTaglistTag</h3>
+		<? 
+		if(1 && "addTaglistTag – An array of parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/items/taglist.class.php");
+				$query = new Query();
+
+				backup();
+				$TC = new Taglist();
+				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
+				if($query->sql($sql)) {
+					$taglist_id = $query->lastInsertId();
+				}
+
+				// ACT
+				$no_taglist_tag = $TC->addTaglistTag(["addTaglistTag", $taglist_id, 100]);
+
+				// ASSERT 
+				if(
+					$no_taglist_tag === false
+				): ?>
+				<div class="testpassed"><p>Taglist::addTaglistTag – An array of parameters is sent – Returns false for non-existing tag – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::addTaglistTag – An array of parameters is sent – Returns false for non-existing tag – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests addTaglistTag">
+		<h3>Taglist::addTaglistTag</h3>
+		<? 
+		if(1 && "addTaglistTag – An array of parameters is sent") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -269,7 +438,6 @@ function restore() {
 
 				backup();
 				$TC = new Taglist();
-				$no_taglist_tag = $TC->addTaglistTag(["addTaglistTag", 200, 100]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -303,8 +471,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					$no_taglist_tag === false
-					&& $taglist_tags
+					$taglist_tags
 					&& count($taglist_tags) == 2
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -318,17 +485,8 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".tags";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -337,7 +495,84 @@ function restore() {
 	<div class="tests removeTaglistTag">
 		<h3>Taglist::removeTaglistTag</h3>
 		<? 
-		if(1 && "removeTaglistTag – An array of parameters is sent – Returns true when the corresponding tag is removed from the corresponding taglist") { 
+		if(1 && "removeTaglistTag – An array of parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+
+				// ACT
+				$no_taglist = $TC->removeTaglistTag(["removeTaglistTag", 200, 100]);
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::removeTaglistTag – An array of parameters is sent – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::removeTaglistTag – An array of parameters is sent – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests removeTaglistTag">
+		<h3>Taglist::removeTaglistTag</h3>
+		<? 
+		if(1 && "removeTaglistTag – An array of parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+				$query = new Query();
+
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
+				if($query->sql($sql)) {
+					$taglist_id = $query->lastInsertId(); // These are tags added to the taglist
+				}
+
+				// ACT
+				$no_taglist_tag = $TC->removeTaglistTag(["removeTaglistTag", $taglist_id, 100]);
+
+				// ASSERT 
+				if(
+					$no_taglist_tag === false
+				): ?>
+				<div class="testpassed"><p>Taglist::removeTaglistTag – An array of parameters is sent – Returns false for non-existing tag – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::removeTaglistTag – An array of parameters is sent – Returns false for non-existing tag – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests removeTaglistTag">
+		<h3>Taglist::removeTaglistTag</h3>
+		<? 
+		if(1 && "removeTaglistTag – An array of parameters is sent") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -412,18 +647,8 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".tags";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -432,7 +657,42 @@ function restore() {
 	<div class="tests updateTaglist">
 		<h3>Taglist::updateTaglist</h3>
 		<? 
-		if(1 && "updateTaglist – An array of parameters is sent – Returns true when the corresponding taglist is updated with the input values") { 
+		if(1 && "updateTaglist – An array of parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
+
+				// ACT
+				$no_taglist = $TC->updateTaglist(["updateTaglist", 200]);
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests updateTaglist">
+		<h3>Taglist::updateTaglist</h3>
+		<? 
+		if(1 && "updateTaglist – An array of parameters is sent") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -443,7 +703,6 @@ function restore() {
 				$query = new Query();
 				$TC = new Taglist();
 				backup(); // backed up and deleted to perform the test in an empty database
-				$no_taglist = $TC->updateTaglist(["updateTaglist", 200]);
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
 				if($query->sql($sql)) {
@@ -473,8 +732,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					!$no_taglist
-					&& $test_taglist
+					$test_taglist
 					&& count($test_taglist) == 1
 					&& $test_taglist[0]["name"] == "Test1"
 					&& $test_taglist[0]["handle"] == "test1"
@@ -483,19 +741,50 @@ function restore() {
 					&& $updated_taglist[0]["name"] == "testName"
 					&& $updated_taglist[0]["handle"] == "testhandle"
 				): ?>
-				<div class="testpassed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns true when the corresponding taglist is updated with the input values – correct</p></div>	
+				<div class="testpassed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns true when the corresponding taglist is updated with new values – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
-				<div class="testfailed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns true when the corresponding taglist is updated with the input values – error</p></div>
+				<div class="testfailed"><p>Taglist::updateTaglist – An array of parameters is sent – Returns true when the corresponding taglist is updated with new values – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests saveTaglist">
+		<h3>Taglist::saveTaglist</h3>
+		<? 
+		if(1 && "saveTaglist – An array of a single element is sent in the parameter – Returns false for non-existing inputed taglist name") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
+
+				// ACT
+				$no_taglist = $TC->saveTaglist(["saveTaglist"]); 
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::saveTaglist – An array of a single element is sent in the parameter – Returns false for non-existing inputed taglist name – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::saveTaglist – An array of a single element is sent in the parameter – Returns false for non-existing inputed taglist name – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -515,7 +804,6 @@ function restore() {
 				$query = new Query();
 				$TC = new Taglist();
 				backup(); // backed up and deleted to perform the test in an empty database
-				$no_taglist = $TC->saveTaglist(["updateTaglist"]);
 
 				// ACT
 
@@ -532,8 +820,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					!$no_taglist
-					&& $taglist
+					$taglist
 					&& count($taglist) == 1
 					&& $taglist[0]["name"] == "testName"
 				): ?>
@@ -544,21 +831,18 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
 	</div>
 
+
 	<div class="tests deleteTaglist">
 		<h3>Taglist::deleteTaglist</h3>
 		<? 
-		if(1 && "deleteTaglist – An array of a parameters is sent – Returns true when the corresponding taglist is deleted") { 
+		if(1 && "deleteTaglist – An array of a parameters is sent – Returns false for non-existing taglist") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -569,7 +853,40 @@ function restore() {
 				$query = new Query();
 				$TC = new Taglist();
 				backup(); // backed up and deleted to perform the test in an empty database
-				$no_taglist = $TC->deleteTaglist(["updateTaglist", 400]);
+				$no_taglist = $TC->deleteTaglist(["deleteTaglist", 400]);
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::deleteTaglist – An array of a parameters is sent – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::deleteTaglist – An array of a parameters is sent – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests deleteTaglist">
+		<h3>Taglist::deleteTaglist</h3>
+		<? 
+		if(1 && "deleteTaglist – An array of a parameters is sent") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+				$query = new Query();
+				$TC = new Taglist();
+				backup(); // backed up and deleted to perform the test in an empty database
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'testDelete', handle = 'testdelete'";
 				$query->sql($sql);
@@ -590,8 +907,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					!$no_taglist
-					&& $taglist
+					$taglist
 					&& count($taglist) == 1
 					&& $taglist[0]["name"] == "testDelete"
 					&& $taglist[0]["handle"] == "testdelete"
@@ -604,12 +920,44 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
+
+	<div class="tests duplicateTaglist">
+		<h3>Taglist::duplicateTaglist</h3>
+		<? 
+		if(1 && "duplicateTaglist – An array of parameters is sent – Returns false for non-existing taglist") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+
+				// ACT
+				$no_taglist = $TC->duplicateTaglist(["duplicateTaglist", 200]);
+
+				// ASSERT 
+				if(
+					$no_taglist === false
+				): ?>
+				<div class="testpassed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns false for non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns false for non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>
@@ -633,7 +981,6 @@ function restore() {
 
 				backup(); // backed up and deleted to perform the test in an empty database
 				$TC = new Taglist();
-				$no_taglist = $TC->duplicateTaglist(["removeTaglistTag", 200]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -660,6 +1007,7 @@ function restore() {
 						$sql = "SELECT * FROM ".SITE_DB.".taglist_tags";
 						if($query->sql($sql)) {
 							$taglist_tags = $query->results();
+							//print_r($taglist_tags);
 							if($taglist_tags) {
 								$sql = "SELECT tags.id, tags.context, tags.value, taglist_tags.position FROM ".SITE_DB.".tags, ".SITE_DB.".taglist_tags WHERE tags.id = taglist_tags.tag_id AND taglist_tags.taglist_id = $taglist_id ORDER BY taglist_tags.position ASC";
 								if($query->sql($sql)) {
@@ -674,21 +1022,28 @@ function restore() {
 				if($tags) {
 					$TC = new Taglist();
 					$duplicated_taglist = $TC->duplicateTaglist(["duplicateTaglist", $taglist_id]);
+					//print_r($duplicated_taglist);
 				}
 
 				// ASSERT 
 				if(
-					!$no_taglist
+					$taglist
+					&& $duplicated_taglist
 					&& count($taglist_tags) == 2
+					&& count($duplicated_taglist["tags"]) == 2
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
 					&& $tags[0]["position"] == $duplicated_taglist["tags"][0]["position"]
 					&& $tags[1]["context"] == "test"
 					&& $tags[1]["value"] == "tag2"
+					&& $duplicated_taglist["tags"][0]["context"] == "test"
+					&& $duplicated_taglist["tags"][0]["value"] == "tag1"
+					&& $duplicated_taglist["tags"][1]["context"] == "test"
+					&& $duplicated_taglist["tags"][1]["value"] == "tag2"
+					&& $tags[0]["position"] == $duplicated_taglist["tags"][0]["position"]
 					&& $tags[1]["position"] == $duplicated_taglist["tags"][1]["position"]
 					&& $taglist["name"] != $duplicated_taglist["name"]
 					&& $taglist["handle"] != $duplicated_taglist["handle"]
-
 				): ?>
 				<div class="testpassed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns the duplicated taglist when the duplication is made on the corresponding taglist – correct</p></div>	
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
@@ -697,17 +1052,42 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".tags";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
-				$query->sql($sql);
+				restore();
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+			})();
+		}
+		?>
+	</div>
 
+	<div class="tests updateOrder">
+		<h3>Taglist::updateOrder</h3>
+		<? 
+		if(1 && "updateOrder – An array of parameters is sent – Returns false for a non-existing taglist") { 
+				// #method# – #test conditions# – #expected result#
+
+			(function() {
+
+				// ARRANGE
+
+				include_once("classes/items/taglist.class.php");
+
+				backup(); // backed up and deleted to perform the test in an empty database
+				$TC = new Taglist();
+
+				// ACT
+				$no_order = $TC->updateOrder(["updateOrder", 200]); //Update the order of tags for a non-existing taglist
+
+				// ASSERT 
+				if(
+					$no_order === false
+				): ?>
+				<div class="testpassed"><p>Taglist::updateOrder – An array of parameters is sent – Returns false for a non-existing taglist – correct</p></div>	
+				<!-- #Class#::#method# – #test conditions# – #expected result# -->
+				<? else: ?>
+				<div class="testfailed"><p>Taglist::updateOrder – An array of parameters is sent – Returns false for a non-existing taglist – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
 				restore();
 			})();
 		}
@@ -717,7 +1097,7 @@ function restore() {
 	<div class="tests updateOrder">
 		<h3>Taglist::updateOrder</h3>
 		<? 
-		if(1 && "updateOrder – An array of parameters is sent – Returns true when the order of the tags of the corresponding taglist is updated") { 
+		if(1 && "updateOrder – An array of parameters is sent") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
@@ -732,7 +1112,6 @@ function restore() {
 
 				backup(); // backed up and deleted to perform the test in an empty database
 				$TC = new Taglist();
-				$no_order = $TC->updateOrder(["updateOrder", 200]);
 
 				$_POST["tags"] = "test:tag1";
 				$tag1 = $model_tests->addTag(["addTag", $test_item_id]);
@@ -788,8 +1167,7 @@ function restore() {
 
 				// ASSERT 
 				if(
-					!$no_order
-					&& $updated
+					$updated
 					&& count($taglist_tags) == 3
 					&& $tags[0]["context"] == "test"
 					&& $tags[0]["value"] == "tag1"
@@ -809,18 +1187,8 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-
-				$sql = "DELETE FROM ".SITE_DB.".taglists";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".tags";
-				$query->sql($sql);
-
-				$sql = "DELETE FROM ".SITE_DB.".taglist_tags";
-				$query->sql($sql);
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
-
 				restore();
+				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
 		?>

@@ -1,6 +1,6 @@
 <div class="scene docpage i:docpage">
 	<h1>The Taglist Class</h1>
-	<p>Creating, getting, querying and manipulatig taglists and taglist data</p>
+	<p>A taglist is a sortable collection of tags. It allows you to create a list of selected tags and 	arrange them in the order you choose. With the taglist you can then create lists of tag-related content, ordered by the taglist, rather than the default order of tags.</p>
 
 	<div class="section functions">
 		<div class="header">
@@ -17,9 +17,9 @@
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">getAllTags</dd>
+							<dd class="name">Taglist::getAllTags</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">No parameter</span> = 
+							<dd class="syntax"><span class="type">Array|False</span> = 
 								Taglist::getAllTags();
 							</dd>
 						</dl>
@@ -27,7 +27,7 @@
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get all the tags</p>
+						<p>Get all the tags from the entire system.</p>
 
 					</div>
 
@@ -35,9 +35,10 @@
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
+							<dt><span class="var">None</span></dt>
 							<dd>
 								<div class="summary">
-									<p>No parameters sent</p>
+									<p>None</p>
 								</div>
 							</dd>
 						</dl>
@@ -45,7 +46,7 @@
 
 					<div class="return">
 						<h4>Return values</h4>
-						<p><span class="type">Array|false</span> An array of at least one tag object. False on either empty array or error.</p>
+						<p><span class="type">Array|false</span> An array of at least one tag object. False on error.</p>
 					</div>
 
 					<div class="examples">
@@ -54,6 +55,32 @@
 						<div class="example"><code>$TC = new Taglist();
 
 $tags = $TC->getAllTags();</code>
+							<p>Get all the tags from the entire system. Return value:</p>
+							<code>Array
+(
+    [0] => Array
+        (
+            [id] => 168
+            [context] => test
+            [value] => tag1
+            [description] => 
+        )
+    [1] => Array
+        (
+            [id] => 169
+            [context] => test
+            [value] => tag2
+            [description] => 
+        )
+    [2] => Array
+        (
+            [id] => 170
+            [context] => test
+            [value] => tag3
+            [description] => 
+        )
+)
+</code>
 						</div>
 					</div>
 
@@ -64,7 +91,7 @@ $tags = $TC->getAllTags();</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li><p>None</p></li>
 							</ul>
 						</div>
 
@@ -89,9 +116,9 @@ $tags = $TC->getAllTags();</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">getTaglists</dd>
+							<dd class="name">Taglist::getTaglists</dd>
 							<dt class="syntax">Syntax</dt>
-							<dd class="syntax"><span class="type">No parameter</span> = 
+							<dd class="syntax"><span class="type">Array|False</span> = 
 								Taglist::getTaglists();
 							</dd>
 						</dl>
@@ -99,7 +126,7 @@ $tags = $TC->getAllTags();</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get all the taglists</p>
+						<p>Get all the taglists from the entire system.</p>
 
 					</div>
 
@@ -107,9 +134,10 @@ $tags = $TC->getAllTags();</code>
 						<h4>Parameters</h4>
 
 						<dl class="parameters">
+							<dt><span class="var">None</span></dt>
 							<dd>
 								<div class="summary">
-									<p>No parameters sent</p>
+									<p>None</p>
 								</div>
 							</dd>
 						</dl>
@@ -161,7 +189,7 @@ $taglists = $TC->getTaglists();</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">getTaglist</dd>
+							<dd class="name">Taglist::getTaglist</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
 								Taglist::getTaglist( 
@@ -173,7 +201,7 @@ $taglists = $TC->getTaglists();</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Get a specific taglist.</p>
+						<p>Get a specific taglist, specified in the parameter by the taglist_id or handle.</p>
 					</div>
 
 					<div class="parameters">
@@ -211,12 +239,12 @@ $taglists = $TC->getTaglists();</code>
 						<p>Get taglist for taglist_id</p>
 						<div class="example">
 							<code>$TC = new Taglist();
-$taglist = $TC->Taglist(["taglist_id" => $taglist_id]);</code>
+$taglist = $TC->getTaglist(["taglist_id" => $taglist_id]);</code>
 						</div>
 						<p>Get taglist for handle</p>
 						<div>
 							<code>$TC = new Taglist();
-$taglist = $TC->Taglist(["handle" => $handle]);</code>
+$taglist = $TC->getTaglist(["handle" => $handle]);</code>
 						</div>
 					</div>
 
@@ -227,7 +255,8 @@ $taglist = $TC->Taglist(["handle" => $handle]);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>foreach</li>
+								<li>switch...case</li>
 							</ul>
 						</div>
 
@@ -252,7 +281,7 @@ $taglist = $TC->Taglist(["handle" => $handle]);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">addTaglistTag</dd>
+							<dd class="name">Taglist::addTaglistTag</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::addTaglistTag(
@@ -264,7 +293,7 @@ $taglist = $TC->Taglist(["handle" => $handle]);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Add a specific tag to a specific taglist</p>
+						<p>Add a specific tag to a specific taglist. Specifications are sent through the action parameter.</p>
 						<p>/#controller#/addTaglistTag/#taglist_id#/#tag_id#</p>
 					</div>
 
@@ -341,7 +370,7 @@ $TC->addTaglistTag($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">removeTaglistTag</dd>
+							<dd class="name">Taglist::removeTaglistTag</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::removeTaglistTag(
@@ -353,7 +382,7 @@ $TC->addTaglistTag($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Remove a specific tag from a specific taglist</p>
+						<p>Remove a specific tag from a specific taglist. Specifications are sent through the action parameter.</p>
 						<p>/#controller#/removeTaglistTag/#taglist_id#/#tag_id#</p>
 					</div>
 
@@ -430,7 +459,7 @@ $TC->removeTaglistTag($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">updateTaglist</dd>
+							<dd class="name">Taglist::updateTaglist</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::updateTaglist(
@@ -442,7 +471,7 @@ $TC->removeTaglistTag($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Update a specific taglist</p>
+						<p>Update a specific taglist. Specification is sent through the action parameter.</p>
 						<p>User input information is in $_POST</p>
 						<p>/#controller#/updateTaglist/#taglist_id#</p>
 					</div>
@@ -539,7 +568,7 @@ $TC->updateTaglist($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">saveTaglist</dd>
+							<dd class="name">Taglist::saveTaglist</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::saveTaglist(
@@ -551,7 +580,7 @@ $TC->updateTaglist($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Save a taglist</p>
+						<p>Save a taglist.</p>
 						<p>User input information is in $_POST</p>
 						<p>/#controller#/saveTaglist</p>
 					</div>
@@ -641,7 +670,7 @@ $TC->saveTaglist($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">deleteTaglist</dd>
+							<dd class="name">Taglist::deleteTaglist</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::deleteTaglist(
@@ -653,7 +682,7 @@ $TC->saveTaglist($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Delete a specific taglist</p>
+						<p>Delete a specific taglist. Specification is sent through the action parameter.</p>
 						<p>/#controller#/deleteTaglist/#taglist_id#</p>
 					</div>
 
@@ -728,7 +757,7 @@ $TC->deleteTaglist($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">duplicateTaglist</dd>
+							<dd class="name">Taglist::duplicateTaglist</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Array|False</span> = 
 								Taglist::duplicateTaglist(
@@ -740,7 +769,7 @@ $TC->deleteTaglist($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Duplicate a specific taglist</p>
+						<p>Duplicate a specific taglist. Specification is sent through the action parameter.</p>
 						<p>Information is in $_POST</p>
 						<p>/#controller#/duplicateTaglist/#taglist_id#</p>
 					</div>
@@ -830,7 +859,7 @@ $TC->duplicateTaglist($action);</code>
 						<h4>Definition</h4>
 						<dl class="definition">
 							<dt class="name">Name</dt>
-							<dd class="name">updateOrder</dd>
+							<dd class="name">Taglist::updateOrder</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Boolean</span> = 
 								Taglist::updateOrder(
@@ -842,7 +871,7 @@ $TC->duplicateTaglist($action);</code>
 
 					<div class="description">
 						<h4>Description</h4>
-						<p>Update order of the tags of a specific taglist</p>
+						<p>Update order of the tags of a specific taglist. Specification is sent through the action parameter.</p>
 						<p>/#controller#/updateOrder/#taglist_id#</p>
 					</div>
 
