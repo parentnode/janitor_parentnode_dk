@@ -14,8 +14,8 @@ class QrCodesGateway {
 
 		if(!$this->adapter) {
 
-			include_once("classes/adapters/qr_codes/endroid-qr-code-generator.class.php");
-			$this->adapter = new JanitorEndroidQrCodeGenerator();
+			include_once("classes/adapters/qr_codes/bacon-qr-code.class.php");
+			$this->adapter = new JanitorBaconQrCode();
 		}
 	}
 
@@ -25,9 +25,9 @@ class QrCodesGateway {
 	 * @param string|array|mixed $content – array is converted to json-encoded string. Everything else is directly converted to string. 
 	 * @param array|false $_options
 	 * * size (number): size in px
-	 * * margin (number): margin size in px
-	 * * foreground_color (array): rgba array, e.g. ["r" => 255, "g" => 255, "b" => 255, "a" => 0]
-	 * * background_color (array): rgba array
+	 * * margin (boolean): toggles a column-sized margin
+	 * * DISABLED foreground_color (array): rgba array, e.g. ["r" => 255, "g" => 255, "b" => 255, "a" => 0]
+	 * * DISABLED background_color (array): rgba array
 	 * * output_file (string): will save the QR code as the specified filename
 	 * * format (string): png (default) or svg
 	 * 
@@ -40,9 +40,9 @@ class QrCodesGateway {
 		if($this->adapter) {
 
 			$size = false;
-			$margin = false;
-			$foreground_color = false;
-			$background_color = false;
+			$margin = true;
+			// $foreground_color = false;
+			// $background_color = false;
 			$output_file = false;
 			$format = false;
 
@@ -52,8 +52,8 @@ class QrCodesGateway {
 		
 						case "size"                   : $size                   = $_value; break;
 						case "margin"                 : $margin                 = $_value; break;
-						case "foreground_color"       : $foreground_color       = $_value; break;
-						case "background_color"       : $background_color       = $_value; break;
+						// case "foreground_color"       : $foreground_color       = $_value; break;
+						// case "background_color"       : $background_color       = $_value; break;
 						
 						case "output_file"            : $output_file            = $_value; break;
 						case "format"                 : $format                 = $_value; break;
@@ -62,12 +62,14 @@ class QrCodesGateway {
 				}
 			}
 
+			$margin ? $margin = 1 : $margin = 0;
+
 			return $this->adapter->create($content, [
 
 				"size" => $size,
 				"margin" => $margin,
-				"foreground_color" => $foreground_color,
-				"background_color" => $background_color,
+				// "foreground_color" => $foreground_color,
+				// "background_color" => $background_color,
 
 				"output_file" => $output_file,
 				"format" => $format,

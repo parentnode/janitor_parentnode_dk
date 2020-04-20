@@ -573,8 +573,8 @@ class TypeTests extends Itemtype {
 		if($item_id) {
 	
 			$item = $IC->getItem(["id" => $item_id]);
-			$itemtype = $item["itemtype"];
-			$model_item = $IC->TypeObject($itemtype);
+			$model_item = $IC->TypeObject($item["itemtype"]);
+			
 	
 			// delete subscriptions
 			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id";
@@ -596,7 +596,7 @@ class TypeTests extends Itemtype {
 
 		// check that item was deleted
 		$remaining_itemtype_items = false;
-		if($item_id) {
+		if($itemtype) {
 			$sql = "SELECT * FROM ".UT_ITEMS." WHERE itemtype = '$itemtype'";
 			$remaining_itemtype_items = $query->sql($sql); 
 		}

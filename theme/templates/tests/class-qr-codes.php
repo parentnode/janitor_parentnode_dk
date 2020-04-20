@@ -204,25 +204,25 @@
 	
 			})();
 		}
-		if(1 && "create – pass content as string; pass filename; pass custom margin size – save QR code png with custom margin size; return QR code path") {
+		if(1 && "create – pass content as string; pass filename; pass margin false – save QR code png with no margin; return QR code path") {
 
 			(function() {
 					
 				// ARRANGE
 				$filename = LOCAL_PATH."/templates/tests/qr_codes/qr-test.png";
-				$reference = LOCAL_PATH."/templates/tests/qr_codes/references/qr-test_string_custom_margin.png";
+				$reference = LOCAL_PATH."/templates/tests/qr_codes/references/qr-test_string_no_margin.png";
 
 				// ACT
-				$output_file = qr_codes()->create("test", ["output_file" => $filename, "margin" => 50]);
+				$output_file = qr_codes()->create("test", ["output_file" => $filename, "margin" => false]);
 				
 				// ASSERT 
 				if(
 					$output_file == $filename
 					&& file_get_contents($output_file) == file_get_contents($reference) 
 				): ?>
-				<div class="testpassed"><p>QrCodesGateway::create – pass content as string; pass filename; pass custom margin size – save QR code png with custom margin size; return QR code path – correct</p></div>
+				<div class="testpassed"><p>QrCodesGateway::create – pass content as string; pass filename; pass margin false – save QR code png with no margin; return QR code path – correct</p></div>
 				<? else: ?>
-				<div class="testfailed"><p>QrCodesGateway::create – pass content as string; pass filename; pass custom margin size – save QR code png with custom margin size; return QR code path – error</p></div>
+				<div class="testfailed"><p>QrCodesGateway::create – pass content as string; pass filename; pass margin false – save QR code png with no margin; return QR code path – error</p></div>
 				<? endif; 
 				
 				// CLEAN UP
@@ -230,7 +230,8 @@
 	
 			})();
 		}
-		if(1 && "create – pass content as string; pass filename; pass custom colors – save QR code png with custom colors; return QR code path") {
+		// temporarily disabled
+		if(0 && "create – pass content as string; pass filename; pass custom colors – save QR code png with custom colors; return QR code path") {
 
 			(function() {
 					
@@ -260,6 +261,7 @@
 	
 			})();
 		}
+		
 		if(1 && "create – pass content as string; pass filename; pass custom format (svg) – save QR code svg; return QR code path") {
 
 			(function() {
