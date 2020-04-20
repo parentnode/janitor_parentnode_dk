@@ -1533,6 +1533,8 @@ $post_model = $IC->typeObject("post");
 						]
 					]
 				]);
+
+				
 	
 				// ACT
 				$prices = $IC->getPrices(["item_id" => $test_item_id]);
@@ -1541,8 +1543,8 @@ $post_model = $IC->typeObject("post");
 				if(
 					$prices &&
 					count($prices) == 2 &&
-					$prices[0]["name"] == "offer" &&
-					$prices[1]["name"] == "default" &&
+					$prices[0]["type"] == "offer" &&
+					$prices[1]["type"] == "default" &&
 					$prices[0]["price"] == "50" &&
 					$prices[1]["price"] == "100"
 				): ?>
@@ -1588,7 +1590,7 @@ $post_model = $IC->typeObject("post");
 				if(
 					$prices &&
 					count($prices) == 1 &&
-					$prices[0]["name"] == "default" &&
+					$prices[0]["type"] == "default" &&
 					$prices[0]["price"] == 100 &&
 					$prices[0]["currency"] == "XXX"
 				): ?>
