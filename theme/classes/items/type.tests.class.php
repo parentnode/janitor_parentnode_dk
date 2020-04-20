@@ -523,6 +523,13 @@ class TypeTests extends Itemtype {
 
 				$model_item->delete(["delete", $item["id"]]);
 
+				// flush price_types cache
+				include_once("classes/system/system.class.php");
+				$SysC = new System();
+				$_POST["cache-key"] = "price_types";
+				$SysC->flushFromCache(["flushFromCache"]);
+				unset($_POST);
+
 			}
 
 		}
@@ -581,6 +588,13 @@ class TypeTests extends Itemtype {
 			$query->sql($sql);
 	
 			$model_item->delete(["delete",$item_id]);
+
+			// flush price_types cache
+			include_once("classes/system/system.class.php");
+			$SysC = new System();
+			$_POST["cache-key"] = "price_types";
+			$SysC->flushFromCache(["flushFromCache"]);
+			unset($_POST);
 		}
 
 		// Delete by currency id
