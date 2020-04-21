@@ -953,6 +953,7 @@ $TC->duplicateTaglist($action);</code>
         )
 
 )
+</code>
 						</div>
 					</div>
 
