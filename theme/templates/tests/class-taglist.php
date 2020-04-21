@@ -811,6 +811,7 @@ function restore() {
 					//unset($_POST);
 
 					$taglist_id = $TC->saveTaglist(["saveTaglist"]);
+					//print_r($taglist_id);
 					unset($_POST);
 
 					$sql = "SELECT * FROM ".SITE_DB.".taglists WHERE id = ".$taglist_id["id"];
@@ -1022,7 +1023,6 @@ function restore() {
 				if($tags) {
 					$TC = new Taglist();
 					$duplicated_taglist = $TC->duplicateTaglist(["duplicateTaglist", $taglist_id]);
-					//print_r($duplicated_taglist);
 				}
 
 				// ASSERT 
@@ -1045,12 +1045,12 @@ function restore() {
 					&& $taglist["name"] != $duplicated_taglist["name"]
 					&& $taglist["handle"] != $duplicated_taglist["handle"]
 				): ?>
-				<div class="testpassed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns the duplicated taglist when the duplication is made on the corresponding taglist – correct</p></div>	
+				<div class="testpassed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns the duplicated taglist when the duplication is made on the corresponding taglist – correct</p></div>
 				<!-- #Class#::#method# – #test conditions# – #expected result# -->
 				<? else: ?>
 				<div class="testfailed"><p>Taglist::duplicateTaglist – An array of parameters is sent – Returns the duplicated taglist when the duplication is made on the corresponding taglist – error</p></div>
 				<? endif; 
-
+				//print_r($duplicated_taglist);
 				// CLEAN UP
 				restore();
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
