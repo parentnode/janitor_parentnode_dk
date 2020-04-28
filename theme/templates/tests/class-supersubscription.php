@@ -709,6 +709,90 @@ if($query->sql($sql)) {
 			})();
 
 		endif; 
+
+		if(1 && "renewSubscriptions – renew subscription with custom price of 0 – return true, renewed subscription has custom price of 0"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 2, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => 0]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$result = $SuperSubscriptionClass->renewSubscriptions(["renewSubscriptions", $test_user_id]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]); 
+
+
+				// ASSERT
+				if(
+					$result
+					&& $subscription
+					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
+					&& $subscription["custom_price"] === "0"
+
+				):?>
+				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price of 0 – return true, renewed subscription has custom price of 0 – correct</p></div>
+				<? else: 
+					
+				?>
+				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price of 0 – return true, renewed subscription has custom price of 0 – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+
+		if(1 && "renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 2, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => 50.5]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$result = $SuperSubscriptionClass->renewSubscriptions(["renewSubscriptions", $test_user_id]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]); 
+
+
+				// ASSERT
+				if(
+					$result
+					&& $subscription
+					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
+					&& $subscription["custom_price"] === "50,5"
+
+				):?>
+				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals – correct</p></div>
+				<? else: 
+					
+				?>
+				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
 		
 		?>
 

@@ -16,8 +16,8 @@
 
 	<h3>Shop classes</h3>
 	<ul class="tests">
-		<?= $HTML->link("Shop", "/janitor/tests/shop", array("wrapper" => "li.shop")) ?>
-		<?= $HTML->link("SuperShop", "/janitor/tests/supershop", array("wrapper" => "li.supershop")) ?>
+		<?= $HTML->link("Shop", "/janitor/tests/class-shop", array("wrapper" => "li.shop")) ?>
+		<?= $HTML->link("SuperShop", "/janitor/tests/class-supershop", array("wrapper" => "li.supershop")) ?>
 	</ul>
 
 	<h3>Subscription classes</h3>

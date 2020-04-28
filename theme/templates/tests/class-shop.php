@@ -216,6 +216,38 @@ function deleteTestCart($cart_reference) {
 			})();
 		} 
 
+		if(1 && "getPrice – item with default price of 0 – return default price") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 0]);
+
+				// ACT
+				
+				$price = $SC->getPrice($test_item_id);
+				
+				// ASSERT 
+				if(
+					$price
+					&& $price["price"] == "0"
+					&& $price["type"] == "default"
+				): ?>
+				<div class="testpassed"><p>Shop::getPrice – item with default price of 0 – return default price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::getPrice – item with default price of 0 – return default price – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
+	
+			})();
+		} 
+
 		if(1 && "getPrice – item with default price and cheaper offer price – return offer price") {
 
 			(function() {
@@ -921,6 +953,47 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
+		if(0 && "addToCart – add item with custom_price of 0 – return cart with cart item with custom price of 0") {
+
+			(function(){
+
+				// ARRANGE
+				$SC = new Shop();
+				$IC = new Items();
+				$model_tests = $IC->TypeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				$cart = $SC->addCart(["addCart"]);
+				$cart_reference = $cart["cart_reference"];
+
+				// ACT
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$_POST["custom_name"] = "Test item with special price";
+				$_POST["custom_price"] = 0;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ASSERT
+				if(
+					$cart
+					&& $cart["items"][0]["item_id"] == $test_item_id
+					&& $cart["items"][0]["custom_price"] === "0"
+				): ?>
+				<div class="testpassed"><p>Shop::addToCart() – add item with custom_price of 0 – return cart with cart item with custom price of 0 – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::addToCart() – add item with custom_price of 0 – return cart with cart item with custom price of 0 – error</p></div>
+				<? endif; 
+
+				
+				// CLEAN UP
+				deleteTestItem($test_item_id);
+				deleteTestCart($cart_reference);
+
+			})();
+		}
+
 		if(1 && "addToCart – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items ") {
 
 			(function(){
@@ -1523,6 +1596,7 @@ function deleteTestCart($cart_reference) {
 			})();
 
 		}
+
 		?>
 
 	</div>
@@ -1874,6 +1948,135 @@ function deleteTestCart($cart_reference) {
 				
 			})();
 		}
+
+		if(1 && "newOrderFromCart – cart_item with custom price of 0 – return order with total_price of 0, status = 1, payment_status = paid") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new Shop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = $model_tests->createTestUser();
+				$item_id = $model_tests->createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = 0;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["total_price"] === "0" &&
+					$order["status"] == 1 &&
+					$order["payment_status"] == 2 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>Shop::newOrderFromCart – cart_item with custom price of 0 – return order with total_price of 0, status = 1, payment_status = paid – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::newOrderFromCart – cart_item with custom price of 0 – return order with total_price of 0, status = 1, payment_status = paid – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new Shop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = $model_tests->createTestUser();
+				$item_id = $model_tests->createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = 50.5;
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["total_price"] == 50.5 &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>Shop::newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
 
 		if(1 && "newOrderFromCart – cart_item with custom name – return order with custom name") {
 
