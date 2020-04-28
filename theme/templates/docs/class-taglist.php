@@ -55,7 +55,7 @@
 						<div class="example"><code>$TC = new Taglist();
 
 $tags = $TC->getAllTags();</code>
-							<p>Get all the tags from the entire system. Return value:</p>
+							<p>Get all the tags from the entire system. Return value/s:</p>
 							<code>Array
 (
     [0] => Array
@@ -64,21 +64,24 @@ $tags = $TC->getAllTags();</code>
             [context] => test
             [value] => tag1
             [description] => 
-        )
+		)
+
     [1] => Array
         (
             [id] => 169
             [context] => test
             [value] => tag2
             [description] => 
-        )
+		)
+
     [2] => Array
         (
             [id] => 170
             [context] => test
             [value] => tag3
             [description] => 
-        )
+		)
+
 )
 </code>
 						</div>
@@ -91,7 +94,7 @@ $tags = $TC->getAllTags();</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li><p>None</p></li>
+								<li>if</li>
 							</ul>
 						</div>
 
@@ -145,15 +148,48 @@ $tags = $TC->getAllTags();</code>
 
 					<div class="return">
 						<h4>Return values</h4>
-						<p><span class="type">Array|false</span> An array of at least one taglist object. False on either empty array or error.</p>
+						<p><span class="type">Array|false</span> An array of at least one taglist object. False on error.</p>
 					</div>
 
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$TC = new Taglist();
-
+						<div class="example">
+							<code>$TC = new Taglist();
 $taglists = $TC->getTaglists();</code>
+							<p>Get all the tags from the entire system. Return value/s:</p>
+							<code>Array
+(
+    [0] => Array
+        (
+            [id] => 213
+            [name] => taglist1
+            [handle] => taglist1
+        )
+
+    [1] => Array
+        (
+            [id] => 229
+            [name] => TagList3
+            [handle] => taglist3
+        )
+
+    [2] => Array
+        (
+            [id] => 230
+            [name] => Taglist2
+            [handle] => taglist2
+        )
+
+    [3] => Array
+        (
+            [id] => 408
+            [name] => Taglist4
+            [handle] => taglist4
+        )
+
+)
+</code>
 						</div>
 					</div>
 
@@ -164,7 +200,7 @@ $taglists = $TC->getTaglists();</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>if</li>
 							</ul>
 						</div>
 
@@ -231,7 +267,7 @@ $taglists = $TC->getTaglists();</code>
 
 					<div class="return">
 						<h4>Return values</h4>
-						<p><span class="type">Array|false</span> An array of one taglist object. False on either error or an empty array.</p>
+						<p><span class="type">Array|false</span> An array of one taglist object. False on error.</p>
 					</div>
 
 					<div class="examples">
@@ -240,11 +276,67 @@ $taglists = $TC->getTaglists();</code>
 						<div class="example">
 							<code>$TC = new Taglist();
 $taglist = $TC->getTaglist(["taglist_id" => $taglist_id]);</code>
+							<p>Get the taglist. Return value:</p>
+							<code>Array
+(
+    [id] => 408
+    [name] => Taglist4
+    [handle] => taglist4
+    [tags] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 168
+                    [context] => test
+                    [value] => tag1
+                    [position] => 0
+                )
+
+            [1] => Array
+                (
+                    [id] => 169
+                    [context] => test
+                    [value] => tag2
+                    [position] => 0
+                )
+
+        )
+
+)
+</code>
 						</div>
 						<p>Get taglist for handle</p>
 						<div>
 							<code>$TC = new Taglist();
 $taglist = $TC->getTaglist(["handle" => $handle]);</code>
+							<p>Get the taglist. Return value:</p>
+							<code>Array
+(
+    [id] => 408
+    [name] => Taglist4
+    [handle] => taglist4
+    [tags] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 168
+                    [context] => test
+                    [value] => tag1
+                    [position] => 0
+                )
+
+            [1] => Array
+                (
+                    [id] => 169
+                    [context] => test
+                    [value] => tag2
+                    [position] => 0
+                )
+
+        )
+
+)
+</code>
 						</div>
 					</div>
 
@@ -256,6 +348,7 @@ $taglist = $TC->getTaglist(["handle" => $handle]);</code>
 							<h5>PHP</h5>
 							<ul>
 								<li>foreach</li>
+								<li>if...else</li>
 								<li>switch...case</li>
 							</ul>
 						</div>
@@ -304,7 +397,7 @@ $taglist = $TC->getTaglist(["handle" => $handle]);</code>
 							<dt><span class="var">$action</span></dt>
 							<dd>
 								<div class="summary">
-									<span class="type">Array</span> Action array.
+									<span class="type">Array</span> of REST parameters sent in current request
 								</div>
 								<!-- action details -->
 								<div class="details">
@@ -312,12 +405,12 @@ $taglist = $TC->getTaglist(["handle" => $handle]);</code>
 									<h5>Action parameters</h5>
 									<dl class="options">
 										<!-- specific actions -->
-										<dt><span class="value">$action[0]</span></dt>
+										<dt><span class="value">0</span></dt>
 										<dd>"addTaglistTag"</dd>
-										<dt><span class="value">$action[1]</span></dt>
-										<dd>#taglist_id#</dd>
-										<dt><span class="value">$action[2]</span></dt>
-										<dd>#tag_id#</dd>
+										<dt><span class="value">1</span></dt>
+										<dd>taglist_id</dd>
+										<dt><span class="value">2</span></dt>
+										<dd>tag_id</dd>
 									</dl>
 								</div>
 							</dd>
@@ -332,7 +425,8 @@ $taglist = $TC->getTaglist(["handle" => $handle]);</code>
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$TC = new Taglist();
+						<div class="example">
+							<code>$TC = new Taglist();
 $TC->addTaglistTag($action);</code>
 						</div>
 					</div>
@@ -344,7 +438,7 @@ $TC->addTaglistTag($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>if</li>
 							</ul>
 						</div>
 
@@ -355,6 +449,7 @@ $TC->addTaglistTag($action);</code>
 								<li>Query::sql</li>
 								<li>Query::results</li>
 								<li>Query::checkDbExistence</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
@@ -433,7 +528,7 @@ $TC->removeTaglistTag($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>if</li>
 							</ul>
 						</div>
 
@@ -444,6 +539,7 @@ $TC->removeTaglistTag($action);</code>
 								<li>Query::sql</li>
 								<li>Query::results</li>
 								<li>Query::checkDbExistence</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
@@ -536,8 +632,8 @@ $TC->updateTaglist($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
 								<li>count</li>
+								<li>if...else</li>
 							</ul>
 						</div>
 
@@ -552,6 +648,7 @@ $TC->updateTaglist($action);</code>
 								<li>Model::validateList</li>
 								<li>Model::getProperty</li>
 								<li>Model::getPostedEntities</li>
+								<li>Message::addMessage</li>
 								<li>superNormalize</li>
 							</ul>
 						</div>
@@ -626,8 +723,15 @@ $TC->updateTaglist($action);</code>
 					<div class="examples">
 						<h4>Examples</h4>
 
-						<div class="example"><code>$TC = new Taglist();
+						<div class="example">
+							<code>$TC = new Taglist();
 $TC->saveTaglist($action);</code>
+							<p>Save the taglist. Return value:</p>
+							<code>Array
+(
+    [id] => 460
+)
+</code>
 						</div>
 					</div>
 
@@ -638,8 +742,8 @@ $TC->saveTaglist($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
 								<li>count</li>
+								<li>if...else</li>
 							</ul>
 						</div>
 
@@ -655,6 +759,7 @@ $TC->saveTaglist($action);</code>
 								<li>Model::getProperty</li>
 								<li>Model::getPostedEntities</li>
 								<li>superNormalize</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
@@ -731,8 +836,8 @@ $TC->deleteTaglist($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
 								<li>count</li>
+								<li>if</li>
 							</ul>
 						</div>
 
@@ -742,6 +847,8 @@ $TC->deleteTaglist($action);</code>
 							<ul>
 								<li>Query::sql</li>
 								<li>Query::results</li>
+								<li>PageCore::addLog</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
@@ -819,6 +926,34 @@ $TC->deleteTaglist($action);</code>
 
 						<div class="example"><code>$TC = new Taglist();
 $TC->duplicateTaglist($action);</code>
+							<p>Get the duplicated taglist. Return value:</p>
+							<code>Array
+(
+    [id] => 531
+    [name] => Test1 (cloned 2020-04-21 15:56:39)
+    [handle] => test1-cloned-2020-04-21-15-56-39
+    [tags] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 262
+                    [context] => test
+                    [value] => tag1
+                    [position] => 0
+                )
+
+            [1] => Array
+                (
+                    [id] => 263
+                    [context] => test
+                    [value] => tag2
+                    [position] => 0
+                )
+
+        )
+
+)
+</code>
 						</div>
 					</div>
 
@@ -829,7 +964,8 @@ $TC->duplicateTaglist($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>if</li>
+								<li>foreach</li>
 								<li>count</li>
 								<li>unset</li>
 								<li>date</li>
@@ -844,6 +980,7 @@ $TC->duplicateTaglist($action);</code>
 								<li>Taglist::getTaglist</li>
 								<li>Taglist::saveTaglist</li>
 								<li>Taglist::addTaglistTag</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
@@ -931,7 +1068,8 @@ $TC->updateOrder($action);</code>
 							<!-- list php functions used by function -->
 							<h5>PHP</h5>
 							<ul>
-								<li>Query</li>
+								<li>if</li>
+								<li>for</li>
 								<li>count</li>
 								<li>explode</li>
 							</ul>
@@ -944,6 +1082,7 @@ $TC->updateOrder($action);</code>
 								<li>Query::sql</li>
 								<li>Query::results</li>
 								<li>getPost</li>
+								<li>Message::addMessage</li>
 							</ul>
 						</div>
 					</div>
