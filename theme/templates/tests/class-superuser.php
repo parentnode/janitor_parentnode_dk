@@ -382,7 +382,7 @@ $SC = new SuperShop();
 		$sql = "SELECT id FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id' AND id = $test_email2_username_id";
 		// print ($sql); 
 
-		if(			
+		if(
 			$result === true &&
 			!$query->sql($sql)
 		):?>
