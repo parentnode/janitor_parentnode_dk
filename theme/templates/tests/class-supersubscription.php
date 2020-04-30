@@ -777,7 +777,7 @@ if($query->sql($sql)) {
 					$result
 					&& $subscription
 					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
-					&& $subscription["custom_price"] === "50,5"
+					&& $subscription["custom_price"] === "50.5"
 
 				):?>
 				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals – correct</p></div>

@@ -2053,7 +2053,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$order &&
 					$order["items"] &&
-					$order["items"][0]["total_price"] == 50.5 &&
+					$order["items"][0]["total_price"] === "50.5" &&
 					$order["status"] == 0 &&
 					$order["payment_status"] == 0 &&
 					$order["shipping_status"] == 0 &&
