@@ -752,7 +752,7 @@ if($query->sql($sql)) {
 
 		endif;
 
-		if(1 && "renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals"):
+		if(1 && "renewSubscriptions – renew subscription with custom price with comma-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal"):
 			
 			(function() {
 
@@ -764,7 +764,7 @@ if($query->sql($sql)) {
 				$model_tests = $IC->typeObject("tests");
 
 				$test_item_id = $model_tests->createTestItem(["subscription_method" => 2, "price" => 100]);
-				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => 50.5]);
+				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => "50,5"]);
 				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
 
 				// ACT
@@ -777,14 +777,14 @@ if($query->sql($sql)) {
 					$result
 					&& $subscription
 					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
-					&& $subscription["custom_price"] === "50,5"
+					&& $subscription["custom_price"] === "50.5"
 
 				):?>
-				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals – correct</p></div>
+				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with comma-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal – correct</p></div>
 				<? else: 
 					
 				?>
-				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with decimals – return true, renewed subscription has custom price with decimals – error</p></div>
+				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with comma-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal – error</p></div>
 				<? endif;
 
 				// CLEAN UP
@@ -793,7 +793,50 @@ if($query->sql($sql)) {
 			})();
 
 		endif;
-		
+
+		if(1 && "renewSubscriptions – renew subscription with custom price with period-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal"):
+			
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supersubscription.class.php");
+				$SuperSubscriptionClass = new SuperSubscription();
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_id = $model_tests->createTestItem(["subscription_method" => 2, "price" => 100]);
+				$test_user_id = $model_tests->createTestUser(["subscribed_item_id" => $test_item_id, "subscription_expires_at" => "2019-01-01 00:00:00", "subscription_custom_price" => "50.5"]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+				// ACT
+				$result = $SuperSubscriptionClass->renewSubscriptions(["renewSubscriptions", $test_user_id]);
+				$subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_id]); 
+
+
+				// ASSERT
+				if(
+					$result
+					&& $subscription
+					&& $subscription["expires_at"] == "2020-01-01 00:00:00"
+					&& $subscription["custom_price"] === "50.5"
+
+				):?>
+				<div class="testpassed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with period-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal – correct</p></div>
+				<? else: 
+					
+				?>
+				<div class="testfailed"><p>SuperSubscription::renewSubscriptions – renew subscription with custom price with period-seperated decimal – return true, renewed subscription has custom price with period-seperated decimal – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $test_user_id, "item_id" => $test_item_id]);
+
+			})();
+
+		endif;
+
+
 		?>
 
 		

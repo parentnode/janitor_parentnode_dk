@@ -224,7 +224,9 @@ class TypeTests extends Itemtype {
 		$item = $IC->getItem(["id" => $order_item["item_id"], "extend" => ["subscription_method" => true]]);
 		$item_id = $order_item["item_id"];
 
-		$custom_price = isset($order_item["custom_price"]) ? $order_item["custom_price"] : false;
+		if(isset($order_item["custom_price"]) && $order_item["custom_price"] !== false) {
+			$custom_price = $order_item["custom_price"];
+		}
 
 		// item can be subscribed to
 		if(SITE_SUBSCRIPTIONS && isset($item["subscription_method"]) && $item["subscription_method"]) {
@@ -241,7 +243,7 @@ class TypeTests extends Itemtype {
 				// makes callback to 'subscribed' if item_id changes
 				$_POST["order_id"] = $order["id"];
 				$_POST["item_id"] = $item_id;
-				$_POST["custom_price"] = $custom_price;
+				$_POST["custom_price"] = $custom_price ?? null;
 				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $subscription["id"]]);
 				unset($_POST);
 
@@ -253,7 +255,7 @@ class TypeTests extends Itemtype {
 				$_POST["item_id"] = $item_id;
 				$_POST["user_id"] = $user_id;
 				$_POST["order_id"] = $order_id;
-				$_POST["custom_price"] = $custom_price;
+				$_POST["custom_price"] = $custom_price ?? null;
 				$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 				unset($_POST);
 

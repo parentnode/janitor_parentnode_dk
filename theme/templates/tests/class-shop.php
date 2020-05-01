@@ -2013,7 +2013,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal") {
+		if(1 && "newOrderFromCart – cart_item with custom price with comma-seperated decimal – return order with custom price with period-seperated decimal") {
 
 			(function() {
 
@@ -2039,7 +2039,7 @@ function deleteTestCart($cart_reference) {
 				
 				$_POST["item_id"] = $item_id;
 				$_POST["quantity"] = 1;		
-				$_POST["custom_price"] = 50.5;
+				$_POST["custom_price"] = "50,5";
 				$cart = $SC->addToCart(["addToCart", $cart_reference]);
 				unset($_POST);
 
@@ -2053,7 +2053,7 @@ function deleteTestCart($cart_reference) {
 				if(
 					$order &&
 					$order["items"] &&
-					$order["items"][0]["total_price"] == 50.5 &&
+					$order["items"][0]["total_price"] === "50.5" &&
 					$order["status"] == 0 &&
 					$order["payment_status"] == 0 &&
 					$order["shipping_status"] == 0 &&
@@ -2064,9 +2064,73 @@ function deleteTestCart($cart_reference) {
 					!session()->value("test_item_subscribed_callback") &&
 					$order["id"]
 					): ?>
-				<div class="testpassed"><p>Shop::newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal – correct</p></div>
+				<div class="testpassed"><p>Shop::newOrderFromCart – cart_item with custom price with comma-seperated decimal – return order with custom price with period-seperated decimal – correct</p></div>
 				<? else: ?>
-				<div class="testfailed"><p>Shop::newOrderFromCart – cart_item with custom price with decimal – return order with custom price with decimal – error</p></div>
+				<div class="testfailed"><p>Shop::newOrderFromCart – cart_item with custom price with comma-seperated decimal – return order with custom price with period-seperated decimal – error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				$model_tests->cleanUp(["user_id" => $user_id, "item_id" => $item_id]);
+
+				
+				
+			})();
+		}
+
+		if(1 && "newOrderFromCart – cart_item with custom price with period-seperated decimal – return order with custom price with comma-seperated decimal") {
+
+			(function() {
+
+				// ARRANGE
+				include_once("classes/shop/supershop.class.php");
+				$SC = new Shop();
+				$IC = new Items();
+
+				$model_tests = $IC->typeObject("tests");
+
+				session()->reset("test_item_ordered_callback");
+				session()->reset("test_item_subscribed_callback");
+
+				$user_id = $model_tests->createTestUser();
+				$item_id = $model_tests->createTestItem(["price" => 100]);
+
+				// add test item to cart
+				$_POST["user_id"] = $user_id;
+				$cart = $SC->addCart(["addCart"]);
+				$cart_id = $cart["id"];
+				$cart_reference = $cart["cart_reference"];
+				unset($_POST);
+				
+				$_POST["item_id"] = $item_id;
+				$_POST["quantity"] = 1;		
+				$_POST["custom_price"] = "50.5";
+				$cart = $SC->addToCart(["addToCart", $cart_reference]);
+				unset($_POST);
+
+				// ACT
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
+				$order_id = $order["id"];
+				// print_r($order);
+				// debug($_SESSION);
+
+				// ASSERT
+				if(
+					$order &&
+					$order["items"] &&
+					$order["items"][0]["total_price"] === "50.5" &&
+					$order["status"] == 0 &&
+					$order["payment_status"] == 0 &&
+					$order["shipping_status"] == 0 &&
+					$order["user_id"] &&
+					$order["currency"] &&
+					$order["country"] &&
+					session()->value("test_item_ordered_callback") &&
+					!session()->value("test_item_subscribed_callback") &&
+					$order["id"]
+					): ?>
+				<div class="testpassed"><p>Shop::newOrderFromCart – cart_item with custom price with period-seperated decimal – return order with custom price with comma-seperated decimal – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::newOrderFromCart – cart_item with custom price with period-seperated decimal – return order with custom price with comma-seperated decimal – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
