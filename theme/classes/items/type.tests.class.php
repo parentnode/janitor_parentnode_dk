@@ -243,7 +243,13 @@ class TypeTests extends Itemtype {
 				// makes callback to 'subscribed' if item_id changes
 				$_POST["order_id"] = $order["id"];
 				$_POST["item_id"] = $item_id;
-				$_POST["custom_price"] = $custom_price ?? null;
+				if(isset($custom_price) && ($custom_price || $custom_price === "0")) {
+					$_POST["custom_price"] = $custom_price;
+				}
+				else {
+					$_POST["custom_price"] = null;
+				}
+				
 				$subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $subscription["id"]]);
 				unset($_POST);
 
@@ -255,7 +261,13 @@ class TypeTests extends Itemtype {
 				$_POST["item_id"] = $item_id;
 				$_POST["user_id"] = $user_id;
 				$_POST["order_id"] = $order_id;
-				$_POST["custom_price"] = $custom_price ?? null;
+				if(isset($custom_price) && ($custom_price || $custom_price === "0")) {
+					$_POST["custom_price"] = $custom_price;
+				}
+				else {
+					$_POST["custom_price"] = null;
+				}
+				
 				$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
 				unset($_POST);
 
