@@ -45,7 +45,7 @@ $custom_values = [
 
 	<h2>Test send</h2>
 
-	<? if(0 && "simple message to admin from current user"):?>
+	<? if(1 && "simple message to admin from current user"):?>
 	<div class="tests">;
 		<h3>Mailer::send - simple message to admin from current user</h3>
 		<? if(mailer()->send([
@@ -59,7 +59,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "simple text message with system template to specific users (sending as CC)"):?>
+	<? if(1 && "simple text message with system template to specific users (sending as CC)"):?>
 	<div class="tests">
 		<h3>Mailer::send - simple message with system php template to specific users (sending as CC)</h3>
 		<? if(mailer()->send([
@@ -74,7 +74,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template to admin with system variables only - should send mails with unfilled placeholders"):?>
+	<? if(1 && "custom html template to admin with system variables only - should send mails with unfilled placeholders"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with system variables only</h3>
 		<? if(mailer()->send([
@@ -88,7 +88,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template to admin with custom variables"):?>
+	<? if(1 && "custom html template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -103,7 +103,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables"):?>
+	<? if(1 && "custom txt template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -118,7 +118,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled click tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled click tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled click tracking</h3>
 		<? if(mailer()->send([
@@ -134,7 +134,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled opened tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled opened tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled opened tracking</h3>
 		<? if(mailer()->send([
@@ -150,7 +150,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled all tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled all tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled all tracking</h3>
 		<? if(mailer()->send([
@@ -166,7 +166,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline text template to admin with custom variables"):?>
+	<? if(1 && "custom inline text template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -180,7 +180,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline text template to specific users (sending as CC)"):?>
+	<? if(1 && "custom inline text template to specific users (sending as CC)"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to specific users (sending as CC)</h3>
 		<? if(mailer()->send([
@@ -195,7 +195,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline html template to admin with custom variables"):?>
+	<? if(1 && "custom inline html template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline html template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -212,7 +212,7 @@ $custom_values = [
 
 	<h2>With attachment</h2>
 
-	<? if(0 && "simple message with attachment to admin"):?>
+	<? if(1 && "simple message with attachment to admin"):?>
 	<div class="tests">
 		<h3>Mailer::send - simple message with attachment to admin</h3>
 		<? if(mailer()->send([
@@ -229,7 +229,7 @@ $custom_values = [
 
 	<h2>Test sendBulk</h2>
 
-	<? if(0 && "simple message with custom variables"):?>
+	<? if(1 && "simple message with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - simple message with custom variables</h3>
 		<? if(mailer()->sendBulk([
@@ -259,7 +259,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template with custom variables"):?>
+	<? if(1 && "custom txt template with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - custom txt template with custom variables</h3>
 		<? if(mailer()->sendBulk([
@@ -276,7 +276,7 @@ $custom_values = [
 
 	<h2>System emails</h2>
 
-	<? if(0 && "Signup:"):?>
+	<? if(1 && "Signup:"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup:</h3>
 		<? if(mailer()->send([
@@ -296,7 +296,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Signup reminder"):?>
+	<? if(1 && "Signup reminder"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup reminder:</h3>
 		<? if(mailer()->send([
@@ -317,7 +317,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Signup error"):?>
+	<? if(1 && "Signup error"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup error:</h3>
 		<? if(mailer()->send([
@@ -332,7 +332,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Reset password"):?>
+	<? if(1 && "Reset password"):?>
 	<div class="tests">
 		<h3>Mailer::send - Reset password:</h3>
 		<? if(mailer()->send([
@@ -352,7 +352,7 @@ $custom_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Payment reminder"):?>
+	<? if(1 && "Payment reminder"):?>
 	<div class="tests">
 		<h3>Mailer::send - Payment reminder:</h3>
 		<? if(mailer()->send([
