@@ -2,7 +2,9 @@
 // init mailer to expose ADMIN_EMAIL
 mailer();
 
-$secondary_recipient = "test.parentnode@gmail.com";
+$secondary_recipient = "test2.parentnode@gmail.com";
+$tertiary_recipient = "test3.parentnode@gmail.com";
+$quaternary_recipient = "test4.parentnode@gmail.com";
 $custom_recipients = [ADMIN_EMAIL, $secondary_recipient];
 $custom_values = [
 	ADMIN_EMAIL => [
@@ -10,10 +12,17 @@ $custom_values = [
 		"text" => "I'm the primary test recipient"
 	], 
 	$secondary_recipient => [
-		"name" => "parentnode test gmail", 
+		"name" => "Tester 2", 
 		"text" => "I'm the secondary test recipient"
 	]
 ];
+$cc_values = [
+	$tertiary_recipient => [
+		"name" => "Tester 3",
+		"text" => "I'm the tertiary test recipient"
+	]
+];
+
 ?>
 
 <div class="scene i:scene tests defaultEdit">
@@ -126,6 +135,21 @@ $custom_values = [
 				"from_current_user" => true,
 				"from_name" => "Popeye",
 				"message" => "I'm a simple text message to the Admin, from Popeye with email from current user."
+		])): ?>
+		<div class="testpassed">Mailer::send - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::send - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "simple message to admin with custom reply-to"):?>
+	<div class="tests">
+		<h3>Mailer::send - simple message to admin with custom reply-to</h3>
+		<? if(mailer()->send([
+				"from_current_user" => true,
+				"reply_to" => $secondary_recipient,
+				"message" => "I'm a simple text message to the Admin; replies will go to ".$secondary_recipient."."
 		])): ?>
 		<div class="testpassed">Mailer::send - message sent - correct</div>
 		<? else: ?>
