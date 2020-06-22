@@ -16,12 +16,7 @@ $custom_values = [
 		"text" => "I'm the secondary test recipient"
 	]
 ];
-$cc_values = [
-	$tertiary_recipient => [
-		"name" => "Tester 3",
-		"text" => "I'm the tertiary test recipient"
-	]
-];
+
 
 ?>
 
@@ -54,12 +49,12 @@ $cc_values = [
 
 	<h2>Test send</h2>
 
-	<? if(0 && "simple message to admin from current user"):?>
+	<? if(1 && "simple message to admin from current user"):?>
 	<div class="tests">;
 		<h3>Mailer::send - simple message to admin from current user</h3>
 		<? if(mailer()->send([
 				"from_current_user" => true,
-				"message" => "I'm a simple text message to the Admin, from current user"
+				"message" => "I'm a simple text message to the Admin, from current user",
 		])): ?>
 		<div class="testpassed">Mailer::send - message sent - correct</div>
 		<? else: ?>
@@ -158,7 +153,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "simple text message with system template to specific users (sending as CC)"):?>
+	<? if(1 && "simple text message with system template to specific users (sending as CC)"):?>
 	<div class="tests">
 		<h3>Mailer::send - simple message with system php template to specific users (sending as CC)</h3>
 		<? if(mailer()->send([
@@ -173,7 +168,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template to admin with system variables only - should send mails with unfilled placeholders"):?>
+	<? if(1 && "custom html template to admin with system variables only - should send mails with unfilled placeholders"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with system variables only</h3>
 		<? if(mailer()->send([
@@ -187,7 +182,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom html template to admin with custom variables"):?>
+	<? if(1 && "custom html template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -202,7 +197,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables"):?>
+	<? if(1 && "custom txt template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -217,7 +212,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled click tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled click tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled click tracking</h3>
 		<? if(mailer()->send([
@@ -233,7 +228,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled opened tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled opened tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled opened tracking</h3>
 		<? if(mailer()->send([
@@ -249,7 +244,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template to admin with custom variables - disabled all tracking"):?>
+	<? if(1 && "custom txt template to admin with custom variables - disabled all tracking"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled all tracking</h3>
 		<? if(mailer()->send([
@@ -265,7 +260,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline text template to admin with custom variables"):?>
+	<? if(1 && "custom inline text template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -279,7 +274,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline text template to specific users (sending as CC)"):?>
+	<? if(1 && "custom inline text template to specific users (sending as CC)"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to specific users (sending as CC)</h3>
 		<? if(mailer()->send([
@@ -294,7 +289,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom inline html template to admin with custom variables"):?>
+	<? if(1 && "custom inline html template to admin with custom variables"):?>
 	<div class="tests">
 		<h3>Mailer::send - custom inline html template to admin with custom variables</h3>
 		<? if(mailer()->send([
@@ -311,7 +306,7 @@ $cc_values = [
 
 	<h2>With attachment</h2>
 
-	<? if(0 && "simple message with attachment to admin"):?>
+	<? if(1 && "simple message with attachment to admin"):?>
 	<div class="tests">
 		<h3>Mailer::send - simple message with attachment to admin</h3>
 		<? if(mailer()->send([
@@ -325,10 +320,68 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
+	<h2>With CC/BCC</h2>
+
+	<? if(1 && "simple message to admin and 1 CC"):?>
+	<div class="tests">
+		<h3>Mailer::send - simple message to admin and 1 CC</h3>
+		<? if(mailer()->send([
+			"message" => "I have 1 CC recipient",
+			"cc_recipients" => ["test2.parentnode@gmail.com"]
+		])): ?>
+		<div class="testpassed">Mailer::send - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::send - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "simple message to admin and 2 CC's"):?>
+	<div class="tests">
+		<h3>Mailer::send - simple message to admin and 2 CC's</h3>
+		<? if(mailer()->send([
+			"message" => "I have 2 CC recipients",
+			"cc_recipients" => ["test2.parentnode@gmail.com","test3.parentnode@gmail.com"]
+		])): ?>
+		<div class="testpassed">Mailer::send - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::send - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+	
+	<? if(1 && "simple message to admin and 2 BCC's"):?>
+	<div class="tests">
+		<h3>Mailer::send - simple message to admin and 2 BCC's</h3>
+		<? if(mailer()->send([
+			"message" => "I have 2 BCC recipients",
+			"bcc_recipients" => ["test2.parentnode@gmail.com","test3.parentnode@gmail.com"]
+		])): ?>
+		<div class="testpassed">Mailer::send - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::send - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "simple message to admin and 1 CC and 1 BCC"):?>
+	<div class="tests">
+		<h3>Mailer::send - simple message to admin and 2 CC's</h3>
+		<? if(mailer()->send([
+			"message" => "I have 1 CC and 1 BCC recipient",
+			"cc_recipients" => ["test2.parentnode@gmail.com"],
+			"bcc_recipients" => ["test3.parentnode@gmail.com"]
+		])): ?>
+		<div class="testpassed">Mailer::send - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::send - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
 
 	<h2>Test sendBulk</h2>
 
-	<? if(0 && "simple message with custom variables"):?>
+	<? if(1 && "simple message with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - simple message with custom variables</h3>
 		<? if(mailer()->sendBulk([
@@ -342,8 +395,72 @@ $cc_values = [
 		<? endif; ?>
 	</div>
 	<? endif; ?>
+	
+	<? if(1 && "simple message with custom variables, with 1 CC"):?>
+	<div class="tests sendBulk">
+		<h3>Mailer::sendBulk - simple message with custom variables, with 1 CC</h3>
+		<? if(mailer()->sendBulk([
+			"message" => "Hi {name}\n\nI am a simple text message without a template.\n\nThe secret text is:'{text}'.\n\nGood luck with the development.",
+			"recipients" => $custom_recipients,
+			"cc_recipients" => ["test3.parentnode@gmail.com"],
+			"values" => $custom_values
+		])): ?>
+		<div class="testpassed">Mailer::sendBulk - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::sendBulk - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
 
-	<? if(0 && "custom html template with custom variables"):?>
+	<? if(1 && "simple message with custom variables, with 2 CC's"):?>
+	<div class="tests sendBulk">
+		<h3>Mailer::sendBulk - simple message with custom variables, with 2 CC's</h3>
+		<? if(mailer()->sendBulk([
+			"message" => "Hi {name}\n\nI am a simple text message without a template.\n\nThe secret text is:'{text}'.\n\nGood luck with the development.",
+			"recipients" => $custom_recipients,
+			"cc_recipients" => [$tertiary_recipient, $quaternary_recipient],
+			"values" => $custom_values
+		])): ?>
+		<div class="testpassed">Mailer::sendBulk - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::sendBulk - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "simple message with custom variables, with 1 BCC"):?>
+	<div class="tests sendBulk">
+		<h3>Mailer::sendBulk - simple message with custom variables, with 1 BCC</h3>
+		<? if(mailer()->sendBulk([
+			"message" => "Hi {name}\n\nI am a simple text message without a template.\n\nThe secret text is:'{text}'.\n\nGood luck with the development.",
+			"recipients" => $custom_recipients,
+			"bcc_recipients" => ["test3.parentnode@gmail.com"],
+			"values" => $custom_values
+		])): ?>
+		<div class="testpassed">Mailer::sendBulk - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::sendBulk - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "simple message with custom variables, with custom reply-to"):?>
+	<div class="tests sendBulk">
+		<h3>Mailer::sendBulk - simple message with custom variables, with custom reply-to</h3>
+		<? if(mailer()->sendBulk([
+			"message" => "Hi {name}\n\nReplies will go to $tertiary_recipient.\n\nI am a simple text message without a template.\n\nThe secret text is:'{text}'.\n\nGood luck with the development.",
+			"recipients" => $custom_recipients,
+			"reply_to" => $tertiary_recipient,
+			"values" => $custom_values
+		])): ?>
+		<div class="testpassed">Mailer::sendBulk - message sent - correct</div>
+		<? else: ?>
+		<div class="testfailed">Mailer::sendBulk - message sent - error</div>
+		<? endif; ?>
+	</div>
+	<? endif; ?>
+
+	<? if(1 && "custom html template with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - custom html template with custom variables</h3>
 		<? if(mailer()->sendBulk([
@@ -358,7 +475,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "custom txt template with custom variables"):?>
+	<? if(1 && "custom txt template with custom variables"):?>
 	<div class="tests sendBulk">
 		<h3>Mailer::sendBulk - custom txt template with custom variables</h3>
 		<? if(mailer()->sendBulk([
@@ -373,9 +490,10 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
+
 	<h2>System emails</h2>
 
-	<? if(0 && "Signup:"):?>
+	<? if(1 && "Signup:"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup:</h3>
 		<? if(mailer()->send([
@@ -395,7 +513,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Signup reminder"):?>
+	<? if(1 && "Signup reminder"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup reminder:</h3>
 		<? if(mailer()->send([
@@ -416,7 +534,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Signup error"):?>
+	<? if(1 && "Signup error"):?>
 	<div class="tests">
 		<h3>Mailer::send - Signup error:</h3>
 		<? if(mailer()->send([
@@ -431,7 +549,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Reset password"):?>
+	<? if(1 && "Reset password"):?>
 	<div class="tests">
 		<h3>Mailer::send - Reset password:</h3>
 		<? if(mailer()->send([
@@ -451,7 +569,7 @@ $cc_values = [
 	</div>
 	<? endif; ?>
 
-	<? if(0 && "Payment reminder"):?>
+	<? if(1 && "Payment reminder"):?>
 	<div class="tests">
 		<h3>Mailer::send - Payment reminder:</h3>
 		<? if(mailer()->send([
