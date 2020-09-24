@@ -23,7 +23,7 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => false, 
 ?>
 <script type="text/javascript">
 
-u.o["testForm"] = new function() {
+u.m["testForm"] = new function() {
 	this.init = function(form) {
 		u.bug("init");
 		u.f.init(form, {"validation":false});
