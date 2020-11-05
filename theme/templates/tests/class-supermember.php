@@ -49,7 +49,7 @@
 			// ACT 
 			$_POST["item_id"] = $membership_item_id;
 			$added_membership_order = $MC->addNewMembership(["addNewMembership", $test_user_id]);
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			unset($_POST);
 			
 			
@@ -68,7 +68,7 @@
 			// CLEAN UP
 			// delete memberships
 			$added_membership = $MC->getMembers(["user_id" => $test_user_id]);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($added_membership_id)";
 			$query->sql($sql);
 
@@ -299,7 +299,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -338,7 +338,7 @@
 			$_POST["item_id"] = $membership_item_id;
 			$_POST["user_id"] = $user_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 
 			// ACT 
@@ -394,7 +394,7 @@
 			$_POST["item_id"] = $membership_item_id;
 			$_POST["user_id"] = $user_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 
 			// ACT 
@@ -452,7 +452,7 @@
 			$_POST["item_id"] = $membership_item_id;
 			$_POST["user_id"] = $user_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 
 			// ACT 
@@ -471,7 +471,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -527,7 +527,7 @@
 			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			if($query->sql($sql)) {
 				$order = $query->result(0);
-				$order_id = $order["id"];
+				$order_id = $order ? $order["id"] : false;
 
 				// add user_id to order
 				$sql = "UPDATE ".SITE_DB.".shop_orders SET user_id = '$user_id' WHERE id = '$order_id'";
@@ -544,7 +544,7 @@
 			$_POST["user_id"] = $user_id;
 			$_POST["order_id"] = $order_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 	
 			// ACT 
@@ -569,7 +569,7 @@
 			$membership_item_id = $membership_item["id"];
 			
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -614,7 +614,7 @@
 
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
 	
@@ -633,7 +633,7 @@
 				
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -688,7 +688,7 @@
 			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			if($query->sql($sql)) {
 				$order = $query->result(0);
-				$order_id = $order["id"];
+				$order_id = $order ? $order["id"] : false;
 
 				// add user_id to order
 				$sql = "UPDATE ".SITE_DB.".shop_orders SET user_id = '$user_id' WHERE id = '$order_id'";
@@ -703,13 +703,14 @@
 			$_POST["user_id"] = $user_id;
 			$_POST["order_id"] = $order_id;
 			$subscription = $SuperSubscriptionClass->addSubscription(["addSubscription"]);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 			unset($_POST);
 	
 			$added_membership = $MC->addMembership($membership_item_id, $subscription_id, ["user_id" => $user_id]);
 			
 			// ACT 
-			$fetched_membership = $MC->getMembers(["member_id" => $added_membership["id"]]);
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
+			$fetched_membership = $MC->getMembers(["member_id" => $added_membership_id]);
 			
 			// ASSERT 
 			if(
@@ -725,7 +726,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -814,7 +815,7 @@
 			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 	
 			// ACT 
 			$fetched_membership = $MC->getMembers(["user_id" => $user_id]);
@@ -832,7 +833,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$fetched_membership_id = $fetched_membership["id"];
+			$fetched_membership_id = $fetched_membership ? $fetched_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $fetched_membership_id";
 			$query->sql($sql);
 
@@ -921,7 +922,7 @@
 			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 	
 			// ACT 
 			$fetched_membership = $MC->getMembers(["item_id" => $membership_item_id]);
@@ -939,7 +940,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$fetched_membership_id = $fetched_membership[0]["id"];
+			$fetched_membership_id = $fetched_membership ? $fetched_membership[0]["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $fetched_membership_id";
 			$query->sql($sql);
 	
@@ -1061,7 +1062,7 @@
 			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
 			$membership_1_order_id = $membership_1_order["id"];
 			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
-			$membership_1_id = $membership_1["id"];
+			$membership_1_id = $membership_1 ? $membership_1["id"] : false;
 
 			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
 			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
@@ -1069,7 +1070,7 @@
 			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
 			$membership_2_order_id = $membership_2_order["id"];
 			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
-			$membership_2_id = $membership_2["id"];
+			$membership_2_id = $membership_2 ? $membership_2["id"] : false;
 
 			// create one membership based on second membership item  
 			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
@@ -1078,7 +1079,7 @@
 			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
 			$membership_3_order_id = $membership_3_order["id"];
 			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
-			$membership_3_id = $membership_3["id"];
+			$membership_3_id = $membership_3 ? $membership_3["id"] : false;
 
 			
 			
@@ -1215,7 +1216,7 @@
 			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
 			$membership_1_order_id = $membership_1_order["id"];
 			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
-			$membership_1_id = $membership_1["id"];
+			$membership_1_id = $membership_1 ? $membership_1["id"] : false;
 
 			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
 			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
@@ -1223,7 +1224,7 @@
 			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
 			$membership_2_order_id = $membership_2_order["id"];
 			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
-			$membership_2_id = $membership_2["id"];
+			$membership_2_id = $membership_2 ? $membership_2["id"] : false;
 
 			// create one membership based on second membership item  
 			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
@@ -1232,7 +1233,7 @@
 			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
 			$membership_3_order_id = $membership_3_order["id"];
 			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
-			$membership_3_id = $membership_3["id"];
+			$membership_3_id = $membership_3 ? $membership_3["id"] : false;
 
 			
 			
@@ -1397,7 +1398,7 @@
 			$membership_1_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_1_cart_id, $membership_1_cart_reference]);
 			$membership_1_order_id = $membership_1_order["id"];
 			$membership_1 = $MC->getMembers(["user_id" => $test_user_ids[0]]);
-			$membership_1_id = $membership_1["id"];
+			$membership_1_id = $membership_1 ? $membership_1["id"] : false;
 
 			$membership_2_cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $test_user_ids[1]]);
 			$membership_2_cart_reference = $membership_2_cart["cart_reference"];
@@ -1405,7 +1406,7 @@
 			$membership_2_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_2_cart_id, $membership_2_cart_reference]);
 			$membership_2_order_id = $membership_2_order["id"];
 			$membership_2 = $MC->getMembers(["user_id" => $test_user_ids[1]]);
-			$membership_2_id = $membership_2["id"];
+			$membership_2_id = $membership_2 ? $membership_2["id"] : false;
 
 			// create one membership based on second membership item  
 			$membership_3_cart = $SC->addToNewInternalCart($membership_item_2_id, ["user_id" => $test_user_ids[2]]);
@@ -1414,7 +1415,7 @@
 			$membership_3_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_3_cart_id, $membership_3_cart_reference]);
 			$membership_3_order_id = $membership_3_order["id"];
 			$membership_3 = $MC->getMembers(["user_id" => $test_user_ids[2]]);
-			$membership_3_id = $membership_3["id"];
+			$membership_3_id = $membership_3 ? $membership_3["id"] : false;
 
 			
 			
@@ -1501,7 +1502,7 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 	
 			$cancellation_success = false;
 	
@@ -1520,7 +1521,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -1624,7 +1625,7 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			
 			// ACT 
 			$updated_membership = $MC->updateMembership(["user_id" => $user_id]);
@@ -1644,7 +1645,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -1703,9 +1704,9 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 	
-			$subscription_id = $added_membership["subscription_id"];
+			$subscription_id = $added_membership ? $added_membership["subscription_id"] : false;
 	
 			// ACT 
 			$updated_membership = $MC->updateMembership(["subscription_id" => $subscription_id, "user_id" => $user_id]);
@@ -1726,7 +1727,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -1739,7 +1740,7 @@
 			$query->sql($sql);	
 	
 			// delete order
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_membership_order_id";
 			$query->sql($sql);
 
@@ -1763,7 +1764,7 @@
 			
 			// ACT 
 			$updated_membership = $MC->updateMembership(["user_id" => $user_id]);
-			$updated_membership_id = $updated_membership["id"];
+			$updated_membership_id = $updated_membership ? $updated_membership["id"] : false;
 			
 			
 			// ASSERT 
@@ -1908,7 +1909,7 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			
 			// cancel membership 1 (removes subscription_id)
 			$MC->cancelMembership(["cancelMembership", $user_id, $added_membership_id]);
@@ -1968,7 +1969,7 @@
 			$query->sql($sql);
 
 			// delete membership 1 order
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$added_membership_order_id'";
 			$query->sql($sql);
 			
@@ -1981,7 +1982,7 @@
 			$query->sql($sql);
 	
 			// delete membership 2 order
-			$switched_membership_order_id = $switched_membership_order["id"];
+			$switched_membership_order_id = $switched_membership_order ? $switched_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
@@ -2028,8 +2029,9 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
-			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
+			$added_membership_subscription_id = $added_membership ? $added_membership["subscription_id"] : false;
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]);
 
 			// create another test membership item
 			$_POST["name"] = "Membership Test item 2";
@@ -2058,7 +2060,8 @@
 			unset($_POST);
 			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
-			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+			$switched_membership_subscription_id = $switched_membership ? $switched_membership["subscription_id"] : false;
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership_subscription_id]);
 
 			// ASSERT 
 			if(
@@ -2079,7 +2082,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 			
@@ -2097,7 +2100,8 @@
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$switched_membership_order["id"];
+			$switched_membership_order_id = $switched_membership_order ? $switched_membership_order["id"] : false;
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$switched_membership_order_id;
 			$query->sql($sql);
 			
 			// delete membership item 2
@@ -2105,7 +2109,7 @@
 			$query->sql($sql);
 			
 			// delete order
-			$switched_membership_order_id = $switched_membership_order["id"];
+			$switched_membership_order_id = $switched_membership_order ? $switched_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
@@ -2152,8 +2156,9 @@
 			$added_membership_cart_id = $added_membership_cart["id"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
 			$added_membership = $MC->getMembers(["user_id" => $user_id]);
-			$added_membership_id = $added_membership["id"];
-			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
+			$added_membership_subscription_id = $added_membership ? $added_membership["subscription_id"] : false;
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]);
 
 			// create another test membership item
 			$_POST["name"] = "Membership Test item 2";
@@ -2182,7 +2187,8 @@
 			unset($_POST);
 			$switched_membership = $MC->getMembers(["user_id" => $user_id]);
 			
-			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+			$switched_membership_subscription_id = $switched_membership ? $switched_membership["subscription_id"] : false;
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership_subscription_id]);
 
 			// ASSERT 
 			if(
@@ -2208,7 +2214,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 			
@@ -2226,7 +2232,8 @@
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$switched_membership_order["id"];
+			$switched_membership_order_id = $switched_membership_order ? $switched_membership_order["id"] : false;
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$switched_membership_order_id;
 			$query->sql($sql);
 			
 			// delete membership item 2
@@ -2234,7 +2241,7 @@
 			$query->sql($sql);
 			
 			// delete order
-			$switched_membership_order_id = $switched_membership_order["id"];
+			$switched_membership_order_id = $switched_membership_order ? $switched_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
@@ -2435,7 +2442,7 @@
 			$existing_membership_cart_id = $existing_membership_cart["id"];
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $existing_membership_cart_id, $existing_membership_cart_reference]);
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 	
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
@@ -2460,7 +2467,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -2487,7 +2494,7 @@
 	
 
 			// delete membership 2 order
-			$upgraded_membership_order_no = $upgraded_membership["order"]["order_no"];
+			$upgraded_membership_order_no = $upgraded_membership ? $upgraded_membership["order"]["order_no"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 		}
@@ -2535,7 +2542,7 @@
 			$existing_membership_cart_id = $existing_membership_cart["id"];
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $existing_membership_cart_id, $existing_membership_cart_reference]);
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			
 
 			// create second test membership item
@@ -2574,7 +2581,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -2663,7 +2670,7 @@
 			$existing_membership_cart_id = $existing_membership_cart["id"];
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $existing_membership_cart_id, $existing_membership_cart_reference]);
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 
 			// cancel membership (removes subscription_id)
 			$MC->cancelMembership(["cancelMembership", $user_id, $existing_membership_id]);
@@ -2687,7 +2694,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -2857,7 +2864,7 @@
 			$cart = $SC->addToNewInternalCart($membership_item_1_id, ["user_id" => $user_id]);
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
 			$existing_membership = $MC->getMembers(["user_id" => $user_id]);
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 	
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
@@ -2882,7 +2889,7 @@
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -2908,7 +2915,7 @@
 			$query->sql($sql);
 			
 			// delete membership 2 order
-			$upgraded_membership_order_no = $upgraded_membership["order"]["order_no"];
+			$upgraded_membership_order_no = $upgraded_membership ? $upgraded_membership["order"]["order_no"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 

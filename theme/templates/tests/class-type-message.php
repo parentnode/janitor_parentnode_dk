@@ -158,21 +158,24 @@ function deleteTestMembership($membership) {
 	
 	$query = new Query();
 
-	// delete memberships
-	$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = ".$membership["id"];
-	$query->sql($sql);
+	if($membership) {
 
-	// delete subscriptions
-	$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = ".$membership["item_id"];
-	$query->sql($sql);
-
-	// delete membership items
-	$sql = "DELETE FROM ".SITE_DB.".items WHERE id = ".$membership["item_id"];
-	$query->sql($sql);
+		// delete memberships
+		$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = ".$membership["id"];
+		$query->sql($sql);
 	
-	// delete orders
-	$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = ".$membership["order_id"];
-	$query->sql($sql);
+		// delete subscriptions
+		$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = ".$membership["item_id"];
+		$query->sql($sql);
+	
+		// delete membership items
+		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = ".$membership["item_id"];
+		$query->sql($sql);
+		
+		// delete orders
+		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = ".$membership["order_id"];
+		$query->sql($sql);
+	}
 
 }
 

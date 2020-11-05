@@ -514,15 +514,15 @@ skip_cleanup:
 		$cart = $SC->addCart(["addCart"]);
 		unset($_POST);
 		
-		$cart_id = $cart["id"];
-		$cart_reference = $cart["cart_reference"];
+		$cart_id = $cart ? $cart["id"] : false;
+		$cart_reference = $cart ? $cart["cart_reference"] : false;
 		$_POST["item_id"] = $item_id;
 		$_POST["quantity"] = 1;
 		$cart = $SC->addToCart(["addToCart", $cart_reference]);
 		unset($_POST);
 
 		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
-		$order_id = $order["id"];
+		$order_id = $order ? $order["id"] : false;
 
 		$result = $UC->cancel(["cancel", $user_id]);
 		// print_r($result);

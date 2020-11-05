@@ -147,7 +147,8 @@ function createTestUser($_options = false) {
 		}
 
 		if($expires_at) {
-			$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$expires_at."' WHERE id = ".$added_subscription["id"];
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$expires_at."' WHERE id = ".$added_subscription_id;
 			$query->sql($sql);
 		}
 
@@ -265,7 +266,9 @@ if($query->sql($sql)) {
 
 		<?
 		// get the created subscription
-		$subscription = $SuperSubscriptionClass->getSubscriptions(["item_id" => $item_id])[0];
+		$subscriptions = $SuperSubscriptionClass->getSubscriptions(["item_id" => $item_id]);
+		$subscription = $subscriptions ? $subscriptions[0] : false;
+
 		if(
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
@@ -281,7 +284,8 @@ if($query->sql($sql)) {
 
 		<?
 		// delete the created subscription
-		$deletion_success = $SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $subscription["id"]]);
+		$subscription_id = $subscription ? $subscription["id"] : false;
+		$deletion_success = $SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $subscription_id]);
 		if(
 			$subscription && 
 			$deletion_success &&
@@ -899,7 +903,8 @@ if($query->sql($sql)) {
 			session()->reset("test_item_ordered_callback");
 
 			// ACT 
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			
 			// ASSERT 
 			if(
@@ -1165,7 +1170,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["item_id"] = 9999;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1271,7 +1277,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1369,11 +1376,14 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -1478,16 +1488,20 @@ if($query->sql($sql)) {
 			$second_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription_id]);
 			
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -1596,7 +1610,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1708,18 +1723,22 @@ if($query->sql($sql)) {
 			$second_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription_id]);
 
 			// clear session for callback checks
 			session()->reset("test_item_subscribed_callback");
 			
 			// ACT 
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $updated_subscription["item_id"] &&
@@ -1825,14 +1844,16 @@ if($query->sql($sql)) {
 			$second_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $test_user_id, "item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SuperSubscriptionClass->deleteSubscription(["deleteSubscription", $test_user_id, $second_subscription_id]);
 			
 			// clear session for callback checks
 			session()->reset("test_item_subscribed_callback");
 			
 			// ACT 
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1920,11 +1941,14 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["expires_at"] = "2001-01-01 00:00:00";
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -2016,7 +2040,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["expires_at"] = "2001-01-01 00:00:00";
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -2106,7 +2131,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["expires_at"] = 9999;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -2193,7 +2219,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["subscription_renewal"] = true;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 
 			// ASSERT 
@@ -2288,7 +2315,8 @@ if($query->sql($sql)) {
 
 			// ACT 
 			$_POST["subscription_renewal"] = true;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 
 			// ASSERT 
@@ -2376,7 +2404,8 @@ if($query->sql($sql)) {
 			// ACT 
 			$_POST["expires_at"] = "2001-01-01 00:00:00";
 			$_POST["subscription_renewal"] = true;
-			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 
 			// ASSERT 
@@ -2446,7 +2475,8 @@ if($query->sql($sql)) {
 
 				// ACT
 				$_POST["custom_price"] = 50;
-				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT
@@ -2488,7 +2518,8 @@ if($query->sql($sql)) {
 
 				// ACT
 				$_POST["custom_price"] = 50;
-				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT
@@ -2531,7 +2562,8 @@ if($query->sql($sql)) {
 
 				// ACT
 				$_POST["custom_price"] = false;
-				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SuperSubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT

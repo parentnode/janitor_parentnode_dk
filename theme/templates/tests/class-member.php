@@ -45,7 +45,7 @@ use Psr\Log\NullLogger;
 			// ACT 
 			$_POST["item_id"] = $membership_item_id;
 			$added_membership_order = $MC->addNewMembership(["addNewMembership"]);
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			unset($_POST);
 			
 			
@@ -63,7 +63,7 @@ use Psr\Log\NullLogger;
 			// CLEAN UP
 			// delete memberships
 			$added_membership = $MC->getMembership();
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id IN ($added_membership_id)";
 			$query->sql($sql);
 
@@ -229,7 +229,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -264,7 +264,7 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 	
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
@@ -282,7 +282,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -348,7 +348,7 @@ use Psr\Log\NullLogger;
 			$_POST["order_id"] = $order_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 	
 			// ACT 
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
@@ -372,7 +372,7 @@ use Psr\Log\NullLogger;
 			$membership_item_id = $membership_item["id"];
 			
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -416,7 +416,7 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 	
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
 	
@@ -435,7 +435,7 @@ use Psr\Log\NullLogger;
 				
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -481,7 +481,7 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 
 			$added_membership = $MC->addMembership($membership_item_id, $subscription_id);
 			
@@ -502,7 +502,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -576,10 +576,10 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 	
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 	
 			$cancellation_success = false;
 	
@@ -598,7 +598,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -684,7 +684,7 @@ use Psr\Log\NullLogger;
 			$added_membership_cart_reference = $SC->addToNewInternalCart($membership_item_1_id)["cart_reference"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_reference]);
 			$added_membership = $MC->getMembership();
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			
 			// cancel membership 1 
 			$MC->cancelMembership(["cancelMembership", $added_membership_id]);
@@ -734,7 +734,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -748,7 +748,8 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order["id"];
+			$order_id = $order ? $order["id"] : false;
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order_id;
 			$query->sql($sql);
 
 			// delete membership item 2
@@ -756,7 +757,7 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 	
 			// delete order
-			$order_no = $order["order_no"];
+			$order_no = $order ? $order["order_no"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$order_no'";
 			$query->sql($sql);
 		}
@@ -797,8 +798,9 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_1_id;
 			$added_membership_order = $MC->addNewMembership(["addNewMembership"]);
 			$added_membership = $MC->getMembership();
-			$added_membership_id = $added_membership["id"];
-			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
+			$added_membership_subscription_id = $added_membership ? $added_membership["subscription_id"] : false;
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]);
 			unset($_POST);
 			
 			// create another test membership item
@@ -827,7 +829,8 @@ use Psr\Log\NullLogger;
 			unset($_POST);
 			$switched_membership = $MC->getMembership();
 
-			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+			$switched_membership_subscription_id = $switched_membership ? $switched_membership["subscription_id"] : false;
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership_subscription_id]);
 			
 			// ASSERT 
 			if(
@@ -848,7 +851,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 			
@@ -861,12 +864,13 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 
 			// delete membership 1 order
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$added_membership_order_id'";
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order["id"];
+			$order_id = $order ? $order["id"] : false;
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order_id;
 			$query->sql($sql);
 			
 			// delete membership item 2
@@ -874,7 +878,7 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 			
 			// delete order
-			$order_id = $order["id"];
+			$order_id = $order ? $order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$order_id'";
 			$query->sql($sql);
 		}
@@ -914,13 +918,14 @@ use Psr\Log\NullLogger;
 
 			// create new membership with custom price
 			$cart = $SC->addToNewInternalCart($membership_item_1_id, ["custom_price" => 50]);
-			$cart_reference = $cart["cart_reference"];
+			$cart_reference = $cart ? $cart["cart_reference"] : false;
 			$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
 			
 			$added_membership = $MC->getMembership();
-			$added_membership_order = $added_membership["order"];
-			$added_membership_id = $added_membership["id"];
-			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership["subscription_id"]]);
+			$added_membership_order = $added_membership ? $added_membership["order"] : false;
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
+			$added_membership_subscription_id = $added_membership ? $added_membership["subscription_id"] : false;
+			$added_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $added_membership_subscription_id]);
 			unset($_POST);
 			
 			// create another test membership item
@@ -949,7 +954,8 @@ use Psr\Log\NullLogger;
 			unset($_POST);
 			$switched_membership = $MC->getMembership();
 
-			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership["subscription_id"]]);
+			$switched_membership_subscription_id = $switched_membership ? $switched_membership["subscription_id"] : false;
+			$switched_membership_subscription = $SuperSubscriptionClass->getSubscriptions(["subscription_id" => $switched_membership_subscription_id]);
 			
 			// ASSERT 
 			if(
@@ -974,7 +980,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 			
@@ -987,12 +993,13 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 
 			// delete membership 1 order
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$added_membership_order_id'";
 			$query->sql($sql);
 			
 			// delete membership item 2 subscription
-			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order["id"];
+			$order_id = $order ? $order["id"] : false;
+			$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $membership_item_2_id AND order_id = ".$order_id;
 			$query->sql($sql);
 			
 			// delete membership item 2
@@ -1000,7 +1007,7 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 			
 			// delete order
-			$order_id = $order["id"];
+			$order_id = $order ? $order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$order_id'";
 			$query->sql($sql);
 		}
@@ -1078,7 +1085,7 @@ use Psr\Log\NullLogger;
 			$_POST["item_id"] = $membership_item_id;
 			$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_id = $subscription["id"];
+			$subscription_id = $subscription ? $subscription["id"] : false;
 	
 			$added_membership = $MC->addMembership($membership_item["id"], $subscription_id);
 			
@@ -1100,7 +1107,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 
@@ -1149,7 +1156,7 @@ use Psr\Log\NullLogger;
 			$added_membership_cart_reference = $SC->addToNewInternalCart($membership_item_1_id)["cart_reference"];
 			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_reference]);
 			$added_membership = $MC->getMembership();
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			
 			// cancel membership 1 (remove subscription_id)
 			$MC->cancelMembership(["cancelMembership",$added_membership_id]);
@@ -1195,7 +1202,7 @@ use Psr\Log\NullLogger;
 			$_POST["order_id"] = $order_2_id;
 			$subscription_2 = $SubscriptionClass->addSubscription(["addSubscription"]);
 			unset($_POST);
-			$subscription_2_id = $subscription_2["id"];
+			$subscription_2_id = $subscription_2 ? $subscription_2["id"] : false;
 	
 			
 			// ACT 
@@ -1216,7 +1223,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$added_membership_id = $added_membership["id"];
+			$added_membership_id = $added_membership ? $added_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $added_membership_id";
 			$query->sql($sql);
 	
@@ -1225,7 +1232,7 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);	
 	
 			// delete order 1
-			$added_membership_order_id = $added_membership_order["id"];
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $added_membership_order_id";
 			$query->sql($sql);
 	
@@ -1258,7 +1265,7 @@ use Psr\Log\NullLogger;
 			
 			// ACT 
 			$updated_membership = $MC->updateMembership();
-			$updated_membership_id = $updated_membership["id"];
+			$updated_membership_id = $updated_membership ? $updated_membership["id"] : false;
 			
 			
 			// ASSERT 
@@ -1336,7 +1343,7 @@ use Psr\Log\NullLogger;
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
 			
 			$existing_membership = $MC->getMembership();
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 	
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
@@ -1361,7 +1368,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -1388,7 +1395,7 @@ use Psr\Log\NullLogger;
 	
 
 			// delete membership 2 order
-			$upgraded_membership_order_no = $upgraded_membership["order"]["order_no"];
+			$upgraded_membership_order_no = $upgraded_membership ? $upgraded_membership["order"]["order_no"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 		}
@@ -1451,7 +1458,7 @@ use Psr\Log\NullLogger;
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
 			
 			$existing_membership = $MC->getMembership();
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 	
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
@@ -1470,7 +1477,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -1554,7 +1561,7 @@ use Psr\Log\NullLogger;
 			$cart = $SC->addToNewInternalCart($membership_item_1_id);
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
 			$existing_membership = $MC->getMembership();
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 
 			// cancel membership 1 (remove subscription_id)
 			$MC->cancelMembership(["cancelMembership", $existing_membership_id]);
@@ -1578,7 +1585,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -1662,7 +1669,7 @@ use Psr\Log\NullLogger;
 			$cart = $SC->addToNewInternalCart($membership_item_1_id);
 			$existing_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
 			$existing_membership = $MC->getMembership();
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 	
 			// ACT 
 			$_POST["item_id"] = $membership_item_2_id;
@@ -1687,7 +1694,7 @@ use Psr\Log\NullLogger;
 			
 			// CLEAN UP
 			// delete membership
-			$existing_membership_id = $existing_membership["id"];
+			$existing_membership_id = $existing_membership ? $existing_membership["id"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = $existing_membership_id";
 			$query->sql($sql);
 
@@ -1713,7 +1720,7 @@ use Psr\Log\NullLogger;
 			$query->sql($sql);
 			
 			// delete membership 2 order
-			$upgraded_membership_order_no = $upgraded_membership["order"]["order_no"];
+			$upgraded_membership_order_no = $upgraded_membership ? $upgraded_membership["order"]["order_no"] : false;
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 		}

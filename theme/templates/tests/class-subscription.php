@@ -447,7 +447,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			session()->reset("test_item_ordered_callback");
 
 			// ACT 
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			
 			// ASSERT 
 			if(
@@ -691,7 +692,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["item_id"] = 9999;
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -789,7 +791,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -880,11 +883,14 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -982,16 +988,20 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$second_subscription = $SubscriptionClass->getSubscriptions(["item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription_id]);
 			
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -1093,7 +1103,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["item_id"] = $test_item_2_id;
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1198,18 +1209,22 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$second_subscription = $SubscriptionClass->getSubscriptions(["item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription_id]);
 
 			// clear session for callback checks
 			session()->reset("test_item_subscribed_callback");
 			
 			// ACT 
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $updated_subscription["item_id"] &&
@@ -1306,14 +1321,16 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$second_subscription = $SubscriptionClass->getSubscriptions(["item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription_id]);
 			
 			// clear session for callback checks
 			session()->reset("test_item_subscribed_callback");
 			
 			// ACT 
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1418,14 +1435,16 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$second_subscription = $SubscriptionClass->getSubscriptions(["item_id" => $test_item_2_id]);
 
 			// delete second subscription
-			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription["id"]]);
+			$second_subscription_id = $second_subscription ? $second_subscription["id"] : false;
+			$SubscriptionClass->deleteSubscription(["deleteSubscription", $second_subscription_id]);
 			
 			// clear session for callback checks
 			session()->reset("test_item_subscribed_callback");
 			
 			// ACT 
 			$_POST["order_id"] = $second_item_order["id"];
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1507,11 +1526,14 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["expires_at"] = "2001-01-01 00:00:00";
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
 			if(
+				$updated_subscription &&
+				$added_subscription &&
 				$updated_subscription["id"] == $added_subscription["id"] &&
 				$updated_subscription["user_id"] == $test_user_id &&
 				$added_subscription["item_id"] == $test_item_1_id &&
@@ -1595,7 +1617,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["expires_at"] = "2001-01-01 00:00:00";
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 
@@ -1652,7 +1675,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 				// ACT
 				$_POST["custom_price"] = 50;
-				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT
@@ -1693,7 +1717,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 				// ACT
 				$_POST["custom_price"] = 50;
-				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT
@@ -1735,7 +1760,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 				// ACT
 				$_POST["custom_price"] = false;
-				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription["id"]]);
+				$existing_subscription_id = $existing_subscription ? $existing_subscription["id"] : false;
+				$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $existing_subscription_id]);
 				unset($_POST);
 
 				// ASSERT
@@ -1807,7 +1833,8 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			// ACT 
 			$_POST["expires_at"] = 9999;
-			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription["id"]]);
+			$added_subscription_id = $added_subscription ? $added_subscription["id"] : false;
+			$updated_subscription = $SubscriptionClass->updateSubscription(["updateSubscription", $added_subscription_id]);
 			unset($_POST);
 			
 			// ASSERT 

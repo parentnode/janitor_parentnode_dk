@@ -435,9 +435,10 @@ function deleteTestCart($cart_reference) {
 
 				$_POST["item_id"] = $membership_item_id;
 				$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+				$subscription_id = $subscription ? $subscription["id"] : false;
 				unset($_POST);
 
-				$membership = $MC->addMembership($membership_item_id, $subscription["id"]);
+				$membership = $MC->addMembership($membership_item_id, $subscription_id);
 
 				$test_item_id = $model_tests->createTestItem([
 					"prices" => [
@@ -494,9 +495,10 @@ function deleteTestCart($cart_reference) {
 
 				$_POST["item_id"] = $membership_item_id;
 				$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+				$subscription_id = $subscription ? $subscription["id"] : false;
 				unset($_POST);
 
-				$membership = $MC->addMembership($membership_item_id, $subscription["id"]);
+				$membership = $MC->addMembership($membership_item_id, $subscription_id);
 
 				$test_item_id = $model_tests->createTestItem([
 					"prices" => [
@@ -559,9 +561,10 @@ function deleteTestCart($cart_reference) {
 
 				$_POST["item_id"] = $membership_item_id_2;
 				$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+				$subscription_id = $subscription ? $subscription["id"] : false;
 				unset($_POST);
 
-				$membership = $MC->addMembership($membership_item_id_2, $subscription["id"]);
+				$membership = $MC->addMembership($membership_item_id_2, $subscription_id);
 
 				$test_item_id = $model_tests->createTestItem([
 					"prices" => [
@@ -671,9 +674,10 @@ function deleteTestCart($cart_reference) {
 
 				$_POST["item_id"] = $membership_item_id;
 				$subscription = $SubscriptionClass->addSubscription(["addSubscription"]);
+				$subscription_id = $subscription ? $subscription["id"] : false;
 				unset($_POST);
 
-				$membership = $MC->addMembership($membership_item_id, $subscription["id"]);
+				$membership = $MC->addMembership($membership_item_id, $subscription_id);
 
 				$test_item_id = $model_tests->createTestItem([
 					"prices" => [
@@ -781,7 +785,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = createTestItem();
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -821,7 +825,7 @@ function deleteTestCart($cart_reference) {
 				$membership_item_id = $model_tests->createTestItem(["itemtype" => "membership", "price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -879,7 +883,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -924,7 +928,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -965,7 +969,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -1006,7 +1010,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -1053,7 +1057,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -1125,7 +1129,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 
@@ -1173,7 +1177,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -1243,7 +1247,7 @@ function deleteTestCart($cart_reference) {
 				$test_item_id = $model_tests->createTestItem(["price" => 100]);
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$_POST["item_id"] = $test_item_id;
@@ -1615,7 +1619,7 @@ function deleteTestCart($cart_reference) {
 				$model_tests = $IC->typeObject("tests");
 
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				$test_item_id = $model_tests->createTestItem();
 
@@ -1671,7 +1675,7 @@ function deleteTestCart($cart_reference) {
 				// add cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_reference = $cart["cart_reference"];
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart_reference]);
@@ -1715,8 +1719,8 @@ function deleteTestCart($cart_reference) {
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
 				// print_r($cart);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -1726,7 +1730,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -1779,8 +1783,8 @@ function deleteTestCart($cart_reference) {
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
 				// print_r($cart);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -1792,7 +1796,7 @@ function deleteTestCart($cart_reference) {
 				$_POST["order_comment"] = "Testing order comment";
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
 				unset($_POST);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -1846,8 +1850,8 @@ function deleteTestCart($cart_reference) {
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
 				// print_r($cart);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -1857,7 +1861,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 
 				// ASSERT
 				if(
@@ -1905,8 +1909,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -1917,7 +1921,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -1969,8 +1973,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -1981,7 +1985,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -2033,8 +2037,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -2045,7 +2049,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -2097,8 +2101,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -2109,7 +2113,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 				// print_r($order);
 				// debug($_SESSION);
 
@@ -2162,8 +2166,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -2174,7 +2178,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 
 				// ASSERT
 				if(
@@ -2224,8 +2228,8 @@ function deleteTestCart($cart_reference) {
 				// add test item to cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -2237,7 +2241,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 
 				// ASSERT
 				if(
@@ -2288,8 +2292,8 @@ function deleteTestCart($cart_reference) {
 				// add cart
 				$_POST["user_id"] = $user_id;
 				$cart = $SC->addCart(["addCart"]);
-				$cart_id = $cart["id"];
-				$cart_reference = $cart["cart_reference"];
+				$cart_id = $cart ? $cart["id"] : false;
+				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				unset($_POST);
 				
 				$_POST["item_id"] = $item_id;
@@ -2318,7 +2322,7 @@ function deleteTestCart($cart_reference) {
 
 				// ACT
 				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_reference]);
-				$order_id = $order["id"];
+				
 
 				// ASSERT
 				if(
