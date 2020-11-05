@@ -231,7 +231,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			!$subscription["expires_at"] &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::addSubscription - correct</p></div>
@@ -273,7 +272,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			!$subscription["expires_at"] &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::getSubscriptions - correct</p></div>
@@ -321,7 +319,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			// $subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::addSubscription - correct</p></div>
@@ -357,7 +354,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			// $subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::getSubscriptions - correct</p></div>
@@ -401,7 +397,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			$subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::addSubscription - correct</p></div>
@@ -436,7 +431,6 @@ if($query->sql($sql)) {
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			$subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>SuperSubscription::getSubscriptions - correct</p></div>

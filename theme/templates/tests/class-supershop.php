@@ -1373,6 +1373,8 @@ function deleteTestOrder($order_id) {
 				$test_item_id = createTestItem(["price" => 100]);
 				$membership_item_id = createTestItem(["itemtype" => "membership", "price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id; 
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1415,6 +1417,7 @@ function deleteTestOrder($order_id) {
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
 				$model_tests->cleanUp(["item_id" => $membership_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1432,6 +1435,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1462,6 +1467,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1514,6 +1520,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1540,6 +1548,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1557,6 +1566,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1589,6 +1600,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1606,6 +1618,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1663,6 +1677,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1680,6 +1695,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1713,6 +1730,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1730,6 +1748,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1785,6 +1805,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
@@ -1802,6 +1823,8 @@ function deleteTestOrder($order_id) {
 
 				$test_item_id = createTestItem(["price" => 100]);
 
+				$test_user_id = createTestUser();
+				$_POST["user_id"] =	$test_user_id;
 				$cart = $SC->addCart(["addCart"]);
 				$cart_reference = $cart ? $cart["cart_reference"] : false;
 				$cart_id = $cart ? $cart["id"] : false;
@@ -1921,6 +1944,7 @@ function deleteTestOrder($order_id) {
 
 				// CLEAN UP
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+				$model_tests->cleanUp(["user_id" => $test_user_id]);
 				$SC->deleteCart(["deleteCart", $cart_id, $cart_reference]);
 
 			})();
