@@ -58,7 +58,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			!$subscription["expires_at"] &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::addSubscription - correct</p></div>
@@ -96,7 +95,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			!$subscription["expires_at"] &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::getSubscription - correct</p></div>
@@ -140,7 +138,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			// $subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::addSubscription - correct</p></div>
@@ -175,7 +172,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			// $subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::getSubscription - correct</p></div>
@@ -218,7 +214,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			$subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::addSubscription - correct</p></div>
@@ -252,7 +247,6 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 			$subscription &&
 			$subscription["item_id"] == $item_id &&
 			$subscription["expires_at"] == $expires_at &&
-			!$subscription["payment_method"] &&
 			!$subscription["order_id"]
 		): ?>
 		<div class="testpassed"><p>Subscription::getSubscription - correct</p></div>
