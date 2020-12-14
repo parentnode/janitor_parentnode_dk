@@ -1649,7 +1649,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 <? 
 		
-		if(1 && "updateSubscription – add custom price – return subscription with custom price"):
+		if(1 && "updateSubscription – add custom price – return subscription with custom price") {
 			
 			(function() {
 
@@ -1689,9 +1689,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			})();
 
-		endif; 
+		} 
 
-		if(1 && "updateSubscription – change custom price – return subscription with changed custom price"):
+		if(1 && "updateSubscription – change custom price – return subscription with changed custom price") {
 			
 			(function() {
 
@@ -1732,9 +1732,9 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			})();
 
-		endif;
+		}
 
-		if(1 && "updateSubscription – delete custom price (set to false) – return subscription without custom price"):
+		if(1 && "updateSubscription – delete custom price (set to false) – return subscription without custom price") {
 			
 			(function() {
 
@@ -1775,7 +1775,7 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 
 			})();
 
-		endif;
+		}
 		
 		?>
 
@@ -1957,6 +1957,232 @@ $model_tests->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_i
 		}
 		calculateSubscriptionExpiry_annuallyFromFeb29th();
 		?>
+
+		<? 	
+		function calculateSubscriptionExpiry_biannuallyFromCurrentTime() {
+			// calculateSubscriptionExpiry – biannually subscription, no parameters sent – return current time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			$current_time = date("Y-m-d 00:00:00");
+
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("biannually");
+
+			// ASSERT 
+			$current_timestamp = strtotime($current_time);
+			$calculated_timestamp = strtotime($calculated_time);
+			$time_diff = $calculated_timestamp - $current_timestamp;
+			// summer / wintertime offset
+			$offset = 3600;
+
+			// compensate for Dayligt Saving Time (shifts in March/October in the EU)
+			if(
+				$current_time &&
+				$calculated_time &&
+				(
+					$time_diff == (181*86400) || $time_diff == (182*86400) || $time_diff == (183*86400) || $time_diff == (184*86400) ||
+					$time_diff == (181*86400+$offset) || $time_diff == (182*86400+$offset) || $time_diff == (183*86400+$offset) || $time_diff == (184*86400+$offset) ||
+					$time_diff == (181*86400-$offset) || $time_diff == (182*86400-$offset) || $time_diff == (183*86400-$offset) || $time_diff == (184*86400-$offset)
+				)		//|| $time_diff == (31*86400) || $time_diff == (31*86400+3600)
+			): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, no parameters sent – return current time + 6 months – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, no parameters sent – return current time + 6 months – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_biannuallyFromCurrentTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_biannuallyFromSpecifiedTime() {
+			// calculateSubscriptionExpiry – biannually subscription, specify start time – return start time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("biannually", "2018-01-01 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-07-01 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time – return start time + 6 months – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time – return start time + 6 months – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_biannuallyFromSpecifiedTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_biannuallyFromShorterMonth() {
+			// calculateSubscriptionExpiry – biannually subscription, specify start time as last day in a short month – return last day in longer month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("biannually", "2018-02-28 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-08-31 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time as last day in a short month – return last day in longer month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time as last day in a short month – return last day in longer month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_biannuallyFromShorterMonth();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_biannuallyFromLongerMonth() {
+			// calculateSubscriptionExpiry – biannually subscription, specify start time as last day in longer month – return last day in short month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("biannually", "2018-03-31 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-09-30 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time as last day in longer month – return last day in short month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – biannually subscription, specify start time as last day in longer month – return last day in short month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_biannuallyFromLongerMonth();
+		?>
+
+		<? 	
+		function calculateSubscriptionExpiry_quarterlyFromCurrentTime() {
+			// calculateSubscriptionExpiry – quarterly subscription, no parameters sent – return current time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			$current_time = date("Y-m-d 00:00:00");
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("quarterly");
+			
+			// ASSERT 
+			$current_timestamp = strtotime($current_time);
+			$calculated_timestamp = strtotime($calculated_time);
+			$time_diff = $calculated_timestamp - $current_timestamp;
+
+			// compensate for Dayligt Saving Time (shifts in March/October in the EU)
+			if(date("M") == "Mar") {
+				$time_diff += 3600;
+			}
+			if(date("M") == "Oct") {
+				$time_diff -= 3600;
+			}
+
+			if(
+				$current_time &&
+				$calculated_time &&
+					($time_diff == (90*86400) || $time_diff == (91*86400) || $time_diff == (92*86400)
+						//|| $time_diff == (31*86400) || $time_diff == (31*86400+3600)
+					)
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, no parameters sent – return current time + 3 months – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, no parameters sent – return current time + 3 months – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_quarterlyFromCurrentTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_quarterlyFromSpecifiedTime() {
+			// calculateSubscriptionExpiry – quarterly subscription, specify start time – return start time + 1 month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("quarterly", "2018-01-01 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-04-01 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time – return start time + 3 months – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time – return start time + 3 months – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_quarterlyFromSpecifiedTime();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_quarterlyFromShorterMonth() {
+			// calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in a short month – return last day in longer month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("quarterly", "2018-02-28 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-05-31 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in a short month – return last day in longer month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in a short month – return last day in longer month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_quarterlyFromShorterMonth();
+		?>
+		<? 	
+		function calculateSubscriptionExpiry_quarterlyFromLongerMonth() {
+			// calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in longer month – return last day in short month
+
+			// ARRANGE
+			include_once("classes/shop/subscription.class.php");
+			$SubscriptionClass = new Subscription();
+
+			
+			// ACT 
+			$calculated_time = $SubscriptionClass->calculateSubscriptionExpiry("quarterly", "2018-03-31 00:00:00");
+			
+			// ASSERT 
+			if(
+				$calculated_time == "2018-06-30 00:00:00"
+				): ?>
+			<div class="testpassed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in longer month – return last day in short month – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>Subscription::calculateSubscriptionExpiry – quarterly subscription, specify start time as last day in longer month – return last day in short month – error</p></div>
+			<? endif; 
+
+		}
+		calculateSubscriptionExpiry_quarterlyFromLongerMonth();
+		?>
+
 		<? 	
 		function calculateSubscriptionExpiry_monthlyFromCurrentTime() {
 			// calculateSubscriptionExpiry – monthly subscription, no parameters sent – return current time + 1 month
