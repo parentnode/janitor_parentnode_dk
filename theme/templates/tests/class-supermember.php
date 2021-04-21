@@ -1694,7 +1694,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$added_membership_order_no'";
 			$query->sql($sql);
 		}
-		// cancelMembership_membershipExists_membershipIsCancelled();
+		cancelMembership_membershipExists_membershipIsCancelled();
 		?>
 		<? 	
 		function cancelMembership_membershipInvalid_returnFalse() {
