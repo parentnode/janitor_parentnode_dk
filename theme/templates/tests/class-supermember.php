@@ -1072,8 +1072,6 @@
 		<? 
 		function getMembers_onlyActiveMembers_returnAllActiveMemberships() {
 
-			getMembers by item_id, membership exists
-			
 			// ARRANGE
 			include_once("classes/users/supermember.class.php");
 			$MC = new SuperMember();
@@ -1622,8 +1620,6 @@
 		<? 	
 		function cancelMembership_membershipExists_membershipIsCancelled() {
 
-			cancelMembership
-			
 			// ARRANGE
 			include_once("classes/users/supermember.class.php");
 			include_once("classes/shop/supersubscription.class.php");
