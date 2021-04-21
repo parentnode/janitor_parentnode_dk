@@ -90,7 +90,7 @@
 			
 			
 		}
-		addNewMembership_correctAction_returnOrder();
+		// addNewMembership_correctAction_returnOrder();
 		?>
 		<? function addNewMembership_noUserIdSent_returnFalse() {
 			// addNewMembership – no user_id in $action – should return false
@@ -145,7 +145,7 @@
 			$query->sql($sql);
 			
 		}
-		addNewMembership_noUserIdSent_returnFalse();
+		// addNewMembership_noUserIdSent_returnFalse();
 		?>
 		<? function addNewMembership_invalidUserIdSent_returnFalse() {
 			// addNewMembership – invalid user_id in $action – should return false
@@ -200,7 +200,7 @@
 			$query->sql($sql);
 			
 		}
-		addNewMembership_invalidUserIdSent_returnFalse();
+		// addNewMembership_invalidUserIdSent_returnFalse();
 		?>
 		<? function addNewMembership_validButNonexistingUserId_returnFalse() {
 			// addNewMembership – valid but non-existing user_id in $action – should return false
@@ -254,7 +254,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id IN ($membership_item_id)";
 			$query->sql($sql);
 		}
-		addNewMembership_validButNonexistingUserId_returnFalse();
+		// addNewMembership_validButNonexistingUserId_returnFalse();
 		?>
 		
 	</div>
@@ -307,7 +307,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		addMembership_nonexistingSubscription_returnFalse(); 
+		// addMembership_nonexistingSubscription_returnFalse(); 
 		?>
 		<? 
 		function addMembership_noUserIdSent_returnFalse() {
@@ -363,7 +363,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		addMembership_noUserIdSent_returnFalse();
+		// addMembership_noUserIdSent_returnFalse();
 		?>
 		<? 
 		function addMembership_invalidUserIdSent_returnFalse() {
@@ -419,7 +419,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		addMembership_invalidUserIdSent_returnFalse();
+		// addMembership_invalidUserIdSent_returnFalse();
 		?>
 		<? function addMembership_withSubscriptionNoPrice_returnMembership() {
 
@@ -483,7 +483,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		addMembership_withSubscriptionNoPrice_returnMembership(); 
+		// addMembership_withSubscriptionNoPrice_returnMembership(); 
 		?>		
 		<? 	
 		function addMembership_withSubscriptionWithPrice_returnMembership() {
@@ -586,7 +586,7 @@
 			$query->sql($sql);
 	
 		}
-		addMembership_withSubscriptionWithPrice_returnMembership(); 
+		// addMembership_withSubscriptionWithPrice_returnMembership(); 
 		?>
 		<? 
 		function addMembership_membershipAlreadyExists_returnFalse() {
@@ -641,7 +641,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}	
-		addMembership_membershipAlreadyExists_returnFalse(); 
+		// addMembership_membershipAlreadyExists_returnFalse(); 
 		?>
 	</div>
 
@@ -659,6 +659,7 @@
 			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
+			include_once("classes/shop/supershop.class.php");
 			$SC = new SuperShop();
 			
 			$user_id = session()->value("user_id");
@@ -987,6 +988,165 @@
 			// CLEAN UP 
 		}
 		getMembers_byItemIdNoMembershipExists_returnFalse();
+		?>
+		<? 
+		function getMembers_noParameters_returnAllMemberships() {
+
+			// getMembers by item_id, membership exists
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$model_tests = $IC->typeObject("tests");
+
+			$test_user_1_id = $model_tests->createTestUser();
+			$test_user_2_id = $model_tests->createTestUser();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// create membership and subscription for test_user_1
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_1_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			// create membership and subscription for test_user_2
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_2_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			$test_user_2_membership = $MC->getMembers(["user_id" => $test_user_2_id]);
+
+			// cancel membership for test_user_2
+			$MC->cancelMembership(["cancelMembership", $test_user_2_id, $test_user_2_membership["id"]]);
+	
+			// ACT 
+			$fetched_memberships = $MC->getMembers();
+			
+			// ASSERT 
+			if(
+				$fetched_memberships &&
+				count($fetched_memberships) == 2 &&
+				$fetched_memberships[0]["user_id"] == $test_user_1_id && 
+				$fetched_memberships[1]["user_id"] == $test_user_2_id 
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMembers – no parameters send – return all members – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMembers – no parameters send – return all members – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+
+			$model_tests->cleanup(["user_id" => $test_user_1_id]);
+			$model_tests->cleanup(["user_id" => $test_user_2_id]);
+		
+		}	
+		getMembers_noParameters_returnAllMemberships(); 
+		?>
+		<? 
+		function getMembers_onlyActiveMembers_returnAllActiveMemberships() {
+
+			// getMembers by item_id, membership exists
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$model_tests = $IC->typeObject("tests");
+
+			$test_user_1_id = $model_tests->createTestUser();
+			$test_user_2_id = $model_tests->createTestUser();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// create membership and subscription for test_user_1
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_1_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			// create membership and subscription for test_user_2
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_2_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			$test_user_2_membership = $MC->getMembers(["user_id" => $test_user_2_id]);
+
+			// cancel membership for test_user_2
+			$MC->cancelMembership(["cancelMembership", $test_user_2_id, $test_user_2_membership["id"]]);
+	
+			// ACT 
+			$fetched_memberships = $MC->getMembers(["only_active_members" => true]);
+			
+			// ASSERT 
+			if(
+				$fetched_memberships &&
+				count($fetched_memberships) == 1 &&
+				$fetched_memberships[0]["user_id"] == $test_user_1_id
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMembers – send parameter 'only_active_members' – return all active members – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMembers – send parameter 'only_active_members' – return all active members – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+
+			$model_tests->cleanup(["user_id" => $test_user_1_id]);
+			$model_tests->cleanup(["user_id" => $test_user_2_id]);
+		
+		}	
+		getMembers_onlyActiveMembers_returnAllActiveMemberships(); 
 		?>	
 	</div>
 
@@ -1118,7 +1278,7 @@
 			$query->sql($sql);
 		
 		}	
-		getMemberCount_noParameters_countAllMembersReturnString(); 
+		// getMemberCount_noParameters_countAllMembersReturnString(); 
 		?>
 		<? 
 		function getMemberCount_noParametersNoMemberships_returnZero() {
@@ -1145,7 +1305,7 @@
 			// CLEAN UP
 		
 		}	
-		getMemberCount_noParametersNoMemberships_returnZero(); 
+		// getMemberCount_noParametersNoMemberships_returnZero(); 
 		?>
 		<?
 		function getMemberCount_byItemId_countMembersWithMembertypeReturnString() {
@@ -1271,7 +1431,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN (".$test_user_ids[0].", ".$test_user_ids[1].", ".$test_user_ids[2].")";
 			$query->sql($sql);
 		}
-		getMemberCount_byItemId_countMembersWithMembertypeReturnString();
+		// getMemberCount_byItemId_countMembersWithMembertypeReturnString();
 		?>
 		<?
 		function getMemberCount_byItemIdNoMemberships_returnZero() {
@@ -1327,7 +1487,7 @@
 			$query->sql($sql);
 			
 		}
-		getMemberCount_byItemIdNoMemberships_returnZero();
+		// getMemberCount_byItemIdNoMemberships_returnZero();
 		?>
 		<?
 		function getMemberCount_byInvalidItemId_returnZero() {
@@ -1452,7 +1612,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".users WHERE id IN (".$test_user_ids[0].", ".$test_user_ids[1].", ".$test_user_ids[2].")";
 			$query->sql($sql);
 		}
-		getMemberCount_byInvalidItemId_returnZero();
+		// getMemberCount_byInvalidItemId_returnZero();
 		?>
 			
 	</div>
@@ -1538,7 +1698,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$added_membership_order_no'";
 			$query->sql($sql);
 		}
-		cancelMembership_membershipExists_membershipIsCancelled();
+		// cancelMembership_membershipExists_membershipIsCancelled();
 		?>
 		<? 	
 		function cancelMembership_membershipInvalid_returnFalse() {
@@ -1578,7 +1738,7 @@
 			$query->sql($sql);
 
 		}
-		cancelMembership_membershipInvalid_returnFalse();
+		// cancelMembership_membershipInvalid_returnFalse();
 		?>
 	</div>
 
@@ -1662,7 +1822,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$added_membership_order_no'";
 			$query->sql($sql);	
 		}
-		updateMembership_noChanges_returnUpdatedMembership();
+		// updateMembership_noChanges_returnUpdatedMembership();
 		?>
 		<? 	
 		function updateMembership_addSubscriptionId_returnUpdatedMembership() {
@@ -1745,7 +1905,7 @@
 			$query->sql($sql);
 
 		}
-		updateMembership_addSubscriptionId_returnUpdatedMembership();
+		// updateMembership_addSubscriptionId_returnUpdatedMembership();
 		?>
 		<? 	
 		function updateMembership_noMembershipExists_returnFalse() {
@@ -1778,7 +1938,7 @@
 			
 			// CLEAN UP
 		}
-		updateMembership_noMembershipExists_returnFalse();
+		// updateMembership_noMembershipExists_returnFalse();
 		?>
 		<? 
 		function updateMembership_noUserIdSent_returnFalse() {
@@ -1819,7 +1979,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		updateMembership_noUserIdSent_returnFalse();
+		// updateMembership_noUserIdSent_returnFalse();
 		?>
 		<? 
 		function updateMembership_invalidUserIdSent_returnFalse() {
@@ -1860,7 +2020,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		updateMembership_invalidUserIdSent_returnFalse();
+		// updateMembership_invalidUserIdSent_returnFalse();
 		?>
 	</div>
 
@@ -1986,7 +2146,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
-		switchMembership_fromNoSubscriptionToSubscription_returnOrderAddSubscriptionUpdateMembership();
+		// switchMembership_fromNoSubscriptionToSubscription_returnOrderAddSubscriptionUpdateMembership();
 		?>
 		<? 	
 		function switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership() {
@@ -2113,7 +2273,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
-		switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
+		// switchMembership_fromSubscriptionToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
 		?>
 		<? 	
 		function switchMembership_fromSubscriptionWithCustomPriceToSubscription_returnOrderUpdateSubscriptionUpdateMembership() {
@@ -2245,7 +2405,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = '$switched_membership_order_id'";
 			$query->sql($sql);
 		}
-		switchMembership_fromSubscriptionWithCustomPriceToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
+		// switchMembership_fromSubscriptionWithCustomPriceToSubscription_returnOrderUpdateSubscriptionUpdateMembership();
 		?>
 		<? 
 		function switchMembership_noMembershipExists_returnFalse() {
@@ -2288,7 +2448,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		switchMembership_noMembershipExists_returnFalse();
+		// switchMembership_noMembershipExists_returnFalse();
 		?>
 		<? 
 		function switchMembership_noUserIdSent_returnFalse() {
@@ -2332,7 +2492,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		switchMembership_noUserIdSent_returnFalse();
+		// switchMembership_noUserIdSent_returnFalse();
 		?>
 		<? 
 		function switchMembership_invalidUserIdSent_returnFalse() {
@@ -2375,7 +2535,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		switchMembership_invalidUserIdSent_returnFalse();
+		// switchMembership_invalidUserIdSent_returnFalse();
 		?>
 	</div>
 
@@ -2498,7 +2658,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE order_no = '$upgraded_membership_order_no'";
 			$query->sql($sql);
 		}
-		upgradeMembership_toMoreExpensiveSubscription_returnTrueUpgradeMembership();
+		// upgradeMembership_toMoreExpensiveSubscription_returnTrueUpgradeMembership();
 		?>
 		<? 	
 		function upgradeMembership_toCheaperSubscription_returnFalse() {
@@ -2607,7 +2767,7 @@
 			$query->sql($sql);
 	
 		}
-		upgradeMembership_toCheaperSubscription_returnFalse();
+		// upgradeMembership_toCheaperSubscription_returnFalse();
 		?>
 		<? 	
 		function upgradeMembership_existingMembershipHasNoSubscription_returnFalse() {
@@ -2720,7 +2880,7 @@
 			$query->sql($sql);
 
 		}
-		upgradeMembership_existingMembershipHasNoSubscription_returnFalse();
+		// upgradeMembership_existingMembershipHasNoSubscription_returnFalse();
 		?>
 		<? 
 		function upgradeMembership_noUserIdSent_returnFalse() {
@@ -2762,7 +2922,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		upgradeMembership_noUserIdSent_returnFalse();
+		// upgradeMembership_noUserIdSent_returnFalse();
 		?>
 		<? 
 		function upgradeMembership_invalidUserIdSent_returnFalse() {
@@ -2804,7 +2964,7 @@
 			$sql = "DELETE FROM ".SITE_DB.".items WHERE id = $membership_item_id";
 			$query->sql($sql);
 		}
-		upgradeMembership_invalidUserIdSent_returnFalse();
+		// upgradeMembership_invalidUserIdSent_returnFalse();
 		?>
 		<? 	
 		function upgradeMembership_existingMembershipHasNoExpiry_returnTrue() {
@@ -2921,7 +3081,7 @@
 
 			$model_tests->cleanUp(["user_id" => $user_id]);
 		}
-		upgradeMembership_existingMembershipHasNoExpiry_returnTrue();
+		// upgradeMembership_existingMembershipHasNoExpiry_returnTrue();
 		?>
 	</div>
 
