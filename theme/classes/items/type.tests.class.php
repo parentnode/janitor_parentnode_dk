@@ -27,6 +27,14 @@ class TypeTests extends Itemtype {
 			"error_message" => "String must be string"
 		));
 
+		// Published at
+		$this->addToModel("published_at", array(
+			"type" => "datetime",
+			"label" => "Publish date (yyyy-mm-dd hh:mm)",
+			"hint_message" => "Publishing date of the item. Leave empty for current time.",
+			"error_message" => "Datetime must be of format yyyy-mm-dd hh:mm",
+		));
+
 		$this->addToModel("v_text", array(
 			"type" => "text",
 			"label" => "Text",
@@ -191,11 +199,15 @@ class TypeTests extends Itemtype {
 		));
 		$this->addToModel("v_latitude", array(
 			"type" => "number",
-			"label" => "Latitude"
+			"label" => "Latitude",
+			"hint_message" => "Type latitude",
+			"error_message" => "Must be latitude"
 		));
 		$this->addToModel("v_longitude", array(
 			"type" => "number",
-			"label" => "Longitude"
+			"label" => "Longitude",
+			"hint_message" => "Type longitude",
+			"error_message" => "Must be longitude"
 		));
 
 

@@ -77,7 +77,7 @@ u.m["testForm"] = new function() {
 				<?= $model->input("v_radiobuttons", array("value" => $item["v_radiobuttons"])) ?>
 
 
-				<?= $model->inputHTML("v_html", array("value" => $item["v_html"])) ?>
+				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "label_lon" => $item["v_longitude"])) ?>
 			</fieldset>
 
