@@ -531,7 +531,7 @@ class TypeTests extends Itemtype {
 				case "item_id"            : $item_id              = $_value; break;
 				case "user_id"            : $user_id              = $_value; break;
 				case "currency_id"        : $currency_id          = $_value; break;
-
+				
 			}
 		}
 
@@ -888,6 +888,33 @@ class TypeTests extends Itemtype {
 
 		return false;
 	} 
+
+	function createTestTag($context, $value) {
+
+		$query = new Query();
+		if(!$query->sql("SELECT id FROM ".UT_TAG." WHERE context = '$context' AND value = '$value'")) {
+			
+			if($query->sql("INSERT INTO ".UT_TAG." VALUES(DEFAULT, '$context', '$value', DEFAULT)")) {
+				$tag_id = $query->lastInsertId();
+
+				return $tag_id;
+			}
+		}
+		
+		return false;
+	}
+
+	function createTestTaglist($name) {
+
+		$TC = new Taglist();
+		$_POST["name"] = $name;
+		$_POST["handle"] = superNormalize($name);
+		$taglist = $TC->saveTaglist(["saveTaglist"]);
+		unset($_POST);
+
+		return $taglist ? $taglist["id"] : false;
+	}
+
 	
 }
 
