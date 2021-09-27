@@ -522,6 +522,10 @@ class TypeTests extends Itemtype {
 		$user_id = false;
 		$item_id = false;
 		$currency_id = false;
+		$payment_method_id = false;
+		$cart_id = false;
+		$order_id = false;
+		$order_no = false;
 		$itemtype = false;
 		
 		foreach($_options as $_option => $_value) {
@@ -531,6 +535,10 @@ class TypeTests extends Itemtype {
 				case "item_id"            : $item_id              = $_value; break;
 				case "user_id"            : $user_id              = $_value; break;
 				case "currency_id"        : $currency_id          = $_value; break;
+				case "payment_method_id"  : $payment_method_id    = $_value; break;
+				case "cart_id"            : $cart_id              = $_value; break;
+				case "order_id"           : $order_id             = $_value; break;
+				case "order_no"           : $order_no             = $_value; break;
 				
 			}
 		}
@@ -602,6 +610,25 @@ class TypeTests extends Itemtype {
 			}
 		}
 
+		// Delete by order_id or order_no
+		if($order_id || $order_no) {
+
+			if($order_no) {
+
+				$order = $SC->getOrders(["order_no" => $order_no]);
+				$order_id = $order ? $order["id"] : false;
+				
+			}
+
+			$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
+
+			$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
+			$query->sql($sql);
+			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+			$query->sql($sql);
+
+		}
+
 		// Delete by item_id
 		if($item_id) {
 	
@@ -623,10 +650,27 @@ class TypeTests extends Itemtype {
 			unset($_POST);
 		}
 
+		
+
 		// Delete by currency id
 		if($currency_id) {
 
 			$sql = "DELETE FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
+			$query->sql($sql);
+		}
+		
+		// Delete by payment_method id
+		if($payment_method_id) {
+
+			$sql = "DELETE FROM ".UT_PAYMENT_METHODS." WHERE id = '$payment_method_id'";
+			$query->sql($sql);
+			cache()->reset("payment_methods");
+		}
+		
+		// Delete by cart id
+		if($cart_id) {
+
+			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
 			$query->sql($sql);
 		}
 
@@ -666,6 +710,12 @@ class TypeTests extends Itemtype {
 
 		}
 
+		if($order_id) {
+			
+			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+			$remaining_orders = $query->sql($sql); 	
+		}
+
 		// Check that currency was deleted
 		$remaining_currencies = false;
 		if($currency_id) {
@@ -674,6 +724,26 @@ class TypeTests extends Itemtype {
 			$remaining_currencies = $query->sql($sql);
 
 		}
+		
+		// Check that payment_methods were deleted
+		$remaining_payment_methods = false;
+		if($payment_method_id) {
+
+			$sql = "SELECT * FROM ".UT_PAYMENT_METHODS." WHERE id = '$payment_method_id'";
+			$remaining_payment_methods = $query->sql($sql);
+
+		}
+		
+		// Check that carts was deleted
+		$remaining_carts = false;
+		if($cart_id) {
+
+			$sql = "SELECT * FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
+			$remaining_carts = $query->sql($sql);
+
+		}
+
+		
 
 
 		if(
@@ -681,7 +751,10 @@ class TypeTests extends Itemtype {
 			!$remaining_items && 
 			!$remaining_orders && 
 			!$remaining_users && 
-			!$remaining_currencies
+			!$remaining_currencies &&
+			!$remaining_payment_methods &&
+			!$remaining_carts
+			
 		) {
 	
 			return true;
@@ -884,6 +957,27 @@ class TypeTests extends Itemtype {
 		$sql = "INSERT INTO ".UT_CURRENCIES." (id, name, abbreviation, abbreviation_position, decimals, decimal_separator, grouping_separator) VALUES ('$id', '$name', '$abbreviation', '$abbreviation_position', $decimals, '$decimal_separator', '$grouing_separator')";
 		if ($query->sql($sql)) {
 			 return $id;
+		}
+
+		return false;
+	}
+
+	function createTestPaymentMethod($_options = false) {
+		$query = new Query();
+
+		$name = "Test PaymentMethod";
+		$classname = "test";
+		$description = "A payment method for testing. Can be deleted.";
+		$gateway = null;
+		$state = "public";
+
+		$sql = "INSERT INTO ".UT_PAYMENT_METHODS." (name, classname, description, gateway, state) VALUES ('$name', '$classname', '$description', '$gateway', '$state')";
+		if ($query->sql($sql)) {
+			
+			$payment_method_id = $query->lastInsertId();
+			cache()->reset("payment_methods");
+
+			return $payment_method_id;
 		}
 
 		return false;
