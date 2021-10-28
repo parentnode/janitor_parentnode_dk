@@ -9,6 +9,74 @@
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
+	<div class="tests cutString">
+		<h3>cutString</h3>
+
+		<?
+		// cutString
+
+		// max_length = 8
+		$ref1 = "123";
+		$res1 = "123";
+		$ref2 = "1234567";
+		$res2 = "1234567";
+		$ref3 = "12345678";
+		$res3 = "12345678";
+		$ref4 = "123456789";
+		$res4 = "12345...";
+		$ref5 = "1234567890";
+		$res5 = "12345...";
+		$ref6 = "12345678901";
+		$res6 = "12345...";
+		$ref7 = "12345678987654321";
+		$res7 = "12345...";
+		$ref8 = "1234\n5678987654321";
+		$res8 = "1234";
+		$ref9 = "123 45678987654321";
+		$res9 = "123...";
+		$ref10 = "12 3 456789876 54321";
+		$res10 = "12 3...";
+		$ref11 = "12 34 56789876 54321";
+		$res11 = "12 34...";
+		$ref12 = "1234567 8987654321";
+		$res12 = "12345...";
+
+		$string1 = cutString($ref1, 8);
+		$string2 = cutString($ref2, 8);
+		$string3 = cutString($ref3, 8);
+		$string4 = cutString($ref4, 8);
+		$string5 = cutString($ref5, 8);
+		$string6 = cutString($ref6, 8);
+		$string7 = cutString($ref7, 8);
+		$string8 = cutString($ref8, 8);
+		$string9 = cutString($ref9, 8);
+		$string10 = cutString($ref10, 8);
+		$string11 = cutString($ref11, 8);
+		$string12 = cutString($ref12, 8);
+
+
+		// debug([$ref1, $string1, $res1, $ref2, $string2, $res2, $ref3, $string3, $res3, $ref4, $string4, $res4]);
+
+		if($string1 === $res1 
+		&& $string2 === $res2 
+		&& $string3 === $res3 
+		&& $string4 === $res4
+		&& $string5 === $res5
+		&& $string6 === $res6
+		&& $string7 === $res7
+		&& $string8 === $res8
+		&& $string9 === $res9
+		&& $string10 === $res10
+		&& $string11 === $res11
+		&& $string12 === $res12
+		): ?>
+		<div class="testpassed">cutString - correct</div>
+		<? else: ?>
+		<div class="testfailed">cutString - error</div>
+		<? endif; ?>
+
+	</div>
+
 	<div class="tests getPost">
 		<h3>getPost</h3>
 

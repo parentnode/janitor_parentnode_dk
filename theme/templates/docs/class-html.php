@@ -339,7 +339,7 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$JML->jsMedia($item, "mediae");</code>
+							<code>$HTML->jsMedia($item, "mediae");</code>
 							<p>Might return something like:</p>
 							<code> format:jpg variant:mediae-xyzdefgh</code>
 						</div>

@@ -62,7 +62,7 @@ u.o["testValidation"] = new function() {
 		<h3>HTML validation</h3>
 		<?= $model->formStart("htmlValidation", array("class" => "labelstyle:inject i:testValidation html")) ?>
 			<fieldset>
-				<?= $model->inputHTML("v_html") ?>
+				<?= $model->input("v_html") ?>
 			</fieldset>
 
 			<ul class="actions">

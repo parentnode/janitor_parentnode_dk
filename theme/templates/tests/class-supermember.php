@@ -659,6 +659,7 @@
 			$SuperSubscriptionClass = new SuperSubscription();
 			$query = new Query();
 			$IC = new Items();
+			include_once("classes/shop/supershop.class.php");
 			$SC = new SuperShop();
 			
 			$user_id = session()->value("user_id");
@@ -987,6 +988,163 @@
 			// CLEAN UP 
 		}
 		getMembers_byItemIdNoMembershipExists_returnFalse();
+		?>
+		<? 
+		function getMembers_noParameters_returnAllMemberships() {
+
+			// getMembers by item_id, membership exists
+			
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$model_tests = $IC->typeObject("tests");
+
+			$test_user_1_id = $model_tests->createTestUser();
+			$test_user_2_id = $model_tests->createTestUser();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// create membership and subscription for test_user_1
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_1_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			// create membership and subscription for test_user_2
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_2_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			$test_user_2_membership = $MC->getMembers(["user_id" => $test_user_2_id]);
+
+			// cancel membership for test_user_2
+			$MC->cancelMembership(["cancelMembership", $test_user_2_id, $test_user_2_membership["id"]]);
+	
+			// ACT 
+			$fetched_memberships = $MC->getMembers();
+			
+			// ASSERT 
+			if(
+				$fetched_memberships &&
+				count($fetched_memberships) == 2 &&
+				$fetched_memberships[0]["user_id"] == $test_user_1_id && 
+				$fetched_memberships[1]["user_id"] == $test_user_2_id 
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMembers – no parameters send – return all members – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMembers – no parameters send – return all members – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+
+			$model_tests->cleanup(["user_id" => $test_user_1_id]);
+			$model_tests->cleanup(["user_id" => $test_user_2_id]);
+		
+		}	
+		getMembers_noParameters_returnAllMemberships(); 
+		?>
+		<? 
+		function getMembers_onlyActiveMembers_returnAllActiveMemberships() {
+
+			// ARRANGE
+			include_once("classes/users/supermember.class.php");
+			$MC = new SuperMember();
+			include_once("classes/shop/supersubscription.class.php");
+			$SuperSubscriptionClass = new SuperSubscription();
+			$query = new Query();
+			$IC = new Items();
+			$SC = new SuperShop();
+			$model_tests = $IC->typeObject("tests");
+
+			$test_user_1_id = $model_tests->createTestUser();
+			$test_user_2_id = $model_tests->createTestUser();
+
+			// create test membership item
+			$model_membership = $IC->TypeObject("membership");
+			$_POST["name"] = "Membership Test item";
+			$membership_item = $model_membership->save(array("save"));
+			$membership_item_id = $membership_item["id"];
+			unset($_POST);
+
+			// add price to membership item
+			$_POST["item_price"] = 100;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 1;
+			$_POST["item_price_type"] = 1;
+			$membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
+			unset($_POST);
+	
+			// update test item subscription method
+			$_POST["item_subscription_method"] = 2;
+			$model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
+			unset($_POST);
+
+			// create membership and subscription for test_user_1
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_1_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			// create membership and subscription for test_user_2
+			$added_membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $test_user_2_id]);
+			$added_membership_cart_reference = $added_membership_cart["cart_reference"];
+			$added_membership_cart_id = $added_membership_cart["id"];
+			$added_membership_order = $SC->newOrderFromCart(["newOrderFromCart", $added_membership_cart_id, $added_membership_cart_reference]);
+			$added_membership_order_id = $added_membership_order ? $added_membership_order["id"] : false;
+
+			$test_user_2_membership = $MC->getMembers(["user_id" => $test_user_2_id]);
+
+			// cancel membership for test_user_2
+			$MC->cancelMembership(["cancelMembership", $test_user_2_id, $test_user_2_membership["id"]]);
+	
+			// ACT 
+			$fetched_memberships = $MC->getMembers(["only_active_members" => true]);
+			
+			// ASSERT 
+			if(
+				$fetched_memberships &&
+				count($fetched_memberships) == 1 &&
+				$fetched_memberships[0]["user_id"] == $test_user_1_id
+				): ?>
+			<div class="testpassed"><p>SuperMember::getMembers – send parameter 'only_active_members' – return all active members – correct</p></div>
+			<? else: ?>
+			<div class="testfailed"><p>SuperMember::getMembers – send parameter 'only_active_members' – return all active members – error</p></div>
+			<? endif;
+			
+			// CLEAN UP
+
+			$model_tests->cleanup(["user_id" => $test_user_1_id]);
+			$model_tests->cleanup(["user_id" => $test_user_2_id]);
+		
+		}	
+		getMembers_onlyActiveMembers_returnAllActiveMemberships(); 
 		?>	
 	</div>
 
@@ -1462,8 +1620,6 @@
 		<? 	
 		function cancelMembership_membershipExists_membershipIsCancelled() {
 
-			// cancelMembership
-			
 			// ARRANGE
 			include_once("classes/users/supermember.class.php");
 			include_once("classes/shop/supersubscription.class.php");
