@@ -1,4 +1,4 @@
-<div class="scene i:scene tests">
+	<div class="scene i:scene tests">
 	<h1>QR codes</h1>	
 	<h2>QR code generator</h2>
 	<ul class="actions">

@@ -658,9 +658,12 @@ class TypeTests extends Itemtype {
 			$sql = "DELETE FROM ".UT_CURRENCIES." WHERE id = '$currency_id'";
 			$query->sql($sql);
 		}
-		
+
 		// Delete by payment_method id
 		if($payment_method_id) {
+
+			$sql = "DELETE FROM ".SITE_DB.".user_payment_methods WHERE payment_method_id = '$payment_method_id'";
+			$query->sql($sql);
 
 			$sql = "DELETE FROM ".UT_PAYMENT_METHODS." WHERE id = '$payment_method_id'";
 			$query->sql($sql);
@@ -886,6 +889,7 @@ class TypeTests extends Itemtype {
 		$subscribed_item_id = false;
 		$subscription_expires_at = false;
 		$subscription_custom_price = false;
+		$payment_method_id = false;
 	
 		if($_options !== false) {
 			foreach($_options as $_option => $_value) {
@@ -901,6 +905,7 @@ class TypeTests extends Itemtype {
 					case "subscribed_item_id"             : $subscribed_item_id                    = $_value; break;
 					case "subscription_expires_at"        : $subscription_expires_at               = $_value; break;
 					case "subscription_custom_price"      : $subscription_custom_price             = $_value; break;
+					case "payment_method_id"              : $payment_method_id                     = $_value; break;
 				}
 			}
 		}
@@ -933,6 +938,11 @@ class TypeTests extends Itemtype {
 	
 			if($subscription_expires_at) {
 				$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$subscription_expires_at."' WHERE id = ".$added_subscription["id"];
+				$query->sql($sql);
+			}
+			
+			if($payment_method_id) {
+				$sql = "INSERT INTO ".SITE_DB.".user_payment_methods SET user_id = $user_id, payment_method_id = $payment_method_id, default_method = 1";
 				$query->sql($sql);
 			}
 	
@@ -970,6 +980,14 @@ class TypeTests extends Itemtype {
 		$description = "A payment method for testing. Can be deleted.";
 		$gateway = null;
 		$state = "public";
+
+		if($_options !== false) {
+			foreach($_options as $_option => $_value) {
+				switch($_option) {
+					case "gateway"            : $gateway              = $_value; break;
+				}
+			}
+		}
 
 		$sql = "INSERT INTO ".UT_PAYMENT_METHODS." (name, classname, description, gateway, state) VALUES ('$name', '$classname', '$description', '$gateway', '$state')";
 		if ($query->sql($sql)) {
