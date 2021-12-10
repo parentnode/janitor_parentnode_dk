@@ -19,13 +19,16 @@
 				// ARRANGE
 				
 				// ACT
-				$message = sms()->send(["to" => "+4560626083", "from" => "+18506053865", "body" => "Hejsa!-".rand()]);
+				$message = sms()->send(["to" => "+4560626083", "body" => "Hejsa!-".rand()]);
 				
 				
 				// ASSERT
 				
-				sleep(5);
-				$message = sms()->fetchMessage($message->sid);
+				if($message) {
+
+					sleep(5);
+					$message = sms()->fetchMessage($message->sid);
+				}
 
 				if(
 					$message
