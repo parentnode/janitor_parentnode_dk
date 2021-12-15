@@ -12,7 +12,7 @@ NC=`tput sgr0`
 
 sites
 # Variables (to optimize installation)
-working_directory=$PWD
+working_directory=pwd
 parentnode_env="n"
 install_user=$( who am i | awk '{print $1}' )
 
