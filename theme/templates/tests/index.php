@@ -56,6 +56,7 @@
 		<?= $HTML->link("PDF", "/janitor/tests/class-pdf", array("wrapper" => "li.pdf")) ?>
 		<?= $HTML->link("Autoconversion (Image/Video/Audio)", "/janitor/tests/api-autoconversion", array("wrapper" => "li.autoconversion")) ?>
 		<?= $HTML->link("QR code generator", "/janitor/tests/class-qr-codes", array("wrapper" => "li.qr_codes")) ?>
+		<?= $HTML->link("SMS", "/janitor/tests/class-sms", array("wrapper" => "li.sms")) ?>
 	</ul>
 
 	<h3>Form and model</h3>

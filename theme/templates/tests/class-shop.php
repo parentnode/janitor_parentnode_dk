@@ -184,7 +184,7 @@ function deleteTestCart($cart_reference) {
 	<div class="tests getPrice">
 		<h3>Shop::getPrice</h3>
 		<?
-		if(1 && "getPrice – item with default price – return default price") {
+		if(0 && "getPrice – item with default price – return default price") {
 
 			(function() {
 					
@@ -216,7 +216,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		} 
 
-		if(1 && "getPrice – item with default price of 0 – return default price") {
+		if(0 && "getPrice – item with default price of 0 – return default price") {
 
 			(function() {
 					
@@ -248,7 +248,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		} 
 
-		if(1 && "getPrice – item with default price and cheaper offer price – return offer price") {
+		if(0 && "getPrice – item with default price and cheaper offer price – return offer price") {
 
 			(function() {
 					
@@ -289,7 +289,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 		
-		if(1 && "getPrice – item with default price and more expensive offer price – return default price") {
+		if(0 && "getPrice – item with default price and more expensive offer price – return default price") {
 
 			(function() {
 					
@@ -330,7 +330,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		} 
 
-		if(1 && "getPrice – item with default price and bulk price with minimum quantity 3, get price for 3 items – return bulk price") {
+		if(0 && "getPrice – item with default price and bulk price with minimum quantity 3, get price for 3 items – return bulk price") {
 
 			(function() {
 					
@@ -372,7 +372,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		} 
 
-		if(1 && "getPrice – item with default price and bulk price with minimum quantity 3, get price for 2 items – return default price") {
+		if(0 && "getPrice – item with default price and bulk price with minimum quantity 3, get price for 2 items – return default price") {
 
 			(function() {
 					
@@ -414,7 +414,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with default price and cheaper membership price, user has matching membership – return membership price") {
+		if(0 && "getPrice – item with default price and cheaper membership price, user has matching membership – return membership price") {
 
 			(function() {
 					
@@ -474,7 +474,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with default price and more expensive membership price, user has matching membership – return membership price") {
+		if(0 && "getPrice – item with default price and more expensive membership price, user has matching membership – return membership price") {
 
 			(function() {
 					
@@ -534,7 +534,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with default price and cheaper membership price, user has different membership – return default price") {
+		if(0 && "getPrice – item with default price and cheaper membership price, user has different membership – return default price") {
 
 			(function() {
 					
@@ -601,7 +601,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with default price and membership price, user has no membership – return default price") {
+		if(0 && "getPrice – item with default price and membership price, user has no membership – return default price") {
 
 			(function() {
 					
@@ -653,7 +653,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with default price and cheaper membership price and even cheaper offer price, user has matching membership – return offer price") {
+		if(0 && "getPrice – item with default price and cheaper membership price and even cheaper offer price, user has matching membership – return offer price") {
 
 			(function() {
 					
@@ -716,7 +716,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "getPrice – item with only membership price, user has no membership – return false") {
+		if(0 && "getPrice – item with only membership price, user has no membership – return false") {
 
 			(function() {
 					
@@ -774,7 +774,7 @@ function deleteTestCart($cart_reference) {
 
 		<?
 
-		if(1 && "addToCart – add item without price – return false") {
+		if(0 && "addToCart – add item without price – return false") {
 
 			(function(){
 
@@ -812,7 +812,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add two different itemtypes to cart – return cart") {
+		if(0 && "addToCart – add two different itemtypes to cart – return cart") {
 
 			(function(){
 
@@ -870,7 +870,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add item that already exists in cart – return cart with updated quantity") {
+		if(0 && "addToCart – add item that already exists in cart – return cart with updated quantity") {
 
 			(function(){
 
@@ -916,7 +916,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add item with custom_name and custom_price – return cart") {
+		if(0 && "addToCart – add item with custom_name and custom_price – return cart") {
 
 			(function(){
 
@@ -998,7 +998,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items ") {
+		if(0 && "addToCart – add item with standard price to cart that already contains an item of the same type but with a custom price – return cart with separated items ") {
 
 			(function(){
 
@@ -1045,7 +1045,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add the same item five times (2x standard price, 1x custom price A, 2x custom price B), in mixed order – return cart with separated items, with correct quantities ") {
+		if(0 && "addToCart – add the same item five times (2x standard price, 1x custom price A, 2x custom price B), in mixed order – return cart with separated items, with correct quantities ") {
 
 			(function(){
 
@@ -1117,7 +1117,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add the same item twice, one standard, and one with custom name – return cart with separated items") {
+		if(0 && "addToCart – add the same item twice, one standard, and one with custom name – return cart with separated items") {
 
 			(function(){
 
@@ -1165,7 +1165,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add the same item five times (2x standard, 1x custom name AAA, 2x custom name BBB), in mixed order – return cart with separated items, with correct quantities ") {
+		if(0 && "addToCart – add the same item five times (2x standard, 1x custom name AAA, 2x custom name BBB), in mixed order – return cart with separated items, with correct quantities ") {
 
 			(function(){
 
@@ -1235,7 +1235,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities") {
+		if(0 && "addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities") {
 
 			(function(){
 
@@ -1462,12 +1462,11 @@ function deleteTestCart($cart_reference) {
 
 	</div>
 
-
 	<div class="tests addToNewInternalCart">
 		<h3>Shop::addToNewInternalCart</h3>
 
 		<? 
-		if(1 && "addToNewInternalCart – add test item – return cart with test item") {
+		if(0 && "addToNewInternalCart – add test item – return cart with test item") {
 
 			(function() {
 					
@@ -1500,7 +1499,7 @@ function deleteTestCart($cart_reference) {
 
 		}
 
-		if(1 && "addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2)") {
+		if(0 && "addToNewInternalCart – add test item (quantity = 2) – return cart with test item (quantity = 2)") {
 
 			(function() {
 					
@@ -1534,7 +1533,7 @@ function deleteTestCart($cart_reference) {
 
 		}
 
-		if(1 && "addToNewInternalCart – add test item without price – return false") {
+		if(0 && "addToNewInternalCart – add test item without price – return false") {
 
 			(function() {
 					
@@ -1566,7 +1565,7 @@ function deleteTestCart($cart_reference) {
 
 		}
 
-		if(1 && "addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item") {
+		if(0 && "addToNewInternalCart – add test item with custom_name and custom_price – return cart with test item") {
 
 			(function() {
 					
@@ -1609,7 +1608,7 @@ function deleteTestCart($cart_reference) {
 		<h3>Shop::getCart()</h3>
 		
 		<? 
-		if(1 && "getCart – cart with 1 item – return cart") {
+		if(0 && "getCart – cart with 1 item – return cart") {
 
 			(function() {
 					
@@ -1656,7 +1655,7 @@ function deleteTestCart($cart_reference) {
 
 		<?
 		
-		if(1 && "newOrderFromCart – empty cart – return false") {
+		if(0 && "newOrderFromCart – empty cart – return false") {
 
 			(function() {
 
@@ -1698,7 +1697,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – item without subscription method – return order, 'ordered'-callback, no 'subscribed'-callback") {
+		if(0 && "newOrderFromCart – item without subscription method – return order, 'ordered'-callback, no 'subscribed'-callback") {
 
 			(function() {
 
@@ -1762,7 +1761,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – pass cart and order_comment method – return order with comment") {
+		if(0 && "newOrderFromCart – pass cart and order_comment method – return order with comment") {
 
 			(function() {
 
@@ -1829,7 +1828,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback") {
+		if(0 && "newOrderFromCart – item with subscription method – return order, 'ordered'-callback, 'subscribed'-callback") {
 
 			(function() {
 
@@ -1889,7 +1888,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom price – return order with custom price") {
+		if(0 && "newOrderFromCart – cart_item with custom price – return order with custom price") {
 
 			(function() {
 
@@ -1953,7 +1952,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom price of 0 – return order with total_price of 0, status = 1, payment_status = paid") {
+		if(0 && "newOrderFromCart – cart_item with custom price of 0 – return order with total_price of 0, status = 1, payment_status = paid") {
 
 			(function() {
 
@@ -2017,7 +2016,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom price with comma-seperated decimal – return order with custom price with period-seperated decimal") {
+		if(0 && "newOrderFromCart – cart_item with custom price with comma-seperated decimal – return order with custom price with period-seperated decimal") {
 
 			(function() {
 
@@ -2081,7 +2080,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom price with period-seperated decimal – return order with custom price with comma-seperated decimal") {
+		if(0 && "newOrderFromCart – cart_item with custom price with period-seperated decimal – return order with custom price with comma-seperated decimal") {
 
 			(function() {
 
@@ -2146,7 +2145,7 @@ function deleteTestCart($cart_reference) {
 		}
 
 
-		if(1 && "newOrderFromCart – cart_item with custom name – return order with custom name") {
+		if(0 && "newOrderFromCart – cart_item with custom name – return order with custom name") {
 
 			(function() {
 
@@ -2208,7 +2207,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – cart_item with custom name and custom price – return order with custom name and custom price") {
+		if(0 && "newOrderFromCart – cart_item with custom name and custom price – return order with custom name and custom price") {
 
 			(function() {
 
@@ -2272,7 +2271,7 @@ function deleteTestCart($cart_reference) {
 			})();
 		}
 
-		if(1 && "newOrderFromCart – add item (1x standard price, 2x custom_price, 1x custom_price/custom_name, 1 custom_name– return order with correct prices and quantities ") {
+		if(0 && "newOrderFromCart – add item (1x standard price, 2x custom_price, 1x custom_price/custom_name, 1 custom_name– return order with correct prices and quantities ") {
 
 			(function() {
 
@@ -2369,7 +2368,7 @@ function deleteTestCart($cart_reference) {
 	<div class="tests deleteItemtypeFromCart">
 		<h3>Shop::deleteItemtypeFromCart()</h3>
 		<? 
-		if(1 && "deleteItemtypeFromCart – delete existing itemtype – return cart without deleted itemtype") {
+		if(0 && "deleteItemtypeFromCart – delete existing itemtype – return cart without deleted itemtype") {
 
 			(function() {
 					
@@ -2422,7 +2421,7 @@ function deleteTestCart($cart_reference) {
 				
 			})();
 		}
-		if(1 && "deleteItemtypeFromCart – delete non-existing itemtype – return unchanged cart") {
+		if(0 && "deleteItemtypeFromCart – delete non-existing itemtype – return unchanged cart") {
 
 			(function() {
 					
@@ -2476,7 +2475,7 @@ function deleteTestCart($cart_reference) {
 				
 			})();
 		}
-		if(1 && "deleteItemtypeFromCart – delete existing itemtype that is not in cart – return unchanged cart") {
+		if(0 && "deleteItemtypeFromCart – delete existing itemtype that is not in cart – return unchanged cart") {
 
 			(function() {
 					
@@ -2721,6 +2720,105 @@ function deleteTestCart($cart_reference) {
 				
 			})();
 			
+		}
+
+		?>
+	</div>
+	<div class="tests selectUserPaymentMethodForCart">
+		<h3>Shop::selectUserPaymentMethodForCart</h3>
+		<? 
+		if(1 && "selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
+				
+				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
+				
+				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
+
+
+				// ACT
+				$_POST["cart_id"] = $cart ? $cart["id"] : false;
+				$_POST["payment_method_id"] = $stripe_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method_id;
+				$_POST["gateway_payment_method_id"] = $gateway_payment_method_id;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["payment_gateway"] == "stripe"
+					&& $result["status"] == "PROCEED_TO_INTENT"
+					&& $result["gateway_payment_method_id"] == $gateway_payment_method_id
+					&& $result["cart"] == $cart
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "item_id" => $test_item_id]);
+	
+			})();
+
+		}
+		if(1 && "selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["cart_id"] = $cart ? $cart["id"] : false;
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["order_no"]
+					&& $result["status"] == "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id, "order_no" => $result["order_no"]]);
+	
+			})();
+
 		}
 
 

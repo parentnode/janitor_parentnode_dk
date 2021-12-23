@@ -23,7 +23,7 @@ define("DEFAULT_CURRENCY_ISO", "DKK");
 
 define("SITE_LOGIN_URL", "/login");
 
-define("SITE_SIGNUP", "/signup");
+define("SITE_SIGNUP", "1");
 define("SITE_SIGNUP_URL", "/signup");
 
 define("SITE_ITEMS", true);
