@@ -26,7 +26,7 @@ $v_files_value = $IC->filterMediae($item, "v_files");
 ?>
 <script type="text/javascript">
 
-u.o["testForm"] = new function() {
+u.m["testForm"] = new function() {
 	this.init = function(form) {
 
 		u.f.init(form);

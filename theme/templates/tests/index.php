@@ -76,13 +76,14 @@
 	</ul>
 
 
-	<h3>CSS tests</h3>
+	<h3>CSS + JS tests</h3>
 	<ul class="tests">
-		<?= $HTML->link("CSS Scene (General)", "/janitor/tests/css-scene", array("wrapper" => "li.css")) ?>
-		<?= $HTML->link("CSS Form", "/janitor/tests/css-form", array("wrapper" => "li.css")) ?>
-		<?= $HTML->link("CSS DefaultList", "/janitor/tests/css-default-list", array("wrapper" => "li.css")) ?>
-		<?= $HTML->link("CSS DefaultEdit", "/janitor/tests/css-default-edit", array("wrapper" => "li.css")) ?>
-		<?= $HTML->link("CSS DefaultNew", "/janitor/tests/css-default-new", array("wrapper" => "li.css")) ?>
+		<?= $HTML->link("CSS/JS Scene (General)", "/janitor/tests/css-scene", array("wrapper" => "li.css")) ?>
+		<?= $HTML->link("CSS/JS Form", "/janitor/tests/css-form", array("wrapper" => "li.css_form")) ?>
+		<?= $HTML->link("CSS/JS Form, HTML Field", "/janitor/tests/css-form-field-html", array("wrapper" => "li.html")) ?>
+		<?= $HTML->link("CSS/JS DefaultList", "/janitor/tests/css-default-list", array("wrapper" => "li.defaultlist")) ?>
+		<?= $HTML->link("CSS/JS DefaultEdit", "/janitor/tests/css-default-edit", array("wrapper" => "li.defaultedit")) ?>
+		<?= $HTML->link("CSS/JS DefaultNew", "/janitor/tests/css-default-new", array("wrapper" => "li.defaultnew")) ?>
 	</ul>
 
 
