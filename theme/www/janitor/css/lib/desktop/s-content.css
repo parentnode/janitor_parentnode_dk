@@ -47,3 +47,37 @@ body.tests #navigation .test a,
 body.wish #navigation .wish a,
 body.wishlist #navigation .wishlist a,
 body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
+
+/* TIMESHEETS */
+#content .scene.timesheets div.warning {border-bottom: 1px solid #bbbbbb; padding-top: 30px;}
+
+#content .scene.timesheets > div.item {border-bottom: 1px solid #bbbbbb; position: relative;}
+#content .scene.timesheets > div.item h2 {margin-bottom: 0;}
+#content .scene.timesheets > div.item > div.total {position: absolute; top: 5px; right: 70px; font-size: 12px;}
+
+#content .scene.timesheets > div.item div.project {position: relative;}
+#content .scene.timesheets > div.item div.project.open {border-bottom: 10px solid #313942;}
+#content .scene.timesheets > div.item div.project > h3 {font-size: 24px; padding-top: 5px; padding-right: 30px; background: #313942; color: #dedede; line-height: 1.38em; border-top: 1px solid #dedede;}
+#content .scene.timesheets > div.item div.project h3 svg {stroke: #dedede; top: 19px;}
+#content .scene.timesheets > div.item div.project h4 svg {top: 13px;}
+#content .scene.timesheets > div.item div.project > div.total {position: absolute; top: 14px; right: 70px; font-size: 16px; color: #dedede;}
+
+#content .scene.timesheets ul.users {padding: 0;}
+/*#content .scene.timesheets ul.users + h3 {border-top: 1px solid #dedede; padding-top: 25px;}*/
+#content .scene.timesheets ul.users li.user {display: block; border-left: 30px solid #313942; position: relative;}
+#content .scene.timesheets ul.users li.user div.all_items {padding-bottom: 30px;}
+#content .scene.timesheets ul.users li.user > h4 {font-size: 16px; padding-bottom: 10px; padding-top: 10px;}
+#content .scene.timesheets ul.users li.user > h4 + div {border-top: 1px solid #dedede;}
+#content .scene.timesheets ul.users li.user ul.items {padding-bottom: 15px;}
+#content .scene.timesheets ul.users li.user h5 {font-weight: 700;}
+#content .scene.timesheets ul.users li.user h5 + h5 {padding-top: 10px;}
+#content .scene.timesheets ul.users li.user > div.total {position: absolute; top: 12px; right: 70px; font-size: 14px;}
+#content .scene.timesheets ul.users li.user ul.actions {padding-top: 20px;}
+#content .scene.timesheets ul.users li.user ul.actions li {padding-bottom: 0px;}
+
+/* SELECTABLE LIST OVERRIDE */
+#content .scene.timesheets ul.users li.user ul.items > li:not(.all) input {top: 6px;}
+#content .scene.timesheets ul.users li.user ul.items > li h3 {font-size: 13px; padding-top: 6px; padding-bottom: 6px;}
+#content .scene.timesheets ul.users li.user ul.items > li h3 span {display: inline-block;}
+#content .scene.timesheets ul.users li.user ul.items > li h3 span.date {width: 100px; font-style: italic;}
+#content .scene.timesheets ul.users li.user ul.items > li h3 span.duration {width: 70px;}

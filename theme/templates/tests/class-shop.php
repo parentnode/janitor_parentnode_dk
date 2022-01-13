@@ -2527,7 +2527,7 @@ function deleteTestCart($cart_reference) {
 	<div class="tests selectPaymentMethodForCart">
 		<h3>Shop::selectPaymentMethodForCart</h3>
 		<? 
-		if(1 && "selectPaymentMethodForCart – Stripe as payment method – Return 'PROCEED_TO_GATEWAY'") {
+		if(0 && "selectPaymentMethodForCart – Stripe as payment method – Return 'PROCEED_TO_GATEWAY'") {
 
 			(function() {
 					
@@ -2566,7 +2566,7 @@ function deleteTestCart($cart_reference) {
 		}
 		?>
 		<? 
-		if(1 && "selectPaymentMethodForCart – Non-public payment method – Return false") {
+		if(0 && "selectPaymentMethodForCart – Non-public payment method – Return false") {
 			
 			(function() {
 				
@@ -2603,7 +2603,7 @@ function deleteTestCart($cart_reference) {
 			
 		}
 
-		if(1 && "selectPaymentMethodForCart – Non-existing payment method – Return false") {
+		if(0 && "selectPaymentMethodForCart – Non-existing payment method – Return false") {
 			
 			(function() {
 				
@@ -2636,7 +2636,7 @@ function deleteTestCart($cart_reference) {
 			
 		}
 
-		if(1 && "selectPaymentMethodForCart – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT'") {
+		if(0 && "selectPaymentMethodForCart – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT'") {
 			
 			(function() {
 				
@@ -2682,7 +2682,7 @@ function deleteTestCart($cart_reference) {
 			
 		}
 
-		if(1 && "selectPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED'") {
+		if(0 && "selectPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED'") {
 			
 			(function() {
 				
@@ -2724,6 +2724,749 @@ function deleteTestCart($cart_reference) {
 
 		?>
 	</div>
+
+	<div class="tests selectUserPaymentMethodForCart">
+		<h3>Shop::selectUserPaymentMethodForCart</h3>
+		<? 
+		if(0 && "selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
+				
+				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
+				
+				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
+
+
+				// ACT
+				$_POST["cart_id"] = $cart ? $cart["id"] : false;
+				$_POST["payment_method_id"] = $stripe_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method_id;
+				$_POST["gateway_payment_method_id"] = $gateway_payment_method_id;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["payment_gateway"] == "stripe"
+					&& $result["status"] == "PROCEED_TO_INTENT"
+					&& $result["gateway_payment_method_id"] == $gateway_payment_method_id
+					&& $result["cart"] == $cart
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – With payment method gateway – Return 'PROCEED_TO_INTENT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "item_id" => $test_item_id]);
+	
+			})();
+
+		}
+		if(0 && "selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["cart_id"] = $cart ? $cart["id"] : false;
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["order_no"]
+					&& $result["status"] == "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id, "order_no" => $result["order_no"]]);
+	
+			})();
+
+		}
+		if(0 && "selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$cart_item = $SC->getCartItem($cart["cart_reference"], $test_item_id);
+				$cart = $SC->deleteFromCart(["deleteFromCart", $cart["cart_reference"], $cart_item["id"]]);
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["cart_id"] = $cart["id"];
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "ORDER_FAILED"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id]);
+	
+			})();
+
+		}
+
+		?>
+	</div>
+	
+	<div class="tests selectPaymentMethodForOrder">
+		<h3>Shop::selectPaymentMethodForOrder</h3>
+		<? 
+		if(0 && "selectPaymentMethodForOrder – Stripe as payment method – Return 'PROCEED_TO_GATEWAY'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+				
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+
+				// ACT
+				$_POST["order_id"] = $order["id"];
+				$_POST["payment_method_id"] = $stripe_payment_method["id"];
+				$result = $SC->selectPaymentMethodForOrder(["selectPaymentMethodForOrder"]);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "PROCEED_TO_GATEWAY"
+					&& $result["order_no"] == $order["order_no"]
+					&& $result["payment_gateway"] == "stripe"
+				): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrder – Stripe as payment method – Return 'PROCEED_TO_GATEWAY' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectPaymentMethodForOrder – Stripe as payment method – Return 'PROCEED_TO_GATEWAY' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "item_id" => $test_item_id, "order_no" => $result["order_no"]]);
+	
+			})();
+
+		}
+		?>
+		<? 
+		if(0 && "selectPaymentMethodForOrder – Non-public payment method – Return false") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);
+
+				$payment_methods = $this->paymentMethods();
+				
+				$payment_method = $payment_methods[arrayKeyValue($payment_methods, "state", null)];
+				
+				// ACT
+				$_POST["order_id"] = $order["id"];
+				$_POST["payment_method_id"] = $payment_method["id"];
+				$result = $SC->selectPaymentMethodForOrder(["selectPaymentMethodForOrder"]);
+				
+				
+				// ASSERT 
+				if(
+					$payment_method
+					AND $result === false
+					): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrder – Non-public payment method – Return false – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrder – Non-public payment method – Return false – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "item_id" => $test_item_id, "order_no" => $order["order_no"]]);
+				
+			})();
+			
+		}
+
+		if(0 && "selectPaymentMethodForOrder – Non-existing payment method – Return false") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);				
+
+				// ACT
+				$_POST["order_id"] = $order["id"];
+				$_POST["payment_method_id"] = 10000000000000;
+				$result = $SC->selectPaymentMethodForOrder(["selectPaymentMethodForOrder"]);
+				
+				
+				// ASSERT 
+				if(
+					$result === false
+					): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrder – Non-existing payment method – Return false – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrder – Non-existing payment method – Return false – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "item_id" => $test_item_id, "order_no" => $order["order_no"]]);
+				
+			})();
+			
+		}
+
+		if(0 && "selectPaymentMethodForOrder – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT'") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$payment_method_id = $model_tests->createTestPaymentMethod();
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);	
+
+				// ACT
+				$_POST["order_id"] = $order["id"];
+				$_POST["payment_method_id"] = $payment_method_id;
+				$result = $SC->selectPaymentMethodForOrder(["selectPaymentMethodForOrder"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					AND $result["status"] === "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrder – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrder – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp([
+					"payment_method_id" => $payment_method_id,
+					"item_id" => $test_item_id,
+					"cart_id" => $cart["id"],
+					"order_no" => $result["order_no"]
+				]);
+				
+			})();
+			
+		}
+
+		?>
+	</div>
+
+	<div class="tests selectUserPaymentMethodForOrder">
+		<h3>Shop::selectUserPaymentMethodForOrder</h3>
+		<? 
+		if(0 && "selectUserPaymentMethodForOrder – With payment method gateway – Return 'PROCEED_TO_INTENT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);	
+
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
+				
+				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
+				
+				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
+
+
+				// ACT
+				$_POST["order_id"] = $order ? $order["id"] : false;
+				$_POST["payment_method_id"] = $stripe_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method_id;
+				$_POST["gateway_payment_method_id"] = $gateway_payment_method_id;
+				$result = $SC->selectUserPaymentMethodForOrder(["selectUserPaymentMethodForOrder"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["payment_gateway"] == "stripe"
+					&& $result["status"] == "PROCEED_TO_INTENT"
+					&& $result["gateway_payment_method_id"] == $gateway_payment_method_id
+					&& $result["order"] == $order
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForOrder – With payment method gateway – Return 'PROCEED_TO_INTENT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForOrder – With payment method gateway – Return 'PROCEED_TO_INTENT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp([
+					"item_id" => $test_item_id,
+					"cart_id" => $cart["id"],
+					"order_no" => $order["order_no"]
+				]);	
+			})();
+
+		}
+		if(0 && "selectUserPaymentMethodForOrder – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["cart_reference"]]);	
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["order_id"] = $order ? $order["id"] : false;
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForOrder(["selectUserPaymentMethodForOrder"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["order_no"]
+					&& $result["status"] == "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForOrder – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForOrder – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id, "order_no" => $result["order_no"]]);
+	
+			})();
+
+		}
+
+		?>
+	</div>
+
+	<div class="tests selectPaymentMethodForOrders">
+		<h3>Shop::selectPaymentMethodForOrders</h3>
+		<? 
+		if(0 && "selectPaymentMethodForOrders – Stripe as payment method – Return 'PROCEED_TO_GATEWAY'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$order_ids = $order_1["id"].",".$order_1["id"];
+				
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = $stripe_payment_method["id"];
+				$result = $SC->selectPaymentMethodForOrders(["selectPaymentMethodForOrders"]);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "PROCEED_TO_GATEWAY"
+					&& $result["order_ids"] == $order_ids
+					&& $result["payment_gateway"] == "stripe"
+				): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrders – Stripe as payment method – Return 'PROCEED_TO_GATEWAY' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectPaymentMethodForOrders – Stripe as payment method – Return 'PROCEED_TO_GATEWAY' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart_1["id"], "item_id" => $test_item_id_1, "order_no" => $order_1["order_no"]]);
+				$model_tests->cleanUp(["cart_id" => $cart_2["id"], "item_id" => $test_item_id_2, "order_no" => $order_2["order_no"]]);
+	
+			})();
+
+		}
+		?>
+		<? 
+		if(0 && "selectPaymentMethodForOrders – Non-public payment method – Return false") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$order_ids = $order_1["id"].",".$order_1["id"];
+
+				$payment_methods = $this->paymentMethods();
+				
+				$payment_method = $payment_methods[arrayKeyValue($payment_methods, "state", null)];
+				
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = $payment_method["id"];
+				$result = $SC->selectPaymentMethodForOrders(["selectPaymentMethodForOrders"]);
+				
+				
+				// ASSERT 
+				if(
+					$payment_method
+					AND $result === false
+					): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrders – Non-public payment method – Return false – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrders – Non-public payment method – Return false – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart_1["id"], "item_id" => $test_item_id_1, "order_no" => $order_1["order_no"]]);
+				$model_tests->cleanUp(["cart_id" => $cart_2["id"], "item_id" => $test_item_id_2, "order_no" => $order_2["order_no"]]);
+				
+			})();
+			
+		}
+
+		if(0 && "selectPaymentMethodForOrders – Non-existing payment method – Return false") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$order_ids = $order_1["id"].",".$order_1["id"];		
+
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = 10000000000000;
+				$result = $SC->selectPaymentMethodForOrders(["selectPaymentMethodForOrders"]);
+				
+				
+				// ASSERT 
+				if(
+					$result === false
+					): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrders – Non-existing payment method – Return false – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrders – Non-existing payment method – Return false – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart_1["id"], "item_id" => $test_item_id_1, "order_no" => $order_1["order_no"]]);
+				$model_tests->cleanUp(["cart_id" => $cart_2["id"], "item_id" => $test_item_id_2, "order_no" => $order_2["order_no"]]);
+				
+			})();
+			
+		}
+
+		if(0 && "selectPaymentMethodForOrders – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT'") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$payment_method_id = $model_tests->createTestPaymentMethod();
+				
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$order_ids = $order_1["id"].",".$order_1["id"];		
+
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = $payment_method_id;
+				$result = $SC->selectPaymentMethodForOrders(["selectPaymentMethodForOrders"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					AND $result["status"] === "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectPaymentMethodForOrders – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::selectPaymentMethodForOrders – Non-credit card payment method – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["payment_method_id" => $payment_method_id]);
+				$model_tests->cleanUp(["cart_id" => $cart_1["id"], "item_id" => $test_item_id_1, "order_no" => $order_1["order_no"]]);
+				$model_tests->cleanUp(["cart_id" => $cart_2["id"], "item_id" => $test_item_id_2, "order_no" => $order_2["order_no"]]);
+
+				
+			})();
+			
+		}
+
+		?>
+	</div>
+
+	<div class="tests selectUserPaymentMethodForOrders">
+		<h3>Shop::selectUserPaymentMethodForOrders</h3>
+		<? 
+		if(0 && "selectUserPaymentMethodForOrders – With payment method gateway – Return 'PROCEED_TO_INTENT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$orders = [$order_1, $order_2];
+				$order_ids = $order_1["id"].",".$order_2["id"];		
+
+				$payment_methods = $this->paymentMethods();
+				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
+				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
+				
+				$gateway_payment_method = payments()->processCardForOrders($orders, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
+				
+				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
+
+
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = $stripe_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method_id;
+				$_POST["gateway_payment_method_id"] = $gateway_payment_method_id;
+				$result = $SC->selectUserPaymentMethodForOrders(["selectUserPaymentMethodForOrders"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["payment_gateway"] == "stripe"
+					&& $result["status"] == "PROCEED_TO_INTENT"
+					&& $result["gateway_payment_method_id"] == $gateway_payment_method_id
+					&& $result["orders"] == $orders
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForOrders – With payment method gateway – Return 'PROCEED_TO_INTENT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForOrders – With payment method gateway – Return 'PROCEED_TO_INTENT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp([
+					"item_id" => $test_item_id_1,
+					"cart_id" => $cart_1["id"],
+					"order_no" => $order_1["order_no"]
+				]);	
+				$model_tests->cleanUp([
+					"item_id" => $test_item_id_2,
+					"cart_id" => $cart_2["id"],
+					"order_no" => $order_2["order_no"]
+				]);	
+			})();
+
+		}
+		if(0 && "selectUserPaymentMethodForOrders – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
+
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id_1 = $model_tests->createTestItem(["price" => 100]);
+				$test_item_id_2 = $model_tests->createTestItem(["price" => 100]);
+
+				$cart_1 = $SC->addToNewInternalCart($test_item_id_1);
+				$order_1 = $SC->newOrderFromCart(["newOrderFromCart", $cart_1["cart_reference"]]);
+
+				$cart_2 = $SC->addToNewInternalCart($test_item_id_2);
+				$order_2 = $SC->newOrderFromCart(["newOrderFromCart", $cart_2["cart_reference"]]);
+
+				$orders = [$order_1, $order_2];
+				$order_ids = $order_1["id"].",".$order_2["id"];	
+				$order_nos = $order_1["order_no"].",".$order_2["order_no"];	
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["order_ids"] = $order_ids;
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForOrders(["selectUserPaymentMethodForOrders"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["order_nos"] == $order_nos
+					&& $result["status"] == "PROCEED_TO_RECEIPT"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForOrders – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForOrders – No payment method gateway – Return 'PROCEED_TO_RECEIPT' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart_1["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id_1, "order_no" => $order_1["order_no"]]);
+				$model_tests->cleanUp(["cart_id" => $cart_2["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id_2, "order_no" => $order_2["order_no"]]);
+	
+			})();
+
+		}
+
+		?>
+	</div>
+
 	<div class="tests selectUserPaymentMethodForCart">
 		<h3>Shop::selectUserPaymentMethodForCart</h3>
 		<? 
@@ -2778,7 +3521,7 @@ function deleteTestCart($cart_reference) {
 			})();
 
 		}
-		if(1 && "selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
+		if(0 && "selectUserPaymentMethodForCart – No payment method gateway – Return 'PROCEED_TO_RECEIPT'") {
 
 			(function() {
 					
@@ -2820,9 +3563,100 @@ function deleteTestCart($cart_reference) {
 			})();
 
 		}
+		if(0 && "selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED'") {
 
+			(function() {
+					
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				$UC = new User();
+
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				$cart_item = $SC->getCartItem($cart["cart_reference"], $test_item_id);
+				$cart = $SC->deleteFromCart(["deleteFromCart", $cart["cart_reference"], $cart_item["id"]]);
+
+				$test_payment_method_id = $model_tests->createTestPaymentMethod();
+				$UC->addPaymentMethod(["payment_method_id" => $test_payment_method_id]);
+				$user_payment_method = $UC->getPaymentMethods(["payment_method_id" => $test_payment_method_id]);
+
+				// ACT
+				$_POST["cart_id"] = $cart["id"];
+				$_POST["payment_method_id"] = $test_payment_method_id;
+				$_POST["user_payment_method_id"] = $user_payment_method ? $user_payment_method["id"] : false;
+				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "ORDER_FAILED"
+				): ?>
+				<div class="testpassed"><p>Shop::selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Shop::selectUserPaymentMethodForCart – Empty cart – Return 'ORDER_FAILED' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp(["cart_id" => $cart["id"], "payment_method_id" => $test_payment_method_id, "item_id" => $test_item_id]);
+	
+			})();
+
+		}
 
 		?>
 	</div>
-	
+
+	<div class="tests processCardForCart">
+		<h3>Shop::processCardForCart</h3>
+		<? 
+
+		if(1 && "processCardForCart – Valid card, valid cart – Return status 'success' and card object") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				
+				// ACT
+				$_POST["card_number"] = 4242424242424242;
+				$_POST["card_exp_month"] = "12";
+				$_POST["card_exp_year"] = "30";
+				$_POST["card_cvc"] = "123";
+				$result = $SC->processCardForCart(["processCardForCart", "stripe", "cart", $cart["cart_reference"], "process"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "success"
+					&& $result["type"] == "card"
+					&& $result["card"]
+					): ?>
+				<div class="testpassed"><p>Shop::processCardForCart – Valid card, valid cart – Return status 'success' and card object – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::processCardForCart – Valid card, valid cart – Return status 'success' and card object – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp([
+					"cart_id" => $cart["id"],
+					"item_id" => $test_item_id
+				]);
+				
+			})();
+			
+		}
+
+		?>
+	</div>
 </div>
