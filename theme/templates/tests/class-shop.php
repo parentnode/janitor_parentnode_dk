@@ -3656,6 +3656,77 @@ function deleteTestCart($cart_reference) {
 			})();
 			
 		}
+		
+		if(1 && "processCardForCart – Valid card, non-existing cart – Return false") {
+			
+			(function() {
+				
+				// ARRANGE
+				$SC = new Shop();
+				
+				// ACT
+				$_POST["card_number"] = 4242424242424242;
+				$_POST["card_exp_month"] = "12";
+				$_POST["card_exp_year"] = "30";
+				$_POST["card_cvc"] = "123";
+				$result = $SC->processCardForCart(["processCardForCart", "stripe", "cart", "invalid_cart_reference", "process"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result === false
+				): ?>
+				<div class="testpassed"><p>Shop::processCardForCart – Valid card, non-existing cart – Return false – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::processCardForCart – Valid card, non-existing cart – Return false – error</p></div>
+				<? endif; 
+				
+			})();
+			
+		}
+
+		if(1 && "processCardForCart – Expired card, valid cart – Return status 'CARD_ERROR' and error code 'expired_card'") {
+			
+			(function() {
+				
+				// ARRANGE
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+				$SC = new Shop();
+				
+				$test_item_id = $model_tests->createTestItem(["price" => 100]);
+				$cart = $SC->addToNewInternalCart($test_item_id);
+				
+				// ACT
+				$_POST["card_number"] = 4000000000000069;
+				$_POST["card_exp_month"] = "12";
+				$_POST["card_exp_year"] = "30";
+				$_POST["card_cvc"] = "123";
+				$result = $SC->processCardForCart(["processCardForCart", "stripe", "cart", $cart["cart_reference"], "process"]);
+				unset($_POST);
+				
+				
+				// ASSERT 
+				if(
+					$result
+					&& $result["status"] == "CARD_ERROR"
+					&& $result["code"] == "expired_card"
+					): ?>
+				<div class="testpassed"><p>Shop::processCardForCart – Expired card, valid cart – Return status 'CARD_ERROR' and error code 'expired_card' – correct</p></div>
+				<? else: ?>
+					<div class="testfailed"><p>Shop::processCardForCart – Expired card, valid cart – Return status 'CARD_ERROR' and error code 'expired_card' – error</p></div>
+					<? endif; 
+				
+				// CLEAN UP
+				$model_tests->cleanUp([
+					"cart_id" => $cart["id"],
+					"item_id" => $test_item_id
+				]);
+				
+			})();
+			
+		}
 
 		?>
 	</div>
