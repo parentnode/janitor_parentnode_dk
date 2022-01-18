@@ -11,17 +11,21 @@ $missing_client = false;
 
 
 // Get reports for the last three years
+// $project_ids = "177174365,177348428";
+$project_ids = false;
+$client_ids = "42890218";
+
 $entries = [];
-$_entries = $timesheet->getReports(["since" => gmdate("c", strtotime("-3 year")), "until" => gmdate("c", strtotime("-2 year"))]);
+$_entries = $timesheet->getReports(["client_ids" => $client_ids, "project_ids" => $project_ids, "since" => gmdate("c", strtotime("-3 year")), "until" => gmdate("c", strtotime("-2 year"))]);
 $entries = array_merge($_entries, $entries);
-$_entries = $timesheet->getReports(["since" => gmdate("c", strtotime("-2 year")), "until" => gmdate("c", strtotime("-1 year"))]);
+$_entries = $timesheet->getReports(["client_ids" => $client_ids, "project_ids" => $project_ids, "since" => gmdate("c", strtotime("-2 year")), "until" => gmdate("c", strtotime("-1 year"))]);
 $entries = array_merge($_entries, $entries);
-$_entries = $timesheet->getReports(["since" => gmdate("c", strtotime("-1 year")), "until" => gmdate("c", time())]);
+$_entries = $timesheet->getReports(["client_ids" => $client_ids, "project_ids" => $project_ids, "since" => gmdate("c", strtotime("-1 year")), "until" => gmdate("c", time())]);
 $entries = array_merge($_entries, $entries);
 
 
 ?>
-<div class="scene">
+<div class="scene toggloverview i:toggloverview">
 	<h1>Toggl reports</h1>
 	<h2>Fetched a total of <?= count($entries) ?> entries</h2>
 
@@ -84,15 +88,15 @@ $entries = array_merge($_entries, $entries);
 	foreach($data["clients"] as $client => $projects):
 		$total_client_hours = 0;
 ?>
-	<div class="item i:collapseHeader <?= supernormalize($client) ?>">
-		<h2><?= $client ?></h2>
+	<div class="item client <?= supernormalize($client) ?> i:moveTotals">
+		<h2<?= !$client ? ' class="error"' : '' ?>><?= $client ? $client : "NO CLIENT" ?></h2>
 
 <?
  		foreach($projects as $project => $users):
 			$total_project_hours = 0;
 ?>
-		<div class="project i:collapseHeader <?= supernormalize($client) ?> <?= supernormalize($project) ?>">
-			<h3><?= $project ?></h3>
+		<div class="item project <?= supernormalize($client) ?> <?= supernormalize($project) ?>">
+			<h3<?= !$project ? ' class="error"' : '' ?>><?= $project ? $project : "NO PROJECT" ?></h3>
 
 			<ul class="users">
 <?
@@ -100,7 +104,7 @@ $entries = array_merge($_entries, $entries);
 					$total = 0;
 					$total_rounded = 0;
 ?>
-				<li class="user i:collapseHeader <?= supernormalize($client) ?> <?= supernormalize($project) ?> <?= supernormalize($user) ?>">
+				<li class="user <?= supernormalize($client) ?> <?= supernormalize($project) ?> <?= supernormalize($user) ?>">
 					<h4><?= $user ?></h4>
 
 					<div class="all_items i:defaultList i:timeentries selectable filters"
@@ -131,7 +135,7 @@ $entries = array_merge($_entries, $entries);
 						<h5 class="total">TOTAL: <span class="hours"><?= ceil($total/60) ?></span> hours (<span class="minutes"><?= $total ?></span> min.) / <span class="hours15"><?= ceil($total_rounded/60) ?></span> hours (<span class="minutes15"><?= $total_rounded ?></span> min.)</h5>
 					</div>
 
-					<div class="total"><?= ceil($total/60) ?></span> hours</div>
+					<div class="total user"><?= ceil($total/60) ?></span> hours</div>
 				</li>
 
 <?			
@@ -140,7 +144,7 @@ $entries = array_merge($_entries, $entries);
 				endforeach;
 ?>
 			</ul>
-			<div class="total"><?= $total_project_hours ?></span> hours</div>
+			<div class="total project"><?= $total_project_hours ?></span> hours</div>
 
 		</div>
 <?
@@ -148,7 +152,7 @@ $entries = array_merge($_entries, $entries);
 
 		endforeach;
 ?>
-		<div class="total"><?= $total_client_hours ?></span> hours</div>
+		<div class="total client"><?= $total_client_hours ?></span> hours</div>
 
 	</div>
 

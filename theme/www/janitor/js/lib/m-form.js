@@ -10,7 +10,7 @@ Util.Modules["generic"] = new function() {
 
 Util.Modules["timeentries"] = new function() {
 	this.init = function(div) {
-		u.bug("timeentries", div, div.list);
+		// u.bug("timeentries", div, div.list);
 
 
 		div.total_selection_min = u.qs("h5.total_selection span.minutes", div);
@@ -155,5 +155,49 @@ Util.Modules["timeentries"] = new function() {
 		// }
 
 	}
-	
+
 }
+
+Util.Modules["toggloverview"] = new function() {
+	this.init = function(div) {
+		// u.bug("toggloverview init");
+
+		var i, client, j, project, k, user;
+
+		// Get clients
+		div.clients = u.qsa("div.item.client", div);
+		for(i = 0; i < div.clients.length; i++) {
+			client = div.clients[i];
+
+			client.h2 = u.qs("h2", client);
+			client.div_total = u.qs("div.client.total", client);
+			u.ae(client.h2, client.div_total);
+
+			// Get projects
+			client.projects = u.qsa("div.item.project", client);
+			for(j = 0; j < client.projects.length; j++) {
+				project = client.projects[j];
+
+				project.h3 = u.qs("h3", project);
+				project.div_total = u.qs("div.project.total", project);
+				u.ae(project.h3, project.div_total);
+
+				project.users = u.qsa("li.user", project);
+				for(k = 0; k < project.users.length; k++) {
+					user = project.users[k];
+
+					user.h4 = u.qs("h4", user);
+					user.div_total = u.qs("div.user.total", user);
+					u.ae(user.h4, user.div_total);
+
+					u.m.collapseHeader.init(user);
+				}
+
+				u.m.collapseHeader.init(project);
+			}
+
+			u.m.collapseHeader.init(client);
+		}
+
+	}
+} 

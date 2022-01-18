@@ -48,32 +48,8 @@ class TimesheetsGateway {
 		$this->init_adapter();
 
 		if($this->adapter) {
-			
-			$since = false;
-			$until = false;
 
-			if($_options !== false) {
-				foreach($_options as $_option => $_value) {
-					switch($_option) {
-
-						case "since"                     : $since                     = $_value; break;
-						case "until"                     : $until                     = $_value; break;
-					}
-				}
-			}
-
-			// Some kind of id
-			$default_query = "user_agent=" . $this->_settings["user-agent"];
-
-			// Choose parentNode workspace
-			$default_query .= "&workspace_id=" . $this->_settings["workspace-id"];
-
-			// only not tagged elements (rule is only using "afregnet" tag)
-			$default_query .= "&tag_ids=0";
-
-			$query = $default_query;
-
-			return $this->adapter->getReports($query);
+			return $this->adapter->getReports($_options);
 		}
 	}
 

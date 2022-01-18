@@ -64,7 +64,55 @@ class JanitorToggl {
 		}
 	}
 
-	function getReports($query) {
+	function getReports($_options = false) {
+
+		$user_agent = $this->_settings["user-agent"];
+		$workspace_id = $this->_settings["workspace-id"];
+
+		$since = false;
+		$until = false;
+		$client_ids = false;
+		$project_ids = false;
+
+		if($_options !== false) {
+			foreach($_options as $_option => $_value) {
+				switch($_option) {
+
+					case "since"                     : $since                     = $_value; break;
+					case "until"                     : $until                     = $_value; break;
+					case "client_ids"                : $client_ids                = $_value; break;
+					case "project_ids"               : $project_ids               = $_value; break;
+				}
+			}
+		}
+
+		// Some kind of id
+		$default_query = "user_agent=" . $user_agent;
+
+		// Choose parentNode workspace
+		$default_query .= "&workspace_id=" . $workspace_id;
+
+		// only not tagged elements (rule is only using "afregnet" tag)
+		$default_query .= "&tag_ids=0";
+
+		$query = $default_query;
+
+		if($since) {
+
+			$query .= "&since=".$since;
+		}
+		if($until) {
+
+			$query .= "&until=".$until;
+		}
+		if($client_ids) {
+
+			$query .= "&client_ids=".$client_ids;
+		}
+		if($project_ids) {
+
+			$query .= "&project_ids=".$project_ids;
+		}
 
 		$entries = [];
 	
