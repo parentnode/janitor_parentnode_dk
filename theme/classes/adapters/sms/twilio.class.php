@@ -35,6 +35,12 @@ class JanitorTwilio {
 			}
 		}
 
+		// since dash ("–") cannot be encoded with the GSM-7 standard, we convert dashes to hyphens ("-"). 
+		// If we don't, Twilio will fall back to UCS-2 encoding, which contains much fewer characters per text than GSM-7, causing texting to be more costly
+		if($body) {
+			$body = str_replace("–", "-", $body);
+		}
+
 		$sms_options = [];
 		$sms_options["from"] = $from;
 		$sms_options["body"] = $body;
