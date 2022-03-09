@@ -12,7 +12,7 @@ class JanitorTwilio {
 		# Instantiate the client.
 		$this->sid = $_settings["sid"];
 		$this->token = $_settings["token"];
-		$this->phone_no = $_settings["phone_no"];
+		$this->from = $_settings["from"];
 		$this->client = new Client($this->sid, $this->token);
 
 	}

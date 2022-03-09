@@ -56,7 +56,7 @@ class SMSGateway {
 		if($this->adapter) {
 
 			$to = false;
-			$from = $this->_settings["phone_no"];
+			$from = $this->_settings["from"];
 			$body = "";
 
 			if($_options !== false) {
