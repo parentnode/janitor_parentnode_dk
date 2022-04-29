@@ -100,6 +100,53 @@ $post_model = $IC->typeObject("post");
 
 		}
 
+		if(1 && "getItems by editor") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_1_id = $model_tests->createTestItem();
+				$test_user_1_id = $model_tests->createTestUser();
+				
+				unset($_POST);
+				$_POST["item_editor"] = $test_user_1_id;
+				$model_tests->addEditor(array("addEditor", $test_item_1_id));
+				unset($_POST);
+				
+				
+				$test_item_2_id = $model_tests->createTestItem();
+				$test_user_2_id = $model_tests->createTestUser();
+
+				unset($_POST);
+				$_POST["item_editor"] = $test_user_2_id;
+				$model_tests->addEditor(array("addEditor", $test_item_2_id));
+				unset($_POST);
+
+
+				// Get items by rating
+				$items = $IC->getItems(array("itemtype" => "tests", "editor_id" => $test_user_1_id, "extend" => ["editors" => true]));
+
+				// debug([$items]);
+				if($items 
+					&& count($items) === 1
+					&& $items[0]["editors"]
+					&& $items[0]["editors"][0]["user_id"] == $test_user_1_id
+				): ?>
+				<div class="testpassed"><p>Items::getItems by editors - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getItems by editors - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
 		?>
 
 	</div>
