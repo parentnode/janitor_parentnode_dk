@@ -521,10 +521,13 @@ class TypeTests extends Itemtype {
 	
 		$user_id = false;
 		$item_id = false;
+		$item_ids = false;
 		$currency_id = false;
 		$payment_method_id = false;
 		$cart_id = false;
+		$cart_ids = false;
 		$order_id = false;
+		$order_ids = false;
 		$order_no = false;
 		$itemtype = false;
 		
@@ -533,11 +536,14 @@ class TypeTests extends Itemtype {
 				case "itemtype"           : $itemtype             = $_value; break;
 
 				case "item_id"            : $item_id              = $_value; break;
+				case "item_ids"           : $item_ids             = $_value; break;
 				case "user_id"            : $user_id              = $_value; break;
 				case "currency_id"        : $currency_id          = $_value; break;
 				case "payment_method_id"  : $payment_method_id    = $_value; break;
 				case "cart_id"            : $cart_id              = $_value; break;
+				case "cart_ids"           : $cart_ids             = $_value; break;
 				case "order_id"           : $order_id             = $_value; break;
+				case "order_ids"          : $order_ids            = $_value; break;
 				case "order_no"           : $order_no             = $_value; break;
 				
 			}
@@ -611,7 +617,7 @@ class TypeTests extends Itemtype {
 		}
 
 		// Delete by order_id or order_no
-		if($order_id || $order_no) {
+		if($order_id || $order_ids || $order_no) {
 
 			if($order_no) {
 
@@ -619,13 +625,30 @@ class TypeTests extends Itemtype {
 				$order_id = $order ? $order["id"] : false;
 				
 			}
+			
+			if($order_id) {
 
-			$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
+				$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
+	
+				$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
+				$query->sql($sql);
+				$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+				$query->sql($sql);
+			}
+			elseif($order_ids) {
 
-			$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
-			$query->sql($sql);
-			$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
-			$query->sql($sql);
+				foreach ($order_ids as $order_id) {
+					
+					$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
+
+					$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
+					$query->sql($sql);
+					$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+					$query->sql($sql);
+				}
+			}
+
+
 
 		}
 
@@ -650,7 +673,29 @@ class TypeTests extends Itemtype {
 			unset($_POST);
 		}
 
+		// Delete by item_ids
+		if($item_ids) {
+	
+			foreach ($item_ids as $item_id) {
+				$item = $IC->getItem(["id" => $item_id]);
+				$model_item = $IC->TypeObject($item["itemtype"]);
+				
 		
+				// delete subscriptions
+				$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = $item_id";
+				$query->sql($sql);
+		
+				$model_item->delete(["delete",$item_id]);
+	
+				// flush price_types cache
+				include_once("classes/system/system.class.php");
+				$SysC = new System();
+				$_POST["cache-key"] = "price_types";
+				$SysC->flushFromCache(["flushFromCache"]);
+				unset($_POST);
+			}
+		}
+				
 
 		// Delete by currency id
 		if($currency_id) {
@@ -677,6 +722,14 @@ class TypeTests extends Itemtype {
 			$query->sql($sql);
 		}
 
+		// Delete by cart ids
+		if($cart_ids) {
+
+			foreach ($cart_ids as $cart_id ) {
+				$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
+				$query->sql($sql);
+			}
+		}
 
 
 		// Cleanup check
