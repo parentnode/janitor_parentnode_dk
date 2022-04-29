@@ -19,7 +19,7 @@
 				// ARRANGE
 				
 				// ACT
-				$message = sms()->send(["to" => "+4560626083", "body" => "Hejsa!-".rand()]);
+				$message = sms()->send(["to" => "+4560626083", "body" => "Hejsa!–".rand()]);
 				
 				
 				// ASSERT
@@ -43,6 +43,39 @@
 	
 			})();
 		}
+
+		if(1 && "send – send single sms with URL-like string and wait 5 seconds – return status 'delivered'") {
+
+			(function() {
+					
+				// ARRANGE
+				
+				// ACT
+				$message = sms()->send(["to" => "+4560626083", "body" => "4.tv https://parentnode.dk - ".rand()]);
+				
+				
+				// ASSERT
+				
+				if($message) {
+
+					sleep(5);
+					$message = sms()->fetchMessage($message->sid);
+				}
+
+				if(
+					$message
+					&& $message->status == "delivered"
+				): ?>
+				<div class="testpassed"><p>SMSGateway::send – send single sms with URL-like string and wait 5 seconds – return status 'delivered' – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SMSGateway::send – send single sms with URL-like string and wait 5 seconds – return status 'delivered' – error</p></div>
+				<? endif; 
+				
+				// CLEAN UP
+	
+			})();
+		}
+
 		?>
 	</div>
 
