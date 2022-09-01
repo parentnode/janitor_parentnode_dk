@@ -29,6 +29,7 @@
 	<h3>System classes</h3>
 	<ul class="tests">
 		<?= $HTML->link("Page", "/janitor/tests/class-page", array("wrapper" => "li.page")) ?>
+		<?= $HTML->link("Security", "/janitor/tests/class-security", array("wrapper" => "li.security")) ?>
 		<?= $HTML->link("HTML", "/janitor/tests/class-html", array("wrapper" => "li.html")) ?>
 		<?= $HTML->link("Model", "/janitor/tests/class-model", array("wrapper" => "li.model")) ?>
 		<?= $HTML->link("Output", "/janitor/tests/class-output", array("wrapper" => "li.output")) ?>		
@@ -72,7 +73,7 @@
 	</ul>
 
 
-	<h3>Security test</h3>
+	<h3>Interaction security test</h3>
 	<ul class="tests">
 		<?= $HTML->link("Security", "/janitor/tests/security", array("wrapper" => "li.security")) ?>
 	</ul>

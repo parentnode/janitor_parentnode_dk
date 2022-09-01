@@ -139,7 +139,7 @@ if(!$test_item_id) {
 }
 
 if(!$user) {
-	print "You must have a user: security-test@parentnode.dk on your system, with the password: s3curltA<br>\n";
+	print 'You must have a user: security-test@parentnode.dk on your system, with the password: s3curltA – <a href="/janitor/admin/user/list">create it here</a>.';
 }
 
 
