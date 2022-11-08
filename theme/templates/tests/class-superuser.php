@@ -5,9 +5,255 @@ $UpgradeClass = new Upgrade();
 
 include_once("classes/shop/supershop.class.php");
 include_once("classes/users/superuser.class.php");
-$UC = new SuperUser();
-$IC = new Items();
-$SC = new SuperShop();
+
+
+
+function countExistingUsers() {
+
+	$query = new Query();
+	$user_count = 0;
+
+	$sql = "SELECT count(id) AS count FROM ".SITE_DB.".users WHERE id != 1";
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		$user_count = $query->result(0, "count");
+	}
+	return $user_count;
+	
+}
+
+function createUserGroup($user_group) {
+
+	$query = new Query();
+
+	$sql = "INSERT INTO ".SITE_DB.".user_groups SET user_group = '$user_group'";
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		return $query->lastInsertId();
+	}
+	return false;
+}
+function deleteUserGroup($id) {
+
+	$query = new Query();
+
+	// delete user
+	$sql = "DELETE FROM ".SITE_DB.".user_groups WHERE id = $id";
+	if($query->sql($sql)) {
+		return true;
+	}
+
+	return false;
+
+}
+
+function createUser($_options = false) {
+
+	$user_group_id = 2;
+	$nickname = "test_user_".randomKey(4);
+	$status = 1;
+	$created_at = false;
+
+	$usernames = false;
+
+	if($_options !== false) {
+		foreach($_options as $_option => $_value) {
+			switch($_option) {
+
+				case "user_group_id"       : $user_group_id      = $_value; break;
+				case "nickname"            : $nickname           = $_value; break;
+				case "status"              : $status             = $_value; break;
+				case "created_at"          : $created_at         = $_value; break;
+
+				case "usernames"           : $usernames          = $_value; break;
+
+
+			}
+		}
+	}
+
+	$query = new Query();
+	$test_user_id = false;
+
+
+	$sql = "INSERT INTO ".SITE_DB.".users SET user_group_id = $user_group_id, nickname = '$nickname', status = $status".($created_at ? ", created_at = '$created_at'" : "");
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		$test_user_id = $query->lastInsertId();
+
+
+		if($usernames) {
+		
+			foreach($usernames as $username) {
+
+				$sql = "INSERT INTO ".SITE_DB.".user_usernames SET user_id = $test_user_id, username = '".$username["username"]."', type = '".$username["type"]."', verified = ".(isset($username["verified"]) ? $username["verified"] : 0).", verification_code = '".randomKey(8)."'";
+				// debug(["sql", $sql, $username]);
+				$query->sql($sql);
+			}
+		
+		}
+
+	}
+
+	
+	return $test_user_id;
+
+
+	
+}
+function deleteUser($id) {
+
+	$query = new Query();
+
+	// delete user
+	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $id";
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		return true;
+	}
+
+	return false;
+
+}
+
+
+function createTestItem($_options = false) {
+
+	$IC = new Items();
+
+	$itemtype = "tests";
+	$name = "Test item";
+
+	$user_id = false;
+
+	if($_options !== false) {
+		foreach($_options as $_option => $_value) {
+			switch($_option) {
+				case "itemtype"            : $itemtype              = $_value; break;
+				case "name"           : $name             = $_value; break;
+				case "price"               : $price                 = $_value; break;
+				case "subscription_method" : $subscription_method   = $_value; break;
+
+				case "user_id" : $user_id   = $_value; break;
+			}
+		}
+	}
+	
+	// create test item
+	$model = $IC->TypeObject($itemtype);
+	$_POST["name"] = $name;
+
+	$item = $model->save(array("save"));
+	$item_id = $item["id"];
+	unset($_POST);
+
+	if($item_id) {
+
+		if(isset($price) && $price) {
+			// add price to membership item
+			$_POST["item_price"] = $price;
+			$_POST["item_price_currency"] = "DKK";
+			$_POST["item_price_vatrate"] = 2;
+			$_POST["item_price_type"] = 1;
+			$item_price = $model->addPrice(array("addPrice", $item_id));
+			unset($_POST);
+
+		}
+
+		// Set owner
+		if($user_id) {
+			$_POST["item_ownership"] = $user_id;
+			$model->updateOwner(["updateOwner", $item_id]);
+			unset($_POST);
+		}
+
+		if(isset($subscription_method) && preg_match("/[1-3]/", $subscription_method)) {
+			// add subscription method to second membership item
+			$_POST["item_subscription_method"] = $subscription_method;
+			$model->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));
+			unset($_POST);
+		}
+
+		return $item_id; 
+	}
+
+	return false;
+}
+function deleteTestItem($item_id) {
+
+	$IC = new Items();
+	$item = $IC->getItem(["id" => $item_id]);
+	$itemtype = $item["itemtype"];
+	$model = $IC->TypeObject($itemtype);
+
+	
+	return $model->delete(["delete",$item_id]);	
+
+}
+
+function createTestOrder($user_id, $item_id) {
+
+	$SC = new SuperShop();
+
+	$_POST["user_id"] = $user_id;
+	$cart = $SC->addCart(["addCart"]);
+	unset($_POST);
+
+	$_POST["item_id"] = $item_id;
+	$_POST["quantity"] = 1;
+	$cart = $SC->addToCart(["addToCart", $cart["cart_reference"]]);
+	unset($_POST);
+
+	$order = $SC->newOrderFromCart(["newOrderFromCart", $cart["id"], $cart["cart_reference"]]);
+
+	return $order["id"];
+
+}
+function deleteTestOrder($order_id) {
+
+	$query = new Query();
+
+	// delete order
+	$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		return true;
+	}
+
+	return false;
+	
+}
+
+function payTestOrder($order_id) {
+
+	$SC = new SuperShop();
+	$order_price = $SC->getTotalOrderPrice($order_id);
+
+	global $page;
+	$payment_methods = $page->paymentMethods();
+
+	$_POST["order_id"] = $order_id;
+	$_POST["payment_method_id"] = $payment_methods[0]["id"];
+	$_POST["payment_amount"] = $order_price["price"];
+
+	return $SC->registerPayment(["registerPayment"]);
+	
+}
+function deleteTestPayment($payment_id) {
+
+	$query = new Query();
+
+	// delete payment
+	$sql = "DELETE FROM ".SITE_DB.".shop_payments WHERE id = $payment_id";
+	// debug([$sql]);
+	if($query->sql($sql)) {
+		return true;
+	}
+
+	return false;
+	
+}
+
 ?>
 
 <div class="scene i:scene tests">
@@ -16,591 +262,2739 @@ $SC = new SuperShop();
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
-	
-<?
-	// SETUP
-	// create test user, no password, activated, and also create reference user
-	$query = new Query();
-	
-	// add test user
-	$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'test user', 1, '2019-01-01 00:00:00')";
-	if($query->sql($sql)) {
-		$test_user_id = $query->lastInsertId();
-	}
 
-	// delete all unverified usernames
-	$query->sql("DELETE FROM ".SITE_DB.".user_usernames WHERE verified = 0");
 
-	
-	// add three unverified usernames (two emails and a telephone number) for test user
-	if($test_user_id) {
-		$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($test_user_id, 'test.parentnode@gmail.com', 'email', 0, '12345678'), ($test_user_id, 'test2.parentnode@gmail.com', 'email', 0, '23456789'), ($test_user_id, '11223344', 'mobile', 0, '34567890')";
-		$query->sql($sql);
-		$sql = "SELECT id, username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id'";
-		// print ($sql); 
+	<div class="tests">
+		<h3>SuperUser::getUsers</h3>
+		<?
+		if(1 && "getUsers") {
 
-		if($query->sql($sql)) {
-			$test_email1 = $query->result(0)["username"];
-			$test_email1_verification_code = $query->result(0)["verification_code"];
-			$test_email1_username_id = $query->result(0)["id"];
+			(function() {
 
-			$test_email2 = $query->result(1)["username"];
-			$test_email2_verification_code = $query->result(1)["verification_code"];
-			$test_email2_username_id = $query->result(1)["id"];
+				$UC = new SuperUser();
+				$query = new Query();
 
-			$test_mobile = $query->result(2)["username"];
-			$test_mobile_verification_code = $query->result(2)["verification_code"];
-			$test_mobile_id = $query->result(2)["id"];
+				// Count existing users
+				$user_count = countExistingUsers();
 
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 2",
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 3",
+					"status" => 0
+				]);
+
+				$users = $UC->getUsers();
+				// debug([count($users), $users]);
+
+				$test_user_1_index = arrayKeyValue($users, "id", $test_user_id_1);
+				$test_user_2_index = arrayKeyValue($users, "id", $test_user_id_2);
+				$test_user_3_index = arrayKeyValue($users, "id", $test_user_id_3);
+
+
+				if(
+					count($users) === ($user_count+3) &&
+
+					$test_user_1_index !== false &&
+					$users[$test_user_1_index]["nickname"] === "test user 1" &&
+					$users[$test_user_1_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_1_index]["status"] == 1 &&
+
+					$test_user_2_index !== false &&
+					$users[$test_user_2_index]["nickname"] === "test user 2" &&
+					$users[$test_user_2_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_2_index]["status"] == 1 &&
+
+					$test_user_3_index !== false &&
+					$users[$test_user_3_index]["nickname"] === "test user 3" &&
+					$users[$test_user_3_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_3_index]["status"] == 0
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::getUsers – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsers – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
 		}
-	}
 
-	// add reference user
-	if($test_user_id) {
-		$sql = "INSERT INTO ".SITE_DB.".users (user_group_id, nickname, status, created_at) VALUES(2, 'reference user', 1, '2019-02-02 01:01:01')";
-		if($query->sql($sql)) {
-			$ref_user_id = $query->lastInsertId();
+		if(1 && "getUsers – ordered") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				// Count existing users
+				$user_count = countExistingUsers();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "c test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "b test user 2",
+					"created_at" => date("Y-m-d H:i:s", strtotime("- 50 years")),
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "a test user 3",
+					"status" => 0
+				]);
+
+
+				// By User group id
+				$users_by_date = $UC->getUsers();
+
+				$test_user_1_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_1);
+				$test_user_2_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_2);
+				$test_user_3_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_3);
+
+				// debug([count($users_by_date), $users_by_date]);
+
+				$users_by_name = $UC->getUsers(["order" => "nickname ASC"]);
+
+				$test_user_1_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_1);
+				$test_user_2_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_2);
+				$test_user_3_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_3);
+
+				// debug([count($users_by_name), $users_by_name]);
+
+
+
+				if(
+					count($users_by_date) === $user_count+3 &&
+
+					$test_user_1_by_date_index < $test_user_2_by_date_index &&
+					$test_user_1_by_date_index < $test_user_3_by_date_index &&
+					$test_user_2_by_date_index > $test_user_3_by_date_index &&
+
+					$test_user_1_by_name_index > $test_user_2_by_name_index &&
+					$test_user_1_by_name_index > $test_user_3_by_name_index &&
+					$test_user_2_by_name_index > $test_user_3_by_name_index
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::getUsers ordered – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsers ordered – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
 		}
-	}
 
-	if($ref_user_id) {
-		// add unverified username (email) for ref user
-		$sql = "INSERT INTO ".SITE_DB.".user_usernames (user_id, username, type, verified, verification_code) VALUES($ref_user_id, 'test3.parentnode@gmail.com', 'email', 0, '87654321')";
-		$query->sql($sql);
-		$sql = "SELECT id, username, verification_code FROM ".SITE_DB.".user_usernames WHERE user_id = '$ref_user_id'";
-		if($query->sql($sql)) {
-			$ref_username = $query->result(0)["username"];
-			$ref_verification_code = $query->result(0)["verification_code"];
-			$ref_username_id = $query->result(0)["id"];
+		if(1 && "getUsers by user_id") {
 
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 2",
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 3",
+					"status" => 0
+				]);
+
+				// By User id
+				$user_1 = $UC->getUsers(["user_id" => $test_user_id_1]);
+				$user_2 = $UC->getUsers(["user_id" => $test_user_id_2]);
+				$user_3 = $UC->getUsers(["user_id" => $test_user_id_3]);
+				// debug([$user_1, $user_2, $user_3]);
+
+
+				if(
+
+					$user_1 &&
+					$user_1["nickname"] === "test user 1" &&
+					$user_1["user_group_id"] == $test_user_group_id &&
+					$user_1["status"] == 1 &&
+
+					$user_2 &&
+					$user_2["nickname"] === "test user 2" &&
+					$user_2["user_group_id"] == $test_user_group_id &&
+					$user_2["status"] == 1 &&
+
+					$user_3 &&
+					$user_3["nickname"] === "test user 3" &&
+					$user_3["user_group_id"] == $test_user_group_id &&
+					$user_3["status"] == 0
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::getUsers by user_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsers by user_id – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
 		}
-	}
 
-?>
+		if(1 && "getUsers by user_group_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 2",
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 3",
+					"status" => 0
+				]);
+
+				// By User group id
+				$users = $UC->getUsers(["user_group_id" => $test_user_group_id]);
+				// debug([count($users), $users]);
+
+				$test_user_1_index = arrayKeyValue($users, "id", $test_user_id_1);
+				$test_user_2_index = arrayKeyValue($users, "id", $test_user_id_2);
+				$test_user_3_index = arrayKeyValue($users, "id", $test_user_id_3);
+
+
+				if(
+					count($users) === 3 &&
+
+					$test_user_1_index !== false &&
+					$users[$test_user_1_index]["nickname"] === "test user 1" &&
+					$users[$test_user_1_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_1_index]["status"] == 1 &&
+
+					$test_user_2_index !== false &&
+					$users[$test_user_2_index]["nickname"] === "test user 2" &&
+					$users[$test_user_2_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_2_index]["status"] == 1 &&
+
+					$test_user_3_index !== false &&
+					$users[$test_user_3_index]["nickname"] === "test user 3" &&
+					$users[$test_user_3_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_3_index]["status"] == 0
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::getUsers by user_group_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsers by user_group_id – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUsers by user_group_id – ordered") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "c test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "b test user 2",
+					"created_at" => date("Y-m-d H:i:s", strtotime("- 50 years")),
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "a test user 3",
+					"status" => 0
+				]);
+
+
+				// By User group id
+				$users_by_date = $UC->getUsers(["user_group_id" => $test_user_group_id]);
+
+				$test_user_1_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_1);
+				$test_user_2_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_2);
+				$test_user_3_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_3);
+
+				// debug([count($users_by_date), $users_by_date]);
+
+				$users_by_name = $UC->getUsers(["user_group_id" => $test_user_group_id, "order" => "nickname ASC"]);
+
+				$test_user_1_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_1);
+				$test_user_2_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_2);
+				$test_user_3_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_3);
+
+				// debug([count($users_by_name), $users_by_name]);
+
+
+
+				if(
+					count($users_by_date) === 3 &&
+
+					$test_user_1_by_date_index === 0 &&
+					$test_user_2_by_date_index === 2 &&
+					$test_user_3_by_date_index === 1 &&
+
+					$test_user_1_by_name_index === 2 &&
+					$test_user_2_by_name_index === 1 &&
+					$test_user_3_by_name_index === 0
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::getUsers by user_group_id ordered – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsers by user_group_id ordered – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>SuperUser::search</h3>
+		<?
+
+		if(1 && "search without query") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				// Count existing users
+				$user_count = countExistingUsers();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 2",
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 3",
+					"status" => 0
+				]);
+
+				$users = $UC->search();
+				// debug([count($users), $users]);
+
+				$test_user_1_index = arrayKeyValue($users, "id", $test_user_id_1);
+				$test_user_2_index = arrayKeyValue($users, "id", $test_user_id_2);
+				$test_user_3_index = arrayKeyValue($users, "id", $test_user_id_3);
+
+
+				if(
+					count($users) === ($user_count+3) &&
+
+					$test_user_1_index !== false &&
+					$users[$test_user_1_index]["nickname"] === "test user 1" &&
+					$users[$test_user_1_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_1_index]["status"] == 1 &&
+
+					$test_user_2_index !== false &&
+					$users[$test_user_2_index]["nickname"] === "test user 2" &&
+					$users[$test_user_2_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_2_index]["status"] == 1 &&
+
+					$test_user_3_index !== false &&
+					$users[$test_user_3_index]["nickname"] === "test user 3" &&
+					$users[$test_user_3_index]["user_group_id"] == $test_user_group_id &&
+					$users[$test_user_3_index]["status"] == 0
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::search (without query) – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::search (without query) – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "search – ordered") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				// Count existing users
+				$user_count = countExistingUsers();
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "c test user 1",
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "b test user 2",
+					"created_at" => date("Y-m-d H:i:s", strtotime("- 50 years")),
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "a test user 3",
+					"status" => 0
+				]);
+
+
+				// By User group id
+				$users_by_date = $UC->search();
+
+				$test_user_1_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_1);
+				$test_user_2_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_2);
+				$test_user_3_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_3);
+
+				// debug([count($users_by_date), $users_by_date]);
+
+				$users_by_name = $UC->search(["pattern" => ["order" => "nickname ASC"]]);
+
+				$test_user_1_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_1);
+				$test_user_2_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_2);
+				$test_user_3_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_3);
+
+				// debug([count($users_by_name), $users_by_name]);
+
+
+
+				if(
+					count($users_by_date) === $user_count+3 &&
+
+					$test_user_1_by_date_index < $test_user_2_by_date_index &&
+					$test_user_1_by_date_index < $test_user_3_by_date_index &&
+					$test_user_2_by_date_index > $test_user_3_by_date_index &&
+
+					$test_user_1_by_name_index > $test_user_2_by_name_index &&
+					$test_user_1_by_name_index > $test_user_3_by_name_index &&
+					$test_user_2_by_name_index > $test_user_3_by_name_index
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::search ordered – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::search ordered – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "search – ordered with query") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				// Count existing users
+				$user_count = countExistingUsers();
+
+				$test_user_group_id = createUserGroup("test-group");
+				$test_key = randomKey(4);
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "c test user 1 - ".$test_key,
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "b test user 2 - ".$test_key,
+					"created_at" => date("Y-m-d H:i:s", strtotime("- 50 years")),
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "a test user 3 - ".$test_key,
+					"status" => 0
+				]);
+
+
+				// By User group id
+				$users_by_date = $UC->search(["query" => $test_key]);
+
+				$test_user_1_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_1);
+				$test_user_2_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_2);
+				$test_user_3_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_3);
+
+				// debug([count($users_by_date), $users_by_date]);
+
+				$users_by_name = $UC->search(["query" => $test_key, "pattern" => ["order" => "nickname ASC"]]);
+
+				$test_user_1_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_1);
+				$test_user_2_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_2);
+				$test_user_3_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_3);
+
+				// debug([count($users_by_name), $users_by_name]);
+
+
+				if(
+
+					$test_user_1_by_date_index < $test_user_2_by_date_index &&
+					$test_user_1_by_date_index < $test_user_3_by_date_index &&
+					$test_user_2_by_date_index > $test_user_3_by_date_index &&
+
+					$test_user_1_by_name_index > $test_user_2_by_name_index &&
+					$test_user_1_by_name_index > $test_user_3_by_name_index &&
+					$test_user_2_by_name_index > $test_user_3_by_name_index
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::search ordered with query – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::search ordered with query – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "search – ordered with query and user_group_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+				// Count existing users
+				$user_count = countExistingUsers();
+
+				$test_user_group_id_1 = createUserGroup("test-group-1");
+				$test_user_group_id_2 = createUserGroup("test-group-2");
+
+				$test_key = randomKey(4);
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id_1,
+					"nickname" => "c test user 1 - ".$test_key,
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id_1,
+					"nickname" => "b test user 2 - ".$test_key,
+					"created_at" => date("Y-m-d H:i:s", strtotime("- 50 years")),
+				]);
+
+				$test_user_id_3 = createUser([
+					"user_group_id" => $test_user_group_id_2,
+					"nickname" => "a test user 3 - ".$test_key,
+					"status" => 0
+				]);
+
+
+				// By query and User group id
+				$users_by_date = $UC->search(["query" => $test_key, "pattern" => ["user_group_id" => $test_user_group_id_1]]);
+
+				$test_user_1_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_1);
+				$test_user_2_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_2);
+				$test_user_3_by_date_index = arrayKeyValue($users_by_date, "id", $test_user_id_3);
+
+				// debug([count($users_by_date), $users_by_date]);
+
+				$users_by_name = $UC->search(["query" => $test_key, "pattern" => ["user_group_id" => $test_user_group_id_1, "order" => "nickname ASC"]]);
+
+				$test_user_1_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_1);
+				$test_user_2_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_2);
+				$test_user_3_by_name_index = arrayKeyValue($users_by_name, "id", $test_user_id_3);
+
+				// debug([count($users_by_name), $users_by_name]);
+
+
+				if(
+					count($users_by_date) == 2 && 
+					$test_user_1_by_date_index < $test_user_2_by_date_index &&
+					!$test_user_3_by_name_index &&
+
+					count($users_by_name) == 2 && 
+					$test_user_1_by_name_index > $test_user_2_by_name_index &&
+					!$test_user_3_by_name_index
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::search ordered with query and user_group_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::search ordered with query and user_group_id – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+				deleteUser($test_user_id_3);
+
+				deleteUserGroup($test_user_group_id_1);
+				deleteUserGroup($test_user_group_id_2);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
+	</div>
 
 	<div class="tests">
 		<h3>SuperUser::getUsernames</h3>
 
 		<? 
-		// pass user_id
+
+		if(1 && "getUsernames for user_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->getUsernames(["user_id" => $test_user_id]);
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test.parentnode@gmail.com");
+				$test_username_2 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$test_username_3 = arrayKeyValue($result, "username", "11223344");
+	
+				if(
+					$result && 
+					count($result) == 3 &&
+					
+					$test_username_1 !== false &&
+					$result[$test_username_1]["type"] === "email" &&
+					$result[$test_username_1]["verified"] == 0 &&
+
+					$test_username_2 !== false &&
+					$result[$test_username_2]["type"] === "email" &&
+					$result[$test_username_2]["verified"] == 1 &&
+
+					$test_username_3 !== false &&
+					$result[$test_username_3]["type"] === "mobile" &&
+					$result[$test_username_3]["verified"] == 0
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUsernames, get all usernames for user_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsernames, get all usernames for user_id – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUsername type for user_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result_1 = $UC->getUsernames(["user_id" => $test_user_id, "type" => "mobile"]);
+
+				$result_2 = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$result]);
 		
-		$result = $UC->getUsernames(["user_id" => $test_user_id]);
-		// print_r($result);
+				if(
+					$result_1 && 
+					
+					$result_1["username"] === "11223344" &&
+					$result_1["verified"] == 0 &&
+
+					$result_2 && 
+				
+					$result_2["username"] === "test2.parentnode@gmail.com" &&
+					$result_2["verified"] == 1
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUsernames, get username of type for user_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsernames, get username of type for user_id – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUsername by username_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->getUsernames(["user_id" => $test_user_id]);
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$username_id_1 = $result[$test_username_1]["id"];
+
+				$result_1 = $UC->getUsernames(["username_id" => $username_id_1]);
+
+				$test_username_2 = arrayKeyValue($result, "username", "11223344");
+				$username_id_2 = $result[$test_username_2]["id"];
+
+				$result_2 = $UC->getUsernames(["username_id" => $username_id_2]);
 		
-		if($result && count($result) == 3):?>
-		<div class="testpassed"><p>SuperUser::getUsernames, get all usernames for user_id – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUsernames, get all usernames for user_id – error</p></div>
-		<? endif; ?>
+				if(
+					$result_1 && 
+					
+					$result_1["username"] === "test2.parentnode@gmail.com" &&
+					$result_1["verified"] == 1 &&
 
-		<? 
-		// pass user_id and type
-		
-		$result = $UC->getUsernames(["user_id" => $test_user_id, "type" => "mobile"]);
-		// print_r($result);
-		
-		if($result && $result["username"] == 11223344):?>
-		<div class="testpassed"><p>SuperUser::getUsernames, get first username of type for user_id – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUsernames, get first username of type for user_id – error</p></div>
-		<? endif; ?>
+					$result_2 && 
+				
+					$result_2["username"] === "11223344" &&
+					$result_2["verified"] == 0
 
-		<? 
-		// pass username_id
-
-		$result = $UC->getUsernames(["username_id" => $test_email1_username_id]);
-		// print_r($result);
-
-		if($result && $result["username"] == 'test.parentnode@gmail.com'):?>
-		<div class="testpassed"><p>SuperUser::getUsernames, get specific username by username_id – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUsernames, get specific username by username_id – error</p></div>
-		<? endif; ?>
+				):?>
+				<div class="testpassed"><p>SuperUser::getUsernames, get specific username by username_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUsernames, get specific username by username_id – error</p></div>
+				<? endif;
 
 
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
 	</div>
 
 	<div class="tests">
 		<h3>SuperUser::getUnverifiedUsernames</h3>
 
 		<? 
-		// pass nothing
-		
-		$result = $UC->getUnverifiedUsernames();	
-		
-		if($result):?>
-		<div class="testpassed"><p>SuperUser::getUnverifiedUsernames, get all unverified usernames – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUnverifiedUsernames, get all unverified usernames – error</p></div>
-		<? endif; ?>
-		
-		<? 
-		// pass type
-		
-		$result = $UC->getUnverifiedUsernames(["type" => "email"]);
-		// print_r($result);
 
-		if($result && count($result) == 3):?>
-		<div class="testpassed"><p>SuperUser::getUnverifiedUsernames, get unverified usernames of type – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUnverifiedUsernames, get unverified usernames of type – error</p></div>
-		<? endif; ?>
+		if(1 && "getUnverifiedUsernames") {
 
-		<? 
-		// pass user_id
-		
-		$result = $UC->getUnverifiedUsernames(["user_id" => $test_user_id]);
-		// print_r($result);
+			(function() {
 
-		if($result && count($result) == 3):?>
-		<div class="testpassed"><p>SuperUser::getUnverifiedUsernames, get unverified usernames for user_id – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUnverifiedUsernames, get unverified usernames for user_id – error</p></div>
-		<? endif; ?>
+				$UC = new SuperUser();
+				$query = new Query();
 
-		<? 
-		// pass user_id and type
-		
-		$result = $UC->getUnverifiedUsernames(["user_id" => $test_user_id, "type" => "email"]);
 
-		if($result && count($result) == 2):?>
-		<div class="testpassed"><p>SuperUser::getUnverifiedUsernames, get unverifed usernames of type for user_id – correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>SuperUser::getUnverifiedUsernames, get unverifed usernames of type for user_id – error</p></div>
-		<? endif; ?>
+				$test_user_group_id = createUserGroup("test-group");
 
-		<? 
-		// goto cleanup; 
-		// goto skip_cleanup; 
-		?>	
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
 
+				$result = $UC->getUnverifiedUsernames();
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test.parentnode@gmail.com");
+				$test_username_2 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$test_username_3 = arrayKeyValue($result, "username", "11223344");
+	
+				if(
+					$result && 
+					count($result) >= 2 &&
+
+					$test_username_1 !== false &&
+					$result[$test_username_1]["username"] === "test.parentnode@gmail.com" &&
+					$result[$test_username_1]["type"] === "email" &&
+
+					$test_username_2 === false &&
+
+					$test_username_3 !== false &&
+					$result[$test_username_3]["username"] === "11223344" &&
+					$result[$test_username_3]["type"] === "mobile"
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUnverifiedUsernames, get all unverified usernames – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUnverifiedUsernames, get all unverified usernames – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUnverifiedUsernames by type") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->getUnverifiedUsernames(["type" => "email"]);
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test.parentnode@gmail.com");
+				$test_username_2 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$test_username_3 = arrayKeyValue($result, "username", "11223344");
+	
+				if(
+					$result && 
+					count($result) >= 1 &&
+
+					$test_username_1 !== false &&
+					$result[$test_username_1]["username"] === "test.parentnode@gmail.com" &&
+					$result[$test_username_1]["type"] === "email" &&
+
+					$test_username_2 === false &&
+
+					$test_username_3 === false
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUnverifiedUsernames all by type – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUnverifiedUsernames all by type – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUnverifiedUsernames by user_id") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->getUnverifiedUsernames(["user_id" => $test_user_id]);
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test.parentnode@gmail.com");
+				$test_username_2 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$test_username_3 = arrayKeyValue($result, "username", "11223344");
+	
+				if(
+					$result && 
+					count($result) == 2 &&
+
+					$test_username_1 !== false &&
+					$result[$test_username_1]["username"] === "test.parentnode@gmail.com" &&
+					$result[$test_username_1]["type"] === "email" &&
+
+					$test_username_2 === false &&
+
+					$test_username_3 !== false &&
+					$result[$test_username_3]["username"] === "11223344" &&
+					$result[$test_username_3]["type"] === "mobile"
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUnverifiedUsernames by user_id – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUnverifiedUsernames by user_id – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "getUnverifiedUsernames by type") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->getUnverifiedUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$result]);
+	
+				$test_username_1 = arrayKeyValue($result, "username", "test.parentnode@gmail.com");
+				$test_username_2 = arrayKeyValue($result, "username", "test2.parentnode@gmail.com");
+				$test_username_3 = arrayKeyValue($result, "username", "11223344");
+	
+				if(
+					$result && 
+					count($result) == 1 &&
+
+					$test_username_1 !== false &&
+					$result[$test_username_1]["username"] === "test.parentnode@gmail.com" &&
+					$result[$test_username_1]["type"] === "email" &&
+
+					$test_username_2 === false &&
+
+					$test_username_3 === false
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getUnverifiedUsernames all by type – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getUnverifiedUsernames all by type – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
 
 	</div>
-
-
 
 	<div class="tests">
 		<h3>SuperUser::sendVerificationLink</h3>
-		
-		<? 
-		
-		$result = $UC->sendVerificationLink(["sendVerificationLink", $test_email1_username_id]);
-		// print_r($result);
 
-		if(
-			$result &&
-			isset($result["verified"]) &&
-			isset($result["total_reminders"]) &&
-			isset($result["reminded_at"])
-			):?>
-		<div class="testpassed"><p>SuperUser::sendVerificationLink – correct</p></div>
-		<? else: 
-			
+		<?
+
+		if(1 && "sendVerificationLink") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+					]
+				]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+				// debug([$result]);
+
+				$test_username_1 = arrayKeyValue($usernames, "username", "test.parentnode@gmail.com");
+				$username_id_1 = $usernames[$test_username_1]["id"];
+
+				$result = $UC->sendVerificationLink(["sendVerificationLink", $username_id_1]);
+
+				if(
+					$result && 
+
+					isset($result["verified"]) &&
+					$result["verified"] == 0 &&
+
+					isset($result["total_reminders"]) &&
+					$result["total_reminders"] == 1 &&
+
+					isset($result["reminded_at"]) &&
+					date("Y-m-d", strtotime($result["reminded_at"])) === date("Y-m-d")
+
+				):?>
+				<div class="testpassed"><p>SuperUser::sendVerificationLink – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::sendVerificationLink – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
 		?>
-		<div class="testfailed"><p>SuperUser::sendVerificationLink – error</p></div>
-		<? endif; ?>
-		
+
 	</div>
-
-
-	<div class="tests">
-		<h3>SuperUser::sendVerificationLinks</h3>
-		
-		<? 
-		$usernames_ids = $test_email1_username_id.",".$test_email2_username_id;
-		$_POST["selected_username_ids"] = $usernames_ids;
-
-		$result = $UC->sendVerificationLinks(["sendVerificationLinks"]);
-		// print_r($result);
-
-		if($result && count($result) == 2):?>
-		<div class="testpassed"><p>SuperUser::sendVerificationLinks – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::sendVerificationLinks – error</p></div>
-		<? endif; ?>
-		
-	</div>
-
-
 
 	<div class="tests">
 		<h3>SuperUser::getVerificationStatus</h3>
-		
-		<? 
-		
-		$result = $UC->getVerificationStatus($test_email1_username_id, $test_user_id);
-		// print_r($result);
-		if(
-			isset($result["verified"]) &&
-			isset($result["total_reminders"]) &&
-			isset($result["reminded_at"]) &&
-			$result["verified"] === "0"
-			):		
-		?>
-		<div class="testpassed"><p>SuperUser::getVerificationStatus – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::getVerificationStatus – error</p></div>
-		<? endif; ?>
 
-		
+		<? 
+
+		if(1 && "getVerificationStatus") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+				// debug([$usernames]);
+	
+				$test_username_1 = arrayKeyValue($usernames, "username", "test2.parentnode@gmail.com");
+				$username_id_1 = $usernames[$test_username_1]["id"];
+
+				$test_username_2 = arrayKeyValue($usernames, "username", "11223344");
+				$username_id_2 = $usernames[$test_username_2]["id"];
+
+
+				$result_1 = $UC->getVerificationStatus($username_id_1, $test_user_id);
+				$result_2 = $UC->getVerificationStatus($username_id_2, $test_user_id);
+
+
+
+				if(
+					$result_1 && 
+
+					$result_1["verified"] == 1 &&
+					isset($result_1["total_reminders"]) &&
+					$result_1["total_reminders"] == 0 &&
+
+					$result_2 && 
+				
+					$result_2["verified"] == 0 &&
+					isset($result_2["total_reminders"]) &&
+					$result_2["total_reminders"] == 0
+
+				):?>
+				<div class="testpassed"><p>SuperUser::getVerificationStatus – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::getVerificationStatus – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
+
 	</div>
 
 	<div class="tests">
 		<h3>SuperUser::setVerificationStatus</h3>
-		
+
 		<? 
-		// update from 0 to 1
-		$result = $UC->setVerificationStatus($test_email1_username_id, $test_user_id, 1);
-		if(
-			isset($result["verification_status"]) &&
-			$result["verification_status"] == "VERIFIED"
-		):?>
-		<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 0 to 1 – correct</p></div>
-		<? else: 
-			
-			?>
-		<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 0 to 1 – error</p></div>
-		<? endif; ?>
-		
-		<? 
-		// update from 1 to 0
-		$result = $UC->setVerificationStatus($test_email1_username_id, $test_user_id, 0);
-		if(
-			isset($result["verification_status"]) &&
-			$result["verification_status"] == "NOT_VERIFIED"
-		):?>
-		<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 1 to 0 – correct</p></div>
-		<? else: 
-			
-			?>
-		<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 1 to 0 – error</p></div>
-		<? endif; ?>
-		
-		<? 
-		// update from 0 to 0
-		$result = $UC->setVerificationStatus($test_email1_username_id, $test_user_id, 0);
-		if(
-			isset($result["verification_status"]) &&
-			$result["verification_status"] == "NOT_VERIFIED"
-		):?>
-		<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 0 to 0 (unchanged) – correct</p></div>
-		<? else: 
-			
-			?>
-		<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 0 to 0 (unchanged) – error</p></div>
-		<? endif; ?>
-		
+
+		if(1 && "setVerificationStatus - from 0 to 1") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
 
 
-	</div>
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0]
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$username]);
 	
+
+				// update from 0 to 1
+				$result = $UC->setVerificationStatus($username["id"], $test_user_id, 1);
+
+				if(
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 0 to 1 – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 0 to 1 – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "setVerificationStatus - from 0 to 0") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0]
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$username]);
+	
+
+				// update from 0 to 1
+				$result = $UC->setVerificationStatus($username["id"], $test_user_id, 0);
+
+				if(
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "NOT_VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 0 to 0 – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 0 to 0 – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "setVerificationStatus - from 1 to 1") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1]
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$username]);
+	
+
+				// update from 0 to 1
+				$result = $UC->setVerificationStatus($username["id"], $test_user_id, 1);
+
+				if(
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 1 to 1 – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 1 to 1 – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "setVerificationStatus - from 1 to 0") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1]
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				// debug([$username]);
+	
+
+				// update from 0 to 1
+				$result = $UC->setVerificationStatus($username["id"], $test_user_id, 0);
+
+				if(
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "NOT_VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::setVerificationStatus, update from 1 to 0 – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::setVerificationStatus, update from 1 to 0 – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		?>
+	</div>
+
 	<div class="tests">
 		<h3>SuperUser::updateEmail</h3>
 
 		<? 
-		// update existing email
 
-		$_POST["username_id"] = $test_email1_username_id;
-		$_POST["verification_status"] = 0;
-		$_POST["email"] =  "test4.parentnode@gmail.com";
+		if(1 && "updateEmail – no existing usernames") {
 
-		$result = $UC->updateEmail(["updateEmail", $test_user_id]);
-		
-		$sql_test_email1 = "SELECT * FROM ".SITE_DB.".user_usernames WHERE username = 'test4.parentnode@gmail.com' AND verified = 0 AND user_id = $test_user_id AND id = $test_email1_username_id";
-		// print $sql_test_email1;
-		$sql_test_email2 = "SELECT * FROM ".SITE_DB.".user_usernames WHERE username = 'test2.parentnode@gmail.com' AND verified = 0 AND user_id = $test_user_id AND id = $test_email2_username_id";
-		// print $sql_test_email2;
-		$sql_mobile = "SELECT * FROM ".SITE_DB.".user_usernames WHERE username = 11223344 AND verified = 0 AND user_id = $test_user_id AND id = $test_mobile_id";
-		// print $sql_mobile;
-		$sql_ref_username = "SELECT * FROM ".SITE_DB.".user_usernames WHERE username = 'test3.parentnode@gmail.com' AND verified = 0 AND user_id = $ref_user_id AND id = $ref_username_id";
-		// print $sql_mobile;
+			(function() {
 
-		if(
-			$query->sql($sql_test_email1) && 
-			$query->sql($sql_test_email2) && 
-			$query->sql($sql_mobile) && 
-			$query->sql($sql_ref_username) && 
-			$result["email_status"] && 
-			$result["verification_status"] && 
-			$result["email_status"] == "UPDATED" && 
-			$result["verification_status"] == 0
-		):?>
-
-		<div class="testpassed"><p>SuperUser::updateEmail, update existing email – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::updateEmail, update existing email – error</p></div>
-		<? endif; ?>
-
-		<?
-		// unchanged email
-
-		unset($_POST);
-
-		$_POST["username_id"] = $test_email1_username_id;
-		$_POST["verification_status"] = 0;
-		$_POST["email"] =  "test4.parentnode@gmail.com";
-
-		$result = $UC->updateEmail(["updateEmail", $test_user_id]);
-// echo '<pre>'. print_r(count($result)) .'</pre>';
-		if(
-			$query->sql($sql_test_email1) && 
-			$query->sql($sql_test_email2) && 
-			$query->sql($sql_mobile) && 
-			$query->sql($sql_ref_username) && 
-			$result["email_status"] && 
-			$result["verification_status"] && 
-			$result["email_status"] == "UNCHANGED" && 
-			$result["verification_status"] == 0
-		):?>
-
-		<div class="testpassed"><p>SuperUser::updateEmail, unchanged email – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::updateEmail, unchanged email – error</p></div>
-		<? endif; ?>
-
-		
-		<? 
-		// update existing email to empty (deletes username row)
-			
-		unset($_POST);
-		
-		
-		$_POST["username_id"] = $test_email2_username_id;
-		$_POST["verification_status"] = 0;
-		$_POST["email"] = "";
-		
-		$result = $UC->updateEmail(["updateEmail", $test_user_id]);
-				// echo '<pre>'. print_r(count($result)) .'</pre>';
-		$sql = "SELECT id FROM ".SITE_DB.".user_usernames WHERE user_id = '$test_user_id' AND id = $test_email2_username_id";
-		// print ($sql); 
-
-		if(
-			$result === true &&
-			!$query->sql($sql)
-		):?>
-
-		<div class="testpassed"><p>SuperUser::updateEmail, update existing email to empty (deletes username row) – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::updateEmail, update existing email to empty (deletes username row) – error</p></div>
-		<? endif; ?>
-		
-		<? 
-		// goto cleanup; 
-		// goto skip_cleanup; 
-		?>	
+				$UC = new SuperUser();
+				$query = new Query();
 
 
-		<? 
-		// add new email
+				$test_user_group_id = createUserGroup("test-group");
 
-		// delete all emails for test user, empty post array and add new email
-		$sql = "DELETE FROM ".SITE_DB.".user_usernames WHERE user_id = $test_user_id AND type='email'";
-		
-		
-		// print $sql;
-		if($query->sql($sql)) {
-			
-			unset($_POST);
-			
-			$_POST["verification_status"] = 0;
-			$_POST["email"] = "test5.parentnode@gmail.com";
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
 
-			$result = $UC->updateEmail(["updateEmail", $test_user_id]);
-						// echo '<pre>'. print_r(count($result)) .'</pre>';
+
+				$_POST["email"] = "test4.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+				// debug(["result", $result, "usernames" => $usernames]);
+
+				if(
+
+					count($usernames) === 1 &&
+					$usernames[0]["username"] === "test4.parentnode@gmail.com" &&
+
+					isset($result["email_status"]) &&
+					$result["email_status"] == "UPDATED" &&
+
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "NOT_VERIFIED"
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, no existing usernames – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, no existing usernames – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
 		}
-		
-		$sql_test_email5 = "SELECT * FROM ".SITE_DB.".user_usernames WHERE username = 'test5.parentnode@gmail.com' AND verified = 0 AND user_id = $test_user_id";
-		// print $sql_test_email5;
-		if(
-			$query->sql($sql_test_email5) && 
-			$query->sql($sql_mobile) && 
-			$query->sql($sql_ref_username) && 
-			$result["email_status"] && 
-			$result["verification_status"] && 
-			$result["email_status"] == "UPDATED" && 
-			$result["verification_status"] == 0
-		):
-		
+
+		if(1 && "updateEmail – usernames exist") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+
+				$_POST["email"] = "test4.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+
+
+				if(
+					count($usernames) === 4 &&
+
+					isset($result["email_status"]) &&
+					$result["email_status"] == "UPDATED" &&
+
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "NOT_VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, usernames exist – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, usernames exist – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "updateEmail – using username_id + no verification_status") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1],
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				
+				
+				$_POST["username_id"] = $username["id"];
+				// $_POST["verification_status"] = 0;
+				$_POST["email"] = "test4.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+
+				$result_email_username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+
+
+				if(
+
+					count($usernames) === 1 &&
+
+					$result_email_username["id"] === $username["id"] &&
+					$result_email_username["username"] === "test4.parentnode@gmail.com" &&
+					$result_email_username["verified"] == 0 &&
+
+					isset($result["email_status"]) &&
+					$result["email_status"] == "UPDATED" &&
+
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "NOT_VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, using username_id + no verification_status – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, using username_id + no verification_status – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "updateEmail – using username_id + verification_status") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1],
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				
+				
+				$_POST["username_id"] = $username["id"];
+				$_POST["verification_status"] = 1;
+				$_POST["email"] = "test4.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+
+				$result_email_username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+
+
+				if(
+
+					count($usernames) === 1 &&
+					$result_email_username["id"] === $username["id"] &&
+					$result_email_username["username"] === "test4.parentnode@gmail.com" &&
+					$result_email_username["verified"] == 1 &&
+
+					isset($result["email_status"]) &&
+					$result["email_status"] == "UPDATED" &&
+
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, using username_id + verification_status – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, using username_id + verification_status – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "updateEmail – using username_id + unchanged email") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1],
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+				
+				
+				$_POST["username_id"] = $username["id"];
+				$_POST["email"] = "test.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+
+				$result_email_username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+
+
+				if(
+
+					count($usernames) === 1 &&
+
+					$result_email_username["id"] === $username["id"] &&
+					$result_email_username["username"] === "test.parentnode@gmail.com" &&
+					$result_email_username["verified"] == 1 &&
+
+					isset($result["email_status"]) &&
+					$result["email_status"] == "UNCHANGED" &&
+
+					isset($result["verification_status"]) &&
+					$result["verification_status"] == "VERIFIED"
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, using username_id + unchanged email – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, using username_id + unchanged email – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "updateEmail – using username_id + empty email (delete email)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1],
+					]
+				]);
+
+				$username = $UC->getUsernames(["user_id" => $test_user_id, "type" => "email"]);
+
+				$_POST["username_id"] = $username["id"];
+				$_POST["email"] = "";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id]);
+
+				$usernames = $UC->getUsernames(["user_id" => $test_user_id]);
+
+				if(
+
+					$username && 
+					$result &&
+					!$usernames
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, using username_id + empty email (delete email) – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, using username_id + empty email (delete email) – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
+		if(1 && "updateEmail – using username_id + empty email (delete email)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id_1 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 1],
+					]
+				]);
+
+				$test_user_id_2 = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 2",
+				]);
+
+
+				$_POST["email"] = "test.parentnode@gmail.com";
+				$result = $UC->updateEmail(["updateEmail", $test_user_id_2]);
+
+
+				$usernames_1 = $UC->getUsernames(["user_id" => $test_user_id_1]);
+				$usernames_2 = $UC->getUsernames(["user_id" => $test_user_id_2]);
+
+				if(
+
+					count($usernames_1) === 1 &&
+					$usernames_1[0]["username"] === "test.parentnode@gmail.com" && 
+
+					!$usernames_2 &&
+
+					$result &&
+					$result["email_status"] == "ALREADY_EXISTS"
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::updateEmail, using username_id + existing email – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::updateEmail, using username_id + existing email – error</p></div>
+				<? endif;
+
+				// CLEAN UP
+				deleteUser($test_user_id_1);
+				deleteUser($test_user_id_2);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+		}
+
 		?>
-
-		<div class="testpassed"><p>SuperUser::updateEmail, add new email – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::updateEmail, add new email – error</p></div>
-		<? endif; ?>
-		
-		<? 
-		// add new email that already exists in db
-			
-		unset($_POST);
-		
-		$_POST["verification_status"] = 0;
-		$_POST["email"] = "test5.parentnode@gmail.com";
-		
-		$result = $UC->updateEmail(["updateEmail", $test_user_id]);
-		// exit;echo '<pre>'. print_r(count($result)) .'</pre>';
-
-		
-		if(			
-			$result["email_status"] &&
-			$result["email_status"] == "ALREADY_EXISTS"
-		):?>
-
-		<div class="testpassed"><p>SuperUser::updateEmail, add new email that already exists in db (should return error) – correct</p></div>
-		<? else: 
-			
-		?>
-		<div class="testfailed"><p>SuperUser::updateEmail, add new email that already exists in db (should return error) – error</p></div>
-		<? endif; ?>
-	
-
 	</div>
 
-<?
-// CLEAN UP
-// delete test user
+	<div class="tests">
+		<h3>SuperUser::userCanBeDeleted</h3>
+		<?
 
-cleanup:
-$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $test_user_id";
-if($query->sql($sql)) {
-	// delete ref user
-	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $ref_user_id";
-	if($query->sql($sql)) {
+		if(1 && "delete (unused user)") {
 
-	}	
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1 for delete",
+				]);
+
+
+				$result = $UC->userCanBeDeleted($test_user_id);
+		
+				if (
+
+					$result
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::userCanBeDeleted (unused user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::userCanBeDeleted (unused user) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "userCanBeDeleted (guest user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+
+
+				$result = $UC->userCanBeDeleted(1);
+				// debug([$result]);
+		
+				if (
+
+					!$result
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::userCanBeDeleted (guest user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::userCanBeDeleted (guest user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "userCanBeDeleted (non-existing user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$result_1 = $UC->userCanBeDeleted("abc");
+				$result_2 = $UC->userCanBeDeleted("");
+				$result_3 = $UC->userCanBeDeleted(1000000000);
+				// debug([$result_1, $result_2, $result_3, $result_4]);
+
+				if (
+
+					!$result_1 &&
+					!$result_2 &&
+					!$result_3
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::userCanBeDeleted (non-existing user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::userCanBeDeleted (non-existing user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "userCanBeDeleted (user with item)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400, "user_id" => $test_user_id]);
+
+
+				$result = $UC->userCanBeDeleted($test_user_id);
+				// debug([$result]);
+		
+				if (
+					!$result 
+				): ?>
+				<div class="testpassed"><p>SuperUser::userCanBeDeleted (user with item) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::userCanBeDeleted (user with item) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+			})();
+
+		}
+
+		if(1 && "userCanBeDeleted (user with order)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400]);
+
+
+				$test_order_id = createTestOrder($test_user_id, $test_item_id);
+
+
+				$result = $UC->userCanBeDeleted($test_user_id);
+				// debug([$result, message()->getMessages()]);
+
+				if (
+					!$result
+				): ?>
+				<div class="testpassed"><p>SuperUser::userCanBeDeleted (user with order) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::userCanBeDeleted (user with order) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestOrder($test_order_id);
+
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+			})();
+
+		}
+
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>SuperUser::delete</h3>
+		<?
+
+		if(1 && "delete (unused user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1 for delete",
+				]);
+
+
+				$result = $UC->delete(["delete", $test_user_id]);
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+				// debug([$result]);
+		
+				if (
+
+					$result &&
+					!$query->sql($sql_user) &&
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_items) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts) &&
+					!$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (unused user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (unused user) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "delete (guest user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$result = $UC->delete(["delete", 1]);
+				// debug([$result]);
+		
+				if (
+
+					!$result
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (guest user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (guest user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "delete (non-existing user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$result_1 = $UC->delete(["delete", "abc"]);
+				$result_2 = $UC->delete(["delete", ""]);
+				$result_3 = $UC->delete(["delete"]);
+				$result_4 = $UC->delete(["delete", "1000000000"]);
+				// debug([$result_1, $result_2, $result_3, $result_4]);
+
+				if (
+
+					!$result_1 &&
+					!$result_2 &&
+					!$result_3 &&
+					!$result_4
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (non-existing user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (non-existing user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "delete (user with usernames)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$result = $UC->delete(["delete", $test_user_id]);
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+				// debug([$result]);
 	
-}
-message()->resetMessages();
+				if (
 
-skip_cleanup:
-?>
+					$result &&
+					!$query->sql($sql_user) &&
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_items) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts) &&
+					!$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (user with usernames) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (user with usernames) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "delete (user with item)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400, "user_id" => $test_user_id]);
+
+
+				$result = $UC->delete(["delete", $test_user_id]);
+				// debug([$result]);
+		
+				if (
+					!$result 
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (user with item) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (user with item) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+			})();
+
+		}
+
+		if(1 && "delete (user with cart)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400]);
+
+				$SC = new SuperShop();
+
+		
+				$_POST["user_id"] = $test_user_id;
+				$cart = $SC->addCart(["addCart"]);
+				unset($_POST);
+
+				$_POST["item_id"] = $test_item_id;
+				$_POST["quantity"] = 1;
+				$cart = $SC->addToCart(["addToCart", $cart["cart_reference"]]);
+				unset($_POST);
+
+
+				$result = $UC->delete(["delete", $test_user_id]);
+				// debug([$result]);
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+				// debug([$result]);
+	
+				if (
+
+					$result &&
+					!$query->sql($sql_user) &&
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_items) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts) &&
+					!$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (user with cart) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (user with cart) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteUserGroup($test_user_group_id);
+
+				deleteTestItem($test_item_id);
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "delete (user with order)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400]);
+
+
+				$test_order_id = createTestOrder($test_user_id, $test_item_id);
+
+
+				$result = $UC->delete(["delete", $test_user_id]);
+				// debug([$result, message()->getMessages()]);
+
+				if (
+					!$result
+				): ?>
+				<div class="testpassed"><p>SuperUser::delete (user with order) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::delete (user with order) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestOrder($test_order_id);
+
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+			})();
+
+		}
+
+		?>
+	</div>
 
 	<div class="tests">
 		<h3>SuperUser::cancel</h3>
 		<?
-		// add test user
-		$_POST["nickname"] = "testuser@test.com";
-		$_POST["user_group_id"] = 3;
-		$user = $UC->save(["save"]);
-		unset($_POST);
-		$user_id = $user["item_id"];
-		// create test membership item
-		$model = $IC->TypeObject("membership");
-		$_POST["name"] = "Membership Test item";
-		$membership = $model->save(array("save"));
-		unset($_POST);
-		$item_id = $membership["id"];
 
-		$_POST["item_price"] = 100;
-		$_POST["item_price_currency"] = "DKK";
-		$_POST["item_price_vatrate"] = 1;
-		$_POST["item_price_type"] = 1;
-		$_POST["item_price_quantity"] = 1;
-		$price = $model->addPrice(["addPrice", $item_id]);
-		unset($_POST);
-		
-		$_POST["user_id"] = $user_id;
-		$cart = $SC->addCart(["addCart"]);
-		unset($_POST);
-		
-		$cart_id = $cart ? $cart["id"] : false;
-		$cart_reference = $cart ? $cart["cart_reference"] : false;
-		$_POST["item_id"] = $item_id;
-		$_POST["quantity"] = 1;
-		$cart = $SC->addToCart(["addToCart", $cart_reference]);
-		unset($_POST);
+		if(1 && "cancel (user with usernames)") {
 
-		$order = $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
-		$order_id = $order ? $order["id"] : false;
+			(function() {
 
-		$result = $UC->cancel(["cancel", $user_id]);
-		// print_r($result);
-		
-		if (
-			$result["error"] == "unpaid_orders" 
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (can not cancel due to unpaid orders. Should return ["error" => "unpaid_orders"]) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (can not cancel due to unpaid orders. Should return ["error" => "unpaid_orders"]) - error</p></div>
-			<? endif; 
-		
-	
-		$result = $UC->cancel(["cancel", "hej", "bla"]);
-		
-		if (
-			!$result
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (can not cancel due to too many action parameters) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (can not cancel due to too many action parameters) - error</p></div>
-			<? endif; 
-			
-		$result = $UC->cancel([$user_id]);
-		if (
-			!$result
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (can not cancel due to incorrect action parameters) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (can not cancel due to incorrect action parameters) - error</p></div>
-			<? endif; 
-		$new_user_id = 100;
-		$result = $UC->cancel(["cancel", $new_user_id]);
-		// print_r($result);
-		if (
-			!$result
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (non-exisiting user_id, returns false) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (non-exisiting user_id, returns false) - error</p></div>
-			<? endif;
-			
-		$new_user_id = 0;
-		$result = $UC->cancel(["cancel", $new_user_id]);
-		// print_r($result);
-		if (
-			!$result
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (user_id: 0, returns false) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (user_id: 0, returns false) - error</p></div>
-			<? endif;
-		
-		$_POST["order_id"] = $order_id;
-		$_POST["payment_method"] = 1;
-		$_POST["payment_amount"] = 100;
-		$payment_id = $SC->registerPayment(["registerPayment"]);
-		$result = $UC->cancel(["cancel", $user_id]);
-		
-		if (
-			$result == true
-			): ?>
-			<div class="testpassed"><p>SuperUser::cancel (cancels user with no exisiting orders) - correct</p></div>
-			<? else: ?>
-			<div class="testfailed"><p>SuperUser::cancel (cancels user with no exisiting orders) - error</p></div>
-			<? endif; 
-			
-		// CLEAN UP
-		$model->delete(array("delete", $item_id));
-		$sql = "DELETE FROM ".SITE_DB.".shop_payments WHERE order_id = $order_id";
-		$query->sql($sql);
-		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
-		$query->sql($sql);
+				$UC = new SuperUser();
+				$query = new Query();
 
-		// user must be deleted last due to dependencies
-		$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
-		$query->sql($sql);
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+
+				$result = $UC->cancel(["cancel", $test_user_id]);
+				// debug([$result]);
+
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$query->sql($sql_user);
+				$user = $query->result(0);
+				// debug([$user]);
+
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+				if (
+					$result &&
+
+					$user["nickname"] === "Anonymous" &&
+					$user["status"] == -1 &&
+					!$user["firstname"] &&
+					!$user["lastname"] &&
+					!$user["user_group_id"] &&
+
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_items) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts) &&
+					!$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (user with usernames) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (user with usernames) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "cancel (guest user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$result = $UC->cancel(["cancel", 1]);
+				// debug([$result]);
 		
+				if (
+
+					!$result
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (guest user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (guest user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "cancel (non-existing user)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$result_1 = $UC->cancel(["cancel", "abc"]);
+				$result_2 = $UC->cancel(["cancel", ""]);
+				$result_3 = $UC->cancel(["cancel"]);
+				$result_4 = $UC->cancel(["cancel", "1000000000"]);
+				// debug([$result_1, $result_2, $result_3, $result_4]);
+
+				if (
+
+					!$result_1 &&
+					!$result_2 &&
+					!$result_3 &&
+					!$result_4
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (non-existing user) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (non-existing user) - error</p></div>
+				<? endif; 
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "cancel (user with item)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+					"usernames" => [
+						["username" => "test.parentnode@gmail.com", "type" => "email", "verified" => 0],
+						["username" => "test2.parentnode@gmail.com", "type" => "email", "verified" => 1],
+						["username" => "11223344", "type" => "mobile", "verified" => 0],
+					]
+				]);
+
+				$test_item_id = createTestItem(["price" => 400, "user_id" => $test_user_id]);
+
+
+				$result = $UC->cancel(["cancel", $test_user_id]);
+				// debug([$result]);
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$query->sql($sql_user);
+				$user = $query->result(0);
+				// debug([$user]);
+
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+		
+				if (
+
+					$result &&
+
+					$user["nickname"] === "Anonymous" &&
+					$user["status"] == -1 &&
+					!$user["firstname"] &&
+					!$user["lastname"] &&
+					!$user["user_group_id"] &&
+
+					$query->sql($sql_items) &&
+
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts) &&
+					!$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (user with item) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (user with item) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "cancel (user with paid order)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_item_id = createTestItem(["price" => 400]);
+
+				$test_order_id = createTestOrder($test_user_id, $test_item_id);
+
+				$test_payment_id = payTestOrder($test_order_id);
+
+				$result = $UC->cancel(["cancel", $test_user_id]);
+				// debug([$result, message()->getMessages()]);
+
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$query->sql($sql_user);
+				$user = $query->result(0);
+				// debug([$user]);
+
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+		
+				if (
+
+					$result &&
+
+					$user["nickname"] === "Anonymous" &&
+					$user["status"] == -1 &&
+					!$user["firstname"] &&
+					!$user["lastname"] &&
+					!$user["user_group_id"] &&
+
+					$query->sql($sql_orders) &&
+
+					!$query->sql($sql_items) &&
+					!$query->sql($sql_usernames) &&
+					!$query->sql($sql_passwords) &&
+					!$query->sql($sql_comments) &&
+					!$query->sql($sql_carts)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (user with paid order) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (user with paid order) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestPayment($test_payment_id);
+
+				deleteTestOrder($test_order_id);
+
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+			})();
+
+		}
+
+		if(1 && "cancel (user with unpaid order)") {
+
+			(function() {
+
+				$UC = new SuperUser();
+				$query = new Query();
+
+
+				$test_user_group_id = createUserGroup("test-group");
+
+				$test_user_id = createUser([
+					"user_group_id" => $test_user_group_id,
+					"nickname" => "test user 1",
+				]);
+
+				$test_item_id = createTestItem(["price" => 400]);
+
+				$test_order_id = createTestOrder($test_user_id, $test_item_id);
+
+
+				$result = $UC->cancel(["cancel", $test_user_id]);
+				// debug([$result]);
+
+
+				$sql_user = "SELECT * FROM ".SITE_DB.".users WHERE id = $test_user_id"; 
+				$query->sql($sql_user);
+				$user = $query->result(0);
+				// debug([$user]);
+
+				$sql_usernames = "SELECT * FROM ".SITE_DB.".usernames WHERE user_id = $test_user_id"; 
+				$sql_passwords = "SELECT * FROM ".SITE_DB.".passwords WHERE user_id = $test_user_id"; 
+				$sql_items = "SELECT * FROM ".SITE_DB.".items WHERE user_id = $test_user_id"; 
+				$sql_comments = "SELECT * FROM ".SITE_DB.".item_comments WHERE user_id = $test_user_id"; 
+				$sql_carts = "SELECT * FROM ".SITE_DB.".shop_carts WHERE user_id = $test_user_id"; 
+				$sql_orders = "SELECT * FROM ".SITE_DB.".shop_orders WHERE user_id = $test_user_id"; 
+
+		
+				if (
+
+					$result &&
+					$result["error"] === "unpaid_orders" &&
+
+					$user["nickname"] !== "Anonymous" &&
+					$user["status"] == 1 &&
+					$user["user_group_id"] &&
+
+					$query->sql($sql_orders)
+
+				): ?>
+				<div class="testpassed"><p>SuperUser::cancel (user with unpaid order) - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>SuperUser::cancel (user with unpaid order) - error</p></div>
+				<? endif; 
+
+				// CLEAN UP
+				deleteTestOrder($test_order_id);
+
+				deleteTestItem($test_item_id);
+
+				deleteUser($test_user_id);
+
+				deleteUserGroup($test_user_group_id);
+				
+				message()->resetMessages();
+			})();
+
+		}
+
 		?>
 	</div>
 </div>

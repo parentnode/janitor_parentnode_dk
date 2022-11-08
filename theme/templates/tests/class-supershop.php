@@ -1953,10 +1953,6 @@ function deleteTestOrder($order_id) {
 
 		?>
 
-		
-
-		
-
 	</div>
 
 </div>

@@ -151,11 +151,10 @@ $post_model = $IC->typeObject("post");
 
 	</div>
 
-
 	<div class="tests getNext">
 		<h3>Items->getNext</h3>
-		<? 
 
+		<? 
 
 		if(1 && "getNext – invalid item_id") {
 
@@ -308,15 +307,14 @@ $post_model = $IC->typeObject("post");
 
 		}
 
-
 		?>
-	</div>
 
+	</div>
 
 	<div class="tests getPrev">
 		<h3>Items->getPrev</h3>
-		<? 
 
+		<? 
 
 		if(1 && "getPrev – invalid item_id") {
 
@@ -468,15 +466,14 @@ $post_model = $IC->typeObject("post");
 
 		}
 
-
 		?>
-	</div>
 
+	</div>
 
 	<div class="tests paginate">
 		<h3>Items->paginate</h3>
-		<? 
 
+		<? 
 
 		if(1 && "paginate – no start point, order ASC and DESC") {
 
@@ -1510,14 +1507,14 @@ $post_model = $IC->typeObject("post");
 
 		}
 
-
 		?>
+
 	</div>
 
 	<div class="tests getPrices">
 		<h3>Items::getPrices</h3>
-		<? 
 
+		<? 
 
 		if(1 && "getPrices – pass price_id – return specific price") {
 
@@ -1726,8 +1723,8 @@ $post_model = $IC->typeObject("post");
 			})();
 		}
 
-
 		?>
+
 	</div>
 
 </div>
