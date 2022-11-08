@@ -109,8 +109,8 @@ $entries = array_merge($_entries, $entries);
 
 					<div class="all_items i:defaultList i:timeentries selectable filters"
 						data-csrf-token="<?= session()->value("csrf") ?>"
-						data-invoiced="<?= $this->validPath("/index/tag/afregnet") ?>"
-						data-written_off="<?= $this->validPath("/index/tag/afskrevet") ?>"
+						data-invoiced="<?= security()->validPath("/index/tag/afregnet") ?>"
+						data-written_off="<?= security()->validPath("/index/tag/afskrevet") ?>"
 					>
 						<ul class="items">
 

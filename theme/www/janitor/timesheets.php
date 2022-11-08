@@ -35,7 +35,7 @@ $page->pageTitle("Timesheets");
 if(is_array($action) && count($action)) {
 
 	// tag time entries
-	if(count($action) == 2 && $action[0] == "tag" && $page->validateCsrfToken()) {
+	if(count($action) == 2 && $action[0] == "tag" && security()->validateCsrfToken()) {
 
 		$entries = explode(",", getPost("entries"));
 //		print_r($entries);

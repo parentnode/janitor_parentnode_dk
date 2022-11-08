@@ -224,7 +224,7 @@ class JanitorGoogleMaps {
 
 		// Add log entry
 		global $page;
-		$page->addLog($action." failed: message:".$error, "JanitorGoogleApi");
+		logger()->addLog($action." failed: message:".$error, "JanitorGoogleApi");
 
 		// Send mail to admin
 		mailer()->send([

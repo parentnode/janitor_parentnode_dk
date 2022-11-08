@@ -48,25 +48,33 @@ $SubscriptionClass = new Subscription();
 	<div class="tests">
 		<h3>User::getUser</h3>
 		<? 
-		$user = $UC->getUser();
-		// debug([$user]);
+		if(1 && "User::getUser – get current user – basic info") {
 
-		if(
-			$user &&
-			$user["nickname"] &&
-			$user["email"] &&
-			$user["language"] &&
-			array_key_exists("firstname", $user) && 
-			array_key_exists("lastname", $user) &&
-			array_key_exists("mobile", $user) &&
-			array_key_exists("addresses", $user) &&
-			array_key_exists("membership", $user) &&
-			array_key_exists("maillists", $user)
-		): ?>
-		<div class="testpassed"><p>User::getUser - correct</p></div>
-		<? else: ?>
-		<div class="testfailed"><p>User::getUser - error</p></div>
-		<? endif; ?>
+			(function() {
+
+				$UC = new User();
+				$user = $UC->getUser();
+				// debug([$user]);
+
+				if(
+					$user &&
+					$user["nickname"] &&
+					$user["email"] &&
+					$user["language"] &&
+					array_key_exists("firstname", $user) && 
+					array_key_exists("lastname", $user) &&
+					array_key_exists("mobile", $user) &&
+					array_key_exists("addresses", $user) &&
+					array_key_exists("membership", $user) &&
+					array_key_exists("maillists", $user)
+				): ?>
+				<div class="testpassed"><p>User::getUser - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>User::getUser - error</p></div>
+				<? endif; 
+			})();
+		}
+		?>
 
 	</div>
 
@@ -74,7 +82,7 @@ $SubscriptionClass = new Subscription();
 		<h3>User::confirmUsername</h3>
 
 		<?
-		// ADD VALUES
+
 		$query = new Query();
 
 		// add test user

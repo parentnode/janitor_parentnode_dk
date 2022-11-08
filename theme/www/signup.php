@@ -19,7 +19,7 @@ $page->pageTitle("Signup");
 if($action) {
 
 	// /signup/save
-	if($action[0] == "save" && $page->validateCsrfToken()) {
+	if($action[0] == "save" && security()->validateCsrfToken()) {
 
 		// create new user
 		$user = $model->newUser(array("newUser"));
@@ -44,7 +44,7 @@ if($action) {
 
 	// post username, maillist_id and verification_token
 	// signup/unsubscribe
-	else if($action[0] == "unsubscribe" && $page->validateCsrfToken()) {
+	else if($action[0] == "unsubscribe" && security()->validateCsrfToken()) {
 
 		// successful creation
 		if($model->unsubscribeUserFromMaillist(["unsubscribe", "unsubscribeUserFromMaillist"])) {

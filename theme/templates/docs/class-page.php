@@ -2328,7 +2328,7 @@
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>$page->addLog("I think this is interesting");</code>
+							<code>logger()->addLog("I think this is interesting");</code>
 						</div>
 					</div>
 

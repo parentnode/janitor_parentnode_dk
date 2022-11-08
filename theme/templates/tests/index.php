@@ -39,7 +39,7 @@
 
 	<h3>User classes</h3>
 	<ul class="tests">
-		<?= $HTML->link("User", "/janitor/tests/user/index", array("wrapper" => "li.user")) ?>
+		<?= $HTML->link("User", "/janitor/tests/class-user", array("wrapper" => "li.user")) ?>
 		<?= $HTML->link("SuperUser", "/janitor/tests/class-superuser", array("wrapper" => "li.superuser")) ?>
 	</ul>
 

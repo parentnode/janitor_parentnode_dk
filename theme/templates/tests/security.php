@@ -85,7 +85,7 @@ function testName($expected) {
 // test if path is accessible
 function testPath($path, $allowed) {
 	global $page;
-	$result = $page->validatePath($path);
+	$result = security()->validatePath($path);
 	if(($result && $allowed) || (!$result && !$allowed)) {
 		print '<div class="testpassed">'.$path."</div>\n";
 	}
