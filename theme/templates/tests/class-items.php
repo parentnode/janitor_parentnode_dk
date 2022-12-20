@@ -7,17 +7,72 @@ $post_model = $IC->typeObject("post");
 
 <div class="scene i:scene tests">
 	<h1>ItemsClass</h1>	
-	<h2>Item querying of all sorts</h2>
+	<h2>Item querying of all sorts2</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
 
 
-	<div class="tests ratings">
+	<div class="tests getItems">
 		<h3>Items->getItems</h3>
 
 		<? 
-		
+
+		if(1 && "getItems by itemtype") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				// Delete all tests items
+				$model_tests->cleanup(["itemtype" => "tests"]);
+
+				$test_item_1_id = $model_tests->createTestItem();
+
+				// Get items by tags
+				$items_1 = $IC->getItems(array("itemtype" => "tests"));
+
+				$test_item_2_id = $model_tests->createTestItem();
+
+				$items_2 = $IC->getItems(array("itemtype" => "tests"));
+
+
+				$items_1_index_1 = arrayKeyValue($items_1, "id", $test_item_1_id);
+				$items_1_index_2 = arrayKeyValue($items_1, "id", $test_item_2_id);
+
+				$items_2_index_1 = arrayKeyValue($items_2, "id", $test_item_1_id);
+				$items_2_index_2 = arrayKeyValue($items_2, "id", $test_item_2_id);
+
+
+				// debug([$items_1]);
+				if(
+					$items_1 &&
+					count($items_1) === 1 &&
+						
+					$items_1_index_1 !== false &&
+					$items_1_index_2 === false &&
+
+					$items_2 &&
+					count($items_2) === 2 &&
+
+					$items_2_index_1 !== false &&
+					$items_2_index_2 !== false
+
+				): ?>
+				<div class="testpassed"><p>Items::getItems by itemtype - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getItems by itemtype - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
 		if(1 && "getItems by rating") {
 
 			(function() {
@@ -137,6 +192,273 @@ $post_model = $IC->typeObject("post");
 				<div class="testpassed"><p>Items::getItems by editors - correct</p></div>
 				<? else: ?>
 				<div class="testfailed"><p>Items::getItems by editors - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "getItems by tags") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_1_id = $model_tests->createTestItem();
+				
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag2";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				$test_item_2_id = $model_tests->createTestItem();
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_2_id));
+				unset($_POST);
+
+
+				// Get items by tags
+				$items_1 = $IC->getItems(array("tags" => "test:tag1"));
+
+				$items_2 = $IC->getItems(array("tags" => "test:tag2"));
+
+				$items_1_index_1 = arrayKeyValue($items_1, "id", $test_item_1_id);
+				$items_1_index_2 = arrayKeyValue($items_1, "id", $test_item_2_id);
+
+				$items_2_index_1 = arrayKeyValue($items_2, "id", $test_item_1_id);
+				$items_2_index_2 = arrayKeyValue($items_2, "id", $test_item_2_id);
+
+
+				// debug([$items_1]);
+				if(
+					$items_1 &&
+					count($items_1) === 2 &&
+						
+					$items_1_index_1 !== false &&
+					$items_1_index_2 !== false &&
+
+					$items_2 &&
+					count($items_2) === 1 &&
+
+					$items_2_index_1 !== false &&
+					$items_2_index_2 === false
+
+				): ?>
+				<div class="testpassed"><p>Items::getItems by tags - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::getItems by tags - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		?>
+
+	</div>
+
+	<div class="tests search">
+		<h3>Items->search</h3>
+
+		<? 
+
+		if(1 && "search by tags") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$test_item_1_id = $model_tests->createTestItem();
+				
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag2";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				$test_item_2_id = $model_tests->createTestItem();
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_2_id));
+				unset($_POST);
+
+
+				// Get items by tags
+				$items_1 = $IC->search(array("tags" => "test:tag1"));
+
+				$items_2 = $IC->search(array("tags" => "test:tag2"));
+
+				$items_1_index_1 = arrayKeyValue($items_1, "id", $test_item_1_id);
+				$items_1_index_2 = arrayKeyValue($items_1, "id", $test_item_2_id);
+
+				$items_2_index_1 = arrayKeyValue($items_2, "id", $test_item_1_id);
+				$items_2_index_2 = arrayKeyValue($items_2, "id", $test_item_2_id);
+
+
+				// debug([$items_1]);
+				if(
+					$items_1 &&
+					count($items_1) === 2 &&
+						
+					$items_1_index_1 !== false &&
+					$items_1_index_2 !== false &&
+
+					$items_2 &&
+					count($items_2) === 1 &&
+
+					$items_2_index_1 !== false &&
+					$items_2_index_2 === false
+
+				): ?>
+				<div class="testpassed"><p>Items::search by tags - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::search by tags - error</p></div>
+				<? endif; 
+
+
+				$model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "search by query") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$key = randomKey(4);
+				$test_item_1_id = $model_tests->createTestItem(["name" => "test item 1 - $key"]);
+
+				$test_item_2_id = $model_tests->createTestItem(["name" => "test item 2 - $key"]);
+
+
+				// Get items by tags
+				$items_1 = $IC->search(["query" => $key]);
+
+				$items_1_index_1 = arrayKeyValue($items_1, "id", $test_item_1_id);
+				$items_1_index_2 = arrayKeyValue($items_1, "id", $test_item_2_id);
+
+
+				// debug([$items_1]);
+				if(
+					$items_1 &&
+					count($items_1) === 2 &&
+						
+					$items_1_index_1 !== false &&
+					$items_1_index_2 !== false
+
+				): ?>
+				<div class="testpassed"><p>Items::search by query - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::search by query - error</p></div>
+				<? endif; 
+
+
+				// $model_tests->cleanup(["itemtype" => "tests"]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "search by tags and query") {
+
+			(function() {
+
+				$IC = new Items();
+				$model_tests = $IC->typeObject("tests");
+
+				$key_1 = randomKey(4);
+				$key_2 = randomKey(4);
+				$test_item_1_id = $model_tests->createTestItem(["name" => "test item 1 - $key_1"]);
+
+				
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag2";
+				$model_tests->addTag(array("addTag", $test_item_1_id));
+				unset($_POST);
+
+				$test_item_2_id = $model_tests->createTestItem(["name" => "test item 2 - $key_1 – $key_2"]);
+
+				unset($_POST);
+				$_POST["tags"] = "test:tag1";
+				$model_tests->addTag(array("addTag", $test_item_2_id));
+				unset($_POST);
+
+
+				// Get items by tags
+				$items_1 = $IC->search(array("tags" => "test:tag1", "query" => $key_1));
+
+				$items_2 = $IC->search(array("tags" => "test:tag2", "query" => $key_1));
+
+				$items_3 = $IC->search(array("tags" => "test:tag1", "query" => $key_2));
+
+
+				$items_1_index_1 = arrayKeyValue($items_1, "id", $test_item_1_id);
+				$items_1_index_2 = arrayKeyValue($items_1, "id", $test_item_2_id);
+
+				$items_2_index_1 = arrayKeyValue($items_2, "id", $test_item_1_id);
+				$items_2_index_2 = arrayKeyValue($items_2, "id", $test_item_2_id);
+
+				$items_3_index_1 = arrayKeyValue($items_3, "id", $test_item_1_id);
+				$items_3_index_2 = arrayKeyValue($items_3, "id", $test_item_2_id);
+
+
+				// debug([$items_1]);
+				if(
+					$items_1 &&
+					count($items_1) === 2 &&
+						
+					$items_1_index_1 !== false &&
+					$items_1_index_2 !== false &&
+
+					$items_2 &&
+					count($items_2) === 1 &&
+
+					$items_2_index_1 !== false &&
+					$items_2_index_2 === false &&
+
+					$items_3 &&
+					count($items_3) === 1 &&
+
+					$items_3_index_1 === false &&
+					$items_3_index_2 !== false
+
+				): ?>
+				<div class="testpassed"><p>Items::search by tags and query - correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Items::search by tags and query - error</p></div>
 				<? endif; 
 
 

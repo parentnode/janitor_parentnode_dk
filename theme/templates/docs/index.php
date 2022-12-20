@@ -163,6 +163,10 @@ $page_item = $IC->getItem(array("tags" => "page:documentation", "status" => 1, "
 				<p>Audio class</p>
 			</li-->
 			<li>
+				<h3><a href="/docs/class-curl">cURL</a></h3>
+				<p>cURL for Janitor</p>
+			</li>
+			<li>
 				<h3><a href="/docs/class-dom">DOM</a></h3>
 				<p>DOM for Janitor</p>
 			</li>

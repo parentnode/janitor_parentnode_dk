@@ -23,6 +23,7 @@ class TypeTests extends Itemtype {
 			"type" => "string",
 			"label" => "String",
 			"required" => true,
+			"searchable" => true,
 			"hint_message" => "Type string",
 			"error_message" => "String must be string"
 		));
