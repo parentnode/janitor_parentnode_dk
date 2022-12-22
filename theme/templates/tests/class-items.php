@@ -7,7 +7,7 @@ $post_model = $IC->typeObject("post");
 
 <div class="scene i:scene tests">
 	<h1>ItemsClass</h1>	
-	<h2>Item querying of all sorts2</h2>
+	<h2>Item querying of all sorts</h2>
 	<ul class="actions">
 		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
 	</ul>
@@ -2050,3 +2050,7 @@ $post_model = $IC->typeObject("post");
 	</div>
 
 </div>
+
+<?
+	// header_remove('Set-Cookie');
+?>

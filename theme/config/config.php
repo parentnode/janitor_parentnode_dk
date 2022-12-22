@@ -10,6 +10,7 @@ error_reporting(E_ALL);
 define("VERSION", "0.7.9.2");
 define("UI_BUILD", "UN-BUILT");
 
+
 define("SITE_UID", "JANI");
 define("SITE_NAME", "Janitor");
 define("SITE_URL", (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]);
@@ -38,3 +39,6 @@ define("SITE_MEMBERS", true);
 
 define("SITE_COLLECT_NOTIFICATIONS", 100);
 
+
+// Slower but necessary in application with high number of simultaneaous requests that updates sessions values
+define("REALTIME_SESSION_WRITE", false);

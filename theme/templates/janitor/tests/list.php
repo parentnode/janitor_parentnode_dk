@@ -14,7 +14,7 @@ else if(count($action) == 2) {
 	$sindex = $action[1];
 }
 
-$limit = 2;
+$limit = 50;
 
 $items = $IC->paginate([
 	"limit" => $limit, 
