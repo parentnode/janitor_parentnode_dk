@@ -6,16 +6,16 @@ $current_user = trim(shell_exec("whoami"));
 $project_path = realpath(LOCAL_PATH."/..");
 
 
-$test_1 = trim(shell_exec("cd '$project_path' && sudo git pull"));
+$test_1 = trim(shell_exec("cd '$project_path' && sudo /urs/bin/git pull"));
 
 
 // Get git origin
-$remote_origin = trim(shell_exec("cd '$project_path' && git config --get remote.origin.url"));
+$remote_origin = trim(shell_exec("cd '$project_path' && /urs/bin/git config --get remote.origin.url"));
 // Remove any existing username:password from remote url
 $remote_origin = preg_replace("/(http[s]?):\/\/(([^:]+)[:]?([^@]+)@)?/", "$1://", $remote_origin);
 
 // Get branch
-$branch = trim(shell_exec("cd '$project_path' && git rev-parse --abbrev-ref HEAD"));
+$branch = trim(shell_exec("cd '$project_path' && /urs/bin/git rev-parse --abbrev-ref HEAD"));
 
 debug([$current_user, $project_path, $test_1, $remote_origin, $branch]);
 
