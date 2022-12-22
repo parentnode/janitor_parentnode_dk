@@ -6,7 +6,7 @@ $current_user = trim(shell_exec("whoami"));
 $project_path = realpath(LOCAL_PATH."/..");
 
 
-$test_1 = trim(shell_exec("cd '$project_path' && git status"));
+$test_1 = trim(shell_exec("cd '$project_path' && git pull"));
 
 
 // Get git origin
