@@ -5,6 +5,10 @@ $current_user = trim(shell_exec("whoami"));
 // Get project path
 $project_path = realpath(LOCAL_PATH."/..");
 
+
+$test_1 = trim(shell_exec("cd '$project_path' && git status"));
+
+
 // Get git origin
 $remote_origin = trim(shell_exec("cd '$project_path' && git config --get remote.origin.url"));
 // Remove any existing username:password from remote url
@@ -13,7 +17,7 @@ $remote_origin = preg_replace("/(http[s]?):\/\/(([^:]+)[:]?([^@]+)@)?/", "$1://"
 // Get branch
 $branch = trim(shell_exec("cd '$project_path' && git rev-parse --abbrev-ref HEAD"));
 
-debug([$current_user, $project_path, $remote_origin, $branch]);
+debug([$current_user, $project_path, $test_1, $remote_origin, $branch]);
 
 
 ?>
