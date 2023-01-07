@@ -514,15 +514,20 @@ class TypeTests extends Itemtype {
 
 	// cleanup function
 	function cleanUp($_options) {
+
 		$query = new Query();
 		include_once("classes/shop/supershop.class.php");
-	
 		$SC = new SuperShop();
+
 		$IC = new Items();
 	
-		$user_id = false;
+		$itemtype = false;
+
 		$item_id = false;
 		$item_ids = false;
+
+		$user_id = false;
+
 		$currency_id = false;
 		$payment_method_id = false;
 		$cart_id = false;
@@ -530,15 +535,18 @@ class TypeTests extends Itemtype {
 		$order_id = false;
 		$order_ids = false;
 		$order_no = false;
-		$itemtype = false;
-		
+
+		$maillist_id = false;
+
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"           : $itemtype             = $_value; break;
 
 				case "item_id"            : $item_id              = $_value; break;
 				case "item_ids"           : $item_ids             = $_value; break;
+
 				case "user_id"            : $user_id              = $_value; break;
+
 				case "currency_id"        : $currency_id          = $_value; break;
 				case "payment_method_id"  : $payment_method_id    = $_value; break;
 				case "cart_id"            : $cart_id              = $_value; break;
@@ -546,7 +554,8 @@ class TypeTests extends Itemtype {
 				case "order_id"           : $order_id             = $_value; break;
 				case "order_ids"          : $order_ids            = $_value; break;
 				case "order_no"           : $order_no             = $_value; break;
-				
+
+				case "maillist_id"        : $maillist_id          = $_value; break;
 			}
 		}
 
@@ -624,9 +633,9 @@ class TypeTests extends Itemtype {
 
 				$order = $SC->getOrders(["order_no" => $order_no]);
 				$order_id = $order ? $order["id"] : false;
-				
+
 			}
-			
+
 			if($order_id) {
 
 				$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
@@ -639,7 +648,7 @@ class TypeTests extends Itemtype {
 			elseif($order_ids) {
 
 				foreach ($order_ids as $order_id) {
-					
+
 					$SC->cancelOrder(["cancelOrder", $order_id, session()->value("user_id")]);
 
 					$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = $order_id";
@@ -648,8 +657,6 @@ class TypeTests extends Itemtype {
 					$query->sql($sql);
 				}
 			}
-
-
 
 		}
 
@@ -733,6 +740,22 @@ class TypeTests extends Itemtype {
 		}
 
 
+		// Delete by maillist id
+		if($maillist_id) {
+
+			// delete maillist subscriptions
+			$sql = "DELETE FROM ".SITE_DB.".user_maillists WHERE maillist_id = $maillist_id";
+			if($query->sql($sql)) {
+		
+				// delete maillist
+				$sql = "DELETE FROM ".SITE_DB.".system_maillists WHERE id = $maillist_id";
+				$query->sql($sql);
+
+			}
+
+		}
+
+
 		// Cleanup check
 
 		// check that item was deleted
@@ -768,9 +791,10 @@ class TypeTests extends Itemtype {
 		}
 
 		if($order_id) {
-			
+
 			$sql = "SELECT * FROM ".SITE_DB.".shop_orders WHERE id = $order_id";
 			$remaining_orders = $query->sql($sql); 	
+
 		}
 
 		// Check that currency was deleted
@@ -800,7 +824,14 @@ class TypeTests extends Itemtype {
 
 		}
 
-		
+		// Check that maillist was deleted
+		$remaining_maillist = false;
+		if($maillist_id) {
+
+			$sql = "SELECT * FROM ".SITE_DB.".system_maillists WHERE id = $maillist_id";
+			$remaining_maillist = $query->sql($sql);
+
+		}
 
 
 		if(
@@ -810,38 +841,58 @@ class TypeTests extends Itemtype {
 			!$remaining_users && 
 			!$remaining_currencies &&
 			!$remaining_payment_methods &&
-			!$remaining_carts
-			
+			!$remaining_carts &&
+			!$remaining_maillist
 		) {
-	
 			return true;
 		}
 
-		print "Incomplete cleanup";
+		debug([
+			"Incomplete cleanup", 
+			$remaining_itemtype_items, 
+			$remaining_items, 
+			$remaining_orders, 
+			$remaining_users,
+			$remaining_currencies,
+			$remaining_payment_methods,
+			$remaining_carts,
+			$remaining_maillist
+		]);
 		return false;
-	
+
 	}
 
 	function createTestItem($_options = false) {
 
 		$IC = new Items();
 		$query = new Query();
-	
+
 		$itemtype = "tests";
 		$name = "Test item";
+
+		$layout = "template-a.html";
+		$html = "<h2>{TEST_VALUE}</h2>";
+
+		$subscribed_message_id = false;
+
 		$status = 1;
-	
+
 		if($_options !== false) {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
-					case "itemtype"            : $itemtype              = $_value; break;
-					case "name"           : $name             = $_value; break;
+					case "itemtype"                 : $itemtype                 = $_value; break;
+					case "name"                     : $name                     = $_value; break;
 
-					case "price"               : $price                 = $_value; break;
-					case "prices"              : $prices                = $_value; break;
+					case "layout"                   : $layout                   = $_value; break;
+					case "html"                     : $html                     = $_value; break;
 
-					case "subscription_method" : $subscription_method   = $_value; break;
-					case "status" 			   : $status                = $_value; break;
+					case "subscribed_message_id"    : $subscribed_message_id    = $_value; break;
+
+					case "price"                    : $price                    = $_value; break;
+					case "prices"                   : $prices                   = $_value; break;
+
+					case "subscription_method"      : $subscription_method      = $_value; break;
+					case "status"                   : $status                   = $_value; break;
 				}
 			}
 		}
@@ -849,7 +900,16 @@ class TypeTests extends Itemtype {
 		// create test item
 		$model = $IC->TypeObject($itemtype);
 		$_POST["name"] = $name;
-	
+
+		if($itemtype == "message") {
+			$_POST["layout"] = $layout;
+			$_POST["html"] = $html;
+		}
+
+		if($itemtype == "membership") {
+			$_POST["subscribed_message_id"] = $subscribed_message_id;
+		}
+
 		$item = $model->save(array("save"));
 		$item_id = $item["id"];
 		unset($_POST);
@@ -880,7 +940,6 @@ class TypeTests extends Itemtype {
 					// get price_type_id from price_type name
 					$sql = "SELECT id FROM ".UT_PRICE_TYPES." WHERE name = '$price_type'";
 					if ($query->sql($sql)) {
-						
 						$price_type_id = $query->result(0, "id");
 					} 
 
@@ -892,7 +951,8 @@ class TypeTests extends Itemtype {
 							case "currency"            : $currency              = $_value;   break;
 							case "vatrate"             : $vatrate               = $_value;   break;
 							case "quantity"            : $quantity              = $_value;   break;
-						}					
+
+						}
 
 					}
 
@@ -928,6 +988,7 @@ class TypeTests extends Itemtype {
 	}
 	
 	function createTestUser($_options = false) {
+
 		$query = new Query();
 		include_once("classes/users/superuser.class.php");
 		$UC = new SuperUser();
@@ -981,6 +1042,7 @@ class TypeTests extends Itemtype {
 			$UC->updateEmail(["updateEmail", $user_id]);
 
 			if($subscribed_item_id)	{
+				include_once("classes/shop/supershop.class.php");
 				$SC = new SuperShop();
 				include_once("classes/shop/supersubscription.class.php");
 				$SuperSubscriptionClass = new SuperSubscription();
@@ -994,7 +1056,7 @@ class TypeTests extends Itemtype {
 				$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$subscription_expires_at."' WHERE id = ".$added_subscription["id"];
 				$query->sql($sql);
 			}
-			
+
 			if($payment_method_id) {
 				$sql = "INSERT INTO ".SITE_DB.".user_payment_methods SET user_id = $user_id, payment_method_id = $payment_method_id, default_method = 1";
 				$query->sql($sql);
@@ -1055,6 +1117,39 @@ class TypeTests extends Itemtype {
 		return false;
 	} 
 
+	function createTestOrder($_options = false) {
+
+		include_once("classes/shop/supershop.class.php");
+		$SC = new SuperShop;
+
+		$item_id = false;
+		$user_id = false;
+
+		$custom_price = false;
+
+		if($_options !== false) {
+			foreach($_options as $_option => $_value) {
+				switch($_option) {
+					case "user_id"                  : $user_id                         = $_value; break;
+					case "item_id"                  : $item_id                         = $_value; break;
+
+					case "custom_price"             : $custom_price                    = $_value; break;
+				}
+			}
+		}
+
+		if($item_id && $user_id) {
+
+			$cart = $SC->addToNewInternalCart($item_id, ["user_id" => $user_id, "custom_price" => $custom_price]);
+			$cart_reference = $cart["cart_reference"];
+			$cart_id = $cart["id"];
+
+			return $SC->newOrderFromCart(["newOrderFromCart", $cart_id, $cart_reference]);
+		}
+
+		return false;
+	}
+
 	function createTestTag($context, $value) {
 
 		$query = new Query();
@@ -1081,6 +1176,19 @@ class TypeTests extends Itemtype {
 		return $taglist ? $taglist["id"] : false;
 	}
 
+	function createTestMaillist($name) {
+
+		include_once("classes/system/system.class.php");
+		$SysC = new System();
+
+		unset($_POST);
+		$_POST["maillist"] = $name;
+		$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
+		unset($_POST);
+		
+		return $maillist_id;
+
+	}
 	
 }
 
