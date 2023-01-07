@@ -1,10 +1,3 @@
-<?
-
-$IC = new Items();
-$query = new Query();
-$post_model = $IC->typeObject("post");
-?>
-
 <div class="scene i:scene tests">
 	<h1>ItemsClass</h1>	
 	<h2>Item querying of all sorts</h2>
@@ -196,6 +189,8 @@ $post_model = $IC->typeObject("post");
 
 
 				$model_tests->cleanup(["itemtype" => "tests"]);
+				$model_tests->cleanup(["user_id" => $test_user_1_id]);
+				$model_tests->cleanup(["user_id" => $test_user_2_id]);
 				message()->resetMessages();
 
 			})();

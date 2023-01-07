@@ -1,7 +1,7 @@
 <?
 
 
-
+// Before the delete test we must delete manually
 function manualCleanUp($item_id) {
 	$fs = new FileSystem();
 	$query = new Query();

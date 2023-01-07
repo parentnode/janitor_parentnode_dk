@@ -1,7 +1,7 @@
 <?
 global $backup;
 
-function backup() {
+function backupTags() {
 //A method to backup the existing database
 	global $backup;
 	include_once("classes/items/taglist.class.php");
@@ -42,7 +42,7 @@ function backup() {
 
 }
 
-function restore() {
+function restoreTags() {
 // A method to restore the database existed before the testing 
 	global $backup;
 	include_once("classes/items/taglist.class.php");
@@ -98,15 +98,15 @@ function restore() {
 	<div class="tests getAllTags">
 		<h3>Taglist::getAllTags</h3>
 		<? 
+
 		if(1 && "getAllTags – Returns false for no tag in the entire system") {
-				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
 				// ARRANGE
 				include_once("classes/items/taglist.class.php");
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 				$no_tags = $TC->getAllTags();
 
@@ -121,14 +121,12 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
 
 			})();
 		}
-		?>
-		<? 
+
 		if(1 && "getAllTags – Returns all the tags from the entire system") {
-				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
@@ -138,7 +136,7 @@ function restore() {
 				$model_tests = $IC->typeObject("tests");
 				$test_item_id = $model_tests->createTestItem();
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 
 				$_POST["tags"] = "test:tag1";
@@ -148,8 +146,6 @@ function restore() {
 				$_POST["tags"] = "test:tag2";
 				$model_tests->addTag(["addTag", $test_item_id]);
 				unset($_POST);
-
-				// $test_user_id = $model_tests->createTestUser();
 
 				// ACT
 
@@ -165,25 +161,25 @@ function restore() {
                     && $tags[1]["value"] == "tag2" 
 				): ?>
 				<div class="testpassed"><p>Taglist::getAllTags – Returns all the tags from the entire system – correct</p></div>	
-				<!-- #Class#::#method# – #test conditions# – #expected result# -->
-				<? else: ?>
+			<? else: ?>
 				<div class="testfailed"><p>Taglist::getAllTags – Returns all the tags from the entire system – error</p></div>
 				<? endif; 
 
 				// CLEAN UP
-				restore();
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+				restoreTags();
+				$model_tests->cleanUp(["item_id" => $test_item_id]);
 
 			})();
 		}
+
 		?>
 	</div>
 
 	<div class="tests getTaglists">
 		<h3>Taglist::getTaglists</h3>
 		<? 
+
 		if(1 && "getTaglists – Get all taglists") { 
-				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
@@ -193,7 +189,7 @@ function restore() {
 				global $model;
 
 				// ARRANGE
-				backup();
+				backupTags();
 
 				$test_taglist_1_id = $model->createTestTaglist("Test taglist 1");
 				$test_taglist_2_id = $model->createTestTaglist("Test taglist 2");
@@ -215,11 +211,12 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "getTaglists – No taglists – Return false") { 
 
 			(function() {
@@ -227,7 +224,7 @@ function restore() {
 				include_once("classes/items/taglist.class.php");
 				$query = new Query();
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 
 
@@ -245,17 +242,20 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests getTaglist">
 		<h3>Taglist::getTaglist</h3>
 		<? 
+
 		if(1 && "getTaglist – Send non-existing id and handle – Return false") { 
-				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
@@ -263,7 +263,7 @@ function restore() {
 				include_once("classes/items/taglist.class.php");
 				$query = new Query();
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 				$taglist1 = $TC->getTaglist(array("handle"=>"test1"));
 				$taglist2 = $TC->getTaglist(array("id"=>100));
@@ -280,12 +280,11 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
 				//$model_tests->cleanUp(["item_id" => $test_item_id]);
 			})();
 		}
-		?>
-		<? 
+
 		if(1 && "getTaglist – Send id or handle – Returns the corresponding taglist") { 
 				// #method# – #test conditions# – #expected result#
 
@@ -295,7 +294,7 @@ function restore() {
 				include_once("classes/items/taglist.class.php");
 				$query = new Query();
 				
-				backup();
+				backupTags();
 				$TC = new Taglist();
 
 				$sql = "INSERT INTO ".SITE_DB.".taglists SET name = 'Test1', handle = 'test1'";
@@ -326,16 +325,19 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests addTaglistTag">
 		<h3>Taglist::addTaglistTag</h3>
 		<? 
+
 		if(1 && "addTaglistTag – Non-existing taglist – Return false") { 
 
 			(function() {
@@ -344,7 +346,7 @@ function restore() {
 				include_once("classes/items/taglist.class.php");
 				global $model;
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 				$test_tag_1_id = $model->createTestTag("test", "1");
 
@@ -363,11 +365,12 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+
+				restoreTags();
+
 			})();
 		}
-		?>
-		<? 
+
 		if(1 && "addTaglistTag – Non-existing tag – Return false") { 
 
 			(function() {
@@ -376,7 +379,7 @@ function restore() {
 				include_once("classes/items/taglist.class.php");
 				$query = new Query();
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 				global $model;
 				$test_taglist_1_id = $model->createTestTaglist("Test taglist 1");
@@ -395,11 +398,12 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "addTaglistTag – Send ids for existing tag and taglist – Return true ") { 
 
 			(function() {
@@ -411,7 +415,7 @@ function restore() {
 				$test_item_id = $model_tests->createTestItem();
 				$query = new Query();
 
-				backup();
+				backupTags();
 				$TC = new Taglist();
 
 				$_POST["tags"] = "test:tag1";
@@ -457,16 +461,20 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
 				$model_tests->cleanUp(["item_id" => $test_item_id]);
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests removeTaglistTag">
 		<h3>Taglist::removeTaglistTag</h3>
 		<? 
+
 		if(1 && "removeTaglistTag – Non-existing taglist – Return false") { 
 
 			(function() {
@@ -474,7 +482,7 @@ function restore() {
 				// ARRANGE
 				include_once("classes/items/taglist.class.php");
 
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 				$TC = new Taglist();
 				
 				global $model;
@@ -495,19 +503,19 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
-				//$model_tests->cleanUp(["item_id" => $test_item_id]);
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "removeTaglistTag – Non-existing tag – Return false") { 
 				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				global $model;
 				include_once("classes/items/taglist.class.php");
@@ -530,17 +538,18 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "removeTaglistTag – Send ids for existing taglist and tag – Return true") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				global $model;
@@ -573,22 +582,25 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests updateTaglist">
 		<h3>Taglist::updateTaglist</h3>
 		<? 
+
 		if(1 && "updateTaglist – Non-existing taglist – Return false") { 
-				// #method# – #test conditions# – #expected result#
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -606,17 +618,18 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "updateTaglist – Update existing taglist – Return true") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				global $model;
 				include_once("classes/items/taglist.class.php");
@@ -646,21 +659,25 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests saveTaglist">
 		<h3>Taglist::saveTaglist</h3>
 		<? 
+
 		if(1 && "saveTaglist – Return taglist_id as an array") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -683,21 +700,25 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests deleteTaglist">
 		<h3>Taglist::deleteTaglist</h3>
 		<? 
+
 		if(1 && "deleteTaglist – Non-existing taglist – Return false") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -714,17 +735,18 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "deleteTaglist – Send existing taglist id – Return true") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -746,21 +768,25 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests duplicateTaglist">
 		<h3>Taglist::duplicateTaglist</h3>
 		<? 
+
 		if(1 && "duplicateTaglist – Non-existing taglist – Return false") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -778,17 +804,18 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "duplicateTaglist – Duplicate existing taglist – Return the duplicated taglist") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				global $model;
 				include_once("classes/items/taglist.class.php");
@@ -821,21 +848,25 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+
 			})();
+
 		}
+
 		?>
 	</div>
 
 	<div class="tests updateOrder">
 		<h3>Taglist::updateOrder</h3>
 		<? 
+
 		if(1 && "updateOrder – Non-existing taglist – Return false") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				include_once("classes/items/taglist.class.php");
 				$TC = new Taglist();
@@ -853,17 +884,19 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+				message()->resetMessages();
+
 			})();
+
 		}
-		?>
-		<? 
+
 		if(1 && "updateOrder – Update order of existing taglist – Return true") { 
 
 			(function() {
 
 				// ARRANGE
-				backup(); // backed up and deleted to perform the test in an empty database
+				backupTags(); // backed up and deleted to perform the test in an empty database
 
 				global $model;
 				include_once("classes/items/taglist.class.php");
@@ -902,9 +935,13 @@ function restore() {
 				<? endif; 
 
 				// CLEAN UP
-				restore();
+				restoreTags();
+				message()->resetMessages();
+
 			})();
+
 		}
+
 		?>
 	</div>
 

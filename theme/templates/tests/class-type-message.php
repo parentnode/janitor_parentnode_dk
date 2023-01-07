@@ -1,9 +1,9 @@
 <?
 
-$fs = new FileSystem();
-$query = new Query();
+// $fs = new FileSystem();
+// $query = new Query();
 
-function createTestItem($_options = false) {
+function _createTestItem($_options = false) {
 
 	$IC = new Items();
 
@@ -24,9 +24,10 @@ function createTestItem($_options = false) {
 	$_POST["name"] = $name;
 
 	if($itemtype == "message") {
-		
+
 		$_POST["html"] = '<h2>Nickname: {NICKNAME}</h2><h2>Email: {EMAIL}</h2><h2>Username: {USERNAME}</h2><h2>Firstname: {FIRSTNAME}</h2><h2>Lastname: {LASTNAME}</h2><h2>Language: {LANGUAGE}</h2><h2>Verification code: {VERIFICATION_CODE}</h2><h2>Member ID: {MEMBER_ID}</h2><h2>Order no.: {ORDER_NO}</h2><h2>Membership price: {MEMBERSHIP_PRICE}</h2><h2>Membership: {MEMBERSHIP}</h2>';	
 		$_POST["layout"] = 'template-a.html';
+
 	}
 
 	$item = $model->save(array("save"));
@@ -55,7 +56,7 @@ function createTestItem($_options = false) {
 	return false;
 }
 
-function deleteTestItem($item_id) {
+function _deleteTestItem($item_id) {
 	$IC = new Items();
 	$item = $IC->getItem(["id" => $item_id]);
 	$itemtype = $item["itemtype"];
@@ -66,7 +67,8 @@ function deleteTestItem($item_id) {
 	
 }
 
-function createTestUser($_options = false) {
+function _createTestUser($_options = false) {
+
 	$query = new Query();
 	include_once("classes/users/superuser.class.php");
 	$UC = new SuperUser();
@@ -179,7 +181,7 @@ function deleteTestMembership($membership) {
 
 }
 
-function deleteTestUser($user_id) {
+function _deleteTestUser($user_id) {
 	$query = new Query();
 
 	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
@@ -190,7 +192,7 @@ function deleteTestUser($user_id) {
 	return false;
 }
 
-function deleteTestMailingList($maillist_id) {
+function _deleteTestMailingList($maillist_id) {
 	$query = new Query();
 
 	// delete maillist subscriptions
@@ -210,6 +212,16 @@ function deleteTestMailingList($maillist_id) {
 };
 
 
+// Set custom test emails – DO NOT USE THE EMAIL OF YOUR JANITOR ACCOUNT, OR TEST CANNOT BE COMPLETED
+
+global $mail_1;
+// $mail_1 = "test.parentnode@gmail.com";
+$mail_1 = "martin@parentnode.dk";
+
+global $mail_2;
+// $mail_2 = "test2.parentnode@gmail.com";
+$mail_2 = "martin@kaestel.dk";
+
 
 ?>
 
@@ -222,28 +234,36 @@ function deleteTestMailingList($maillist_id) {
 
 	<div class="tests sendMessage">
 		<h3>Itemtype::sendMessage</h3>
-		<p>Note: many of these tests send out emails (currently to test.parentnode@gmail.com and test2.parentnode@gmail.com) which should be verified manually, according to the instructions in the email's subject line. </p>
+		<p>Note: many of these tests send out emails (currently to <?= $mail_1 ?> and <?= $mail_2 ?>) which should be verified manually, according to the instructions in the email's subject line. </p>
 		<? 
 
 		if(1 && "send message – no parameters send – return null") {
 
 			(function() {
-				
+
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
-				
+
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([]);
-				
+
+
 				// ASSERT
+
 				if(!isset($recipients)): ?>
 				<div class="testpassed">TypeMessage::sendMessage – no parameters in $_options – return null – correct</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – no parameters in $_options – return null – error</div>
 				<? endif;
+
 	
-				//CLEAN UP
+				// CLEAN UP
+
+				message()->resetMessages();
 
 			})();
 
@@ -254,22 +274,32 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
-				$test_item_id = createTestItem();
-							
+				$test_model = $IC->typeObject("tests");
+
+				$test_item_id = $test_model->createTestItem();
+
+
 				// ACT
+
 				$recipients = $message_model->sendMessage(["item_id" => $test_item_id]);
 
+
 				// ASSERT
+
 				if(!isset($recipients)): ?>
 				<div class="testpassed">TypeMessage::sendMessage – pass only item_id – return null – correct</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass only item_id – return null – error</div>
 				<? endif;
 
-				//CLEAN UP
-				deleteTestItem($test_item_id);
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_item_id]);
+				message()->resetMessages();
 
 			})();
 
@@ -280,19 +310,25 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem();
-				$test_user_id = createTestUser();
-				
+				$test_item_id = $test_model->createTestItem();
+				$test_user_id = $test_model->createTestUser();
+
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
+					"item_id" => $test_item_id,
 					"user_id" => $test_user_id
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					!isset($recipients)
 				): ?>
@@ -300,45 +336,13 @@ function deleteTestMailingList($maillist_id) {
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype != message) and user_id – return null – error</div>
 				<? endif;
-	
-				//CLEAN UP
-				deleteTestUser($test_user_id);
-				deleteTestItem($test_message_item_id);
 
-			})();
 
-		}
+				// CLEAN UP
 
-		if(1 && "send message – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1") {
-
-			(function() {
-
-				// ARRANGE
-				$IC = new Items();
-				$message_model = $IC->typeObject("message");
-
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 1: G'day! This should be gibberish: {TEST_VALUE}"]);
-				$test_user_id = createTestUser();
-				
-				// ACT
-				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
-					"user_id" => $test_user_id
-				]);
-				
-				// ASSERT
-				if(
-					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com")
-				: ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1 – correct</div>
-				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1 – error</div>
-				<? endif;
-	
-				//CLEAN UP
-				deleteTestUser($test_user_id);
-				deleteTestItem($test_message_item_id);
+				$test_model->cleanUp(["item_id" => $test_item_id]);
+				$test_model->cleanUp(["user_id" => $test_user_id]);
+				message()->resetMessages();
 
 			})();
 
@@ -349,18 +353,25 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message"]);
-				
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message"
+				]);
+
+
 				// ACT
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
 					"recipients" => []
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					!isset($recipients)
 				): ?>
@@ -368,9 +379,65 @@ function deleteTestMailingList($maillist_id) {
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message) and recipients (empty) – return null – error</div>
 				<? endif;
-	
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
+
+				global $mail_1;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 1: {TEST_VALUE}",
+					"html" => "<h2>Send to user_id</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in header and body should <strong>not</strong> be replaced</p>",
+				]);
+				$test_user_id = $test_model->createTestUser([
+					"email" => $mail_1
+				]);
+
+
+				// ACT
+
+				$recipients = $message_model->sendMessage([
+					"item_id" => $test_message_item_id,
+					"user_id" => $test_user_id
+				]);
+				// debug([$test_message_item_id, $recipients]);
+
+
+				// ASSERT
+
+				if(
+					is_array($recipients) &&
+					$recipients[0] == $mail_1)
+				: ?>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message) and user_id – return recipient list and send Test Message 1 – error</div>
+				<? endif;
+
+
 				//CLEAN UP
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				$test_model->cleanUp(["user_id" => $test_user_id]);
+				message()->resetMessages();
 
 			})();
 
@@ -381,34 +448,51 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 2: Bonjour recipient 1 and recipient 2! This should be gibberish: {TEST_VALUE}"]);
+				global $mail_1;
+				global $mail_2;
 
-				
+
+				// name has a 100 char limit
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 2: {TEST_VALUE}",
+					"html" => "<h3>Send to recipients array with $mail_1 and $mail_2!</h3><h3>Test value: {TEST_VALUE}</h3><p>Test value in header and body should <strong>not</strong> be replaced</p>",
+				]);
+
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
-					"recipients" => "test.parentnode@gmail.com,test2.parentnode@gmail.com"
+					"recipients" => "$mail_1,$mail_2"
 				]);
-				
+				// debug([$test_message_item_id, $recipients, message()->getMessages()]);
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				): ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2 – correct – VERIFY MAIL</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message) and recipients – return recipient list and send Test Message 2 – error</div>
 				<? endif;
-	
+
+
 				// CLEAN UP
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
 
 			})();
-
 
 		}
 
@@ -417,35 +501,51 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 3: {TEST_VALUE}"]);
+				global $mail_1;
+				global $mail_2;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 3: {TEST_VALUE}",
+					"html" => "<h2>Send to recipients array, using on value</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in header and body should be replaced with: Greetings</p>",
+				]);
+
 
 				// ACT
+
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
-					"recipients" => "test.parentnode@gmail.com,test2.parentnode@gmail.com",
-					"values" => ["TEST_VALUE" => "Greetings, recipient 1 and recipient 2!"]
-					
+					"recipients" => "$mail_1,$mail_2",
+					"values" => [
+						"TEST_VALUE" => "Greetings"
+					]
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				): ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3 – correct – VERIFY MAIL</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3 – error</div>
 				<? endif;
-	
+
+
 				// CLEAN UP
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
 
 			})();
-
 
 		}
 
@@ -454,32 +554,50 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 4: {TEST_VALUE} {TEST_VALUE_2}"]);
+				global $mail_1;
+				global $mail_2;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 4",
+					"html" => "<h2>Send to recipients array with two values</h2><h3>Test value: {TEST_VALUE}</h3><h3>Test value: {TEST_VALUE_2}</h3><p>Test value in body should be replaced with for both recipients: Howdy and G'day</p>",
+				]);
+
 
 				// ACT
+
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
-					"recipients" => "test.parentnode@gmail.com,test2.parentnode@gmail.com",
-					"values" => ["TEST_VALUE" => "Howdy, recipient 1 and recipient 2!", "TEST_VALUE_2" => "Here's a second custom value."]
-					
+					"recipients" => "$mail_1,$mail_2",
+					"values" => [
+						"TEST_VALUE" => "Howdy", 
+						"TEST_VALUE_2" => "G'day"
+					]
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				): ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and several values (same values for each recipient) – return recipient list and send Test Message 4 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and several values (same values for each recipient) – return recipient list and send Test Message 4 – correct – VERIFY MAIL</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and several values (same values for each recipient) – return recipient list and send Test Message 4 – error</div>
 				<? endif;
-	
+
+
 				// CLEAN UP
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
 
 			})();
 
@@ -493,36 +611,43 @@ function deleteTestMailingList($maillist_id) {
 				// ARRANGE
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 5: {TEST_VALUE}"]);
+				global $mail_1;
+				global $mail_2;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 5",
+					"html" => "<h2>Send to recipients array with value array</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in body should be replaced with different texts for each recipient.</p>",
+				]);
 
 				// ACT
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
-					"recipients" => "test.parentnode@gmail.com,test2.parentnode@gmail.com",
+					"recipients" => "$mail_1,$mail_2",
 					"values" => [
-						"test.parentnode@gmail.com" => ["TEST_VALUE" => "Hi, recipient 1! Check that this 'Hi' was also sent to recipient 2, with a different value."],
-						"test2.parentnode@gmail.com" => ["TEST_VALUE" => "Hi, recipient 2! Check that this 'Hi' was also sent to recipient 1, with a different value."]
+						$mail_1 => ["TEST_VALUE" => "Hi, $mail_1! Check that this 'Hi' was also sent to $mail_2, with a different value."],
+						$mail_2 => ["TEST_VALUE" => "Hi, $mail_2! Check that this 'Hi' was also sent to $mail_1, with a different value."]
 					]
-					
 				]);
 				
 				// ASSERT
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				): ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and values (different values for each recipient) – return recipient list and send Test Message 5 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and values (different values for each recipient) – return recipient list and send Test Message 5 – correct – VERIFY MAIL</div>
 				<? else: ?>
 				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and values (different values for each recipient) – return recipient list and send Test Message 5 – error</div>
 				<? endif;
 	
 				// CLEAN UP
-				deleteTestItem($test_message_item_id);
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
 
 			})();
-
 
 		}
 
@@ -531,141 +656,350 @@ function deleteTestMailingList($maillist_id) {
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
-				include_once("classes/system/system.class.php");
-				$SysC = new System();
-				$UC = new  SuperUser();
+				$test_model = $IC->typeObject("tests");
 
-				$_POST["maillist"] = "Test mailing list";
-				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
-				unset($_POST);
-
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 6: {TEST_VALUE}"]);
-				$test_user_id_1 = createTestUser();
-				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
-
-				$_POST["maillist_id"] = $maillist_id;
-				$UC->addMaillist(["addMaillist", $test_user_id_1]);
-				$UC->addMaillist(["addMaillist", $test_user_id_2]);
-				unset($_POST);
-
-				// ACT
-				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
-					"maillist_id" => $maillist_id,
-					"values" => [
-						"test.parentnode@gmail.com" => ["TEST_VALUE" => "Hello, maillist subscriber 1! Check that this 'Hello' was also sent to recipient 2, with a different value."],
-						"test2.parentnode@gmail.com" => ["TEST_VALUE" => "Hello, maillist subscriber 2! Check that this 'Hello' was also sent to recipient 1, with a different value."]
-					]
-					
-				]);
-				
-				// ASSERT
-				if(
-					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
-				): ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6 – correct</div>
-				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6 – error</div>
-				<? endif;
-	
-				// CLEAN UP
-				deleteTestMailingList($maillist_id);
-				deleteTestUser($test_user_id_1);
-				deleteTestUser($test_user_id_2);
-				deleteTestItem($test_message_item_id);
-
-			})();
-
-
-		}
-
-		if(1 && "send message – pass item_id (itemtype == message), user_id (user is paying member), and custom value – return recipient list and send Test Message 7") {
-
-			(function() {
-
-				// ARRANGE
-				$IC = new Items();
-				$message_model = $IC->typeObject("message");
-				include_once("classes/shop/supershop.class.php");
-				$SC = new SuperShop;
-
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 7: {TEST_VALUE}"]);
-				$test_user_id = createTestUser([
-					"nickname" => "This is the correct nickname",
-					"firstname" => "Tester (correct)",
-					"lastname" => "Testerson (correct)"
-				]);
-				$test_membership = addTestMembership($test_user_id);
-
-				
-				// ACT
-				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
-					"user_id" => $test_user_id,
-					"values" => [
-						"TEST_VALUE" => "Salutations! Check that all variables are correct inside this one."
-					]
-				]);
-				
-				// ASSERT
-				if(
-					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com")
-				: ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), user_id (user is paying member), and custom value – return recipient list and send Test Message 7 – correct</div>
-				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), user_id (user is paying member), and custom value – return recipient list and send Test Message 7 – error</div>
-				<? endif;
-	
-				//CLEAN UP
-				deleteTestMembership($test_membership);
-				deleteTestUser($test_user_id);
-				deleteTestItem($test_message_item_id);
-
-			})();
-
-		}
-
-		if(1 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – return recipient list and send Test Message 8") {
-
-			(function() {
-
-				// ARRANGE
-				$IC = new Items();
-				$message_model = $IC->typeObject("message");
-				include_once("classes/shop/supershop.class.php");
-				include_once("classes/system/system.class.php");
-				$SysC = new System();
 				include_once("classes/users/superuser.class.php");
 				$UC = new SuperUser();
 
-				$_POST["maillist"] = "Test mailing list";
-				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
-				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 8: Hey! {TEST_VALUE}"]);
-				$test_user_id_1 = createTestUser();
-				$test_membership_1 = addTestMembership($test_user_id_1);
-				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
-				$test_membership_2 = addTestMembership($test_user_id_2);
+				global $mail_1;
+				global $mail_2;
+
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 6",
+					"html" => "<h2>Send to maillist with two subscribers</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in body should be replaced with different texts for each recipient.</p>",
+				]);
+				$test_user_id_1 = $test_model->createTestUser([
+					"email" => $mail_1
+				]);
+				$test_user_id_2 = $test_model->createTestUser([
+					"email" => $mail_2
+				]);
+
+
+				$maillist_id = $test_model->createTestMaillist("Test mailing list");
 
 				$_POST["maillist_id"] = $maillist_id;
 				$UC->addMaillist(["addMaillist", $test_user_id_1]);
 				$UC->addMaillist(["addMaillist", $test_user_id_2]);
 				unset($_POST);
 
-				
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([
 					"item_id" => $test_message_item_id,
 					"maillist_id" => $maillist_id,
 					"values" => [
-						"test.parentnode@gmail.com" => [
-							"TEST_VALUE" => "Check that all values have been changed in this one. But not in the other 'Hey' test for recipient 2",
+						$mail_1 => ["TEST_VALUE" => "Hello, maillist subscriber 1! Check that this 'Hello' was also sent to recipient 2, with a different value."],
+						$mail_2 => ["TEST_VALUE" => "Hello, maillist subscriber 2! Check that this 'Hello' was also sent to recipient 1, with a different value."]
+					]
+				]);
+				// debug([$recipients, message()->getMessages()]);
+
+
+				// ASSERT
+
+				if(
+					is_array($recipients) &&
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), mailing list, and values (different values for each recipient) – and send Test Message 6 – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["maillist_id" => $maillist_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				$test_model->cleanUp(["user_id" => $test_user_id_1]);
+				$test_model->cleanUp(["user_id" => $test_user_id_2]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – buy membership send Test Message 7") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$test_model = $IC->typeObject("tests");
+
+
+				global $mail_1;
+
+
+				// ACT
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 7",
+					"html" => "<h2>Send to paying member – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+
+				$test_user_id = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+
+
+				// ASSERT
+
+				if(
+					$test_user_id &&
+					$test_membership_item_id
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – buy membership send Test Message 7 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – buy membership send Test Message 7 – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["user_id" => $test_user_id]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – buy membership, custom price send Test Message 8") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$test_model = $IC->typeObject("tests");
+
+				global $mail_1;
+
+
+				// ACT
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 8",
+					"html" => "<h2>Send to paying member – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+
+				$test_user_id = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+				]);
+
+				$test_order_id = $test_model->createTestOrder([
+					"user_id" => $test_user_id,
+					"item_id" => $test_membership_item_id,
+					"custom_price" => 50
+				]);
+
+
+				// ASSERT
+
+				if(
+					$test_user_id &&
+					$test_membership_item_id &&
+					$test_order_id
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – buy membership send Test Message 8 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – buy membership send Test Message 8 – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["user_id" => $test_user_id]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – existing member, buy new membership send Test Message 9") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$test_model = $IC->typeObject("tests");
+
+				global $mail_1;
+
+
+				// ACT
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 9",
+					"html" => "<h2>Send to paying member – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id_1 = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+				$test_membership_item_id_2 = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 2",
+					"subscribed_message_id" => $test_message_item_id,
+					"subscription_method" => 1,
+					"price" => 200,
+				]);
+
+				$test_user_id = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+					"subscribed_item_id" => $test_membership_item_id_1
+				]);
+
+				$test_order_id = $test_model->createTestOrder([
+					"user_id" => $test_user_id,
+					"item_id" => $test_membership_item_id_2
+				]);
+
+
+				// ASSERT
+
+				if(
+					$test_user_id &&
+					$test_membership_item_id_1 &&
+					$test_membership_item_id_2 &&
+					$test_order_id
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – existing member, buy new membership send Test Message 9 twice with different memberships – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – existing member, buy new membership send Test Message 9 twice with different memberships – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["user_id" => $test_user_id]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id_1]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id_2]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – maillist for members and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – send Test Message 10-1 and 10-2") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
+
+				include_once("classes/users/superuser.class.php");
+				$UC = new SuperUser();
+
+
+				global $mail_1;
+				global $mail_2;
+
+
+				$test_message_item_id_1 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 10-1",
+					"html" => "<h2>Subscribed to membership mail – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_message_item_id_2 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 10-2",
+					"html" => "<h2>Send to maillist – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id_1,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+
+				$test_user_id_1 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 1",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+				$test_user_id_2 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 2",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_2,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+
+
+				$maillist_id = $test_model->createTestMaillist("Test mailing list 10");
+
+				$_POST["maillist_id"] = $maillist_id;
+				$UC->addMaillist(["addMaillist", $test_user_id_1]);
+				$UC->addMaillist(["addMaillist", $test_user_id_2]);
+				unset($_POST);
+
+
+				// ACT
+
+				$recipients = $message_model->sendMessage([
+					"item_id" => $test_message_item_id_2,
+					"maillist_id" => $maillist_id,
+					"values" => [
+						$mail_1 => [
+							"TEST_VALUE" => "Check that all values have been changed in this one. But not in message for recipient 2",
 							"NICKNAME" => "I have been changed.",
 							"EMAIL" => "I have been changed.",
 							"USERNAME" => "I have been changed.",
@@ -680,63 +1014,101 @@ function deleteTestMailingList($maillist_id) {
 						]
 					]
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				)
 				: ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – return recipient list and send Test Message 8 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – send Test Message 10-1 and 10-2 – correct – VERIFY MAIL</div>
 				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – return recipient list and send Test Message 8 – error</div>
+				<div class="testfailed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for maillist subscriber 1, but not for subscriber 2 – send Test Message 10-1 and 10-2 – error</div>
 				<? endif;
-	
+
+
 				//CLEAN UP
-				deleteTestMailingList($maillist_id);
-				deleteTestMembership($test_membership_1);
-				deleteTestMembership($test_membership_2);
-				deleteTestUser($test_user_id_1);
-				deleteTestUser($test_user_id_2);
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["user_id" => $test_user_id_1]);
+				$test_model->cleanUp(["user_id" => $test_user_id_2]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_1]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_2]);
+				$test_model->cleanUp(["maillist_id" => $maillist_id]);
+				message()->resetMessages();
 
 			})();
 
 		}
 
-		if(1 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for both subscribers – return recipient list and send Test Message 9") {
+		if(1 && "send message – maillist for members and custom value array, which will override default values for both subscribers – send Test Message 11-1 and 11-2") {
 
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
-				include_once("classes/shop/supershop.class.php");
-				include_once("classes/system/system.class.php");
-				$SysC = new System();
+				$test_model = $IC->typeObject("tests");
+
 				include_once("classes/users/superuser.class.php");
 				$UC = new SuperUser();
 
-				$_POST["maillist"] = "Test mailing list";
-				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
-				unset($_POST);
+				global $mail_1;
+				global $mail_2;
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 9: Hola! {TEST_VALUE}"]);
-				$test_user_id_1 = createTestUser();
-				$test_membership_1 = addTestMembership($test_user_id_1);
-				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
-				$test_membership_2 = addTestMembership($test_user_id_2);
+
+				$test_message_item_id_1 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 11-1",
+					"html" => "<h2>Subscribed to membership mail – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_message_item_id_2 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 11-2",
+					"html" => "<h2>Send to maillist – values should be filled out with override values</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id_1,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+
+				$test_user_id_1 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 1",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+				$test_user_id_2 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 2",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_2,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+
+
+				$maillist_id = $test_model->createTestMaillist("Test mailing list 11");
 
 				$_POST["maillist_id"] = $maillist_id;
 				$UC->addMaillist(["addMaillist", $test_user_id_1]);
 				$UC->addMaillist(["addMaillist", $test_user_id_2]);
 				unset($_POST);
 
-				
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
+					"item_id" => $test_message_item_id_2,
 					"maillist_id" => $maillist_id,
 					"values" => [
 						"TEST_VALUE" => "Check that all values have been changed for both recipient 1 and recipient 2",
@@ -753,63 +1125,102 @@ function deleteTestMailingList($maillist_id) {
 						"MEMBERSHIP" => "I have been changed."
 					]
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				)
 				: ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for both subscribers – return recipient list and send Test Message 9 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for both subscribers – send Test Message 11-1 and 11-2 – correct</div>
 				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values for both subscribers – return recipient list and send Test Message 9 – error</div>
+				<div class="testfailed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for both subscribers – send Test Message 11-1 and 11-2 – error</div>
 				<? endif;
-	
+
+
 				//CLEAN UP
-				deleteTestMailingList($maillist_id);
-				deleteTestMembership($test_membership_1);
-				deleteTestMembership($test_membership_2);
-				deleteTestUser($test_user_id_1);
-				deleteTestUser($test_user_id_2);
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["user_id" => $test_user_id_1]);
+				$test_model->cleanUp(["user_id" => $test_user_id_2]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_1]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_2]);
+				$test_model->cleanUp(["maillist_id" => $maillist_id]);
+				message()->resetMessages();
 
 			})();
 
 		}
-		
-		if(1 && "send message – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values with specific values for subscriber 1 and with general values for subscriber 2 – return recipient list and send Test Message 10") {
+
+		if(1 && "send message – maillist for members and custom value array, which will override default values for maillist subscriber 1, and specific values for subscriber 2 – send Test Message 12-1 and 12-2") {
 
 			(function() {
 
 				// ARRANGE
+
 				$IC = new Items();
 				$message_model = $IC->typeObject("message");
-				include_once("classes/shop/supershop.class.php");
-				include_once("classes/system/system.class.php");
-				$SysC = new System();
+				$test_model = $IC->typeObject("tests");
+
 				include_once("classes/users/superuser.class.php");
 				$UC = new SuperUser();
 
-				$_POST["maillist"] = "Test mailing list";
-				$maillist_id = $SysC->addMaillist(["addMaillist"])["item_id"];
-				unset($_POST);
 
-				$test_message_item_id = createTestItem(["itemtype" => "message", "name" => "Test message 10: Ciao! {TEST_VALUE}"]);
-				$test_user_id_1 = createTestUser();
-				$test_membership_1 = addTestMembership($test_user_id_1);
-				$test_user_id_2 = createTestUser(["email" => "test2.parentnode@gmail.com"]);
-				$test_membership_2 = addTestMembership($test_user_id_2);
+				global $mail_1;
+				global $mail_2;
+
+
+				$test_message_item_id_1 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 12-1",
+					"html" => "<h2>Subscribed to membership mail – values should be filled out</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_message_item_id_2 = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 12-2",
+					"html" => "<h2>Send to maillist – values should be filled out with override values</h2><h3>Nickname: {NICKNAME}</h3><h3>Email: {EMAIL}</h3><h3>Username: {USERNAME}</h3><h3>Firstname: {FIRSTNAME}</h3><h3>Lastname: {LASTNAME}</h3><h3>Language: {LANGUAGE}</h3><h3>Verification code: {VERIFICATION_CODE}</h3><h3>Member ID: {MEMBER_ID}</h3><h3>Order no.: {ORDER_NO}</h3><h3>Membership price: {MEMBERSHIP_PRICE}</h3><h3>Membership: {MEMBERSHIP}</h3>"
+				]);
+
+				$test_membership_item_id = $test_model->createTestItem([
+					"itemtype" => "membership", 
+					"name" => "Membership Test item 1",
+					"subscribed_message_id" => $test_message_item_id_1,
+					"subscription_method" => 1,
+					"price" => 100,
+				]);
+
+				$test_user_id_1 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 1",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_1,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+				$test_user_id_2 = $test_model->createTestUser([
+					"nickname" => "This is the correct nickname 2",
+					"firstname" => "Tester",
+					"lastname" => "Testerson",
+					"email" => $mail_2,
+					"subscribed_item_id" => $test_membership_item_id
+				]);
+
+
+				$maillist_id = $test_model->createTestMaillist("Test mailing list 12");
 
 				$_POST["maillist_id"] = $maillist_id;
 				$UC->addMaillist(["addMaillist", $test_user_id_1]);
 				$UC->addMaillist(["addMaillist", $test_user_id_2]);
 				unset($_POST);
 
-				
+
 				// ACT
+
 				$recipients = $message_model->sendMessage([
-					"item_id" => $test_message_item_id,
+					"item_id" => $test_message_item_id_2,
 					"maillist_id" => $maillist_id,
 					"values" => [
 						"TEST_VALUE" => "Check that all values have been changed to general values",
@@ -824,7 +1235,7 @@ function deleteTestMailingList($maillist_id) {
 						"ORDER_NO" => "I have been changed to a general value.",
 						"MEMBERSHIP_PRICE" => "I have been changed to a general value",
 						"MEMBERSHIP" => "I have been changed to a general value.",
-						"test.parentnode@gmail.com" => [
+						$mail_1 => [
 							"TEST_VALUE" => "Check that all values have been changed to user specific values",
 							"NICKNAME" => "I have been changed to a user specific value.",
 							"EMAIL" => "I have been changed to a user specific value.",
@@ -838,38 +1249,37 @@ function deleteTestMailingList($maillist_id) {
 							"MEMBERSHIP_PRICE" => "I have been changed to a user specific value",
 							"MEMBERSHIP" => "I have been changed to a user specific value."
 						]
-						
 					]
 				]);
-				
+
+
 				// ASSERT
+
 				if(
 					is_array($recipients) &&
-					$recipients[0] == "test.parentnode@gmail.com" &&
-					$recipients[1] == "test2.parentnode@gmail.com"
+					$recipients[0] == $mail_1 &&
+					$recipients[1] == $mail_2
 				)
 				: ?>
-				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values with specific values for subscriber 1 and with general values for subscriber 2 – return recipient list and send Test Message 10 – correct</div>
+				<div class="testpassed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for maillist subscriber 1, and specific values for subscriber 2 – send Test Message 12-1 and 12-2 – correct – VERIFY MAIL</div>
 				<? else: ?>
-				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), maillist (subscribers are paying members), and custom value array, which will override default values with specific values for subscriber 1 and with general values for subscriber 2 – return recipient list and send Test Message 10 – error</div>
+				<div class="testfailed">TypeMessage::sendMessage – maillist for members and custom value array, which will override default values for maillist subscriber 1, and specific values for subscriber 2 – send Test Message 12-1 and 12-2 – error</div>
 				<? endif;
-	
+
+
 				//CLEAN UP
-				deleteTestMailingList($maillist_id);
-				deleteTestMembership($test_membership_1);
-				deleteTestMembership($test_membership_2);
-				deleteTestUser($test_user_id_1);
-				deleteTestUser($test_user_id_2);
-				deleteTestItem($test_message_item_id);
+
+				$test_model->cleanUp(["user_id" => $test_user_id_1]);
+				$test_model->cleanUp(["user_id" => $test_user_id_2]);
+				$test_model->cleanUp(["item_id" => $test_membership_item_id]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_1]);
+				$test_model->cleanUp(["item_id" => $test_message_item_id_2]);
+				$test_model->cleanUp(["maillist_id" => $maillist_id]);
+				message()->resetMessages();
 
 			})();
 
 		}
-
-
-
-		
-
 
 		?>
 	</div>
