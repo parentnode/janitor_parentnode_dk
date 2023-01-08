@@ -538,6 +538,8 @@ class TypeTests extends Itemtype {
 
 		$maillist_id = false;
 
+		$tag_id = false;
+
 		foreach($_options as $_option => $_value) {
 			switch($_option) {
 				case "itemtype"           : $itemtype             = $_value; break;
@@ -556,6 +558,8 @@ class TypeTests extends Itemtype {
 				case "order_no"           : $order_no             = $_value; break;
 
 				case "maillist_id"        : $maillist_id          = $_value; break;
+
+				case "tag_id"             : $tag_id               = $_value; break;
 			}
 		}
 
@@ -722,12 +726,15 @@ class TypeTests extends Itemtype {
 			$query->sql($sql);
 			cache()->reset("payment_methods");
 		}
-		
+
 		// Delete by cart id
 		if($cart_id) {
 
 			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
 			$query->sql($sql);
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
 		}
 
 		// Delete by cart ids
@@ -737,6 +744,9 @@ class TypeTests extends Itemtype {
 				$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE id = $cart_id";
 				$query->sql($sql);
 			}
+
+			// clear cart reference from session
+			session()->reset("cart_reference");
 		}
 
 
@@ -753,6 +763,13 @@ class TypeTests extends Itemtype {
 
 			}
 
+		}
+
+		// Delete by tag id
+		if($tag_id) {
+
+			$sql = "DELETE FROM ".UT_TAG." WHERE id = $tag_id";
+			$query->sql($sql);
 		}
 
 
@@ -849,14 +866,32 @@ class TypeTests extends Itemtype {
 
 		debug([
 			"Incomplete cleanup", 
+
+			"remaining_itemtype_items",
 			$remaining_itemtype_items, 
+
+			"remaining_items",
 			$remaining_items, 
+
+			"remaining_orders",
 			$remaining_orders, 
+
+			"remaining_users",
 			$remaining_users,
+
+			"remaining_currencies",
 			$remaining_currencies,
+
+			"remaining_payment_methods",
 			$remaining_payment_methods,
+
+			"remaining_carts",
 			$remaining_carts,
-			$remaining_maillist
+
+			"remaining_maillist",
+			$remaining_maillist,
+
+			message()->getMessages()
 		]);
 		return false;
 
@@ -1016,7 +1051,7 @@ class TypeTests extends Itemtype {
 					case "status"                         : $status                                = $_value; break;
 					case "created_at"                     : $created_at                            = $_value; break;
 					case "email"                          : $email                                 = $_value; break;
-					case "membership"                     : $membership                            = $_value; break;
+					// case "membership"                     : $membership                            = $_value; break;
 					case "subscribed_item_id"             : $subscribed_item_id                    = $_value; break;
 					case "subscription_expires_at"        : $subscription_expires_at               = $_value; break;
 					case "subscription_custom_price"      : $subscription_custom_price             = $_value; break;
@@ -1101,6 +1136,7 @@ class TypeTests extends Itemtype {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
 					case "gateway"            : $gateway              = $_value; break;
+					case "state"              : $state                = $_value; break;
 				}
 			}
 		}
