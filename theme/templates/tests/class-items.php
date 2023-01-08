@@ -208,12 +208,12 @@
 				
 				unset($_POST);
 				$_POST["tags"] = "test:tag1";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_1 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				unset($_POST);
 				$_POST["tags"] = "test:tag2";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_2 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				$test_item_2_id = $model_tests->createTestItem();
@@ -258,6 +258,8 @@
 
 
 				$model_tests->cleanup(["itemtype" => "tests"]);
+				$model_tests->cleanup(["tag_id" => $tag_1["tag_id"]]);
+				$model_tests->cleanup(["tag_id" => $tag_2["tag_id"]]);
 				message()->resetMessages();
 
 			})();
@@ -281,15 +283,15 @@
 				$model_tests = $IC->typeObject("tests");
 
 				$test_item_1_id = $model_tests->createTestItem();
-				
+
 				unset($_POST);
 				$_POST["tags"] = "test:tag1";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_1 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				unset($_POST);
 				$_POST["tags"] = "test:tag2";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_2 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				$test_item_2_id = $model_tests->createTestItem();
@@ -334,6 +336,8 @@
 
 
 				$model_tests->cleanup(["itemtype" => "tests"]);
+				$model_tests->cleanup(["tag_id" => $tag_1["tag_id"]]);
+				$model_tests->cleanup(["tag_id" => $tag_2["tag_id"]]);
 				message()->resetMessages();
 
 			})();
@@ -396,12 +400,12 @@
 				
 				unset($_POST);
 				$_POST["tags"] = "test:tag1";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_1 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				unset($_POST);
 				$_POST["tags"] = "test:tag2";
-				$model_tests->addTag(array("addTag", $test_item_1_id));
+				$tag_2 = $model_tests->addTag(array("addTag", $test_item_1_id));
 				unset($_POST);
 
 				$test_item_2_id = $model_tests->createTestItem(["name" => "test item 2 - $key_1 – $key_2"]);
@@ -458,6 +462,8 @@
 
 
 				$model_tests->cleanup(["itemtype" => "tests"]);
+				$model_tests->cleanup(["tag_id" => $tag_1["tag_id"]]);
+				$model_tests->cleanup(["tag_id" => $tag_2["tag_id"]]);
 				message()->resetMessages();
 
 			})();
@@ -2046,6 +2052,3 @@
 
 </div>
 
-<?
-	// header_remove('Set-Cookie');
-?>
