@@ -61,24 +61,33 @@
 
 			message()->resetMessages();
 
+			$IC = new Items();
+			$test_model = $IC->typeObject("tests");
+
 			$model = new Model();
 
 			// Get model containing only predefined entities
-			$entities = $model->getModel();
+			$default_entities = $model->getModel();
+			$test_entities = $test_model->getModel();
 
 			if(
-				isset($entities["user_id"]) &&
-				$entities["user_id"]["type"] == "user_id" &&
-				isset($entities["user_id"]["label"]) &&
+				isset($default_entities["user_id"]) &&
+				$default_entities["user_id"]["type"] == "user_id" &&
+				isset($default_entities["user_id"]["label"]) &&
 
-				isset($entities["html"]) &&
-				$entities["html"]["type"] == "html" &&
-				isset($entities["html"]["allowed_tags"]) &&
+				isset($default_entities["item_id"]) &&
+				$default_entities["item_id"]["type"] == "item_id" &&
+				isset($default_entities["item_id"]["label"]) &&
+
+				!isset($default_entities["published_at"]) &&
+				!isset($default_entities["v_html"]) &&
+
+				isset($test_entities["v_html"]) &&
+				$test_entities["v_html"]["type"] == "html" &&
+				isset($test_entities["v_html"]["allowed_tags"]) &&
 			
-				isset($entities["published_at"]) &&
-				$entities["published_at"]["type"] == "datetime" &&
-
-				!isset($entities["name"])
+				isset($test_entities["published_at"]) &&
+				$test_entities["published_at"]["type"] == "datetime"
 			): ?>
 			<div class="testpassed">Model::getModel - correct</div>
 			<? else: ?>
@@ -132,12 +141,10 @@
 			$model->setProperty("user_id", "type", "string");
 			$model->setProperty("user_id", "label", "What");
 
+
 			if(
 				$model->getProperty("user_id", "type") == "string" &&
 				$model->getProperty("user_id", "label") == "What" &&
-
-				$model->getProperty("html", "type") == "html" &&
-				!$model->getProperty("html", "value") &&
 
 				$model->getProperty("item_id", "type") == "item_id" &&
 				!$model->getProperty("item_id", "value") &&
@@ -167,6 +174,8 @@
 			$model->addToModel("password", ["type" => "password"]);
 			$model->addToModel("name", ["type" => "string"]);
 			$model->addToModel("email", ["type" => "email"]);
+			$model->addToModel("html", ["type" => "html"]);
+			$model->addToModel("mediae", ["type" => "files"]);
 
 
 			$_POST["user_id"] = 1;
@@ -174,11 +183,11 @@
 			$_POST["email"] = "message+email@domain.tld";
 			$_POST["password"] = "æøå<span>#€%&!/()";
 			$_POST["html"] = "<p>æøå<script>#€%&!/()</script></p>";
-			$_FILES["mediae"] = ["tmp_name" => "Test file name"];
+			$_FILES["mediae"] = ["tmp_name" => "Test file name", "error" => [0]];
 
 			$model->getPostedEntities();
+			unset($_POST);
 
-	
 			if(
 				$model->getProperty("user_id", "value") == 1 &&
 				$model->getProperty("name", "value") == "Test name" &&
@@ -231,7 +240,6 @@
 
 		}
 
-
 		if(1 && "string, zero, not required") {
 
 			message()->resetMessages();
@@ -260,7 +268,6 @@
 
 		}
 
-
 		if(1 && "string, string, not required") {
 
 			message()->resetMessages();
@@ -287,7 +294,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, empty, required") {
 
@@ -319,7 +325,6 @@
 
 		}
 
-
 		if(1 && "string, string, required") {
 
 			message()->resetMessages();
@@ -347,7 +352,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, empty with min-length, not required") {
 
@@ -377,7 +381,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, too short, required") {
 
@@ -411,7 +414,6 @@
 
 		}
 
-
 		if(1 && "string, too long, required") {
 
 			message()->resetMessages();
@@ -442,7 +444,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, not matching pattern, not required") {
 
@@ -475,7 +476,6 @@
 
 		}
 
-
 		if(1 && "string, matching pattern, required") {
 
 			message()->resetMessages();
@@ -505,7 +505,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, compare_to fail, required") {
 
@@ -542,7 +541,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "string, compare_to, required") {
 
@@ -611,7 +609,6 @@
 
 		}
 
-
 		if(1 && "html, string, not required") {
 
 			message()->resetMessages();
@@ -640,7 +637,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "html, string, required") {
 
@@ -672,7 +668,6 @@
 
 		}
 
-
 		if(1 && "html, html, required") {
 
 			message()->resetMessages();
@@ -700,7 +695,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "html, too short, required") {
 
@@ -733,7 +727,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "html, long enough, required") {
 
@@ -798,7 +791,6 @@
 
 		}
 
-
 		if(1 && "files, string, required") {
 
 			message()->resetMessages();
@@ -828,7 +820,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed file, required") {
 
@@ -869,7 +860,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, disallowed file, required") {
 
@@ -912,7 +902,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed file, disallowed size, required") {
 
@@ -957,7 +946,6 @@
 
 		}
 
-
 		if(1 && "files, allowed file, allowed size, required") {
 
 			message()->resetMessages();
@@ -998,7 +986,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed file, disallowed proportion, required") {
 
@@ -1043,7 +1030,6 @@
 
 		}
 
-
 		if(1 && "files, allowed file, allowed proportion, required") {
 
 			message()->resetMessages();
@@ -1084,7 +1070,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed file, < min-width, required") {
 
@@ -1129,7 +1114,6 @@
 
 		}
 
-
 		if(1 && "files, allowed file, > min-width, required") {
 
 			message()->resetMessages();
@@ -1170,7 +1154,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed file, < min-height, required") {
 
@@ -1215,7 +1198,6 @@
 
 		}
 
-
 		if(1 && "files, allowed file, > min-height, required") {
 
 			message()->resetMessages();
@@ -1256,7 +1238,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, allowed files, default max (1), required") {
 
@@ -1303,7 +1284,6 @@
 
 		}
 
-
 		if(1 && "files, allowed files, required") {
 
 			message()->resetMessages();
@@ -1347,7 +1327,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "files, 1 allowed file, 1 disallowed file, required") {
 
@@ -1428,7 +1407,6 @@
 
 		}
 
-
 		if(1 && "number, empty, required") {
 
 			message()->resetMessages();
@@ -1459,7 +1437,6 @@
 
 		}
 
-
 		if(1 && "number, number, required") {
 
 			message()->resetMessages();
@@ -1487,7 +1464,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "number, empty with min-value, not required") {
 
@@ -1517,7 +1493,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "number, too low, required") {
 
@@ -1551,7 +1526,6 @@
 
 		}
 
-
 		if(1 && "number, too high, required") {
 
 			message()->resetMessages();
@@ -1583,7 +1557,6 @@
 
 		}
 
-
 		if(1 && "number, not matching pattern, not required") {
 
 			message()->resetMessages();
@@ -1613,7 +1586,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "number, matching pattern, required") {
 
@@ -1678,7 +1650,6 @@
 
 		}
 
-
 		if(1 && "integer, empty, required") {
 
 			message()->resetMessages();
@@ -1708,7 +1679,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "integer, number, required") {
 
@@ -1740,7 +1710,6 @@
 
 		}
 
-
 		if(1 && "integer, integer, required") {
 
 			message()->resetMessages();
@@ -1769,7 +1738,6 @@
 
 		}
 
-
 		if(1 && "integer, empty with min-value, not required") {
 
 			message()->resetMessages();
@@ -1797,7 +1765,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "integer, too low, required") {
 
@@ -1830,7 +1797,6 @@
 
 		}
 
-
 		if(1 && "integer, too high, required") {
 
 			message()->resetMessages();
@@ -1862,7 +1828,6 @@
 
 		}
 
-
 		if(1 && "integer, not matching pattern, not required") {
 
 			message()->resetMessages();
@@ -1893,7 +1858,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "integer, matching pattern, required") {
 
@@ -3584,33 +3548,52 @@
 
 		if(1 && "unique, existing, item_id, required") {
 
-			message()->resetMessages();
-
 			$IC = new Items();
-			$items = $IC->getItems(["limit" => 1, "extend" => true]);
+			// $items = $IC->getItems(["limit" => 1, "extend" => true]);
+			$test_model = $IC->typeObject("tests");
+
+			$test_name = "My unique value ".randomKey(4);
+
+			unset($_POST);
+			unset($_FILES);
+			$item_id = $test_model->createTestItem([
+				"name" => $test_name,
+			]);
+
+			message()->resetMessages();
 
 			$model = new Model();
 			$model->addToModel("name", ["type" => "string"]);
 
-			$model->setProperty("name", "value", $items[0]["name"]);
-			$model->setProperty("name", "unique", $IC->typeObject($items[0]["itemtype"])->db);
+			$model->setProperty("name", "value", $test_name);
+			$model->setProperty("name", "unique", $test_model->db);
 			$model->setProperty("name", "required", true);
 
-			$validation_result = $model->validate("name", $items[0]["id"]);
-			$messages = message()->getMessages();
-	
+			$validation_result_1 = $model->validate("name", $item_id);
+			$error_1 = $model->getProperty("name", "error");
+
+			$validation_result_2 = $model->validate("name");
+			$error_2 = $model->getProperty("name", "error");
+
+
 			if(
-				!$messages && 
+				$validation_result_1 &&
+				!$validation_result_2 &&
 
-				$validation_result &&
+				!$error_1 &&
+				$error_2 &&
 
-				$model->getProperty("name", "value") &&
-				!$model->getProperty("name", "error")
+				$model->getProperty("name", "value")
+				
 			): ?>
 			<div class="testpassed">Model::validate (unique, existing, item_id, required) - correct</div>
 			<? else: ?>
 			<div class="testfailed">Model::validate (unique, existing, item_id, required) - error</div>
 			<? endif;
+
+
+			// CLEAN UP
+			$test_model->cleanUp(["item_id" => $item_id]);
 
 		}
 

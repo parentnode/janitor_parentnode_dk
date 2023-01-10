@@ -1,24 +1,3 @@
-<?
-// ensure correct default values are available for test
-include_once("classes/system/upgrade.class.php");
-$UpgradeClass = new Upgrade();
-
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DA','Dansk'", "id = 'DA'");
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'EN','English'", "id = 'EN'");
-$UpgradeClass->checkDefaultValues(UT_LANGUAGES, "'DE','Deutsch'", "id = 'DE'");
-
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'DKK', 'Kroner (Denmark)', 'DKK', 'after', 2, ',', '.'", "id = 'DKK'");
-$UpgradeClass->checkDefaultValues(UT_CURRENCIES, "'EUR', 'Euro (Denmark)', '€', 'before', 2, ',', '.'", "id = 'EUR'");
-
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DK', 'Danmark', '45', '#### ####', 'DA', 'DKK'", "id = 'DK'");
-$UpgradeClass->checkDefaultValues(UT_COUNTRIES, "'DE', 'Deutschland', '49', '#### ####', 'DE', 'EUR'", "id = 'DE'");
-
-$UpgradeClass->checkDefaultValues(UT_SUBSCRIPTION_METHODS, "DEFAULT, 'Month', 'monthly', DEFAULT", "name = 'Month'");
-$UpgradeClass->checkDefaultValues(UT_VATRATES, "999, 'No VAT', 0, 'DK'", "id = 999");
-$UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998");
-
-?>
-
 <div class="scene i:scene tests defaultEdit">
 	<h1>Shop</h1>	
 	<h2>Testing Shop class</h2>
@@ -33,8 +12,6 @@ $UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998
 		if(1 && "getPrice – item with default price – return default price") {
 
 			(function() {
-
-				session()->value("user_id", 2);
 
 				// ARRANGE
 
@@ -1547,8 +1524,7 @@ $UpgradeClass->checkDefaultValues(UT_VATRATES, "998, '25%', 25, 'DK'", "id = 998
 					$cart["items"][7]["custom_name"] == "AAA" &&
 					$cart["items"][7]["custom_price"] == 75 &&
 					$cart["items"][7]["quantity"] == 1
-					
-					): ?>
+				): ?>
 				<div class="testpassed"><p>Shop::addToCart() – addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities – correct</p></div>
 				<? else: ?>
 				<div class="testfailed"><p>Shop::addToCart() – addToCart – add the same item 8 times (2x standard, 1x custom name AAA, 2x custom name BBB, 2x custom price 50, 1x custom price 75, 2x custom name AAA/custom price 50, 1x custom name BBB/custom price 50, 1x custom name AAA/custom price 75), in mixed order – return cart with separated items, with correct quantities – error</p></div>
