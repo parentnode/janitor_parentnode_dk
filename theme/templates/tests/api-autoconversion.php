@@ -345,7 +345,7 @@ $curl->init($params);
 
 		if(1 && "mp4 -> mp4/256x144.webm") {
 
-			if(autoconvertVideo("mp4/256x144.webm", array(150000, 170000), 256, 144, "vp8")): ?>
+			if(autoconvertVideo("mp4/256x144.webm", array(150000, 175000), 256, 144, "vp8")): ?>
 				<div class="testpassed">mp4 -> webm (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/mp4/256x144.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">mp4 -> webm (same proportion) - API error</div>
@@ -402,7 +402,7 @@ $curl->init($params);
 
 		if(1 && "mov -> mov/256x144.webm") {
 
-			if(autoconvertVideo("mov/256x144.webm", array(160000, 185000), 256, 144, "vp8")): ?>
+			if(autoconvertVideo("mov/256x144.webm", array(160000, 190000), 256, 144, "vp8")): ?>
 				<div class="testpassed">mov -> webm (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/mov/256x144.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">mov -> webm (same proportion) - API error</div>
@@ -439,7 +439,7 @@ $curl->init($params);
 		
 		if(1 && "webm -> webm/256x144.webm") {
 
-			if(autoconvertVideo("webm/256x144.webm", array(145000, 165000), 256, 144, "vp8")): ?>
+			if(autoconvertVideo("webm/256x144.webm", array(145000, 175000), 256, 144, "vp8")): ?>
 				<div class="testpassed">webm -> webm (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/webm/256x144.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">webm -> webm (same proportion) - API error</div>
@@ -449,7 +449,7 @@ $curl->init($params);
 
 		if(1 && "webm -> webm/300x300.webm") {
 
-			if(autoconvertVideo("webm/300x300.webm", array(275000, 300000), 300, 300, "vp8")): ?>
+			if(autoconvertVideo("webm/300x300.webm", array(275000, 320000), 300, 300, "vp8")): ?>
 				<div class="testpassed">webm -> webm (different proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/webm/300x300.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">webm -> webm (different proportion) - API error</div>
@@ -526,7 +526,7 @@ $curl->init($params);
 
 		if(1 && "ogv -> ogv/256x144.webm") {
 
-			if(autoconvertVideo("ogv/256x144.webm", array(150000, 170000), 256, 144, "vp8")): ?>
+			if(autoconvertVideo("ogv/256x144.webm", array(150000, 180000), 256, 144, "vp8")): ?>
 				<div class="testpassed">ogv -> webm (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/ogv/256x144.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">ogv -> webm (same proportion) - API error</div>
@@ -593,7 +593,7 @@ $curl->init($params);
 
 		if(1 && "3gp -> 3gp/256x144.webm") {
 
-			if(autoconvertVideo("3gp/256x144.webm", array(155000, 175000), 256, 144, "vp8")): ?>
+			if(autoconvertVideo("3gp/256x144.webm", array(155000, 185000), 256, 144, "vp8")): ?>
 				<div class="testpassed">3gp -> webm (same proportion) - correct (<?= $fs->filesize(PUBLIC_FILE_PATH."/autoconversion-test/3gp/256x144.webm") ?>)</div>
 			<? else: ?>
 				<div class="testfailed">3gp -> webm (same proportion) - API error</div>

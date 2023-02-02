@@ -308,6 +308,68 @@
 
 		}
 
+		if(1 && "addMembership – subscription without price") {
+
+			(function() {
+
+				$MC = new Member();
+				$SuC = new Subscription();
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+				$current_user_id = session()->value("user_id");
+
+
+				$test_user_id = $test_model->createTestUser();
+				$test_item_id = $test_model->createTestItem([
+					"itemtype" => "membership",
+					"subscription_method" => 2
+				]);
+
+
+				// ACT
+
+				// Set users id in current session to mimic interaction on behalf of test user
+				session()->value("user_id", $test_user_id);
+
+				// Adding subscription to membership will automatically add membership via type.membership->subscribed
+				$_POST["item_id"] = $test_item_id;
+				$subscription = $SuC->addSubscription(["addSubscription"]);
+				unset($_POST);
+
+				$membership = $MC->getMembership();
+				// debug([$membership]);
+
+				// ASSERT 
+				if(
+					$membership &&
+					$membership["id"] &&
+					$membership["user_id"] == $test_user_id &&
+					$membership["item_id"] == $test_item_id &&
+					$membership["order"] === false &&
+					$membership["item"]["prices"] === false
+				): ?>
+				<div class="testpassed"><p>Member::addMembership – subscription without price – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Member::addMembership – subscription without price – error</p></div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				// Restore user session
+				session()->value("user_id", $current_user_id);
+
+				$test_model->cleanUp([
+					"item_id" => $test_item_id, 
+					"user_id" => $test_user_id
+				]);
+				message()->resetMessages();
+	
+			})();
+
+		}
+
 		?>
 	</div>
 

@@ -1035,6 +1035,8 @@ class TypeTests extends Itemtype {
 		$status = 1;
 		$created_at = "2019-01-01 00:00:00";
 		$email = "test.parentnode@gmail.com";
+		$verified_email = false;
+		$password = false;
 		$membership = false;
 		$subscribed_item_id = false;
 		$subscription_expires_at = false;
@@ -1045,13 +1047,18 @@ class TypeTests extends Itemtype {
 			foreach($_options as $_option => $_value) {
 				switch($_option) {
 					case "user_group_id"                  : $user_group_id                         = $_value; break;
+
 					case "nickname"                       : $nickname                              = $_value; break;
 					case "firstname"                      : $firstname                             = $_value; break;
 					case "lastname"                       : $lastname                              = $_value; break;
 					case "status"                         : $status                                = $_value; break;
 					case "created_at"                     : $created_at                            = $_value; break;
+
 					case "email"                          : $email                                 = $_value; break;
+					case "verified_email"                 : $verified_email                        = $_value; break;
+					case "password"                       : $password                              = $_value; break;
 					// case "membership"                     : $membership                            = $_value; break;
+
 					case "subscribed_item_id"             : $subscribed_item_id                    = $_value; break;
 					case "subscription_expires_at"        : $subscription_expires_at               = $_value; break;
 					case "subscription_custom_price"      : $subscription_custom_price             = $_value; break;
@@ -1074,7 +1081,16 @@ class TypeTests extends Itemtype {
 		if($user_id) {
 	
 			$_POST["email"] = $email;
-			$UC->updateEmail(["updateEmail", $user_id]);
+			$username = $UC->updateEmail(["updateEmail", $user_id]);
+			if($verified_email) {
+				$UC->setVerificationStatus($username["username_id"], $user_id, 1);
+			}
+
+			if($password) {
+				$_POST["password"] = $password;
+				$UC->setPassword(["setPassword", $user_id]);
+			}
+
 
 			if($subscribed_item_id)	{
 				include_once("classes/shop/supershop.class.php");
@@ -1082,12 +1098,26 @@ class TypeTests extends Itemtype {
 				include_once("classes/shop/supersubscription.class.php");
 				$SuperSubscriptionClass = new SuperSubscription();
 
-				$added_item_cart = $SC->addToNewInternalCart($subscribed_item_id, ["user_id" => $user_id, "custom_price" => $subscription_custom_price]);
-				$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart["id"], $added_item_cart["cart_reference"]]);
-				$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $user_id, "item_id" => $subscribed_item_id]);
+				$IC = new Items();
+				$subscribed_item = $IC->getItem(["id" => $subscribed_item_id, "extend" => ["prices" => true]]);
+				if($subscribed_item) {
+					if($subscribed_item["prices"]) {
+						$added_item_cart = $SC->addToNewInternalCart($subscribed_item_id, ["user_id" => $user_id, "custom_price" => $subscription_custom_price]);
+						$added_item_order = $SC->newOrderFromCart(["newOrderFromCart", $added_item_cart["id"], $added_item_cart["cart_reference"]]);
+					}
+					else {
+						$_POST["user_id"] = $user_id;
+						$_POST["item_id"] = $subscribed_item_id;
+						$SuperSubscriptionClass->addSubscription(["addSubscription"]);
+						unset($_POST);
+					}
+
+					$added_subscription = $SuperSubscriptionClass->getSubscriptions(["user_id" => $user_id, "item_id" => $subscribed_item_id]);
+				}
+
 			}
 	
-			if($subscription_expires_at) {
+			if($subscription_expires_at && $added_subscription) {
 				$sql = "UPDATE ".SITE_DB.".user_item_subscriptions SET expires_at = '".$subscription_expires_at."' WHERE id = ".$added_subscription["id"];
 				$query->sql($sql);
 			}

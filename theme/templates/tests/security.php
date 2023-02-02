@@ -5,38 +5,24 @@ if(defined("SITE_INSTALL") && SITE_INSTALL) {
 	exit();
 }
 
-global $IC;
-global $model;
 
+// test if path is accessible
+function testPath($path, $allowed) {
 
-// expose all test item value globally (to use in test class without passing as parameter)
-global $test_item;
-global $test_item_name;
-global $test_item_id;
-global $test_item_status;
-
-
-include_once("classes/users/superuser.class.php");
-$UC = new Superuser();
-
-include("classes/helpers/curl.class.php");
-global $CH;
-
-// Initialize curl request
-function curlInit($params) {
-
-	global $CH;
-
-	$CH = new CurlRequest();
-	$CH->init($params);
+	$result = security()->validatePath($path);
+	if(($result && $allowed) || (!$result && !$allowed)) {
+		print '<div class="testpassed">'.$path."</div>\n";
+	}
+	else {
+		print '<div class="testfailed">'.$path."</div>\n";
+	}
 
 }
-// Test a request
-function curlTest($url, $allowed) {
 
-	global $CH;
+function curlTest($url, $options, $allowed) {
 
-	$result = $CH->exec($url);
+	$result = curl()->request($url, $options);
+	// debug([$result]);
 
 	if(
 		$result["http_code"] == 200 && 
@@ -45,113 +31,26 @@ function curlTest($url, $allowed) {
 			//
 			// ||
 
-			(!$allowed && preg_match("/\/login$/", $result['last_url']))
-			
+			(!$allowed && preg_match("/\/login$/", $result['last_url']) && $url !== $result['last_url'])
+
 			||
-			
-			($allowed && $result['last_url'] ==  $url)
+
+			($allowed && preg_replace("/\/$/", "", $result['last_url']) == preg_replace("/\/$/", "", $url))
 		)
 	
 		|| 
 	
 		($result["http_code"] == 404 && !$allowed)
 	) {
-		print '<div class="testpassed">'.$url.": ".$result['http_code']." (".$result['last_url'].")</div>\n";
+		print '<div class="testpassed"><p>'.$url.": ".$result['http_code']." (".$result['last_url'].")</p></div>\n";
 	}
 	else {
-		print '<div class="testfailed">'.$url.": ".$result['http_code']." (".$result['last_url'].")</div>\n";
+		print '<div class="testfailed"><p>'.$url.": ".$result['http_code']." (".$result['last_url'].")</p></div>\n";
 	}
 
 	return $result;
 
 }
-
-
-// test item name
-function testName($expected) {
-	global $test_item_id;
-	global $test_item_name;
-
-	$IC = new Items();
-
-	$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-	if($compare_item["name"] == $expected) {
-		print '<div class="testpassed">Name ok</div>'."\n";
-	}
-	else {
-		print '<div class="testfailed">Name error</div>'."\n";
-	}
-}
-// test if path is accessible
-function testPath($path, $allowed) {
-	global $page;
-	$result = security()->validatePath($path);
-	if(($result && $allowed) || (!$result && !$allowed)) {
-		print '<div class="testpassed">'.$path."</div>\n";
-	}
-	else {
-		print '<div class="testfailed">'.$path."</div>\n";
-	}
-}
-// test item status
-function testStatus($expected) {
-	global $test_item_id;
-	$IC = new Items();
-
-	$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-	if($compare_item["status"] == $expected) {
-		print '<div class="testpassed">Status ok</div>'."\n";
-	}
-	else {
-		print '<div class="testfailed">Status error</div>'."\n";
-	}
-}
-// test if item exists
-function testExistence($expected) {
-	global $test_item_id;
-	$IC = new Items();
-
-	$compare_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-	if(($compare_item && $expected) || (!$compare_item && !$expected)) {
-		print '<div class="testpassed">Existence ok</div>'."\n";
-	}
-	else {
-		print '<div class="testfailed">Existence error</div>'."\n";
-	}
-}
-
-
-// get test item
-
-$test_item_id = $model->createTestItem();
-
-
-$user = $UC->getUsers(array("email" => "security-test@parentnode.dk"));
-
-
-
-// THIS WILL EXPOSE SYSTEM IF RUN ON LIVE SITE
-
-
-
-if(!$test_item_id) {
-	print "You must have at least one &quot;Tests&quot; item to perform test<br>\n";
-}
-
-if(!$user) {
-	print 'You must have a user: security-test@parentnode.dk on your system, with the password: s3curltA – <a href="/janitor/admin/user/list">create it here</a>.';
-}
-
-
-
-if(!$test_item_id || !$user) {
-	exit();
-}
-
-$test_item = $IC->getItem(array("id" => $test_item_id, "extend" => true));
-$test_item_name = $test_item["name"];
-$test_item_status = $test_item["status"];
-
 
 ?>
 
@@ -168,20 +67,39 @@ $test_item_status = $test_item["status"];
 	<div class="tests">
 		<h3>Testing prevalidation - User group 1</h3>
 		<?
-		session()->value("user_group_id", 1);
 
 		if(1 && "Testing prevalidation - User group 1") {
 
-			testPath("/janitor/admin/user/list", false);
-			testPath("/", true);
-			testPath("/janitor/admin/404", true);
-			testPath("/login", true);
-			testPath("/docs", true);
-			testPath("/janitor/admin/user/delete/1", false);
-			testPath("/janitor/admin/users/list", false);
-			testPath("/janitor/user/list", false);
-			testPath("/janitor/tests", false);
-			testPath("/janitor", false);
+			(function() {
+
+				// ARRANGE 
+
+				$current_user_group = session()->value("user_group_id");
+				security()->resetRuntimeValues();
+				session()->value("user_group_id", 1);
+
+
+				// ACT
+
+				testPath("/janitor/admin/user/list", false);
+				testPath("/", true);
+				testPath("/janitor/admin/404", true);
+				testPath("/login", true);
+				testPath("/docs", true);
+				testPath("/janitor/admin/user/delete/1", false);
+				testPath("/janitor/admin/users/list", false);
+				testPath("/janitor/user/list", false);
+				testPath("/janitor/tests", false);
+				testPath("/janitor", false);
+
+
+				// CLEANUP
+
+				security()->resetRuntimeValues();
+				session()->value("user_group_id", $current_user_group);
+
+			})();
+
 		}
 
 		?>
@@ -190,34 +108,41 @@ $test_item_status = $test_item["status"];
 	<div class="tests">
 		<h3>Testing prevalidation - User group 3</h3>
 		<?
-		session()->value("user_group_id", 3);
 
 		if(1 && "Testing prevalidation - User group 3") {
 
-			testPath("/", true);
-			testPath("/janitor/tests", true);
-			testPath("/login", true);
-			testPath("/getting-started", true);
-			testPath("/janitor/admin/user/list", true);
-			testPath("/janitor/admin/user/delete/1", true);
-			testPath("/janitor/admin/users/list", false);
-			testPath("/janitor", true);
+			(function() {
+
+				// ARRANGE 
+
+				$current_user_group = session()->value("user_group_id");
+				security()->resetRuntimeValues();
+				session()->value("user_group_id", 3);
+
+
+				// ACT
+
+				testPath("/", true);
+				testPath("/janitor/tests", true);
+				testPath("/login", true);
+				testPath("/getting-started", true);
+				testPath("/janitor/admin/user/list", true);
+				testPath("/janitor/admin/user/delete/1", true);
+				testPath("/janitor/admin/users/list", false);
+				testPath("/janitor", true);
+
+
+				// CLEANUP
+
+				security()->resetRuntimeValues();
+				session()->value("user_group_id", $current_user_group);
+
+			})();
+
 		}
 
 		?>
 	</div>
-
-
-
-<?
-// TESTING HTTP GET
-
-$params = array(
-	"method" => "GET"
-);
-curlInit($params);
-
-?>
 
 	<div class="tests">
 		<h3>Testing HTTP GET requests: unrestricted pages</h3>
@@ -225,10 +150,21 @@ curlInit($params);
 
 		if(1 && "Testing HTTP GET requests: unrestricted pages") {
 
-			curlTest(SITE_URL, true);
-			curlTest(SITE_URL."/", true);
-			curlTest(SITE_URL."/getting-started", true);
-			curlTest(SITE_URL."/janitor/js/seg_desktop.js", true);
+			(function() {
+
+				// ARRANGE 
+
+
+				// ACT
+
+				curlTest(SITE_URL, ["method" => "GET"], true);
+				curlTest(SITE_URL."/", ["method" => "GET"], true);
+				curlTest(SITE_URL."/getting-started", ["method" => "GET"], true);
+				curlTest(SITE_URL."/janitor/js/seg_desktop.js", ["method" => "GET"], true);
+
+				// CLEANUP
+
+			})();
 
 		}
 
@@ -241,8 +177,19 @@ curlInit($params);
 
 		if(1 && "Testing HTTP GET requests: missing pages") {
 
-			curlTest(SITE_URL."/janitor/user/list", false);
-			curlTest(SITE_URL."/bad-url", false);
+			(function() {
+
+				// ARRANGE 
+
+
+				// ACT
+
+				curlTest(SITE_URL."/janitor/user/list", ["method" => "GET"], false);
+				curlTest(SITE_URL."/bad-url", ["method" => "GET"], false);
+
+				// CLEANUP
+
+			})();
 
 		}
 
@@ -255,12 +202,21 @@ curlInit($params);
 
 		if(1 && "Testing HTTP GET requests: restricted pages") {
 
-			curlTest(SITE_URL."/janitor", false);
-			curlTest(SITE_URL."/janitor/tests", false);
-			curlTest(SITE_URL."/janitor/admin/post/new", false);
-			curlTest(SITE_URL."/janitor/admin/post", false);
-			curlTest(SITE_URL."/janitor/admin/user/list", false);
-			curlTest(SITE_URL."/janitor/admin/items/tags", false);
+			(function() {
+
+				// ARRANGE 
+
+
+				// ACT
+
+				curlTest(SITE_URL."/janitor", ["method" => "GET"], false);
+				curlTest(SITE_URL."/janitor/tests", ["method" => "GET"], false);
+				curlTest(SITE_URL."/janitor/admin/post/new", ["method" => "GET"], false);
+				curlTest(SITE_URL."/janitor/admin/post", ["method" => "GET"], false);
+				curlTest(SITE_URL."/janitor/admin/user/list", ["method" => "GET"], false);
+				curlTest(SITE_URL."/janitor/admin/items/tags", ["method" => "GET"], false);
+
+			})();
 
 		}
 
@@ -273,10 +229,53 @@ curlInit($params);
 
 		if(1 && "Testing") {
 
-			$result = curlTest(SITE_URL."/janitor/admin/items/status/".$test_item_id."/".($test_item_status ? "0" : "1"), false);
-			testStatus($test_item_status);
-			$result = curlTest(SITE_URL."/janitor/admin/items/delete/".$test_item_id, false);
-			testExistence(1);
+			(function() {
+
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+				$name = "Test item – ".randomKey(4);
+				$test_item_id = $test_model->createTestItem([
+					"name" => $name,
+					"status" => 1
+				]);
+
+				$item_1 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ACT
+
+				$result = curlTest(SITE_URL."/janitor/tests/status/".$test_item_id."/0", ["method" => "GET"], false);
+
+				$result = curlTest(SITE_URL."/janitor/tests/delete/".$test_item_id, ["method" => "GET"], false);
+
+				$item_2 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ASSERT 
+
+				if(
+					$item_1 &&
+					$item_1["name"] === $name &&
+					$item_1["status"] == 1 &&
+					$item_2 &&
+					$item_1 === $item_2
+				): ?>
+				<div class="testpassed"><p>GET data-manipulation – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>GET data-manipulation – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_item_id]);
+				message()->resetMessages();
+
+			})();
 
 		}
 
@@ -284,23 +283,82 @@ curlInit($params);
 	</div>
 
 
-<?
+	<div class="tests">
+		<h3>Testing HTTP GET requests WITH Session, CSRF and Cookie</h3>
+		<?
 
-// TESTING HTTP POST
-$params = array(
-	"method" => "POST"
-);
-curlInit($params);
+		if(1 && "Testing") {
 
-?>
+			(function() {
+
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+
+				// ACT
+
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "GET"
+				], true);
+
+				// when sending cookie, csrf should be the same between requests
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+
+				$result_2 = curlTest(SITE_URL."/login", [
+					"method" => "GET",
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+
+
+				// test if session is established
+				$csrf_2 = $test_model->getCSRF($result_2);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+
+				// ASSERT 
+
+				if(
+					$csrf_1 &&
+					$csrf_2 &&
+					$csrf_1 == $csrf_2 &&
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>Session established</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Session failed</p></div>
+				<? endif; 
+
+			})();
+
+		}
+
+		?>
+	</div>
+
 	<div class="tests">
 		<h3>Testing HTTP POST requests: unrestricted pages</h3>
 		<?
 
 		if(1 && "Testing") {
 
-			curlTest(SITE_URL."/", true);
-			curlTest(SITE_URL."/getting-started", true);
+			(function() {
+
+				// ARRANGE 
+
+
+				// ACT
+
+				curlTest(SITE_URL."/", ["method" => "POST"], true);
+				curlTest(SITE_URL."/getting-started", ["method" => "POST"], true);
+
+			})();
 
 		}
 
@@ -313,12 +371,20 @@ curlInit($params);
 
 		if(1 && "Testing") {
 
-			curlTest(SITE_URL."/janitor/tests", false);
-			curlTest(SITE_URL."/janitor/tests/security", false);
-			curlTest(SITE_URL."/janitor/admin/post/new", false);
-			curlTest(SITE_URL."/janitor/admin/post", false);
-			curlTest(SITE_URL."/janitor/admin/user/list", false);
-			curlTest(SITE_URL."/janitor/admin/items/tags", false);
+			(function() {
+
+				// ARRANGE 
+
+				// ACT
+
+				curlTest(SITE_URL."/janitor/tests", ["method" => "POST"], false);
+				curlTest(SITE_URL."/janitor/tests/security", ["method" => "POST"], false);
+				curlTest(SITE_URL."/janitor/admin/post/new", ["method" => "POST"], false);
+				curlTest(SITE_URL."/janitor/admin/post", ["method" => "POST"], false);
+				curlTest(SITE_URL."/janitor/admin/user/list", ["method" => "POST"], false);
+				curlTest(SITE_URL."/janitor/admin/items/tags", ["method" => "POST"], false);
+
+			})();
 
 		}
 
@@ -329,21 +395,62 @@ curlInit($params);
 	<div class="tests">
 		<h3>Testing HTTP POST requests: advanced requests</h3>
 		<?
+
 		if(1 && "Testing") {
 
-			curlTest(SITE_URL."/janitor/admin/items/status/".$test_item_id."/0", false);
-			testStatus($test_item_status);
-			curlTest(SITE_URL."/janitor/admin/items/delete/".$test_item_id, false);
-			testExistence(1);
+			(function() {
+
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+				$name = "Test item – ".randomKey(4);
+				$test_item_id = $test_model->createTestItem([
+					"name" => $name,
+					"status" => 1
+				]);
+
+				$item_1 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
 
 
-			$params["post_fields"] = "name=hacked";
-			curlInit($params);
+				// ACT
 
-			$result = curlTest(SITE_URL."/janitor/admin/items/update/".$test_item_id, false);
-			testName($test_item_name);
-			
-			
+				curlTest(SITE_URL."/janitor/admin/items/status/".$test_item_id."/0", ["method" => "POST"], false);
+
+				curlTest(SITE_URL."/janitor/admin/items/delete/".$test_item_id, ["method" => "POST"], false);
+
+				$result = curlTest(SITE_URL."/janitor/admin/items/update/".$test_item_id, [
+					"method" => "POST",
+					"post_fields" => "name=hacked"
+				], false);
+
+				$item_2 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ASSERT 
+
+				if(
+					$item_1 &&
+					$item_1["name"] === $name &&
+					$item_1["status"] == 1 &&
+					$item_2 &&
+					$item_1 === $item_2
+				): ?>
+				<div class="testpassed"><p>POST data-manipulation – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>POST data-manipulation – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_item_id]);
+				message()->resetMessages();
+
+			})();
+
 		}
 
 		?>
@@ -351,39 +458,59 @@ curlInit($params);
 
 
 	<div class="tests">
-		<h3>Testing HTTP POST requests WITH Session and CSRF hacking</h3>
+		<h3>Testing HTTP POST requests WITH Session, CSRF and Cookie</h3>
 		<?
 
 		if(1 && "Testing") {
 
-			curlInit($params);
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
+			(function() {
 
-			// when sending cookie, csrf should be the same between requests
-			$csrf = $model->getCSRF($result);
-			$cookie = $model->getCookie($result);
+				// ARRANGE 
 
-			// attemptiong to establish session connection
-			$params["header"] = array("Cookie: ".$cookie);
-			$params["post_fields"] = "csrf-token=".$csrf;
+				$IC = new Items();
 
-			curlInit($params);
-			$result = curlTest(SITE_URL."/login", false);
+				$test_model = $IC->typeObject("tests");
 
-	//		print_r($result);
 
-			// test if session is established
-			$csrf_compare = $model->getCSRF($result);
+				// ACT
 
-			print "csrf:".$csrf.", " .$csrf_compare."<br>";
+				// parse last result (should be done on result with login form)
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "post"
+				], true);
 
-			if($csrf_compare == $csrf) {
-				print '<div class="testpassed">Session established</div>'."\n";
-			}
-			else {
-				print '<div class="testfailed">Session failed</div>'."\n";
-			}
+				// when sending cookie, csrf should be the same between requests
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+
+				$result_2 = curlTest(SITE_URL."/login", [
+					"method" => "POST",
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+
+				// test if session is established
+				$csrf_2 = $test_model->getCSRF($result_2);
+
+
+				// ASSERT 
+
+				if(
+					$csrf_1 &&
+					$csrf_2 &&
+					$csrf_1 == $csrf_2 &&
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>Session established</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Session failed</p></div>
+				<? endif; 
+
+			})();
 
 		}
 
@@ -391,32 +518,80 @@ curlInit($params);
 	</div>
 
 	<div class="tests">
-		<h3>Testing HTTP POST requests WITH Session and CSRF hacking (unrestricted pages)</h3>
+		<h3>Testing HTTP POST requests WITH Session, CSRF and Cookie (unrestricted pages)</h3>
 		<?
 
 		if(1 && "Testing") {
 
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
+			(function() {
 
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/", true);
+				// ARRANGE 
 
-		}
+				$IC = new Items();
 
-		if(1 && "Testing") {
+				$test_model = $IC->typeObject("tests");
 
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
 
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/getting-started", true);
+				// ACT
+
+				// parse last result (should be done on result with login form)
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "post"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+				// Using cookie
+				$result_2 = curlTest(SITE_URL."/", [
+					"method" => "POST",
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+				// Using cookie
+				$result_3 = curlTest(SITE_URL."/getting-started", [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+				$cookie_3 = $test_model->getCookie($result_3);
+
+				// Using cookie
+				$result_4 = curlTest(SITE_URL."/login", [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+				$csrf_4 = $test_model->getCSRF($result_4);
+				$cookie_4 = $test_model->getCookie($result_4);
+
+				// NOT using cookie
+				$result_5 = curlTest(SITE_URL."/login", [
+					"method" => "POST", 
+				], true);
+				$csrf_5 = $test_model->getCSRF($result_5);
+				$cookie_5 = $test_model->getCookie($result_5);
+
+
+				// ASSERT 
+
+				if(
+					$csrf_1 &&
+					$csrf_4 &&
+					$csrf_1 === $csrf_4 &&
+					$csrf_4 !== $csrf_5 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_3 &&
+					$cookie_1 === $cookie_2 &&
+					$cookie_2 === $cookie_3 &&
+					$cookie_4 !== $cookie_5
+				): ?>
+				<div class="testpassed"><p>Session established</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Session failed</p></div>
+				<? endif; 
+
+			})();
 
 		}
 
@@ -424,47 +599,116 @@ curlInit($params);
 	</div>
 
 	<div class="tests">
-		<h3>Testing HTTP POST requests WITH Session and CSRF hacking (restricted pages)</h3>
+		<h3>Testing HTTP POST requests WITH Session, CSRF and Cookie (restricted pages)</h3>
 		<?
 
 		if(1 && "Testing") {
 
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
+			(function() {
 
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor", false);
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+
+				// parse last result (should be done on result with login form)
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "POST"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+
+				// Should reset csrf
+				$result_2 = curlTest(SITE_URL."/janitor", [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+				], false);
+				$csrf_2 = $test_model->getCSRF($result_2);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+
+				$result_3 = curlTest(SITE_URL."/login", [
+					"method" => "POST",
+					"header" => array("Cookie: ".$cookie_1), 
+				], true);
+				$csrf_3 = $test_model->getCSRF($result_3);
+				$cookie_3 = $test_model->getCookie($result_3);
+
+
+				// ASSERT 
+
+				if(
+					$csrf_1 &&
+					$csrf_2 &&
+					$csrf_1 !== $csrf_2 &&
+					$csrf_2 === $csrf_3 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_3 &&
+					$cookie_1 === $cookie_2 &&
+					$cookie_2 === $cookie_3
+				): ?>
+				<div class="testpassed"><p>Session established and renewed</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Session failed</p></div>
+				<? endif; 
+
+			})();
 
 		}
 
 		if(1 && "Testing") {
 
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
+			(function() {
 
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/admin/user/list", false);
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+
+				// parse last result (should be done on result with login form)
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "POST"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+
+				// Should reset csrf
+				$result_2 = curlTest(SITE_URL."/janitor/admin/user/list", [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+				], false);
+				$csrf_2 = $test_model->getCSRF($result_2);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+
+				// ASSERT 
+
+				if(
+					$csrf_1 &&
+					$csrf_2 &&
+					$csrf_1 !== $csrf_2 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>Session established and renewed</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>Session failed</p></div>
+				<? endif; 
+
+			})();
 
 		}
 
-		if(1 && "Testing") {
-
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
-
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/admin/items/tags", false);
-
-		}
 		?>
 	</div>
 
@@ -474,15 +718,67 @@ curlInit($params);
 
 		if(1 && "Testing") {
 
-			// parse last result (should be done on result with login form)
-			$result = curlTest(SITE_URL."/login", true);
-			$csrf = $model->getCSRF($result);
+			(function() {
 
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			$params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/admin/items/update/".$test_item_id, false);
-			testName($test_item_name);
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+				// parse last result (should be done on result with login form)
+				$result_1 = curlTest(SITE_URL."/login", [
+					"method" => "POST"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_1);
+				$cookie_1 = $test_model->getCookie($result_1);
+
+				$name = "Test item – ".randomKey(4);
+				$test_item_id = $test_model->createTestItem([
+					"name" => $name,
+					"status" => 1
+				]);
+
+				$item_1 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				$result_2 = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+					"post_fields" => "csrf-token=".$csrf_1."&name=hacked"
+				], false);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+				$item_2 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ASSERT 
+
+				if(
+					$item_1 &&
+					$item_1["name"] === $name &&
+					$item_1["status"] == 1 &&
+					$item_2 &&
+					$item_1 === $item_2 &&
+
+					$csrf_1 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>POST data-manipulation as guest – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>POST data-manipulation as guest – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_item_id]);
+				message()->resetMessages();
+
+			})();
 
 		}
 
@@ -495,23 +791,51 @@ curlInit($params);
 
 		if(1 && "Testing") {
 
-			$params = array(
-				"method" => "POST"
-			);
+			(function() {
 
-			// login data
-			$params["post_fields"] = "username=security-test@parentnode.dk&password=s3curltA&ajaxlogin=true";
-			curlInit($params);
-			$result = curlTest(SITE_URL."/?login=true", true);
+				// ARRANGE 
 
-			// get CSRF and Cookie after logging in
-			$csrf = $model->getCSRF($result);
+				$IC = new Items();
 
-			// get list page
-			$params["header"] = array("Cookie: ".$model->getCookie($result));
-			// $params["post_fields"] = "csrf-token=".$csrf;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/admin/post/list", true);
+				$test_model = $IC->typeObject("tests");
+
+			// $params = array(
+			// 	"method" => "POST"
+			// );
+			//
+			// // login data
+			// $params["post_fields"] = "username=security-test@parentnode.dk&password=s3curltA&ajaxlogin=true";
+			// curlInit($params);
+				$test_key = randomKey(4);
+				$test_username = "security-test-".$test_key."@parentnode.dk";
+				$test_password = "s3curltA";
+
+				$test_user_id = $test_model->createTestUser([
+					"nickname" => "User item, Security test – ".$test_key,
+					"email" => $test_username,
+					"verified_email" => 1,
+					"password" => $test_password,
+					"status" => 1,
+					"user_group_id" => 3
+				]);
+
+
+				$result = curlTest(SITE_URL."/?login=true", [
+					"method" => "POST", 
+					"post_fields" => "username=$test_username&password=$test_password&ajaxlogin=true"
+				], true);
+
+				// get CSRF and Cookie after logging in
+				$csrf = $test_model->getCSRF($result);
+				$cookie = $test_model->getCookie($result);
+
+
+				$result = curlTest(SITE_URL."/janitor/admin/post/list", [
+					"method" => "GET", 
+					"header" => array("Cookie: ".$cookie), 
+				], true);
+
+			})();
 
 		}
 
@@ -519,54 +843,181 @@ curlInit($params);
 	</div>
 
 	<div class="tests">
-		<h3>Updating "Test item" name to: hacked</h3>
+		<h3>Updating "Test item" name to: hacked as valid user</h3>
 		<?
 
 		if(1 && "Testing") {
 
-			$params = array(
-				"method" => "POST"
-			);
+			(function() {
 
-			// login data
-			$params["post_fields"] = "username=security-test@parentnode.dk&password=s3curltA&ajaxlogin=true";
-			curlInit($params);
-			$result = curlTest(SITE_URL."/?login=true", true);
+				// ARRANGE 
 
-			// get CSRF and Cookie after logging in
-			$csrf = $model->getCSRF($result);
-			$cookie = $model->getCookie($result);
+				$IC = new Items();
 
-			$params["header"] = array("Cookie: ".$cookie);
-			$params["post_fields"] = "csrf-token=".$csrf."&name=hacked";
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, true);
-			// debug([$result]);
-			testName("hacked");
+				$test_model = $IC->typeObject("tests");
 
-			?>
 
-		<h3>Restoring "Test item" name to: <?= $test_item_name ?></h3>
+				$test_key = randomKey(4);
+				$test_item_id = $test_model->createTestItem([
+					"name" => "Test item – ".$test_key,
+					"status" => 1
+				]);
 
-			<?
+				$test_username = "security-test-".$test_key."@parentnode.dk";
+				$test_password = "s3curltA";
 
-			$params["header"] = array("Cookie: ".$cookie);
-			$params["post_fields"] = "csrf-token=".$csrf."&name=".$test_item_name;
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, true);
-			// debug([$result]);
-			testName($test_item_name);
+				$test_user_id = $test_model->createTestUser([
+					"nickname" => "User item, Security test – ".$test_key,
+					"email" => $test_username,
+					"verified_email" => 1,
+					"password" => $test_password,
+					"status" => 1,
+					"user_group_id" => 3
+				]);
 
-			?>
+				$item_1 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
 
-		<h3>CSRF failure</h3>
-			
+
+				$result_login = curlTest(SITE_URL."/?login=true", [
+					"method" => "POST", 
+					"post_fields" => "username=$test_username&password=$test_password&ajaxlogin=true"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_login);
+				$cookie_1 = $test_model->getCookie($result_login);
+
+
+				$result_2 = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+					"inputs" => "csrf-token=".$csrf_1."&name=hacked"
+				], true);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+				$item_2 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ASSERT 
+
+				if(
+					$item_1 &&
+					$item_1["name"] === "Test item – ".$test_key &&
+					$item_1["status"] == 1 &&
+					$item_2 &&
+					$item_2["name"] === "hacked" &&
+
+					$csrf_1 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>POST data-manipulation as valid user – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>POST data-manipulation as valid user – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp([
+					"item_id" => $test_item_id,
+					"user_id" => $test_user_id
+				]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		?>
+	</div>
+
+	<div class="tests">
+		<h3>Updating "Test item" name to: hacked as valid user, CSRF failure</h3>
 		<?
 
-			$params["header"] = array("Cookie: ".$cookie);
-			$params["post_fields"] = "name=hacked";
-			curlInit($params);
-			$result = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, false);
+		if(1 && "Testing") {
+
+			(function() {
+
+				// ARRANGE 
+
+				$IC = new Items();
+
+				$test_model = $IC->typeObject("tests");
+
+				$test_key = randomKey(4);
+
+				$test_username = "security-test-".$test_key."@parentnode.dk";
+				$test_password = "s3curltA";
+
+
+				$item_name = "Test item – ".$test_key;
+				$test_item_id = $test_model->createTestItem([
+					"name" => $item_name,
+					"status" => 1
+				]);
+
+				$user_name = "User item – ".$test_key;
+				$test_user_id = $test_model->createTestUser([
+					"name" => $user_name,
+					"email" => $test_username,
+					"verified_email" => 1,
+					"password" => $test_password,
+					"status" => 1,
+					"user_group_id" => 3
+				]);
+
+				$item_1 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				$result_login = curlTest(SITE_URL."/?login=true", [
+					"method" => "POST", 
+					"post_fields" => "username=$test_username&password=$test_password&ajaxlogin=true"
+				], true);
+				$csrf_1 = $test_model->getCSRF($result_login);
+				$cookie_1 = $test_model->getCookie($result_login);
+
+
+				$result_2 = curlTest(SITE_URL."/janitor/tests/update/".$test_item_id, [
+					"method" => "POST", 
+					"header" => array("Cookie: ".$cookie_1), 
+					"post_fields" => "name=hacked"
+				], false);
+				$cookie_2 = $test_model->getCookie($result_2);
+
+				$item_2 = $IC->getItem(["id" => $test_item_id, "extend" => true]);
+
+
+				// ASSERT 
+
+				if(
+					$item_1 &&
+					$item_1["name"] === $item_name &&
+					$item_1["status"] == 1 &&
+					$item_2 === $item_1 &&
+
+					$csrf_1 &&
+
+					$cookie_1 &&
+					$cookie_2 &&
+					$cookie_1 === $cookie_2
+				): ?>
+				<div class="testpassed"><p>POST data-manipulation as valid user, CSRF failure – correct</p></div>
+				<? else: ?>
+				<div class="testfailed"><p>POST data-manipulation as valid user, CSRF failure – error</p></div>
+				<? endif; 
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp([
+					"item_id" => $test_item_id,
+					"user_id" => $test_user_id
+				]);
+				message()->resetMessages();
+
+			})();
 
 		}
 

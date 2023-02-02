@@ -49,10 +49,12 @@ class JanitorTwilio {
 			return $this->client->messages->create($to, $sms_options);
 		}
 		catch(HttpClientException $e) {
+			// debug(["HttpClientException", $e]);
 			return false;
 		}
 		// Catch general exception
 		catch(Exception $e) {
+			// debug(["Exception", $e]);
 			return false;
 		}
 
