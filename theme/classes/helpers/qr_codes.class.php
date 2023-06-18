@@ -2,7 +2,9 @@
 
 class QrCodesGateway {
 
+
 	private $adapter;
+
 
 	function __construct() {
 

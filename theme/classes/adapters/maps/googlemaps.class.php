@@ -9,6 +9,7 @@
 
 class JanitorGoogleMaps {
 
+
 	// Mailer settings
 	private $api_key;
 

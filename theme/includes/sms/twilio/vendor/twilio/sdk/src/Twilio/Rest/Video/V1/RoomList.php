@@ -55,6 +55,9 @@ class RoomList extends ListResource {
             'RecordingRules' => Serialize::jsonObject($options['recordingRules']),
             'AudioOnly' => Serialize::booleanToString($options['audioOnly']),
             'MaxParticipantDuration' => $options['maxParticipantDuration'],
+            'EmptyRoomTimeout' => $options['emptyRoomTimeout'],
+            'UnusedRoomTimeout' => $options['unusedRoomTimeout'],
+            'LargeRoom' => Serialize::booleanToString($options['largeRoom']),
         ]);
 
         $payload = $this->version->create('POST', $this->uri, [], $data);

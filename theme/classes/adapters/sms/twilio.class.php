@@ -6,6 +6,13 @@ use Twilio\Rest\Client;
 
 class JanitorTwilio {
 
+
+	private $sid;
+	private $token;
+	private $from;
+	private $client;
+
+
 	function __construct($_settings) {
 
 
