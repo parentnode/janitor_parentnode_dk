@@ -1,6 +1,6 @@
 /*
 Manipulator v0.9.3 Copyright 2020 https://manipulator.parentnode.dk
-asset-builder @ 2023-06-18 13:13:37
+asset-builder @ 2023-06-18 13:26:54
 */
 
 /*seg_desktop_include.js*/
@@ -5300,6 +5300,15 @@ u.removeCheckmark = function(node) {
 }
 
 
+/*u-settings.js*/
+u.site_name = "Janitor";
+u.terms_version = "terms_v1";
+u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
+u.ga_account = 'G-5QR8C4TZGH';
+u.ga_domain = 'janitor.parentnode.dk';
+u.gapi_key = "AIzaSyD9uf31u6ccoOTcT3MYrSYVtaED3Pb4HZg";
+
+
 /*u-googleanalytics.js*/
 u.includeGoogleAnalytics = function() {
 	if(typeof(gtag) !== "function") {
@@ -5382,15 +5391,6 @@ u.includeGoogleAnalytics = function() {
 if(u.ga_account && !u.cookies_disallowed) {
 	u.includeGoogleAnalytics();
 }
-
-
-/*u-settings.js*/
-u.site_name = "Janitor";
-u.terms_version = "terms_v1";
-u.github_fork = {"url":"https://github.com/parentnode/janitor", "text":"Fork me on GitHub"};
-u.ga_account = 'G-5QR8C4TZGH';
-u.ga_domain = 'janitor.parentnode.dk';
-u.gapi_key = "AIzaSyD9uf31u6ccoOTcT3MYrSYVtaED3Pb4HZg";
 
 
 /*m-signup.js*/
