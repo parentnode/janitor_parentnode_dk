@@ -70,7 +70,7 @@ global $IC;
 
 		if(1 && "attribute (mixed values)") {
 
-			$attribute_string = $HTML->attribute("class", "test", false, "someclass", "", "id:123");
+			$attribute_string = $HTML->attribute("class", "test", false, "someclass", "", NULL, "id:123");
 
 			if($attribute_string === ' class="test someclass id:123"'): ?>
 			<div class="testpassed">HTML::attribute (mixed values) - correct</div>

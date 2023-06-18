@@ -5,7 +5,7 @@ $item = array("status" => 1, "id" => 1);
 	
 ?>
 <script type="text/javascript">
-u.o["testValidation"] = new function() {
+u.m["testValidation"] = new function() {
 	this.init = function(form) {
 		u.bug("init");
 		u.f.init(form, {"validation":false});

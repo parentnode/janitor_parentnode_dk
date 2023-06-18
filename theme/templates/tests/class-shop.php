@@ -3234,6 +3234,7 @@
 				$result = $SC->selectUserPaymentMethodForCart(["selectUserPaymentMethodForCart"]);
 				unset($_POST);
 
+				// debug([$stripe_payment_method_id, $gateway_payment_method_id, $user_payment_method_id, $result]);
 
 				// ASSERT 
 

@@ -182,18 +182,19 @@
 			$_POST["name"] = "Test name";
 			$_POST["email"] = "message+email@domain.tld";
 			$_POST["password"] = "æøå<span>#€%&!/()";
-			$_POST["html"] = "<p>æøå<script>#€%&!/()</script></p>";
+			$_POST["html"] = '<p class="test" weirdo="not">æøå<script>#€%&!/()</script></p>';
 			$_FILES["mediae"] = ["tmp_name" => "Test file name", "error" => [0]];
 
 			$model->getPostedEntities();
 			unset($_POST);
+
 
 			if(
 				$model->getProperty("user_id", "value") == 1 &&
 				$model->getProperty("name", "value") == "Test name" &&
 				$model->getProperty("email", "value") == "message+email@domain.tld" &&
 				$model->getProperty("password", "value") == "æøå<span>#€%&!/()" &&
-				$model->getProperty("html", "value") == "<p>æøå#€%&!/()</p>" &&
+				$model->getProperty("html", "value") == '<p class=\"test\">æøå#€%&!/()</p>' &&
 				$model->getProperty("mediae", "value") == "Test file name" &&
 
 				!$model->getProperty("item_id", "value") &&
@@ -1922,7 +1923,6 @@
 
 		}
 
-
 		if(1 && "email, empty, required") {
 
 			message()->resetMessages();
@@ -1953,7 +1953,6 @@
 
 		}
 
-
 		if(1 && "email, email, required") {
 
 			message()->resetMessages();
@@ -1982,7 +1981,6 @@
 
 		}
 
-		
 		if(1 && "email, not matching custom pattern, not required") {
 
 			message()->resetMessages();
@@ -2014,7 +2012,6 @@
 
 		}
 
-
 		if(1 && "email, matching custom pattern, required") {
 
 			message()->resetMessages();
@@ -2044,7 +2041,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "email, compare_to fail, required") {
 
@@ -2078,7 +2074,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "email, compare_to, required") {
 
@@ -2147,7 +2142,6 @@
 
 		}
 
-
 		if(1 && "tel, empty, required") {
 
 			message()->resetMessages();
@@ -2178,7 +2172,6 @@
 
 		}
 
-
 		if(1 && "tel, tel, required") {
 
 			message()->resetMessages();
@@ -2207,7 +2200,6 @@
 
 		}
 
-		
 		if(1 && "tel, not matching custom pattern, not required") {
 
 			message()->resetMessages();
@@ -2239,7 +2231,6 @@
 
 		}
 
-
 		if(1 && "tel, matching custom pattern, required") {
 
 			message()->resetMessages();
@@ -2269,7 +2260,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "tel, compare_to fail, required") {
 
@@ -2303,7 +2293,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "tel, compare_to, required") {
 
@@ -2370,7 +2359,6 @@
 
 		}
 
-
 		if(1 && "password, empty, required") {
 
 			message()->resetMessages();
@@ -2401,7 +2389,6 @@
 
 		}
 
-
 		if(1 && "password, password, required") {
 
 			message()->resetMessages();
@@ -2430,7 +2417,6 @@
 
 		}
 
-		
 		if(1 && "password, not matching custom pattern, not required") {
 
 			message()->resetMessages();
@@ -2462,7 +2448,6 @@
 
 		}
 
-
 		if(1 && "password, matching custom pattern, required") {
 
 			message()->resetMessages();
@@ -2492,7 +2477,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "password, compare_to fail, required") {
 
@@ -2529,7 +2513,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "password, compare_to, required") {
 
@@ -2598,7 +2581,6 @@
 
 		}
 
-
 		if(1 && "date, empty, required") {
 
 			message()->resetMessages();
@@ -2629,7 +2611,6 @@
 
 		}
 
-
 		if(1 && "date, date, required") {
 
 			message()->resetMessages();
@@ -2657,7 +2638,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "date, date before min, required") {
 
@@ -2690,7 +2670,6 @@
 
 		}
 
-
 		if(1 && "date, date after min, required") {
 
 			message()->resetMessages();
@@ -2719,7 +2698,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "date, date after max, required") {
 
@@ -2752,7 +2730,6 @@
 
 		}
 
-
 		if(1 && "date, date before max, required") {
 
 			message()->resetMessages();
@@ -2781,7 +2758,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "date, date between min and max, required") {
 
@@ -2846,7 +2822,6 @@
 
 		}
 
-
 		if(1 && "datetime, empty, required") {
 
 			message()->resetMessages();
@@ -2877,7 +2852,6 @@
 
 		}
 
-
 		if(1 && "datetime, datetime, required") {
 
 			message()->resetMessages();
@@ -2905,7 +2879,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "datetime, datetime before min, required") {
 
@@ -2938,7 +2911,6 @@
 
 		}
 
-
 		if(1 && "datetime, datetime after min, required") {
 
 			message()->resetMessages();
@@ -2967,7 +2939,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "datetime, datetime after max, required") {
 
@@ -3000,7 +2971,6 @@
 
 		}
 
-
 		if(1 && "datetime, datetime before max, required") {
 
 			message()->resetMessages();
@@ -3029,7 +2999,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "datetime, datetime between min and max, required") {
 
@@ -3092,7 +3061,6 @@
 
 		}
 
-
 		if(1 && "checkbox, empty, required") {
 
 			message()->resetMessages();
@@ -3122,7 +3090,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "checkbox, checkbox, required") {
 
@@ -3183,7 +3150,6 @@
 
 		}
 
-
 		if(1 && "radiobuttons, empty, required") {
 
 			message()->resetMessages();
@@ -3221,7 +3187,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "radiobuttons, radiobuttons, required") {
 
@@ -3284,7 +3249,6 @@
 
 		}
 
-
 		if(1 && "tag, empty, required") {
 
 			message()->resetMessages();
@@ -3314,7 +3278,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "tag, tag, required") {
 
@@ -3384,7 +3347,6 @@
 
 		}
 
-
 		if(1 && "user_id, user_id, required") {
 
 			message()->resetMessages();
@@ -3445,7 +3407,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "item_id, item_id, required") {
 
@@ -3510,7 +3471,6 @@
 
 		}
 
-
 		if(1 && "unique, existing, required") {
 
 			message()->resetMessages();
@@ -3544,7 +3504,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "unique, existing, item_id, required") {
 
@@ -3604,7 +3563,6 @@
 		<h3>Model::validateAll</h3>
 		<?
 
-
 		if(1 && "validateAll, one failing") {
 
 			message()->resetMessages();
@@ -3640,7 +3598,6 @@
 
 		}	
 
-
 		if(1 && "validateAll, positive cannot be tested meaningfully (yet)") {
 
 			// – some defaults entities are required (still)
@@ -3649,14 +3606,12 @@
 
 		}
 
-
 		?>
 	</div>
 
 	<div class="tests validateList">
 		<h3>Model::validateList</h3>
 		<?
-
 
 		if(1 && "validateList, one failing") {
 
@@ -3692,7 +3647,6 @@
 			<? endif;
 
 		}
-
 
 		if(1 && "validateList, all valid") {
 
@@ -3730,9 +3684,7 @@
 
 		}
 
-
 		?>
 	</div>
-
 
 </div>

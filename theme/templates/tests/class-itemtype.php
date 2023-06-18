@@ -19,7 +19,6 @@ function manualCleanUp($item_id) {
 
 }
 
-
 ?>
 
 <div class="scene i:scene tests">
@@ -114,6 +113,7 @@ function manualCleanUp($item_id) {
 				message()->resetMessages();
 				unset($_POST);
 				unset($_GET);
+
 				// Get current set of test items for reference
 				$starting_tests_items = $IC->getItems(["itemtype" => "tests"]);
 
@@ -127,6 +127,7 @@ function manualCleanUp($item_id) {
 				$reference_tests_items = $IC->getItems(["itemtype" => "tests"]);
 				$reference_item = $IC->getItem(["id" => $test_save_simple["id"], "extend" => ["all" => true]]);
 
+
 				// Test
 				if($test_save_simple &&
 					$reference_item["name"] === $test_save_simple["name"] &&
@@ -135,9 +136,6 @@ function manualCleanUp($item_id) {
 					$reference_item["status"] == 0 &&
 					strpos($reference_item["sindex"], superNormalize($reference_item["name"])) === 0 &&
 					$reference_item["user_id"] == session()->value("user_id") &&
-
-					strtotime($reference_item["created_at"]) <= time() &&
-					strtotime($reference_item["created_at"]) > time()-1000 &&
 
 					!$reference_item["v_text"] &&
 					!$reference_item["v_password"] &&
@@ -215,9 +213,6 @@ function manualCleanUp($item_id) {
 					$reference_item["status"] == 0 &&
 					strpos($reference_item["sindex"], superNormalize($reference_item["name"])) === 0 &&
 					$reference_item["user_id"] == session()->value("user_id") &&
-
-					strtotime($reference_item["created_at"]) <= time() &&
-					strtotime($reference_item["created_at"]) > time()-1000 &&
 
 					$reference_item["v_text"] === $test_save_plain["v_text"] &&
 					$reference_item["v_text"] === $_POST["v_text"] &&
@@ -297,9 +292,6 @@ function manualCleanUp($item_id) {
 					strpos($reference_item["sindex"], superNormalize($reference_item["name"])) === 0 &&
 					$reference_item["user_id"] == session()->value("user_id") &&
 
-					strtotime($reference_item["created_at"]) <= time() &&
-					strtotime($reference_item["created_at"]) > time()-1000 &&
-
 					!$reference_item["mediae"] &&
 					!$reference_item["comments"] &&
 					!$reference_item["ratings"] &&
@@ -345,7 +337,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$test_save_file = $tests_model->save(array("save"));
@@ -363,11 +355,11 @@ function manualCleanUp($item_id) {
 
 					strpos($reference_item["sindex"], superNormalize($reference_item["name"])) === 0 &&
 					$reference_item["user_id"] == session()->value("user_id") &&
+					//
+					// strtotime($reference_item["created_at"]) <= time() &&
+					// strtotime($reference_item["created_at"]) > time()-1000 &&
 
-					strtotime($reference_item["created_at"]) <= time() &&
-					strtotime($reference_item["created_at"]) > time()-1000 &&
-
-					$reference_item["mediae"] && 
+					$reference_item["mediae"] &&
 					$reference_item["mediae"]["v_file"] &&
 					$reference_item["mediae"]["v_file"]["name"] === $_FILES["v_file"]["name"][0] &&
 					$reference_item["mediae"]["v_file"]["format"] === "png" &&
@@ -423,7 +415,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg"],
 					"name" => ["Test file png", "Test file jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png", LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => ["", ""]
+					"error" => [0, 0]
 				];
 
 				$test_save_files = $tests_model->save(array("save"));
@@ -432,7 +424,9 @@ function manualCleanUp($item_id) {
 				$reference_tests_items = $IC->getItems(["itemtype" => "tests"]);
 				$reference_item = $IC->getItem(["id" => $test_save_files["id"], "extend" => ["all" => true]]);
 
-				list($variant1, $variant2) = array_keys($reference_item["mediae"]);
+				if($reference_item["mediae"]) {
+					list($variant1, $variant2) = array_keys($reference_item["mediae"]);
+				}
 
 				// debug([message()->getMessages(), "test", $test_save_files, $reference_item, $variant1, $variant2]);
 
@@ -443,9 +437,6 @@ function manualCleanUp($item_id) {
 
 					strpos($reference_item["sindex"], superNormalize($reference_item["name"])) === 0 &&
 					$reference_item["user_id"] == session()->value("user_id") &&
-
-					strtotime($reference_item["created_at"]) <= time() &&
-					strtotime($reference_item["created_at"]) > time()-1000 &&
 
 					$reference_item["mediae"] &&
 					count($reference_item["mediae"]) === 2 &&
@@ -649,7 +640,7 @@ function manualCleanUp($item_id) {
 						"type" => ["image/png"],
 						"name" => ["Test file png"],
 						"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-						"error" => [""]
+						"error" => [0]
 					];
 
 					$test_update_file = $tests_model->update(array("update", $item_id));
@@ -702,7 +693,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test file png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$test_save_simple = $tests_model->save(array("save"));
@@ -726,7 +717,7 @@ function manualCleanUp($item_id) {
 						"type" => ["image/jpeg"],
 						"name" => ["Test file jpg"],
 						"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-						"error" => [""]
+						"error" => [0]
 					];
 
 					$test_update_file = $tests_model->update(array("update", $item_id));
@@ -800,7 +791,7 @@ function manualCleanUp($item_id) {
 						"type" => ["image/png", "image/jpeg", "image/jpeg"],
 						"name" => ["Test file png 1", "Test file jpg 1", "Test file jpg 2"],
 						"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running-1.png", LOCAL_PATH."/templates/tests/file_upload/test-running-2.jpg", LOCAL_PATH."/templates/tests/file_upload/test-running-3.jpg"],
-						"error" => ["", "", ""]
+						"error" => [0, 0, 0]
 					];
 	
 					$test_update_files = $tests_model->update(array("update", $item_id));
@@ -808,8 +799,10 @@ function manualCleanUp($item_id) {
 					// Get reference items
 					$reference_item_updated = $IC->getItem(["id" => $item_id, "extend" => ["all" => true]]);
 
-					list($variant3, $variant2, $variant1) = array_keys($reference_item_updated["mediae"]);
-					// debug([$variant1, $variant2, $variant3]);
+					if($reference_item_updated["mediae"]) {
+						list($variant3, $variant2, $variant1) = array_keys($reference_item_updated["mediae"]);
+						// debug([$variant1, $variant2, $variant3]);
+					}
 
 					// Test
 					if($test_update_files &&
@@ -869,7 +862,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg", "image/jpeg"],
 					"name" => ["Test file png 1", "Test file jpg 1", "Test file jpg 2"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running-1.png", LOCAL_PATH."/templates/tests/file_upload/test-running-2.jpg", LOCAL_PATH."/templates/tests/file_upload/test-running-3.jpg"],
-					"error" => ["", "", ""]
+					"error" => [0, 0, 0]
 				];
 
 				$test_save_simple = $tests_model->save(array("save"));
@@ -896,7 +889,7 @@ function manualCleanUp($item_id) {
 						"type" => ["image/png", "image/jpeg", "image/jpeg"],
 						"name" => ["Test 2 file png 1", "Test 2 file jpg 1", "Test 2 file jpg 2"],
 						"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running-1.png", LOCAL_PATH."/templates/tests/file_upload/test-running-2.jpg", LOCAL_PATH."/templates/tests/file_upload/test-running-3.jpg"],
-						"error" => ["", "", ""]
+						"error" => [0, 0, 0]
 					];
 
 	
@@ -905,8 +898,10 @@ function manualCleanUp($item_id) {
 					// Get reference items
 					$reference_item_updated = $IC->getItem(["id" => $item_id, "extend" => ["all" => true]]);
 
-					list($variant3, $variant2, $variant1) = array_keys($reference_item_updated["mediae"]);
-					// debug([$reference_item, $reference_item_updated, message()->getMessages()]);
+					if($reference_item_updated["mediae"]) {
+						list($variant3, $variant2, $variant1) = array_keys($reference_item_updated["mediae"]);
+						// debug([$reference_item, $reference_item_updated, message()->getMessages()]);
+					}
 
 					// Test
 					if($test_update_files &&
@@ -1016,7 +1011,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg", "image/jpeg"],
 					"name" => ["Test file png 1", "Test file jpg 1", "Test file jpg 2"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running-1.png", LOCAL_PATH."/templates/tests/file_upload/test-running-2.jpg", LOCAL_PATH."/templates/tests/file_upload/test-running-3.jpg"],
-					"error" => ["", "", ""]
+					"error" => [0, 0, 0]
 				];
 
 				$test_delete_files = $tests_model->save(array("save"));
@@ -1099,7 +1094,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1165,7 +1160,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 
@@ -1177,7 +1172,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/jpg"],
 					"name" => ["Test-file.jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1237,7 +1232,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/jpg"],
 					"name" => ["Test-file.jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$test_upload = $tests_model->save(array("save"));
@@ -1251,7 +1246,7 @@ function manualCleanUp($item_id) {
 					"type" => ["text/plain"],
 					"name" => ["Test-file.txt"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.txt"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1308,7 +1303,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg"],
 					"name" => ["Test file png", "Test file jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png", LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => ["", ""]
+					"error" => [0, 0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file", "auto_add_variant" => true]);
@@ -1362,7 +1357,7 @@ function manualCleanUp($item_id) {
 					"type" => ["video/mp4"],
 					"name" => ["Test-file.mp4"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.mp4"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1426,7 +1421,7 @@ function manualCleanUp($item_id) {
 					"type" => ["video/quicktime"],
 					"name" => ["Test-file.mov"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.mov"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1486,7 +1481,7 @@ function manualCleanUp($item_id) {
 					"type" => ["audio/mpeg"],
 					"name" => ["Test-file.mp3"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.mp3"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1545,7 +1540,7 @@ function manualCleanUp($item_id) {
 					"type" => ["application/pdf"],
 					"name" => ["Test-file.pdf"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.pdf"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1604,7 +1599,7 @@ function manualCleanUp($item_id) {
 					"type" => ["application/zip"],
 					"name" => ["Test-file.zip"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.zip"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1663,7 +1658,7 @@ function manualCleanUp($item_id) {
 					"type" => ["text/plain"],
 					"name" => ["Test-file.txt"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.txt"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1724,7 +1719,7 @@ function manualCleanUp($item_id) {
 					"type" => ["audio/ogg"],
 					"name" => ["Test-file.ogg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.ogg"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1785,7 +1780,7 @@ function manualCleanUp($item_id) {
 					"type" => ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
 					"name" => ["Test-file.docx"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.docx"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1846,7 +1841,7 @@ function manualCleanUp($item_id) {
 					"type" => ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
 					"name" => ["Test-file.odt"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.odt"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1907,7 +1902,7 @@ function manualCleanUp($item_id) {
 					"type" => ["application/octet-stream"],
 					"name" => ["Test-file.graffle"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.graffle"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -1970,7 +1965,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg"],
 					"name" => ["Test file png", "Test file jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png", LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => ["", ""]
+					"error" => [0, 0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_files", "auto_add_variant" => true]);
@@ -2046,7 +2041,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2098,7 +2093,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2164,7 +2159,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2216,7 +2211,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2278,7 +2273,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2330,7 +2325,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2382,7 +2377,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test-file.png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->upload($test_upload["id"], ["input_name" => "v_file"]);
@@ -2453,7 +2448,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "image/jpeg"],
 					"name" => ["Test file png", "Test file jpg"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png", LOCAL_PATH."/templates/tests/file_upload/test-running.jpg"],
-					"error" => ["", ""]
+					"error" => [0, 0]
 				];
 
 				$uploads = $tests_model->addMedia(["addMedia", $test_upload["id"], "v_files"]);
@@ -2461,7 +2456,9 @@ function manualCleanUp($item_id) {
 				// Get reference items
 				$reference_item = $IC->getItem(["id" => $test_upload["id"], "extend" => ["all" => true]]);
 
-				list($variant1, $variant2) = array_keys($uploads["mediae"]);
+				if($uploads["mediae"]) {
+					list($variant1, $variant2) = array_keys($uploads["mediae"]);
+				}
 
 				// Test
 				if($uploads && isset($uploads["mediae"]) &&
@@ -2548,7 +2545,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png", "text/plain"],
 					"name" => ["Test file png", "Test file txt"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png", LOCAL_PATH."/templates/tests/file_upload/test-running.txt"],
-					"error" => ["", ""]
+					"error" => [0, 0]
 				];
 
 				$uploads["mediae"] = $tests_model->addMedia(["addMedia", $test_upload["id"], "v_files"]);
@@ -2611,7 +2608,7 @@ function manualCleanUp($item_id) {
 					"type" => ["image/png"],
 					"name" => ["Test file png"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.png"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->addSingleMedia(["addSingleMedia", $test_upload["id"], "v_file"]);
@@ -2682,7 +2679,7 @@ function manualCleanUp($item_id) {
 					"type" => ["text/plain"],
 					"name" => ["Test file txt"],
 					"tmp_name" => [LOCAL_PATH."/templates/tests/file_upload/test-running.txt"],
-					"error" => [""]
+					"error" => [0]
 				];
 
 				$uploads = $tests_model->addSingleMedia(["addMedia", $test_upload["id"], "v_file"]);

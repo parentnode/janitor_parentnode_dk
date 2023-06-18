@@ -84,6 +84,9 @@
 		<?= $HTML->link("CSS/JS Scene (General)", "/janitor/tests/css-scene", array("wrapper" => "li.css")) ?>
 		<?= $HTML->link("CSS/JS Form", "/janitor/tests/css-form", array("wrapper" => "li.css_form")) ?>
 		<?= $HTML->link("CSS/JS Form, HTML Field", "/janitor/tests/css-form-field-html", array("wrapper" => "li.html")) ?>
+		<?= $HTML->link("CSS/JS Form, Date Field", "/janitor/tests/css-form-field-date", array("wrapper" => "li.date")) ?>
+		<?= $HTML->link("CSS/JS Form, Range Field", "/janitor/tests/css-form-field-range", array("wrapper" => "li.range")) ?>
+		<?= $HTML->link("CSS/JS Form, Dropdown Field", "/janitor/tests/css-form-field-dropdown", array("wrapper" => "li.dropdown")) ?>
 		<?= $HTML->link("CSS/JS DefaultList", "/janitor/tests/css-default-list", array("wrapper" => "li.defaultlist")) ?>
 		<?= $HTML->link("CSS/JS DefaultEdit", "/janitor/tests/css-default-edit", array("wrapper" => "li.defaultedit")) ?>
 		<?= $HTML->link("CSS/JS DefaultNew", "/janitor/tests/css-default-new", array("wrapper" => "li.defaultnew")) ?>

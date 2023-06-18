@@ -24,13 +24,13 @@ $v_file_value = $IC->filterMediae($item, "v_file");
 $v_files_value = $IC->filterMediae($item, "v_files");
 
 $this->headerIncludes(array(
-	"/js/manipulator/src/u-form.js",
-	"/js/manipulator/src/u-form-builder.js",
-	"/js/manipulator/src/u-form-labelstyle-inject.js",
-	"/js/manipulator/src/u-form-field-location.js",
-
-	"/js/manipulator/src/u-form-field-html.js",
-	"/js/manipulator/src/u-sortable.js",
+	// "/js/manipulator/src/u-form.js",
+	// "/js/manipulator/src/u-form-builder.js",
+	// "/js/manipulator/src/u-form-labelstyle-inject.js",
+	// "/js/manipulator/src/u-form-field-location.js",
+	//
+	// "/js/manipulator/src/u-form-field-html.js",
+	// "/js/manipulator/src/u-sortable.js",
 ));
 
 ?>
@@ -60,7 +60,9 @@ u.m["testForm"] = new function() {
 	<h1>Form CSS</h1>	
 	<h2>Testing backend UI</h2>
 
-	<?= $JML->editGlobalActions($item) ?>
+	<ul class="actions">
+		<?= $HTML->link("Back", "/janitor/tests", array("class" => "button", "wrapper" => "li.back")) ?>
+	</ul>
 
 	<div class="tests item">
 

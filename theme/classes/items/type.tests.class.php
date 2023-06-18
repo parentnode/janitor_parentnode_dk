@@ -6,6 +6,8 @@
 
 class TypeTests extends Itemtype {
 
+	public $db;
+
 	/**
 	* Init, set varnames, validation rules
 	*/
@@ -73,7 +75,7 @@ class TypeTests extends Itemtype {
 		$this->addToModel("v_select", array(
 			"type" => "select",
 			"label" => "Select",
-			"options" => array("" => "Select option", "1" => "First option"),
+			"options" => array("" => "Select option", "11" => "First option", "22" => "Second option"),
 			"required" => true,
 			"hint_message" => "Type select",
 			"error_message" => "Option must be selected"
@@ -575,6 +577,27 @@ class TypeTests extends Itemtype {
 				$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = ".$item["id"];
 				$query->sql($sql);
 
+
+				// delete orders and cancelled orders
+				$orders = $SC->getOrders(["item_id" => $item["id"]]);
+				if($orders) {
+	
+					foreach($orders as $order) {
+	
+						// delete cancelled orders
+						$sql = "DELETE FROM ".SITE_DB.".shop_cancelled_orders WHERE order_id = ".$order["id"];
+						$query->sql($sql);
+
+						// delete orders
+						$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = ".$order["id"];
+						// debug([$sql]);
+						$query->sql($sql);
+
+					}
+	
+				}
+
+
 				$model_item->delete(["delete", $item["id"]]);
 
 				// flush price_types cache
@@ -603,7 +626,7 @@ class TypeTests extends Itemtype {
 			// delete carts
 			$sql = "DELETE FROM ".SITE_DB.".shop_carts WHERE user_id = $user_id";
 			$query->sql($sql);
-	
+
 			// delete orders and cancelled orders
 			$orders = $SC->getOrders(["user_id" => $user_id]);
 			if($orders) {
@@ -907,6 +930,7 @@ class TypeTests extends Itemtype {
 
 		$layout = "template-a.html";
 		$html = "<h2>{TEST_VALUE}</h2>";
+		$mail_preview = "Preview text";
 
 		$subscribed_message_id = false;
 
@@ -920,6 +944,7 @@ class TypeTests extends Itemtype {
 
 					case "layout"                   : $layout                   = $_value; break;
 					case "html"                     : $html                     = $_value; break;
+					case "mail_preview"             : $mail_preview             = $_value; break;
 
 					case "subscribed_message_id"    : $subscribed_message_id    = $_value; break;
 
@@ -939,6 +964,7 @@ class TypeTests extends Itemtype {
 		if($itemtype == "message") {
 			$_POST["layout"] = $layout;
 			$_POST["html"] = $html;
+			$_POST["description"] = $mail_preview;
 		}
 
 		if($itemtype == "membership") {
@@ -1003,7 +1029,7 @@ class TypeTests extends Itemtype {
 
 			}
 	
-			if(isset($subscription_method) && preg_match("/[1-3]/", $subscription_method)) {
+			if(isset($subscription_method) && preg_match("/[0-9]/", $subscription_method)) {
 				// add subscription method
 				$_POST["item_subscription_method"] = $subscription_method;
 				$model->updateSubscriptionMethod(array("updateSubscriptionMethod", $item_id));

@@ -22,11 +22,8 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 
 
 $this->headerIncludes(array(
-	"/js/manipulator/src/u-events-browser.js",
-	"/js/manipulator/src/u-dom.js",
-
-	"/js/manipulator/src/u-form-field-html.js",
-	"/js/manipulator/src/u-sortable.js",
+	"/js/manipulator/src/u-form.js",
+	"/js/manipulator/src/u-form-labelstyle-inject.js",
 ));
 
 ?>
@@ -36,7 +33,9 @@ u.m["testForm"] = new function() {
 	this.init = function(form) {
 
 		u.f.init(form);
-
+		form.updated = function(iN) {
+			u.bug("updated", iN.name, iN.type, iN.val(), iN.value);
+		}
 		form.submitted = function() {
 			this.response = function(response) {
 				page.notify(response);
@@ -53,7 +52,7 @@ u.m["testForm"] = new function() {
 </script>
 
 <div class="scene i:scene defaultEdit tests">
-	<h1>Form CSS – HTML Field</h1>	
+	<h1>Form CSS – Date Field</h1>	
 	<h2>Testing backend and frontend</h2>
 
 	<ul class="actions">
@@ -66,7 +65,8 @@ u.m["testForm"] = new function() {
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
 
-				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
+				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
+				<?= $model->input("v_datetime", array("value" => $item["v_datetime"])) ?>
 
 			</fieldset>
 
@@ -81,7 +81,8 @@ u.m["testForm"] = new function() {
 		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
 			<fieldset>
 
-				<?= $model->input("v_html", array("value" => $item["v_html"], "required" => false)) ?>
+				<?= $model->input("v_date", array("value" => $item["v_date"], "required" => false)) ?>
+				<?= $model->input("v_datetime", array("value" => $item["v_datetime"], "required" => false)) ?>
 
 			</fieldset>
 

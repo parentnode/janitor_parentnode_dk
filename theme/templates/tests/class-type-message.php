@@ -1,216 +1,5 @@
 <?
 
-// $fs = new FileSystem();
-// $query = new Query();
-
-function _createTestItem($_options = false) {
-
-	$IC = new Items();
-
-	$itemtype = "tests";
-	$name = "Test item";
-
-	if($_options !== false) {
-		foreach($_options as $_option => $_value) {
-			switch($_option) {
-				case "itemtype"            : $itemtype              = $_value; break;
-				case "name"           : $name             = $_value; break;
-			}
-		}
-	}
-	
-	// create test item
-	$model = $IC->TypeObject($itemtype);
-	$_POST["name"] = $name;
-
-	if($itemtype == "message") {
-
-		$_POST["html"] = '<h2>Nickname: {NICKNAME}</h2><h2>Email: {EMAIL}</h2><h2>Username: {USERNAME}</h2><h2>Firstname: {FIRSTNAME}</h2><h2>Lastname: {LASTNAME}</h2><h2>Language: {LANGUAGE}</h2><h2>Verification code: {VERIFICATION_CODE}</h2><h2>Member ID: {MEMBER_ID}</h2><h2>Order no.: {ORDER_NO}</h2><h2>Membership price: {MEMBERSHIP_PRICE}</h2><h2>Membership: {MEMBERSHIP}</h2>';	
-		$_POST["layout"] = 'template-a.html';
-
-	}
-
-	$item = $model->save(array("save"));
-	$item_id = $item["id"];
-	unset($_POST);
-
-
-	// // add price to membership item
-	// $_POST["item_price"] = 100;
-	// $_POST["item_price_currency"] = "DKK";
-	// $_POST["item_price_vatrate"] = 1;
-	// $_POST["item_price_type"] = 1;
-	// $membership_item_price = $model_membership->addPrice(array("addPrice", $membership_item_id));
-	// unset($_POST);
-
-	// // update test item subscription method
-	// $_POST["item_subscription_method"] = 2;
-	// $model_membership->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
-	// unset($_POST);
-
-	if($item_id) {
-
-		return $item_id; 
-	}
-
-	return false;
-}
-
-function _deleteTestItem($item_id) {
-	$IC = new Items();
-	$item = $IC->getItem(["id" => $item_id]);
-	$itemtype = $item["itemtype"];
-	$model = $IC->TypeObject($itemtype);
-
-	
-	return $model->delete(["delete",$item_id]);	
-	
-}
-
-function _createTestUser($_options = false) {
-
-	$query = new Query();
-	include_once("classes/users/superuser.class.php");
-	$UC = new SuperUser();
-
-	$user_group_id = 2;
-	$nickname = "test user";
-	$firstname = "Tester";
-	$lastname = "Testerson";
-	$status = 1;
-	$created_at = "2019-01-01 00:00:00";
-	$email = "test.parentnode@gmail.com";
-	$membership = false;
-
-	if($_options !== false) {
-		foreach($_options as $_option => $_value) {
-			switch($_option) {
-				case "user_group_id"        : $user_group_id              = $_value; break;
-				case "nickname"             : $nickname                   = $_value; break;
-				case "firstname"            : $firstname                  = $_value; break;
-				case "lastname"             : $lastname                   = $_value; break;
-				case "status"               : $status                     = $_value; break;
-				case "created_at"           : $created_at                 = $_value; break;
-				case "email"                : $email                      = $_value; break;
-				case "membership"           : $membership                 = $_value; break;
-			}
-		}
-	}
-
-	$_POST["user_group_id"] = $user_group_id;
-	$_POST["nickname"] = $nickname;
-	$_POST["firstname"] = $firstname;
-	$_POST["lastname"] = $lastname;
-	$_POST["status"] = $status;
-	$_POST["created_at"] = $created_at;
-
-	// create test user
-	$user_id = $UC->save(["save"])["item_id"];
-	unset($_POST);
-
-	if($user_id) {
-
-		$_POST["email"] = $email;
-		$UC->updateEmail(["updateEmail", $user_id]);
-
-		return $user_id;
-	}
-
-	return false;
-}
-
-function addTestMembership($user_id) {
-	$IC = new Items();
-	$query = new Query();
-	include_once("classes/shop/supershop.class.php");
-	$SC = new Supershop;
-	include_once("classes/users/supermember.class.php");
-	$MC = new SuperMember;
-
-	// create test membership item
-	$model = $IC->TypeObject("membership");
-	$_POST["name"] = "Membership Test item 1";
-	$membership_item = $model->save(array("save"));
-	$membership_item_id = $membership_item["id"];
-	unset($_POST);
-
-	// add subscription method to membership item
-	$_POST["item_subscription_method"] = 1;
-	$model->updateSubscriptionMethod(array("updateSubscriptionMethod", $membership_item_id));
-	unset($_POST);
-	
-	// add price to membership item
-	$_POST["item_price"] = 100;
-	$_POST["item_price_currency"] = "DKK";
-	$_POST["item_price_vatrate"] = 1;
-	$_POST["item_price_type"] = 1;
-	$membership_item_price = $model->addPrice(array("addPrice", $membership_item_id));
-	unset($_POST);
-
-	$membership_cart = $SC->addToNewInternalCart($membership_item_id, ["user_id" => $user_id]);
-	$membership_cart_reference = $membership_cart["cart_reference"];
-	$membership_cart_id = $membership_cart["id"];
-	$membership_order = $SC->newOrderFromCart(["newOrderFromCart", $membership_cart_id, $membership_cart_reference]);
-	$membership = $MC->getMembers(["user_id" => $user_id]);
-
-	return $membership ? $membership : false;
-}
-
-function deleteTestMembership($membership) {
-	
-	$query = new Query();
-
-	if($membership) {
-
-		// delete memberships
-		$sql = "DELETE FROM ".SITE_DB.".user_members WHERE id = ".$membership["id"];
-		$query->sql($sql);
-	
-		// delete subscriptions
-		$sql = "DELETE FROM ".SITE_DB.".user_item_subscriptions WHERE item_id = ".$membership["item_id"];
-		$query->sql($sql);
-	
-		// delete membership items
-		$sql = "DELETE FROM ".SITE_DB.".items WHERE id = ".$membership["item_id"];
-		$query->sql($sql);
-		
-		// delete orders
-		$sql = "DELETE FROM ".SITE_DB.".shop_orders WHERE id = ".$membership["order_id"];
-		$query->sql($sql);
-	}
-
-}
-
-function _deleteTestUser($user_id) {
-	$query = new Query();
-
-	$sql = "DELETE FROM ".SITE_DB.".users WHERE id = $user_id";
-	if($query->sql($sql)) {
-		return true;
-	}
-
-	return false;
-}
-
-function _deleteTestMailingList($maillist_id) {
-	$query = new Query();
-
-	// delete maillist subscriptions
-	$sql = "DELETE FROM ".SITE_DB.".user_maillists WHERE maillist_id = $maillist_id";
-	if($query->sql($sql)) {
-		
-		// delete maillist
-		$sql = "DELETE FROM ".SITE_DB.".system_maillists WHERE id = $maillist_id";
-		if($query->sql($sql)) {
-
-			return true;
-		}
-
-	}
-
-	return false;
-};
-
 
 // Set custom test emails – DO NOT USE THE EMAIL OF YOUR JANITOR ACCOUNT, OR TEST CANNOT BE COMPLETED
 
@@ -672,7 +461,8 @@ $mail_2 = "martin@kaestel.dk";
 				$test_message_item_id = $test_model->createTestItem([
 					"itemtype" => "message", 
 					"name" => "Test message 6",
-					"html" => "<h2>Send to maillist with two subscribers</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in body should be replaced with different texts for each recipient.</p>",
+					"html" => "<h2>Send to maillist with two subscribers</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in body and preview should be replaced with different texts for each recipient.</p>",
+					"mail_preview" => "Hej {PREVIEW}",
 				]);
 				$test_user_id_1 = $test_model->createTestUser([
 					"email" => $mail_1
@@ -696,8 +486,8 @@ $mail_2 = "martin@kaestel.dk";
 					"item_id" => $test_message_item_id,
 					"maillist_id" => $maillist_id,
 					"values" => [
-						$mail_1 => ["TEST_VALUE" => "Hello, maillist subscriber 1! Check that this 'Hello' was also sent to recipient 2, with a different value."],
-						$mail_2 => ["TEST_VALUE" => "Hello, maillist subscriber 2! Check that this 'Hello' was also sent to recipient 1, with a different value."]
+						$mail_1 => ["TEST_VALUE" => "Hello, maillist subscriber 1! Check that this 'Hello' was also sent to recipient 2, with a different value.", "PREVIEW" => "test 1"],
+						$mail_2 => ["TEST_VALUE" => "Hello, maillist subscriber 2! Check that this 'Hello' was also sent to recipient 1, with a different value.", "PREVIEW" => "test 2"]
 					]
 				]);
 				// debug([$recipients, message()->getMessages()]);
@@ -1275,6 +1065,108 @@ $mail_2 = "martin@kaestel.dk";
 				$test_model->cleanUp(["item_id" => $test_message_item_id_1]);
 				$test_model->cleanUp(["item_id" => $test_message_item_id_2]);
 				$test_model->cleanUp(["maillist_id" => $maillist_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – pass item_id (itemtype == message with image and list content), recipient – return recipient list and send Test Message 13") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
+
+				global $mail_1;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 13: {TEST_VALUE}",
+					"html" => "<h2>Send to recipients array, using on value</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in header and body should be replaced with: Greetings</p><ul><li>item 1</li><li>item 2</li></ul><div class=\"media item_id:0 variant:missing name:missing-image format:png \"><p>test image</p></div>",
+				]);
+
+
+				// ACT
+
+				$recipients = $message_model->sendMessage([
+					"item_id" => $test_message_item_id,
+					"recipients" => "$mail_1",
+					"values" => [
+						"TEST_VALUE" => "Greeting with image and list"
+					]
+				]);
+
+
+				// ASSERT
+
+				if(
+					is_array($recipients) &&
+					$recipients[0] == $mail_1
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message), recipients, and value (same value for each recipient) – return recipient list and send Test Message 3 – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
+				message()->resetMessages();
+
+			})();
+
+		}
+
+		if(1 && "send message – pass item_id (itemtype == message with special chars), recipient and value with special chars – return recipient list and send Test Message 14") {
+
+			(function() {
+
+				// ARRANGE
+
+				$IC = new Items();
+				$message_model = $IC->typeObject("message");
+				$test_model = $IC->typeObject("tests");
+
+				global $mail_1;
+
+				$test_message_item_id = $test_model->createTestItem([
+					"itemtype" => "message", 
+					"name" => "Test message 14: {TEST_VALUE}",
+					"html" => "<h2>Send to recipients array, using one value with special chars like æøå and entities &aelig;&oslash;&aring;</h2><h3>Test value: {TEST_VALUE}</h3><p>Test value in header and body should be replaced with: Greetings</p><ul><li>item 1</li><li>item 2</li></ul>",
+				]);
+
+
+				// ACT
+
+				$recipients = $message_model->sendMessage([
+					"item_id" => $test_message_item_id,
+					"recipients" => "$mail_1",
+					"values" => [
+						"TEST_VALUE" => "Greeting with special chars & and æøå and &aring;"
+					]
+				]);
+
+
+				// ASSERT
+
+				if(
+					is_array($recipients) &&
+					$recipients[0] == $mail_1
+				): ?>
+				<div class="testpassed">TypeMessage::sendMessage – pass item_id (itemtype == message with special chars), recipient and value with special chars (same value for each recipient) – return recipient list and send Test Message 3 – correct – VERIFY MAIL</div>
+				<? else: ?>
+				<div class="testfailed">TypeMessage::sendMessage – pass item_id (itemtype == message with special chars), recipient and value with special chars (same value for each recipient) – return recipient list and send Test Message 3 – error</div>
+				<? endif;
+
+
+				// CLEAN UP
+
+				$test_model->cleanUp(["item_id" => $test_message_item_id]);
 				message()->resetMessages();
 
 			})();
