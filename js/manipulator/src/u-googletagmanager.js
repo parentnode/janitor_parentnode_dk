@@ -1,31 +1,27 @@
-u.includeGoogleAnalytics = function() {
+u.includeGoogleTagManager = function() {
 	if(typeof(gtag) !== "function") {
-		// u.bug("includeGoogleAnalytics");
 
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+		dataLayer.push({'gtm.start': new Date().getTime()});
+		dataLayer.push({'event': 'gtm.js'});
 
-		gtag('config', u.ga_account);
+		u.ae(document.head, "script", {src: "https://www.googletagmanager.com/gtm.js?id="+u.gtm_account, async: true})
 
-
-		var script = document.createElement("script");
-		script.src = "https://www.googletagmanager.com/gtag/js?id="+u.ga_account;
-		script.async = true;
-		document.head.appendChild(script);
-
+		// u.bug("includeGoogleTagManager");
 
 		u.stats = new function() {
 
-			// track regular page view
-			// GA4 does this automatically, based on popstate event change
+			// track regurlar page view
 			this.pageView = function(url) {
-				// u.bug("pageView", url);
+				window.dataLayer.push({
+					'event': 'pageview'
+				});
 			}
 
 
 			// track event
 			this.event = function(node, _options) {
+				// u.bug("options", node, _options);
 
 				// default values
 				var event = false;
@@ -62,28 +58,37 @@ u.includeGoogleAnalytics = function() {
 				else if(!eventAction && event) {
 					eventAction = event;
 				}
- 				else if(!eventAction) {
+				else if(!eventAction) {
 					eventAction = "Unknown";
 				}
 
 				// Set missing eventLabel (if possible)
-				if(!eventLabel && event && event.currentTarget && event.currentTarget.url) {
-					eventLabel = event.currentTarget.url;
-				}
-				else if(!eventLabel) {
+				// if(!eventLabel && event && event.currentTarget && event.currentTarget.url) {
+				// 	eventLabel = event.currentTarget.url;
+				// }
+				// else
+				if(!eventLabel) {
 					eventLabel = this.nodeSnippet(node);
 				}
 
+				if(!event) {
+					event = eventLabel + " " + eventAction;
+				}
 
-				gtag({
-					"event": eventAction, 
+
+				//ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject]);
+				window.dataLayer.push({
+					"event": event,
 					"eventCategory": eventCategory, 
 					"eventAction": eventAction,
 					"eventLabel": eventLabel,
 					"eventValue": eventValue,
+					"nonInteraction": nonInteraction,
+					"hitCallback": hitCallback
 				});
 
 			}
+
 
 
 			// Simple label generator
@@ -113,7 +118,7 @@ u.includeGoogleAnalytics = function() {
 
 }
 
-if(u.ga_account && !u.cookies_disallowed) {
-	// u.bug("includeGoogleAnalytics allowed");
-	u.includeGoogleAnalytics();
+if(u.gtm_account && !u.cookies_disallowed) {
+	// u.bug("includeGoogleTagManager allowed");
+	u.includeGoogleTagManager();
 }

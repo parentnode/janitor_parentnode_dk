@@ -160,8 +160,11 @@ Util.Modules["oneButtonForm"] = new function() {
 						u.rc(this._ob_submit_button, "disabled");
 
 						// show notification (if notifications are enabled)
-						if(fun(page.notify)) {
+						if(typeof(page) !== 'undefined' && obj(page) && fun(page.notify)) {
 							page.notify(response);
+						}
+						else if(typeof(app) !== 'undefined' && obj(app) && fun(app.notify)) {
+							app.notify(response);
 						}
 
 						// Restore button

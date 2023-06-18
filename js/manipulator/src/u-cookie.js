@@ -6,6 +6,7 @@ Util.saveCookie = function(name, value, _options) {
 
 	var expires = true;
 	var path = false;
+	var samesite = "lax";
 
 	// force oldschool cookie
 	var force = false;
@@ -18,6 +19,7 @@ Util.saveCookie = function(name, value, _options) {
 			switch(_argument) {
 				case "expires"	: expires	= _options[_argument]; break;
 				case "path"		: path		= _options[_argument]; break;
+				case "samesite"	: samesite	= _options[_argument]; break;
 
 				case "force"	: force		= _options[_argument]; break;
 			}
@@ -40,7 +42,8 @@ Util.saveCookie = function(name, value, _options) {
 	// use cookie
 	// create correct expire value
 	if(expires === false) {
-		expires = ";expires=Mon, 04-Apr-2020 05:00:00 GMT";
+		// default 1 year
+		expires = ";expires="+(new Date((new Date()).getTime() + (1000*60*60*24*365))).toGMTString();
 	}
 	else if(str(expires)) {
 		expires = ";expires="+expires;
@@ -57,7 +60,10 @@ Util.saveCookie = function(name, value, _options) {
 		path = "";
 	}
 
-	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + path + expires;
+	// Create samesite value
+	samesite = ";samesite="+samesite;
+
+	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + path + expires + samesite;
 }
 
 // Get cookie
@@ -138,7 +144,7 @@ Util.getNodeCookie = function(node, name, _options) {
 	var mem = JSON.parse(u.getCookie("man_mem"));
 	if(mem && mem[ref]) {
 		if(name) {
-			return mem[ref][name] ? mem[ref][name] : "";
+			return (typeof(mem[ref][name]) != "undefined") ? mem[ref][name] : false;
 		}
 		else {
 			return mem[ref];
