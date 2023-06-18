@@ -8,8 +8,8 @@ include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 $page->pageTitle("the Janitor @ ".SITE_URL);
 
-$page->page(array(
+$page->page([
 	"type" => "janitor",
 	"templates" => "janitor/front/index.php"
-));
+]);
 exit();
