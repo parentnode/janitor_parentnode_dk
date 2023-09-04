@@ -375,7 +375,7 @@ function manualCleanUp($item_id) {
 				): ?>
 				<div class="testpassed">Itemtype->save (with file) - correct</div>
 				<? else: ?>
-				<div class="testfailed">Itemtype->save (with file) - error</div>
+				<div class="testfailed">Itemtype->save (with file) - error (NOTE: THIS TEST MAY FAIL ON LIVE SERVER DUE TO FILE PERMISSIONS – CONSIDER MOVING TEST FILES TO WRITABLE FOLDER)</div>
 				<? endif;
 
 				// Clear Datasets

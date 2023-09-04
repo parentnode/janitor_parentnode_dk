@@ -27,6 +27,7 @@ $this->headerIncludes(array(
 
 	"/js/manipulator/src/u-form-field-html.js",
 	"/js/manipulator/src/u-sortable.js",
+	"/janitor/admin/css/lib/desktop/s-form.css",
 ));
 
 ?>
