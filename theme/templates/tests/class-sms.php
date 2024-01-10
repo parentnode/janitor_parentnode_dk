@@ -37,11 +37,11 @@ $test_mobile = "+4520742819";
 					$fetched_message = sms()->fetchMessage($message->sid);
 				}
 
-				// debug([$message->status, $fetched_message->status, $fetched_message->body, $sms_text, strpos($fetched_message->body, $sms_text)]);
+				// debug([$message->status, $fetched_message->status, $fetched_message->body, $sms_text, strpos($fetched_message->body, $sms_text), strpos($fetched_message->body, $sms_text) !== false]);
 
 				if(
-					$message && 
-					($message->status == "delivered" || $message->status == "queued") &&
+					$message &&
+					($message->status == "delivered" || $message->status == "queued" || $message->status == "accepted") &&
 					$fetched_message &&
 					$fetched_message->status == "delivered" &&
 					strpos($fetched_message->body, $sms_text) !== false
@@ -84,7 +84,7 @@ $test_mobile = "+4520742819";
 
 				if(
 					$message && 
-					($message->status == "delivered" || $message->status == "queued") &&
+					($message->status == "delivered" || $message->status == "queued" || $message->status == "accepted") &&
 					$fetched_message &&
 					$fetched_message->status == "delivered" &&
 					strpos($fetched_message->body, $sms_text) !== false
