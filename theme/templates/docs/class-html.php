@@ -798,6 +798,10 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 											Default is to <em>deleteHTMLFile</em> on current controller.
 											<br />(Only applicable for type <em>html</em>)
 										</dd>
+										<dt><span class="value">data-#XYZ#</span></dt>
+										<dd>
+											A custom data property to be added to the field-div.
+										</dd>
 									</dl>
 								</div>
 							</dd>
@@ -831,6 +835,11 @@ $HTML-&gt;toOptions($data_sets, &quot;id&quot;, &quot;name&quot;, [&quot;add&quo
 						<div class="example">
 							<p>To create an custom input field, special_token, for a string between 5 and 10 chars, with frontend validation only.</p>
 							<code>$HTML->input("special_token", ["type" => "string", "required" => true, "min" => 5, "max" => 10]);</code> 
+						</div>
+
+						<div class="example">
+							<p>To create an input field for "extra-data-needed", and adding a data-number property to the &lt;div class="field" data-number="666"&gt;.</p>
+							<code>$HTML->input("extra-data-needed", ["data-number" => 666]);</code> 
 						</div>
 					</div>
 
