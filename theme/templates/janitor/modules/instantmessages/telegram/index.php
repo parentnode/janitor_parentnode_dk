@@ -15,8 +15,11 @@ $module_type = isset($connect_values["type"]) ? $connect_values["type"] : "";
 
 	<h1>Telegram configuration</h1>
 	<h2>Instant messages</h2>
+	<ul class="actions">
+		<?= $HTML->link("Modules", "modules", array("class" => "button", "wrapper" => "li.modules")) ?>
+	</ul>
 
-	<? if($module_type !== "telegram"): ?>
+	<? if($module_type && $module_type !== "telegram"): ?>
 	<p class="warning">The system is currently configured for another Instant messaging module.</p>
 	<? endif; ?>
 
@@ -30,6 +33,7 @@ $module_type = isset($connect_values["type"]) ? $connect_values["type"] : "";
 
 		<ul class="actions">
 			<?= $module_class->submit("Save", array("wrapper" => "li.save", "class" => "primary")) ?>
+			<?= $module_class->link("Cancel", "modules", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
 		</ul>
 
 	<?= $module_class->formEnd() ?>

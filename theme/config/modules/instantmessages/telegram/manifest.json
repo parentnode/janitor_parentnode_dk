@@ -1,5 +1,5 @@
 {
-	"version":"1",
+	"version":"1.2",
 	"files": {
 		"classes/telegram.class.php": "classes/adapters/instantmessages/telegram.class.php",
 		"templates/index.php": "templates/janitor/modules/instantmessages/telegram/index.php",
