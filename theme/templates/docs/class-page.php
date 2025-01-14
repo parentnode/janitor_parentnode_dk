@@ -2063,7 +2063,7 @@
 								<li>getPost()</li>
 								<li>getVar()</li>
 								<li>stringOr()</li>
-								<li>mailer()</li>
+								<li>email()</li>
 								<li>message()</li>
 								<li>Page::addLog</li>
 								<li>Page::validatePath</li>
@@ -2252,7 +2252,7 @@
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>mailer()->send(array(
+							<code>email()->send(array(
 	"subject" => "Hello world",
 	"message" => "What do you want to say!",
 	"recipients" => info@parentnode.dk

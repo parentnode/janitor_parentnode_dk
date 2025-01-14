@@ -228,7 +228,7 @@ class JanitorGoogleMaps {
 		logger()->addLog($action." failed: message:".$error, "JanitorGoogleApi");
 
 		// Send mail to admin
-		mailer()->send([
+		notify()->send([
 			"subject" => SITE_URL." - $action - Google Api exception (".$error.")", 
 			"message" => "Exception thrown when $action: \n" . print_r($errors, true),
 			"template" => "system"

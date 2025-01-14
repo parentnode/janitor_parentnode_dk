@@ -300,22 +300,22 @@ $dom_class = DOM();
 
 
 <?
-$mailer_class = mailer();
+$mailer_class = email();
 ?>
 		<? if(is_a($mailer_class, "MailGateway")): ?>
-		<div class="testpassed">mailer() - correct</div>
+		<div class="testpassed">email() - correct</div>
 		<? else: ?>
-		<div class="testfailed">mailer() - error</div>
+		<div class="testfailed">email() - error</div>
 		<? endif; ?>
 
 
 <?
-$payment_class = payments();
+$payment_class = payment();
 ?>
 		<? if(is_a($payment_class, "PaymentGateway")): ?>
-		<div class="testpassed">payments() - correct</div>
+		<div class="testpassed">payment() - correct</div>
 		<? else: ?>
-		<div class="testfailed">payments() - error</div>
+		<div class="testfailed">payment() - error</div>
 		<? endif; ?>
 
 

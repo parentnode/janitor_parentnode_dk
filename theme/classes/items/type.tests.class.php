@@ -307,7 +307,7 @@ class TypeTests extends Itemtype {
 		global $page;
 		$IC = new Items();
 		
-		mailer()->send([
+		notify()->send([
 			"message" => "test unsubscribed"
 		]);
 	}

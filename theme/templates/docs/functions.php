@@ -679,7 +679,7 @@
 							<dd class="name">mailer</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">MailGateway</span> = 
-								mailer();
+								email();
 							</dd>
 						</dl>
 					</div>
@@ -706,7 +706,7 @@
 						<h4>Examples</h4>
 
 						<div class="example">
-							<code>mailer()->send($data);</code>
+							<code>email()->send($data);</code>
 							<p>Sends a mail based on <span class="var">$data</span>.
 						</div>
 					</div>

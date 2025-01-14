@@ -3220,7 +3220,7 @@
 				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
 				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
 
-				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method = payment()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
 				$gateway_payment_method_id = ($gateway_payment_method && isset($gateway_payment_method["card"]))? $gateway_payment_method["card"]["id"] : false;
 
 				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
@@ -3703,7 +3703,7 @@
 				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
 				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
 
-				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method = payment()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
 				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
 
 				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
@@ -4165,7 +4165,7 @@
 				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
 				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
 
-				$gateway_payment_method = payments()->processCardForOrders($orders, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method = payment()->processCardForOrders($orders, "4242424242424242", "12", "34", "567");
 				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
 
 				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
@@ -4335,7 +4335,7 @@
 				$stripe_payment_method = $payment_methods[arrayKeyValue($payment_methods, "gateway", "stripe")];
 				$stripe_payment_method_id = $stripe_payment_method ? $stripe_payment_method["id"] : false;
 
-				$gateway_payment_method = payments()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
+				$gateway_payment_method = payment()->processCardForCart($cart, "4242424242424242", "12", "34", "567");
 				$gateway_payment_method_id = ($gateway_payment_method && $gateway_payment_method["card"])? $gateway_payment_method["card"]["id"] : false;
 
 				$user_payment_method_id = $UC->addPaymentMethod(["payment_method_id" => $stripe_payment_method_id]);
