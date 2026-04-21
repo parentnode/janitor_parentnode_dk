@@ -1,5 +1,6 @@
 <?php
 $access_item["/"] = true;
+//$access_item["/getMediaInfo"] = false;
 $access_item["/dummy-no-access-test-do-not-grant-access"] = true;
 if(isset($read_access) && $read_access) {
 	return;
@@ -98,8 +99,21 @@ if(is_array($action) && count($action)) {
 
 
 
-	// Class interface
+	// Secure Class interface
 	else if(security()->validateCsrfToken() && preg_match("/[a-zA-Z]+/", $action[0])) {
+
+		// check if custom function exists on User class
+		if($model && method_exists($model, "API_".$action[0])) {
+
+			$output = new Output();
+			$output->screen($model->{"API_".$action[0]}($action));
+			exit();
+		}
+
+	}
+	
+	// Fallback Class interface [DEPRECATED]
+	if(security()->validateCsrfToken() && preg_match("/[a-zA-Z]+/", $action[0])) {
 
 		// check if custom function exists on User class
 		if($model && method_exists($model, $action[0])) {

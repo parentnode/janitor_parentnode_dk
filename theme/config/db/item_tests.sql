@@ -8,6 +8,8 @@ CREATE TABLE `SITE_DB`.`item_tests` (
   `v_email` varchar(100) DEFAULT NULL,
   `v_tel` varchar(100) DEFAULT NULL,
   `v_password` varchar(100) DEFAULT NULL,
+
+  `v_dropdown` varchar(100) DEFAULT NULL,
   `v_select` varchar(100) DEFAULT NULL,
 
   `v_datetime` timestamp NULL DEFAULT NULL,

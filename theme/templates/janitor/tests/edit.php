@@ -34,6 +34,7 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 				<?= $model->input("v_datetime", array("value" => $item["v_datetime"])) ?>
 				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
 
+				<?= $model->input("v_dropdown", array("value" => $item["v_dropdown"])) ?>
 				<?= $model->input("v_select", array("value" => $item["v_select"])) ?>
 
 				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
@@ -44,6 +45,8 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 				<?= $model->input("user_id", array("type" => "string", "value" => $item["user_id"])) ?>
 				<?= $model->input("item_id", array("type" => "string", "value" => $item["item_id"])) ?>
 
+				<?= $model->input("v_file", array("value" => $v_file_value)) ?>
+				<?= $model->input("v_files", array("value" => $v_files_value)) ?>
 
 				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 

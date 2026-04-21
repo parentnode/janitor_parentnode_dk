@@ -26,8 +26,8 @@ class TypeTests extends Itemtype {
 			"label" => "String",
 			"required" => true,
 			"searchable" => true,
-			"hint_message" => "Type string",
-			"error_message" => "String must be string"
+			"hint_message" => "Type string can be a long string or a short string or a medium string with a variable number of characters, symbols, number and punctuation.",
+			"error_message" => "String must be string however long that might be and not matter what that string actually says about the writer."
 		));
 
 		// Published at
@@ -81,6 +81,15 @@ class TypeTests extends Itemtype {
 			"error_message" => "Option must be selected"
 		));
 
+		$this->addToModel("v_dropdown", array(
+			"type" => "dropdown",
+			"label" => "Dropdown",
+			"options" => array("" => "Select option", "11" => "First option", "22" => "Second option", "33" => "Third option"),
+			"required" => true,
+			"hint_message" => "Type dropdown",
+			"error_message" => "Option must be selected"
+		));
+
 		$this->addToModel("v_datetime", array(
 			"type" => "datetime",
 			"label" => "Datetime (yyyy-mm-dd hh:mm)",
@@ -124,13 +133,13 @@ class TypeTests extends Itemtype {
 			"min" => 10,
 			"max" => 100,
 			"step" => 5,
-			"hint_message" => "Type range",
+			"hint_message" => "Type range, between 10 and 100",
 			"error_message" => "Must be within range"
 		));
 
 		$this->addToModel("v_checkbox", array(
 			"type" => "checkbox",
-			"label" => "Checkbox",
+			"label" => "Checkbox (<a href=\"/janitor/tests\">with link</a>)",
 			"required" => true,
 			"hint_message" => "Type checkbox",
 			"error_message" => "Must be checked"
@@ -157,10 +166,10 @@ class TypeTests extends Itemtype {
 		$this->addToModel("single_media", array(
 			"type" => "files",
 			"label" => "Add media here",
-			"allowed_sizes" => "960x540",
+			"allowed_sizes" => "960x540,720x1280,720x480,1280x720",
 			"max" => 1,
-			"allowed_formats" => "png,jpg",
-			"hint_message" => "Add single image by dragging it here. PNG or JPG allowed in 960x540",
+			"allowed_formats" => "png,jpg,mp4,mov",
+			"hint_message" => "Add single image by dragging it here. PNG, JPG or mp4 allowed in 960x540, 720x1280, 720x480 or 1280x720",
 			"error_message" => "Media does not fit requirements."
 		));
 
@@ -170,7 +179,8 @@ class TypeTests extends Itemtype {
 			"required" => true,
 			"min" => 3,
 			"max" => 20,
-			"hint_message" => "Type * files",
+			"allowed_formats" => false,
+			"hint_message" => "Type * files (between 3 and 20 files)",
 			"error_message" => "Between 3 and 20 files must be added"
 		));
 
@@ -178,7 +188,7 @@ class TypeTests extends Itemtype {
 			"type" => "files",
 			"label" => "Add media here",
 			"max" => 20,
-			"allowed_formats" => "png,jpg,mp4",
+			"allowed_formats" => "png,jpg,mp4,mov",
 			"hint_message" => "Add images or videos here. Use png, jpg or mp4.",
 			"error_message" => "Media does not fit requirements."
 		));
@@ -187,7 +197,7 @@ class TypeTests extends Itemtype {
 		$this->addToModel("v_html", array(
 			"type" => "html",
 			"label" => "HTML",
-			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube,mp4",
+			"allowed_tags" => "p,h1,h2,h3,h4,h5,h6,code,ul,ol,download,png,jpg,vimeo,youtube,mp4,button",
 			"required" => true,
 			"hint_message" => "Type html",
 			"error_message" => "HTML must be HTML"

@@ -45,7 +45,7 @@ u.m["testForm"] = new function() {
 			this.response = function(response) {
 				page.notify(response);
 
-				u.f.updateFilelistStatus(this, response);
+				u.f.updateFormAfterResponse(this, response);
 			}
 			u.request(this, this.action, {"data":this.getData({"format":"formdata"}), "method":"post"});
 		}
@@ -67,7 +67,7 @@ u.m["testForm"] = new function() {
 	<div class="tests item">
 
 		<h3>Test item (All-in-one)</h3>
-		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
+		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject", "item_id" => $item["id"])) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
 
@@ -83,6 +83,7 @@ u.m["testForm"] = new function() {
 				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
 
 				<?= $model->input("v_select", array("value" => $item["v_select"])) ?>
+				<?= $model->input("v_dropdown", array("value" => $item["v_dropdown"])) ?>
 
 				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
 
@@ -99,11 +100,8 @@ u.m["testForm"] = new function() {
 
 				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 
-				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 
 				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "value_lon" => $item["v_longitude"])) ?>
-
-				<?//= $model->inputTags("tags", array("type" => "string", "value" => $item["tags"])) ?>
 			</fieldset>
 
 			<?= $JML->editActions($item) ?>
