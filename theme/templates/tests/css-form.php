@@ -47,9 +47,50 @@ u.m["testForm"] = new function() {
 
 				u.f.updateFormAfterResponse(this, response);
 			}
-			u.request(this, this.action, {"data":this.getData({"format":"formdata"}), "method":"post"});
+			u.request(this, this.action, {
+				"method":"post",
+				"data":this.getData({"format":"formdata"}), 
+			});
 		}
 
+		form.actions["bad_token"].clicked = function() {
+
+
+			this.prepare_bad_token_response = function(response) {
+
+				this.bad_token_response = function(response) {
+					// u.bug("bad_token_response");
+					page.notify(response);
+				}
+
+				// Simulate request on expired session
+				u.request(this, "test-bad-token", {
+					"method": "post",
+					"callback": "bad_token_response",
+					"data":"csrf-token="+this._form.inputs["csrf-token"].val(),
+				});
+			}
+
+			// Request updates user_id and csrf token for force token based re-login on next request
+			u.request(this, "prepare-bad-token", {
+				"method": "post",
+				"callback": "prepare_bad_token_response",
+			});
+
+		}
+
+		form.actions["force_overlay"].clicked = function() {
+
+			this.response = function(response) {
+				page.notify(response);
+			}
+
+			u.request(this, "test-login-overlay", {
+				"method": "post",
+				"data": "test=test&csrf-token=badtoken",
+			});
+
+		}
 	}
 }
 
@@ -107,9 +148,14 @@ u.m["testForm"] = new function() {
 			<?= $JML->editActions($item) ?>
 
 			<ul class="actions">
-				<?= $model->submit("Button (submit)", array("class" => "primary", "wrapper" => "li.input")); ?>
-				<?= $model->submit("Button (button)", array("type" => "button", "wrapper" => "li.input")); ?>
+				<?= $model->submit("Button (submit)", array("class" => "primary", "wrapper" => "li.input_submit")); ?>
+				<?= $model->button("Button (button)", array("type" => "button", "wrapper" => "li.input_button")); ?>
 				<?= $model->link("Button (a)", "/janitor/tests", array("class" => "button", "wrapper" => "li.abutton")) ?>
+			</ul>
+
+			<ul class="actions">
+				<?= $model->button("Button (bad csrf-token)", array("type" => "button", "wrapper" => "li.bad_token")); ?>
+				<?= $model->button("Button (force overlay login)", array("type" => "button", "wrapper" => "li.force_overlay")); ?>
 			</ul>
 		<?= $model->formEnd() ?>
 

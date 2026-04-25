@@ -7,14 +7,15 @@ global $itemtype;
 $item_id = $action[1];
 $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "mediae" => true, "comments" => true)));
 
+$v_file_value = $IC->filterMediae($item, "v_file");
+$v_files_value = $IC->filterMediae($item, "v_files");
+
 ?>
 <div class="scene i:scene defaultEdit <?= $itemtype ?>Edit">
 	<h1>Edit test</h1>
 	<h2 class="name"><?= strip_tags($item["name"]) ?></h2>
 
 	<?= $JML->editGlobalActions($item) ?>
-
-	<?= $JML->editSindex($item) ?>
 
 	<div class="item i:defaultEdit">
 		<h2>Post content</h2>
@@ -57,6 +58,8 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 
 		<?= $model->formEnd() ?>
 	</div>
+
+	<?= $JML->editSindex($item) ?>
 
 	<?= $JML->editOwner($item) ?>
 
