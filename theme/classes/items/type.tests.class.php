@@ -26,7 +26,7 @@ class TypeTests extends Itemtype {
 			"label" => "String",
 			"required" => true,
 			"searchable" => true,
-			"hint_message" => "Type string can be a long string or a short string or a medium string with a variable number of characters, symbols, number and punctuation.",
+			"hint_message" => "Type string can be a long string or a short string or a medium string with a variable number of characters, symbols, digits and punctuation.",
 			"error_message" => "String must be string however long that might be and not matter what that string actually says about the writer."
 		));
 
@@ -148,7 +148,7 @@ class TypeTests extends Itemtype {
 		$this->addToModel("v_radiobuttons", array(
 			"type" => "radiobuttons",
 			"label" => "Radiobuttons",
-			"options" => array("value1" => "text1", "value2" => "text2"),
+			"options" => array("value1" => "text that could wrap into several lines to test line-height issues and other sideeffects", "value2" => "text2"),
 			"required" => true,
 			"hint_message" => "Type radiobuttons",
 			"error_message" => "One must be selected"
@@ -178,10 +178,10 @@ class TypeTests extends Itemtype {
 			"label" => "Files",
 			"required" => true,
 			"min" => 3,
-			"max" => 20,
+			"max" => 7,
 			"allowed_formats" => false,
-			"hint_message" => "Type * files (between 3 and 20 files)",
-			"error_message" => "Between 3 and 20 files must be added"
+			"hint_message" => "Type * files (between 3 and 7 files)",
+			"error_message" => "Between 3 and 7 files must be added"
 		));
 
 		$this->addToModel("mediae", array(
