@@ -7,14 +7,15 @@ global $itemtype;
 $item_id = $action[1];
 $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "mediae" => true, "comments" => true)));
 
+$v_file_value = $IC->filterMediae($item, "v_file");
+$v_files_value = $IC->filterMediae($item, "v_files");
+
 ?>
 <div class="scene i:scene defaultEdit <?= $itemtype ?>Edit">
 	<h1>Edit test</h1>
 	<h2 class="name"><?= strip_tags($item["name"]) ?></h2>
 
 	<?= $JML->editGlobalActions($item) ?>
-
-	<?= $JML->editSindex($item) ?>
 
 	<div class="item i:defaultEdit">
 		<h2>Post content</h2>
@@ -34,6 +35,7 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 				<?= $model->input("v_datetime", array("value" => $item["v_datetime"])) ?>
 				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
 
+				<?= $model->input("v_dropdown", array("value" => $item["v_dropdown"])) ?>
 				<?= $model->input("v_select", array("value" => $item["v_select"])) ?>
 
 				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
@@ -44,6 +46,8 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 				<?= $model->input("user_id", array("type" => "string", "value" => $item["user_id"])) ?>
 				<?= $model->input("item_id", array("type" => "string", "value" => $item["item_id"])) ?>
 
+				<?= $model->input("v_file", array("value" => $v_file_value)) ?>
+				<?= $model->input("v_files", array("value" => $v_files_value)) ?>
 
 				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 
@@ -54,6 +58,8 @@ $item = $IC->getItem(array("id" => $item_id, "extend" => array("tags" => true, "
 
 		<?= $model->formEnd() ?>
 	</div>
+
+	<?= $JML->editSindex($item) ?>
 
 	<?= $JML->editOwner($item) ?>
 

@@ -19,7 +19,7 @@
 							<dt class="name">Name</dt>
 							<dd class="name">Mailer::send</dd>
 							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">mailer()->send()</dd>
+							<dd class="shorthand">email()->send()</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Object|false</span> = 
 								Mailer::send(
@@ -135,7 +135,7 @@
 							<dt class="name">Name</dt>
 							<dd class="name">Mailer::sendBulk</dd>
 							<dt class="shorthand">Shorthand</dt>
-							<dd class="shorthand">mailer()->sendBulk()</dd>
+							<dd class="shorthand">email()->sendBulk()</dd>
 							<dt class="syntax">Syntax</dt>
 							<dd class="syntax"><span class="type">Object|false</span> = 
 								Mailer::sendBulk(

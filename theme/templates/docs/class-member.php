@@ -422,7 +422,7 @@ $order = $MC->cancelMembership($action);</code>
 								<li>Member::getMembership</li>
 								<li>Subscription::deleteSubscription</li>
 								<li>Page::addLog</li>
-								<li>mailer()->send()</li>
+								<li>email()->send()</li>
 							</ul>
 						</div>
 

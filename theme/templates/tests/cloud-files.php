@@ -34,7 +34,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - simple message to admin from current user</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 				"from_current_user" => true,
 				"message" => "I'm a simple text message to the Admin, from current user"
 		])): ?>
@@ -46,7 +46,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - simple message with system php template to specific users (sending as CC)</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"recipients" => $custom_recipients,
 			"message" => "I'm a simple text message with system template to specific users (sending as CC).<br /><br />No user specific variables, because it's the same message everyone gets.<br /><br />Global variables can be used.",
 			"template" => "system"
@@ -59,7 +59,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with system varaibles only</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom html template, with global variables only.",
 			"template" => "test_html"
 		])): ?>
@@ -71,7 +71,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom html template to admin with custom variables</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom html template, with custom variables.",
 			"template" => "test_html",
 			"values" => $custom_values[ADMIN_EMAIL]
@@ -84,7 +84,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom text template, with custom variables.",
 			"template" => "test_text",
 			"values" => $custom_values[ADMIN_EMAIL]
@@ -97,7 +97,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled click tracking</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom text template, with click tracking disabled.",
 			"template" => "test_text",
 			"values" => $custom_values[ADMIN_EMAIL],
@@ -111,7 +111,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled opened tracking</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom text template, with opened tracking disabled.",
 			"template" => "test_text",
 			"values" => $custom_values[ADMIN_EMAIL],
@@ -125,7 +125,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom txt template to admin with custom variables - disabled all tracking</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"subject" => "I'm a custom text template, with tracking disabled.",
 			"template" => "test_text",
 			"values" => $custom_values[ADMIN_EMAIL],
@@ -139,7 +139,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to admin with custom variables</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"text" => "This is a inline text mail template \"{name}\" (Custom variable) with two variable strings \"{text}\" (Custom variable)",
 			"values" => $custom_values[ADMIN_EMAIL]
 		])): ?>
@@ -151,7 +151,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom inline text template to specific users (sending as CC)</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"recipients" => $custom_recipients,
 			"text" => "This is a inline text mail template \"{name}\" (Custom variable) with two variable strings \"{text}\" (Custom variable)",
 			"values" => $custom_values[ADMIN_EMAIL]
@@ -164,7 +164,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - custom inline html template to admin with custom variables</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"html" => "<h1>This is a inline text mail template \"{name}\" (Custom variable) with two variable strings \"{text}\" (Custom variable)</h1><h2>{SITE_NAME} (Global variable)</h2>",
 			"values" => $custom_values[ADMIN_EMAIL]
 		])): ?>
@@ -179,7 +179,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - simple message with attachment to admin</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"attachments" => LOCAL_PATH."/templates/tests/mail-attachment/test.jpg",
 			"message" => "I have an attachment"
 		])): ?>
@@ -194,7 +194,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::sendBulk - simple message with custom variables</h3>
-		<? if(mailer()->sendBulk([
+		<? if(email()->sendBulk([
 			"message" => "Hi {name}\n\nI am a simple text message without a template.\n\nThe secret text is:'{text}'.\n\nGood luck with the development.",
 			"recipients" => $custom_recipients,
 			"values" => $custom_values
@@ -207,7 +207,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::sendBulk - custom html template with custom variables</h3>
-		<? if(mailer()->sendBulk([
+		<? if(email()->sendBulk([
 			"template" => "test_html",
 			"recipients" => $custom_recipients,
 			"values" => $custom_values
@@ -220,7 +220,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::sendBulk - custom txt template with custom variables</h3>
-		<? if(mailer()->sendBulk([
+		<? if(email()->sendBulk([
 			"template" => "test_text",
 			"recipients" => $custom_recipients,
 			"values" => $custom_values
@@ -235,7 +235,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - Signup:</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 //			"recipients" => ["martin.nielsen@litmuspreviews.com"],
 			"recipients" => $custom_recipients[0],
 			"template" => "signup_reminder",
@@ -253,7 +253,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - Signup reminder:</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 //			"recipients" => ["martin.nielsen@litmuspreviews.com"],
 			"recipients" => $custom_recipients[0],
 			"template" => "signup_reminder",
@@ -272,7 +272,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - Signup error:</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"recipients" => $custom_recipients[0],
 //			"recipients" => ["martin.nielsen@litmuspreviews.com"],
 			"template" => "signup_error",
@@ -285,7 +285,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - Reset password:</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"recipients" => $custom_recipients[0],
 //			"recipients" => ["martin.nielsen@litmuspreviews.com"],
 			"template" => "reset_password",
@@ -303,7 +303,7 @@ cloudfiles();
 
 	<div class="tests">
 		<h3>Mailer::send - Payment reminder:</h3>
-		<? if(mailer()->send([
+		<? if(email()->send([
 			"recipients" => $custom_recipients[0],
 //			"recipients" => ["martin.nielsen@litmuspreviews.com"],
 			"template" => "payment_reminder",

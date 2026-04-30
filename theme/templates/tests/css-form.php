@@ -33,6 +33,7 @@ $this->headerIncludes(array(
 	// "/js/manipulator/src/u-sortable.js",
 ));
 
+
 ?>
 <script type="text/javascript">
 
@@ -45,9 +46,64 @@ u.m["testForm"] = new function() {
 			this.response = function(response) {
 				page.notify(response);
 
-				u.f.updateFilelistStatus(this, response);
+				u.f.updateFormAfterResponse(this, response);
 			}
-			u.request(this, this.action, {"data":this.getData({"format":"formdata"}), "method":"post"});
+			u.request(this, this.action, {
+				"method":"post",
+				"data":this.getData({"format":"formdata"}), 
+			});
+		}
+
+		form.actions["bad_token"].clicked = function() {
+
+
+			this.prepare_bad_token_response = function(response) {
+
+				this.bad_token_response = function(response) {
+					// u.bug("bad_token_response");
+					page.notify(response);
+				}
+
+				// Simulate request on expired session
+				u.request(this, "test-bad-token", {
+					"method": "post",
+					"callback": "bad_token_response",
+					"data":"csrf-token="+this._form.inputs["csrf-token"].val(),
+				});
+			}
+
+			// Request updates user_id and csrf token for force token based re-login on next request
+			u.request(this, "prepare-bad-token", {
+				"method": "post",
+				"callback": "prepare_bad_token_response",
+			});
+
+		}
+
+		form.actions["force_overlay"].clicked = function() {
+
+			this.response = function(response) {
+				page.notify(response);
+			}
+
+			u.request(this, "test-login-overlay", {
+				"method": "post",
+				"data": "test=test&csrf-token=badtoken",
+			});
+
+		}
+
+		form.actions["api_request"].clicked = function() {
+
+			this.response = function(response) {
+				page.notify(response);
+			}
+
+			u.request(this, "API_apitest", {
+				"method": "post",
+				"data": "test=testapi&csrf-token="+this._form.inputs["csrf-token"].val(),
+			});
+
 		}
 
 	}
@@ -67,7 +123,7 @@ u.m["testForm"] = new function() {
 	<div class="tests item">
 
 		<h3>Test item (All-in-one)</h3>
-		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject")) ?>
+		<?= $model->formStart("update/".$item["id"], array("class" => "i:testForm labelstyle:inject", "item_id" => $item["id"])) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
 
@@ -83,6 +139,7 @@ u.m["testForm"] = new function() {
 				<?= $model->input("v_date", array("value" => $item["v_date"])) ?>
 
 				<?= $model->input("v_select", array("value" => $item["v_select"])) ?>
+				<?= $model->input("v_dropdown", array("value" => $item["v_dropdown"])) ?>
 
 				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
 
@@ -99,19 +156,22 @@ u.m["testForm"] = new function() {
 
 				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 
-				<?= $model->input("v_html", array("value" => $item["v_html"])) ?>
 
 				<?= $model->inputLocation("v_location", "v_latitude", "v_longitude", array("value_loc" => $item["v_location"], "value_lat" => $item["v_latitude"], "value_lon" => $item["v_longitude"])) ?>
-
-				<?//= $model->inputTags("tags", array("type" => "string", "value" => $item["tags"])) ?>
 			</fieldset>
 
 			<?= $JML->editActions($item) ?>
 
 			<ul class="actions">
-				<?= $model->submit("Button (submit)", array("class" => "primary", "wrapper" => "li.input")); ?>
-				<?= $model->submit("Button (button)", array("type" => "button", "wrapper" => "li.input")); ?>
+				<?= $model->submit("Button (submit)", array("class" => "primary", "wrapper" => "li.input_submit")); ?>
+				<?= $model->button("Button (button)", array("type" => "button", "wrapper" => "li.input_button")); ?>
 				<?= $model->link("Button (a)", "/janitor/tests", array("class" => "button", "wrapper" => "li.abutton")) ?>
+			</ul>
+
+			<ul class="actions">
+				<?= $model->button("Button (bad csrf-token)", array("type" => "button", "wrapper" => "li.bad_token")); ?>
+				<?= $model->button("Button (force overlay login)", array("type" => "button", "wrapper" => "li.force_overlay")); ?>
+				<?= $model->button("Button (test API bridge)", array("type" => "button", "wrapper" => "li.api_request")); ?>
 			</ul>
 		<?= $model->formEnd() ?>
 

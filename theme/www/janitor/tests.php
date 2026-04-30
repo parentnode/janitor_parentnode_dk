@@ -1,5 +1,6 @@
 <?php
 $access_item["/"] = true;
+//$access_item["/getMediaInfo"] = false;
 $access_item["/dummy-no-access-test-do-not-grant-access"] = true;
 if(isset($read_access) && $read_access) {
 	return;
@@ -56,10 +57,11 @@ if(is_array($action) && count($action)) {
 		}
 
 	}
+
 	// enable forwarding to Tests Class on all posts
 	else if($_SERVER["REQUEST_METHOD"] == "GET" && count($action) >= 1) {
-		
-	// LIST/EDIT/NEW ITEM
+
+		// LIST/EDIT/NEW ITEM
 		if(preg_match("/^(list|edit|new)$/", $action[0])) {
 
 			$page->page(array(
@@ -95,19 +97,45 @@ if(is_array($action) && count($action)) {
 
 	// Custom test responses
 
+	// Test login overlay
+	else if($action[0] === "test-login-overlay") {
 
+		header("Location: ".SITE_LOGIN_URL);
+		exit();
 
+	}
 
-	// Class interface
-	else if(security()->validateCsrfToken() && preg_match("/[a-zA-Z]+/", $action[0])) {
+	// Test bad csrf token / auto login
+	else if($action[0] === "prepare-bad-token") {
 
-		// check if custom function exists on User class
-		if($model && method_exists($model, $action[0])) {
+		// Change current session values to ensure next request fails
+		session()->value("user_id", 1);
+		session()->value("user_group_id", 1);
+		session()->value("csrf", gen_uuid());
+		logger()->addLog("Manually modified csrf: ".session()->value("csrf"));
+
+		$output = new Output();
+		$output->screen(true);
+		exit();
+
+	}
+	// Test bad csrf token / auto login
+	else if($action[0] === "test-bad-token") {
+
+		if(security()->validateCsrfToken()) {
+
+			message()->addMessage("login restored and csrf-token updated to match previous session state");
 
 			$output = new Output();
-			$output->screen($model->{$action[0]}($action));
+			$output->screen(true);
 			exit();
 		}
+
+	}
+
+	// Handle possible API request
+	else {
+		security()->API_request($model, $action);
 	}
 
 }
