@@ -42,11 +42,6 @@
 #content .scene.tests div.tests div.testfailed * {padding: 0; margin: 0;}
 
 
-/* NAVIGATION */
-body.tests #navigation .test a,
-body.wish #navigation .wish a,
-body.wishlist #navigation .wishlist a,
-body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
 
 /* TIMESHEETS */
 #content .scene.toggloverview div.warning {border-bottom: 1px solid #bbbbbb; padding-top: 30px;}
