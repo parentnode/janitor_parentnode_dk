@@ -6,7 +6,10 @@
 
 class TypeTests extends Itemtype {
 
+
 	public $db;
+	public $views;
+
 
 	/**
 	* Init, set varnames, validation rules
@@ -17,9 +20,28 @@ class TypeTests extends Itemtype {
 		parent::__construct(get_class());
 
 
-		// itemtype database
+		// Itemtype database
+
 		$this->db = SITE_DB.".item_tests";
 
+
+
+		// Frontpage views
+
+		$this->views = [
+			"view" => [
+				"label" => "test",
+				"template" => "test/view.php",
+			],
+			"list" => [
+				"label" => "List of tests",
+				"template" => "posts/test/list.php",
+			],
+		];
+
+
+
+		// Data model
 
 		$this->addToModel("name", array(
 			"type" => "string",
@@ -232,6 +254,14 @@ class TypeTests extends Itemtype {
 			"error_message" => "Tag must be valid tag"
 		));
 
+
+	}
+
+
+	function API_apitest($action) {
+
+		message()->addMessage("API request, responded correctly");
+		return $action;
 
 	}
 

@@ -33,6 +33,7 @@ $this->headerIncludes(array(
 	// "/js/manipulator/src/u-sortable.js",
 ));
 
+
 ?>
 <script type="text/javascript">
 
@@ -91,6 +92,20 @@ u.m["testForm"] = new function() {
 			});
 
 		}
+
+		form.actions["api_request"].clicked = function() {
+
+			this.response = function(response) {
+				page.notify(response);
+			}
+
+			u.request(this, "API_apitest", {
+				"method": "post",
+				"data": "test=testapi&csrf-token="+this._form.inputs["csrf-token"].val(),
+			});
+
+		}
+
 	}
 }
 
@@ -156,6 +171,7 @@ u.m["testForm"] = new function() {
 			<ul class="actions">
 				<?= $model->button("Button (bad csrf-token)", array("type" => "button", "wrapper" => "li.bad_token")); ?>
 				<?= $model->button("Button (force overlay login)", array("type" => "button", "wrapper" => "li.force_overlay")); ?>
+				<?= $model->button("Button (test API bridge)", array("type" => "button", "wrapper" => "li.api_request")); ?>
 			</ul>
 		<?= $model->formEnd() ?>
 
