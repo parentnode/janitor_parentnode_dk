@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2023-06-27 09:43:56
+asset-builder @ 2026-05-06 13:04:32
 */
 
 /*seg_smartphone_include.css*/
@@ -451,6 +451,20 @@ div.field.focus div.hint {display: block;}
 div.field.error div.hint {display: none;}
 div.field.correct div.hint,
 div.field.correct div.error {display: none;}
+
+
+/*s-comments.css*/
+#content .scene div.comments {padding-bottom: 15px;}
+#content .scene div.articlebody + div.comments {padding-top: 20px;}
+#content .scene div.comments h2 {font-size: 20px; padding-bottom: 25px;}
+#content .scene div.comments > p {color: #bbbbbb; font-size: 13px; padding-bottom: 25px;}
+#content .scene div.comments ul.comments {padding: 0; margin: 0;}
+#content .scene div.comments ul.comments > li {padding-bottom: 10px; padding-left: 0;}
+#content .scene div.comments ul.comments > li ul.info {padding-bottom: 0; margin: 0; list-style: none; display: block;}
+#content .scene div.comments ul.comments > li ul.info li {display: inline-block; vertical-align: top; font-size: 12px; padding-bottom: 0; padding-left: 0;}
+#content .scene div.comments ul.comments > li ul.info li.user:after {content: ",\00a0";}
+#content .scene div.comments ul.comments > li p.comment {padding-bottom: 15px; font-size: 13px;}
+#content .scene div.comments .field {padding-bottom: 10px;}
 
 
 /*s-used_by.css*/
