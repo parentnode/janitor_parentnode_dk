@@ -1,1 +1,0 @@
-DELETE FROM `SITE_DB`.`navigation_nodes` WHERE `node_link` LIKE '/janitor/page/%';
