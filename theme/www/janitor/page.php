@@ -4,6 +4,12 @@ $access_item["/owner"] = true;
 $access_item["/updateOwner"] = "/owner";
 $access_item["/comments"] = true;
 $access_item["/addComment"] = "/comments";
+$access_item["/sindex"] = true;
+$access_item["/updateSindex"] = "/sindex";
+$access_item["/tags"] = true;
+$access_item["/addTag"] = "/tags";
+$access_item["/updateTag"] = "/tags";
+$access_item["/deleteTag"] = "/tags";
 if(isset($read_access) && $read_access) {
 	return;
 }
@@ -33,16 +39,9 @@ if(is_array($action) && count($action)) {
 		exit();
 	}
 
-	// Class interface
-	else if(security()->validateCsrfToken() && preg_match("/[a-zA-Z]+/", $action[0])) {
-
-		// check if custom function exists on User class
-		if($model && method_exists($model, $action[0])) {
-
-			$output = new Output();
-			$output->screen($model->{$action[0]}($action));
-			exit();
-		}
+	// Handle possible API request
+	else {
+		security()->API_request($model, $action);
 	}
 
 }

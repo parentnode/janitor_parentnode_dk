@@ -1,61 +1,69 @@
 <?php
+global $IC;
 global $action;
-$IC = new Items();
+global $itemtype;
 
-$sindex =  $action[0];
+$sindex = $action[0];
 
-$page_item = $IC->getItem(array("sindex" => $sindex, "status" => 1, "extend" => array("comments" => true, "user" => true, "mediae" => true, "tags" => true)));
-if($page_item) {
-	$this->sharingMetaData($page_item);
+$item = $IC->getItem(array("sindex" => $sindex, "status" => 1, "extend" => array("tags" => true, "user" => true, "mediae" => true, "comments" => true, "readstate" => true)));
+if($item) {
+	$this->sharingMetaData($item);
 }
+
 ?>
 
 <div class="scene page i:scene">
 
-<? if($page_item): 
-	$media = $IC->sliceMediae($page_item, "single_media"); ?>
-	<div class="article i:article id:<?= $page_item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+
+<? if($item):
+	$media = $IC->sliceMediae($item, "single_media"); ?>
+
+	<div class="article i:article id:<?= $item["item_id"] ?> service" itemscope itemtype="http://schema.org/Article"
+		data-csrf-token="<?= session()->value("csrf") ?>"
+		data-readstate="<?= $item["readstate"] ?>"
+		data-readstate-add="<?= security()->validPath("/janitor/admin/profile/addReadstate/".$item["item_id"]) ?>" 
+		data-readstate-delete="<?= security()->validPath("/janitor/admin/profile/deleteReadstate/".$item["item_id"]) ?>" 
+		>
 
 		<? if($media): ?>
-		<div class="image item_id:<?= $page_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+		<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 		<? endif; ?>
 
 
-		<?= $HTML->articleTags($page_item, [
-			"context" => false
+		<?= $HTML->articleTags($item, [
+			"context" => ["page"]
 		]) ?>
 
 
-		<h1 itemprop="headline"><?= $page_item["name"] ?></h1>
-
-		<? if($page_item["subheader"]): ?>
-		<h2 itemprop="alternativeHeadline"><?= $page_item["subheader"] ?></h2>
-		<? endif; ?>
+		<h1 itemprop="headline"><?= $item["name"] ?></h1>
 
 
-		<?= $HTML->articleInfo($page_item, "/pages/". $sindex, [
+		<?= $HTML->articleInfo($item, "/pages/".$item["sindex"], [
 			"media" => $media,
 			"sharing" => true
 		]) ?>
 
 
-		<? if($page_item["html"]): ?>
 		<div class="articlebody" itemprop="articleBody">
-			<?= $page_item["html"] ?>
+			<?= $item["html"] ?>
 		</div>
-		<? endif; ?>
+
+
+		<?= $HTML->frontendComments($item, "/janitor/page/addComment") ?>
 
 	</div>
 
 
+<? else: ?>
 
-<? else:?>
 
 	<h1>Technology clearly doesn't solve everything on it's own.</h1>
 	<h2>Technology needs humanity.</h2>
-	<p>We could not find the specified page.</p>
+	<p>We could not find the specified service.</p>
+
 
 <? endif; ?>
+
 
 
 </div>

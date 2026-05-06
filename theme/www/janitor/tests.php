@@ -9,6 +9,7 @@ if(isset($read_access) && $read_access) {
 
 include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
+debug([$_SERVER, $_GET]);
 
 set_time_limit(0);
 

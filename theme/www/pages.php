@@ -8,33 +8,27 @@ include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 
 $action = $page->actions();
+$IC = new Items();
+$itemtype = "service";
 
 
-$page->bodyClass("pages");
-$page->pageTitle("Every good library deserves content");
+$page->bodyClass("services");
+$page->pageTitle("Services");
 
 
-if(is_array($action) && count($action)) {
+// news list for tags
+// /services/#sindex#
+if(count($action) == 1) {
 
-	if(preg_match("/^(getting-started|changelog|milestones)$/", $action[0])) {
-
-		$page->page(array(
-			"templates" => "pages/".$action[0].".php"
-		));
-	}
-	else {
-		$page->page(array(
-			"body_class" => "gettingstarted",
-			"templates" => "pages/view.php"
-		));
-	}
+	$page->page(array(
+		"templates" => "services/view.php"
+	));
 	exit();
 
 }
 
-
 $page->page(array(
-	"templates" => "pages/getting-started.php"
+	"templates" => "services/index.php"
 ));
 exit();
 

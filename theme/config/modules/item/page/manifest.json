@@ -1,0 +1,85 @@
+{
+	"version": "0.1.1",
+	"files": [
+		{
+			"src": "classes/type.page.class.php",
+			"dest": "classes/items/type.page.class.php",
+			"digest": "sha256:555b0309af048553c364fc98f3480753f043f7a5bc755f34e877ec6a6aadd803"
+		},
+		{
+			"src": "www/janitor/page.php",
+			"dest": "www/janitor/page.php",
+			"digest": "sha256:8f865d16e5e74f7bfb807445190be81998996dc6a23ac0e62adc6af0ab3960e1"
+		},
+		{
+			"src": "templates/janitor/page/list.php",
+			"dest": "templates/janitor/page/list.php",
+			"digest": "sha256:f04b9696b8e92f4a8b0df9331dd7f00b4b125b4258b680dd6fe485e0c0fc068a"
+		},
+		{
+			"src": "templates/janitor/page/edit.php",
+			"dest": "templates/janitor/page/edit.php",
+			"digest": "sha256:81d0d170de8b16a36fed7678547aed7d48f2622ed28c5d570aaa43fb24234a60"
+		},
+		{
+			"src": "templates/janitor/page/new.php",
+			"dest": "templates/janitor/page/new.php",
+			"digest": "sha256:68e5f8ae888c455cc5a564340d617de0a053c64680a0035a2875b4bbff608216"
+		},
+		{
+			"src": "www/settings/css/s-page.css",
+			"dest": "www/janitor/css/setup/modules/s-page.css",
+			"digest": "sha256:771ec77d396c0dcce44cbb322dc0c438d747338fcc7561a33bf30c1c00a869e6"
+		},
+		{
+			"src": "www/settings/js/m-page.js",
+			"dest": "www/janitor/js/setup/modules/m-page.js",
+			"digest": "sha256:049accccac94b05ac530a7c22318941e732e33733b0ded028e5461425d3f32d6"
+		},
+		{
+			"src": "templates/settings/index.php",
+			"dest": "templates/janitor/modules/item/page/index.php",
+			"digest": "sha256:14137a0f33854d9d162a249a031519886e7c43cfd7c2ed176ea487d255f50e14"
+		},
+		{
+			"src": "www/pages.php",
+			"dest": "www/pages.php",
+			"digest": "sha256:0ca8935bae099022e06374d5ba8150f90922d6737e287e594236ac127cff88cd"
+		},
+		{
+			"src": "templates/pages/view.php",
+			"dest": "templates/pages/view.php",
+			"digest": "sha256:86f2d5bfb82c74da8251a537a17e40d446048363aca74a1630f49139ea4f2255"
+		}
+	],
+	"data": {
+		"model": [
+			{
+				"src": "config/db/item_page.sql",
+				"digest": "sha256:7c38dd7e9728734bdc346aac2fe8226f3d34e58b8b54dc5e0b390b0abd6f15b6"
+			}
+		],
+		"install": [
+			{
+				"src": "config/db/navigation_nodes.sql",
+				"digest": "sha256:6e3cad99b46acfd4c556f53264a92b6f581885d5157bf226b145eadee342b0a8"
+			}
+		],
+		"uninstall": [
+			{
+				"src": "config/db/navigation_nodes_uninstall.sql",
+				"digest": "sha256:be3752ef6f7daefe7ca0bfc5deeaad102d31ff378063b2fb88ca9e3c87fe4b6c"
+			}
+		],
+		"uninstall-data": [
+			{
+				"src": "config/db/item_page_data_uninstall.sql",
+				"digest": "sha256:26abddc868a198f150c5a1e0dcf5e17e124de86c15f7d90eb2c70497ef350873"
+			},
+			{
+				"src": "config/db/item_page_uninstall.sql",
+				"digest": "sha256:270d6a8d70dda602633326f41122fa59630e707e9fa813c4f147526d9cad7674"
+			}
+		]
+	}
+}
