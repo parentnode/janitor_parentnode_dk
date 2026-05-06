@@ -8,7 +8,7 @@ header("Content-type: text/html; charset=UTF-8");
 error_reporting(E_ALL);
 
 define("VERSION", "0.7.9.2");
-define("UI_BUILD", "20230627-094402");
+define("UI_BUILD", "20260506-130435");
 
 define("SITE_UID", "JANI");
 define("SITE_NAME", "Janitor");
@@ -17,12 +17,12 @@ define("SITE_EMAIL", "info@parentnode.dk");
 
 define("DEFAULT_PAGE_DESCRIPTION", "Janitor is a PHP content distribution framework, with a unique focus on frontend development");
 define("DEFAULT_PAGE_IMAGE", "/img/logo-large.png");
-
 define("DEFAULT_LANGUAGE_ISO", "EN");
 define("DEFAULT_COUNTRY_ISO", "DK");
 define("DEFAULT_CURRENCY_ISO", "DKK");
 
 define("SITE_LOGIN_URL", "/login");
+define("SITE_AUTO_LOGIN", true);
 
 define("SITE_SIGNUP", "1");
 define("SITE_SIGNUP_URL", "/signup");
@@ -36,5 +36,12 @@ define("SITE_SUBSCRIPTIONS", true);
 
 define("SITE_MEMBERS", true);
 
-define("SITE_COLLECT_NOTIFICATIONS", 100);
+define("SITE_LOGGING_DISABLED", false);
+define("SITE_ADMIN_NOTIFICATIONS", true);
+define("SITE_ADMIN_NOTIFICATION_THRESHOLD", 10);
+define("SITE_DOWNLOAD_NOTIFICATIONS", false);
+
+define("SITE_AUTOCONVERSION_THRESHOLD", 100);
+define("SITE_AUTOCONVERSION_COLLECT_NOTIFICATIONS", 100);
+define("SITE_AUTOCONVERSION_ERROR_NOTIFICATIONS", true);
 
