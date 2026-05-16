@@ -1,4 +1,6 @@
 <?php
+$controller_assignable = false;
+
 $access_item = false;
 if(isset($read_access) && $read_access) {
 	return;
