@@ -142,6 +142,7 @@ u.m["testForm"] = new function() {
 				<?= $model->input("v_dropdown", array("value" => $item["v_dropdown"])) ?>
 
 				<?= $model->input("v_text", array("value" => $item["v_text"])) ?>
+				<?= $model->input("v_text", array("value" => $item["v_text"], "class" => "autoexpand")) ?>
 
 				<?= $model->input("v_checkbox", array("value" => $item["v_checkbox"])) ?>
 				<?= $model->input("v_radiobuttons", array("value" => $item["v_radiobuttons"])) ?>
