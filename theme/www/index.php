@@ -7,12 +7,6 @@ if(isset($read_access) && $read_access) {
 include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 
-debug([$_SERVER]);
-
-page()->resolveRequest();
-
-exit();
-
 $action = $page->actions();
 
 
