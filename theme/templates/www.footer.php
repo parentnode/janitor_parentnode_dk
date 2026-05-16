@@ -1,16 +1,9 @@
-<? //$navigation = $this->navigation("main"); ?>
-<? $navigation = navigation()->get("main"); ?>
 	</div>
 
-	<div id="navigation">
-		<ul class="navigation">
-		<? if($navigation): ?>
-			<? foreach($navigation["nodes"] as $node): ?>
-			<?= $HTML->navigationLink($node); ?>
-			<? endforeach; ?>
-	 	<? endif; ?>
-		</ul>
-	</div>
+	<?= HTML()->renderSnippet("snippets/navigation.php", [
+		"handle" => "main",
+		"levels" => 1
+	]) ?>
 
 	<div id="footer">
 		<ul class="servicenavigation">
