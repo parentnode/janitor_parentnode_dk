@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2026-05-06 13:04:35
+asset-builder @ 2026-05-16 23:38:36
 */
 
 /*seg_smartphone_include.js*/
@@ -8685,7 +8685,7 @@ u.defaultFilters = function(div) {
 			used_tags.sort();
 			for(i = 0; i < used_tags.length; i++) {
 				tag = used_tags[i];
-				li = u.ae(this._tags, "li", {"html":tag});
+				li = u.ae(this._tags, "li", {"class":"tag", "html":tag});
 				li.tag = tag.toLowerCase();
 				li.div_filter = div.div_filter;
 				if(this.filter_tags && this.filter_tags.match('(^|;)'+li.tag+'(;|$)')) {
@@ -8861,7 +8861,7 @@ u.activateTagging = function(node) {
 				var new_tags = u.qsa("li", this.node._new_tags);
 				for(i = 0; tag_node = new_tags[i]; i++) {
 					if(tag_node._id == new_tag.tag_id) {
-						u.ae(this.node._tags, tag_node);
+						this.node._tags.insertBefore(tag_node, this.node._bn_add);
 						return;
 					}
 				}
@@ -8878,15 +8878,18 @@ u.activateTagging = function(node) {
 				tag_node._value = new_tag.value;
 				tag_node._id = new_tag.tag_id;
 				tag_node.node = this.node;
+				this.node._tags.insertBefore(tag_node, this.node._bn_add);
 				u.activateTag(tag_node);
 			}
 		}
 		u.request(this, this.action+"/"+this.node._item_id, {"method":"post", "data" : this.getData()});
 	}
 	node._tag_form.inputs["tags"].focus();
+	u.ae(node._tag_options, "label", {"class":"tags", "html":"Existing tags"});
 	node._new_tags = u.ae(node._tag_options, "ul", {"class":"tags"});
+	u.ae(node._new_tags, "li", {"class":"empty", "html":"No tags available"});
 	var used_tags = {};
-	var item_tags = u.qsa("li:not(.add)", node._tags);
+	var item_tags = u.qsa("li:not(.add,.empty)", node._tags);
 	var i, tag_node, tag, context, value;
 	for(i = 0; tag_node = item_tags[i]; i++) {
 		tag_node._context = u.qs(".context", tag_node).innerHTML;
@@ -8920,6 +8923,15 @@ u.activateTagging = function(node) {
 			u.activateTag(tag_node);
 		}
 	}
+	u.updateTagListState(node._new_tags);
+}
+u.updateTagListState = function(list) {
+	if(u.qs("li:not(.empty)", list)) {
+		u.ac(list, "has_options");
+	}
+	else {
+		u.rc(list, "has_options");
+	}
 }
 u.activateTag = function(tag_node) {
 	u.e.click(tag_node);
@@ -8931,6 +8943,7 @@ u.activateTag = function(tag_node) {
 					if(response.cms_status == "success") {
 						u.ae(this.node._new_tags, this);
 					}
+					u.updateTagListState(this.node._new_tags);
 				}
 				u.request(this, this.node.data_div.delete_tag_url+"/"+this.node._item_id+"/" + this._id, {"method":"post", "data":"csrf-token=" + this.node.data_div.csrf_token});
 			}
@@ -8938,8 +8951,9 @@ u.activateTag = function(tag_node) {
 				this.response = function(response) {
 					page.notify(response);
 					if(response.cms_status == "success") {
-						u.ie(this.node._tags, this)
+						this.node._tags.insertBefore(this, this.node._bn_add);
 					}
+					u.updateTagListState(this.node._new_tags);
 				}
 				u.request(this, this.node.data_div.add_tag_url+"/"+this.node._item_id, {"method":"post", "data":"tags="+this._id+"&csrf-token=" + this.node.data_div.csrf_token});
 			}
@@ -9214,7 +9228,7 @@ Util.Modules["oneButtonForm"] = new function() {
 				u.ae(node._ob_form, "input", {"type":"hidden","name":"csrf-token", "value":csrf_token});
 				var inputs = node.getAttribute("data-inputs");
 				if(inputs) {
-					inputs = JSON.parse(inputs);
+					inputs = JSON.parse(decodeURI(inputs));
 					for(input_name in inputs) {
 						u.ae(node._ob_form, "input", {"type":"hidden","name":input_name, "value":inputs[input_name]});
 					}
@@ -9417,8 +9431,8 @@ u.notifier = function(node, _options) {
 					this.response = function(response) {
 						if(response.isJSON && response.cms_status == "success") {
 							var csrf_token = response.cms_object["csrf-token"];
-							var data_vars = u.qsa("[data-csrf-token]", page);
-							var input_vars = u.qsa("[name=csrf-token]", page);
+							var data_vars = u.qsa("[data-csrf-token]");
+							var input_vars = u.qsa("[name=csrf-token]");
 							var dom_vars = u.qsa("*", page);
 							var i, node;
 							for(i = 0; i < data_vars.length; i++) {
@@ -10183,6 +10197,7 @@ Util.Modules["defaultTags"] = new function() {
 				div._tags = u.ae(div._tags, "ul", {"class":"tags"});
 			}
 			div._tags.div = div;
+			u.ac(div._tags, "editable");
 			div._tags_context = div._tags.getAttribute("data-context");
 			div.tagsResponse = function(response) {
 				if(response.cms_status == "success" && response.cms_object) {
@@ -10266,7 +10281,7 @@ Util.Modules["defaultComments"] = new function() {
 						u.ae(info, "li", {"class":"created_at", "html":response.cms_object["created_at"]});
 						u.ae(comment_li, "p", {"class":"comment", "html":response.cms_object["comment"]})
 						this.div.initComment(comment_li);
-						this.inputs["item_comment"].val("");
+						this.reset();
 					}
 				}
 				u.bug("defaultComments save");
@@ -10591,16 +10606,28 @@ Util.Modules["defaultSubscriptionmethod"] = new function() {
 /*m-default_sindex.js*/
 Util.Modules["defaultSindex"] = new function() {
 	this.init = function(div) {
-		div.current_sindex = u.qs(".current_sindex", div);
+		div.updateView = function() {
+			this.updateViewResponse = function(response) {
+				if(response.isHTML) {
+					var view = u.qs("div.sindex", response);
+					if(view) {
+						this.replaceWith(view);
+						u.init(view.parentNode);
+						var cannonical = u.qs("div.cannonical");
+						if(cannonical && fun(cannonical.updateView)) {
+							cannonical.updateView();
+						}
+					}
+				}
+			}
+			u.request(this, location, {
+				"callback": "updateViewResponse"
+			});
+		}
 		div.li_update = u.qs("li.update", div);
 		div.li_update.div = div;
 		div.li_update.confirmed = function(response) {
-			if(this.div.current_sindex && response.cms_object) {
-				this.div.current_sindex.innerHTML = response.cms_object;
-			}
-			if(this.div.current_sindex_input && response.cms_object) {
-				this.div.current_sindex_input.val(response.cms_object);
-			}
+			this.div.updateView();
 		}
 		div.form_manual = u.qs("form.manual_sindex", div);
 		if(div.form_manual) {
@@ -10611,12 +10638,8 @@ Util.Modules["defaultSindex"] = new function() {
 			div.form_manual.submitted = function(iN) {
 				this.response = function(response) {
 					page.notify(response);
-					if(this.div.current_sindex && response.cms_object) {
-						this.div.current_sindex.innerHTML = response.cms_object;
-					}
-					if(this.div.current_sindex_input && response.cms_object) {
-						this.div.current_sindex_input.val(response.cms_object);
-					}
+					this.div.updateView();
+					// 
 				}
 				u.request(this, this.action, {"method":"post", "data" : this.getData({"format":"formdata"})});
 			}
@@ -10675,6 +10698,40 @@ Util.Modules["defaultDeveloper"] = new function() {
 			div.form.submitted = function(iN) {
 				this.response = function(response) {
 					page.notify(response);
+				}
+				u.request(this, this.action, {"method":"post", "data" : this.getData({"format":"formdata"})});
+			}
+		}
+	}
+}
+
+/*m-default_cannonical.js*/
+Util.Modules["defaultCannonical"] = new function() {
+	this.init = function(div) {
+		div.updateView = function() {
+			this.updateViewResponse = function(response) {
+				if(response.isHTML) {
+					var view = u.qs("div.cannonical", response);
+					if(view) {
+						this.replaceWith(view);
+						u.init(view.parentNode);
+					}
+				}
+			}
+			u.request(this, location, {
+				"callback": "updateViewResponse"
+			});
+		}
+		div.form = u.qs("form", div);
+		if(div.form) {
+			div.form.div = div;
+			u.f.init(div.form);
+			div.form.submitted = function(iN) {
+				this.response = function(response) {
+					page.notify(response);
+					if(response.cms_status === "success") {
+						this.div.updateView();
+					}
 				}
 				u.request(this, this.action, {"method":"post", "data" : this.getData({"format":"formdata"})});
 			}

@@ -1,5 +1,5 @@
 /*
-asset-builder @ 2026-05-06 13:04:35
+asset-builder @ 2026-05-16 23:38:36
 */
 
 /*seg_smartphone_include.css*/
@@ -825,6 +825,7 @@ body.invoice #content div.scene .payment_info {position: absolute; bottom: 50px;
 
 
 /*s-navigations.css*/
+#content .scene.navigationEdit {padding-bottom: 30px;}
 #content .scene.navigationEdit .sortable ul.items li ul.items { border-top: 1px solid #dedede; margin-bottom: -1px;}
 #content .scene.navigationEdit .sortable ul.items > li h3 {padding: 15px 20px 15px 0; display: inline-block; vertical-align: bottom;}
 #content .scene.navigationEdit .sortable ul.items > li.item li.item h3 {margin-left: 30px; padding-left: 40px;}
@@ -843,6 +844,24 @@ body.invoice #content div.scene .payment_info {position: absolute; bottom: 50px;
 #content .scene.navigationEdit div.all_items ul.items > li.item:hover:not(.shadow) {background-color: transparent;}
 #content .scene.navigationEdit ul.items > li span {padding: 10px 10px 15px 0; display: inline-block; vertical-align: bottom;}
 #content .defaultEdit.navigationEdit ul.items > li.dragged .drag {background-image: none;}
+#content .scene.navigationEdit div.all_items ul.items li.item.link_error,
+#content .scene.navigationEdit div.all_items ul.items li.item.link_error:hover,
+#content .scene.navigationEdit div.all_items ul.items li.item.link_error h3 {
+	background-color: #df0000; color: #ffffff;
+}
+#content .scene.navigationEdit div.all_items ul.items li.item.link_warning,
+#content .scene.navigationEdit div.all_items ul.items li.item.link_warning:hover,
+#content .scene.navigationEdit div.all_items ul.items li.item.link_warning h3 {
+	background-color: orange; color: #ffffff;
+}
+#content .scene.navigationEdit div.all_items ul.items li.item.link_error div.drag,
+#content .scene.navigationEdit div.all_items ul.items li.item.link_warning div.drag {
+	background-image: url("../assets/janitor/admin/img/gx_drag-ns_white.svg");
+}
+#content .scene.navigationEdit .sortable ul.items > li li.link_error h3,
+#content .scene.navigationEdit .sortable ul.items > li li.link_warning h3 {
+	background-image: url("../assets/janitor/admin/img/gx_angle_white.svg");
+}
 
 
 /*s-front.css*/
@@ -973,19 +992,20 @@ body.invoice #content div.scene .payment_info {position: absolute; bottom: 50px;
 #content .scene.defaultEdit > div.sindex {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.sindex form {padding-bottom: 15px;}
 #content .scene.defaultEdit > div.sindex ul.actions + form {padding-top: 20px;}
+#content .scene.defaultEdit > div.cannonical {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
+#content .scene.defaultEdit > div.cannonical form {padding-bottom: 15px;}
 #content .scene.defaultEdit > div.developer {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.developer form {padding-bottom: 15px;}
 #content .scene.defaultEdit > div.media {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.media form.upload {text-align: left; position: relative; z-index: 2;}
 #content .scene.defaultEdit > div.media form.upload > .actions {display: none;}
 #content .scene.defaultEdit > div.comments {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
-#content .scene.defaultEdit > div.comments ul.comments {padding-bottom: 20px;}
 #content .scene.defaultEdit > div.comments ul.comments > li {display: block; border-bottom: 1px solid #dedede; position: relative; padding: 15px 0 5px;}
-#content .scene.defaultEdit > div.comments ul.comments > li:last-child {border: none;}
+#content .scene.defaultEdit > div.comments ul.comments > li:last-child {border: none; padding-bottom: 20px;}
 #content .scene.defaultEdit > div.comments ul.comments > li ul.info {padding-bottom: 5px;}
-#content .scene.defaultEdit > div.comments ul.comments > li > ul.actions {position: absolute; top: 15px; right: 0;}
+#content .scene.defaultEdit > div.comments ul.comments > li > ul.actions {position: absolute; top: 5px; right: 0;}
 #content .scene.defaultEdit > div.comments ul.comments > li > ul.actions li {display: inline-block; vertical-align: top;}
-#content .scene.defaultEdit > div.comments > form,
+#content .scene.defaultEdit > div.comments > div > form {padding-bottom: 15px;}
 #content .scene.defaultEdit > div.comments li.comment > form {padding-bottom: 10px; padding-top: 5px;}
 #content .scene.defaultEdit > div.prices {padding: 0; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.prices > form {padding-bottom: 10px; padding-top: 5px;}
