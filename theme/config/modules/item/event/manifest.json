@@ -1,0 +1,114 @@
+{
+	"version": "0.1.1",
+	"files": [
+		{
+			"type": "class",
+			"src": "classes/type.event.class.php",
+			"dest": "classes/items/type.event.class.php",
+			"digest": "sha256:c76fd7e542fa517f5b8b671244a9d939e160f415cdca1e2559304001ad72caac"
+		},
+		{
+			"type": "backend-controller",
+			"src": "www/janitor/event.php",
+			"dest": "www/janitor/event.php",
+			"digest": "sha256:089589992120c677c57df9ded53c31473b7697d7b052fe6deadbf0fa0cfe957a"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/list.php",
+			"dest": "templates/janitor/event/list.php",
+			"digest": "sha256:f340c691eade12de493dc6ebfed73556c17c97d0cc80ede23a7d3bcd8d044ce0"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/edit.php",
+			"dest": "templates/janitor/event/edit.php",
+			"digest": "sha256:580cb6d3b83b8ad58e9f2f04de19c7d1bbda23b4d2cb5e3c74cc7cbbbaf2176d"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/new.php",
+			"dest": "templates/janitor/event/new.php",
+			"digest": "sha256:8bc18d34f510b7e9c26c7b22133ee6ae95a2f9554953b7f14d496918a8ac072a"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/locations.php",
+			"dest": "templates/janitor/event/locations.php",
+			"digest": "sha256:0a7b43c645d9897fa0601c588c8537f5986180e078ccc36e70d367727fcd9e29"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/location-new.php",
+			"dest": "templates/janitor/event/location-new.php",
+			"digest": "sha256:6e5636ebfffedbc2cde5160403e2f4a0dac567781334780802720bcd7d6c42a3"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/event/location-edit.php",
+			"dest": "templates/janitor/event/location-edit.php",
+			"digest": "sha256:31a7e1cec9ff7fccea73c971a1818184a565ef141538e3dfe34535834bbba3a4"
+		},
+		{
+			"type": "settings-css",
+			"src": "www/settings/css/s-eventitem.css",
+			"dest": "www/janitor/css/setup/modules/s-eventitem.css",
+			"digest": "sha256:0774c6568c946c6806132908e487c3c985f26c14af6ab831ad17037965d97f4a"
+		},
+		{
+			"type": "settings-js",
+			"src": "www/settings/js/m-eventitem.js",
+			"dest": "www/janitor/js/setup/modules/m-eventitem.js",
+			"digest": "sha256:84043a894594b61f1eddc3f696b9375a01582fc073dadb0bb5d0d17155c9e6f1"
+		},
+		{
+			"type": "settings-template",
+			"src": "templates/settings/index.php",
+			"dest": "templates/janitor/modules/item/event/index.php",
+			"digest": "sha256:d130d008cdf641d8c688d56e9da81b009ed0553d71973dddf92f604dd61d83e2"
+		},
+		{
+			"type": "controller",
+			"src": "www/events.php",
+			"dest": "www/events.php",
+			"digest": "sha256:2ee5a37ef30467ae4e472291f19bb760e45290c6ed5d75a628a30e6b99daffc4"
+		},
+		{
+			"type": "template",
+			"src": "templates/events/index.php",
+			"dest": "templates/events/index.php",
+			"digest": "sha256:dda274c3f0c3d9aeb9fe1651fa45882844ff84da4319e2412e10acb8a65b6971"
+		},
+		{
+			"type": "template",
+			"src": "templates/events/view.php",
+			"dest": "templates/events/view.php",
+			"digest": "sha256:ad8fe34d631b545b1c05ad43c434292b692418fee241f339af5b781d4b0f2cde"
+		},
+		{
+			"type": "data-model",
+			"src": "config/db/item_event.sql",
+			"digest": "sha256:d50c0c824ee382b44181b06d60bdbf3d28ded4332bbd690aff152464000430c8"
+		},
+		{
+			"type": "data-install",
+			"src": "config/db/navigation_nodes.sql",
+			"digest": "sha256:db8ec6f37f1b8d01f28cfe57575d689e505f620f37b38d91c7380f0773caa030"
+		},
+		{
+			"type": "data-uninstall",
+			"src": "config/db/navigation_nodes_uninstall.sql",
+			"digest": "sha256:436dc2bbcb906c431a3ac7e190d6317f87f33f5e0938f1f80aec89057598bfb7"
+		},
+		{
+			"type": "data-uninstall-all",
+			"src": "config/db/item_event_data_uninstall.sql",
+			"digest": "sha256:e18de888f313521f8037f513141c13266a63d837bd8fbecfdae3a80f0b55d7e7"
+		},
+		{
+			"type": "data-uninstall-all",
+			"src": "config/db/item_event_uninstall.sql",
+			"digest": "sha256:7efb2d401e8fe6751e895e0440d59a280f1857747ae10579b26795c843fadf45"
+		}
+	]
+}
