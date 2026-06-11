@@ -8,8 +8,6 @@ class TypePost extends Itemtype {
 
 
 	public $db;
-	public $views;
-
 
 
 	/**
@@ -25,45 +23,25 @@ class TypePost extends Itemtype {
 		$this->db = SITE_DB.".item_post";
 
 
-		$this->views = [
-			"view" => [
-				"label" => "post",
-				"template" => "posts/post.php",
-			],
-			"list" => [
-				"label" => "List of posts",
-				"template" => "posts/posts.php",
-			],
-		];
-
-
 		// Published
 		$this->addToModel("published_at", array(
 			"type" => "datetime",
-			"label" => "Publishing time (yyyy-mm-dd hh:mm)",
-			"hint_message" => "Date of the post publication (yyyy-mm-dd hh:mm). Leave empty for current time.", 
-			"error_message" => "Date of the post publication must be a valid date (yyyy-mm-dd hh:mm). Leave empty for current time.", 
+			"label" => "Publish date (yyyy-mm-dd hh:mm)",
+			"hint_message" => "Publication date and time of post. This will be shown on website. Leave empty for current time.",
+			"error_message" => "Datetime must be of format (yyyy-mm-dd hh:mm)."
 		));
 
 		// Name
 		$this->addToModel("name", array(
 			"type" => "string",
-			"label" => "Name",
-			"required" => true,
+			"label" => "Title",
 			"searchable" => true,
-			"hint_message" => "Name your post", 
-			"error_message" => "Name must be filled out."
+			"required" => true,
+			"hint_message" => "Title of your post.", 
+			"error_message" => "Title must be filled out."
 		));
 
-		// Class
-		$this->addToModel("classname", array(
-			"type" => "string",
-			"label" => "CSS Class",
-			"hint_message" => "CSS class for custom styling. If you don't know what this is, just leave it empty.",
-			"error_message" => "Classname is invalid.",
-		));
-
-		// description
+		// Description
 		$this->addToModel("description", array(
 			"type" => "text",
 			"label" => "Short SEO description",
@@ -75,20 +53,30 @@ class TypePost extends Itemtype {
 		// HTML
 		$this->addToModel("html", array(
 			"type" => "html",
-			"label" => "Full post",
+			"label" => "Full post text",
 			"searchable" => true,
-			"allowed_tags" => "p,h2,h3,h4,ul,ol,download,jpg,png,code,vimeo,youtube", //,mp4",
-			"hint_message" => "Write your the post",
+			"allowed_tags" => "p,h2,h3,h4,ul,ol,code,download,jpg,png,button",
+			"hint_message" => "Write your post content.",
 			"error_message" => "No words? How weird."
 		));
 
-		// Mediae
-		$this->addToModel("mediae", array(
+		// Class
+		$this->addToModel("classname", [
+			"type" => "string",
+			"label" => "CSS Class",
+			"pattern" => "[a-z]+[a-z\-\:]*",
+			"hint_message" => "CSS class for custom styling. If you don't know what this is, just leave it empty. Must be a valid, implemented css-classname to have any effect.",
+			"error_message" => "Invalid CSS class syntax",
+		]);
+
+		// Single media
+		$this->addToModel("single_media", array(
 			"type" => "files",
 			"label" => "Add media here",
-			"max" => 20,
-			"allowed_formats" => "png,jpg,mp4",
-			"hint_message" => "Add images or videos here. Use png, jpg or mp4.",
+			"allowed_sizes" => "960x540",
+			"max" => 1,
+			"allowed_formats" => "png,jpg",
+			"hint_message" => "Add single image by dragging it here. PNG or JPG allowed in 960x540.",
 			"error_message" => "Media does not fit requirements."
 		));
 

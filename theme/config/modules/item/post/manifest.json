@@ -1,0 +1,108 @@
+{
+	"version": "0.1.5.1",
+	"files": [
+		{
+			"type": "class",
+			"src": "classes/type.post.class.php",
+			"dest": "classes/items/type.post.class.php",
+			"digest": "sha256:bde8f01b18cfd699aa1f7a9b537c16538602d760a1ae2b2987fa8eb85baa6a21"
+		},
+		{
+			"type": "backend-controller",
+			"src": "www/janitor/post.php",
+			"dest": "www/janitor/post.php",
+			"digest": "sha256:1e4049c2aff4990d4ce595a297f5408f6732ec25740f933e9b0cefebf6c52854"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/post/list.php",
+			"dest": "templates/janitor/post/list.php",
+			"digest": "sha256:5f86e27c991d27e06a7bdc59cc1b93fa64cdf353fe55a1c5b4f5ce7275d55542"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/post/edit.php",
+			"dest": "templates/janitor/post/edit.php",
+			"digest": "sha256:94c729e31dcb87b8f9274e7cd7ff5887130c1ceda627f3e0a6e084140b75f1ca"
+		},
+		{
+			"type": "backend-template",
+			"src": "templates/janitor/post/new.php",
+			"dest": "templates/janitor/post/new.php",
+			"digest": "sha256:faa5a2efb8e057be3356d1e4903853c073a93c1a0e3b0b1903e2cf4c1dccb26c"
+		},
+		{
+			"type": "settings-css",
+			"src": "www/settings/css/s-postitem.css",
+			"dest": "www/janitor/css/setup/modules/s-postitem.css",
+			"digest": "sha256:325217b5680d7f8eb3142f52dab8d9490204ba6676c4e9b1c4ca408e4eaf96cd"
+		},
+		{
+			"type": "settings-js",
+			"src": "www/settings/js/m-postitem.js",
+			"dest": "www/janitor/js/setup/modules/m-postitem.js",
+			"digest": "sha256:6aa8da2906c3374f7b31169dfd4e7c7d8f48c3a02a996ff0ef944e7876113fad"
+		},
+		{
+			"type": "settings-template",
+			"src": "templates/settings/index.php",
+			"dest": "templates/janitor/modules/item/post/index.php",
+			"digest": "sha256:883977762360cf262084848b1a720cf41351501e2d9c7d2828c46deae66a0783"
+		},
+		{
+			"type": "controller",
+			"src": "www/posts.php",
+			"dest": "www/posts.php",
+			"digest": "sha256:e13001fdd138521503d54f9f4dc5a6c5afbd69da6d777b5096b157950c6a4d09"
+		},
+		{
+			"type": "template",
+			"src": "templates/posts/post.php",
+			"dest": "templates/posts/post.php",
+			"digest": "sha256:1d9e9f0c25b3b694a3427145854afb2a9dd5d0407c8f51634f8a0f5ba6c7e880"
+		},
+		{
+			"type": "template",
+			"src": "templates/posts/posts.php",
+			"dest": "templates/posts/posts.php",
+			"digest": "sha256:f869ee3022a0f1c75f572e54a0170ce58b569402c9eaf3ab82ad091abf119d2f"
+		},
+		{
+			"type": "template",
+			"src": "templates/posts/posts_tag.php",
+			"dest": "templates/posts/posts_tag.php",
+			"digest": "sha256:5d3abc23a088639f37102c865f3245d7b68cbfdea38207a09235cb30a451797b"
+		},
+		{
+			"type": "template",
+			"src": "templates/posts/post_tag.php",
+			"dest": "templates/posts/post_tag.php",
+			"digest": "sha256:b5185b6849c6061fe8c7f800aea89a355576824cb16a75b40d0807db73739a83"
+		},
+		{
+			"type": "data-model",
+			"src": "config/db/item_post.sql",
+			"digest": "sha256:513fc9eb664e1bd4c86aea4359f2efff3c9778806732a9bee64f5934477ba8d9"
+		},
+		{
+			"type": "data-install",
+			"src": "config/db/navigation_nodes.sql",
+			"digest": "sha256:6fe2457baad9166767af5c12edab4112182f84d54d3f1760ed3994f615529427"
+		},
+		{
+			"type": "data-uninstall",
+			"src": "config/db/navigation_nodes_uninstall.sql",
+			"digest": "sha256:59d3e9ea8ce74aac3fe7112243b83bff980595f84854133f40f7a762fdef3aed"
+		},
+		{
+			"type": "data-uninstall-all",
+			"src": "config/db/item_post_data_uninstall.sql",
+			"digest": "sha256:a4946517ae42727ce60b1996c82bd04286cd8fa001181c31aee2abc84f0f101d"
+		},
+		{
+			"type": "data-uninstall-all",
+			"src": "config/db/item_post_uninstall.sql",
+			"digest": "sha256:b13205a89cf5a0069c4d866998192c97ee77855abf382e0346e9b88ffcca702b"
+		}
+	]
+}
