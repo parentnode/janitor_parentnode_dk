@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `SITE_DB`.`item_service`;
