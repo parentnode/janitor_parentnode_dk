@@ -1,0 +1,40 @@
+#content .scene.pageitem p {}
+
+
+#content .scene.pageitem div.controllers code {
+	margin-bottom: 20px;
+}
+#content .scene.pageitem div.controllers h3 {
+	font-size: 20px;
+	text-transform: uppercase;
+	padding-top: 7px;
+	padding-bottom: 10px;
+	margin: 0;
+}
+
+#content .scene.pageitem div.controllers ul.controllers {
+	border-top: 1px solid #dedede;
+}
+#content .scene.pageitem div.controllers ul.controllers > li {
+	position: relative; display: block;
+	border-bottom: 1px solid #dedede;
+}
+#content .scene.pageitem div.controllers ul.controllers > li h4 {
+	padding: 15px 150px 15px 30px;
+}
+#content .scene.pageitem div.controllers ul.controllers > li ul.actions {
+	position: absolute;
+	right: 30px;
+	top: 5px;
+	padding: 0;
+}
+#content .scene.pageitem div.controllers ul.controllers > li ul.actions li {
+	padding: 0;
+}
+#content .scene.pageitem div.controllers ul.controllers.no_delete > li ul.actions {
+	display: none;
+}
+
+#content .scene.pageitem div.controllers > form {
+	padding: 30px 0 20px;
+}
